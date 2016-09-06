@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/fl_tab_frag"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <!--<RelativeLayout
+        android:id="@+id/rl_fragment_friends_main_top_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAmber550">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <RadioButton
+                android:id="@+id/rb_fragment_friends_main_0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_friends_main_tab0"
+                android:button="@null"
+                android:gravity="center"
+                android:text="名家观点"
+                android:textColor="@drawable/selector_friends_main_tab_text_color"
+                android:textSize="15sp"/>
+
+            <RadioButton
+                android:id="@+id/rb_fragment_friends_main_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-2dp"
+                android:layout_marginStart="-2dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_friends_main_tab1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="解盘视频"
+                android:textColor="@drawable/selector_friends_main_tab_text_color"
+                android:textSize="15sp"/>
+
+            <RadioButton
+                android:id="@+id/rb_fragment_friends_main_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-2dp"
+                android:layout_marginStart="-2dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_friends_main_tab2"
+                android:button="@null"
+                android:gravity="center"
+                android:text="订阅主题"
+                android:textColor="@drawable/selector_friends_main_tab_text_color"
+                android:textSize="15sp"/>
+
+
+        </RadioGroup>
+
+    </RelativeLayout>-->
+    <com.iguxuan.iguxuan_friends.widget.HeaderTabView
+        android:id="@+id/rl_fragment_friends_main_top_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAmber550"/>
+
+    <LinearLayout
+        android:id="@+id/ll_fragment_friends_main_news_info"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_below="@id/rl_fragment_friends_main_top_actionBar"
+        android:background="@color/colorGrey230"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="断线(%68)"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="趋势波段(%23)"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="技术(%16)"/>
+
+    </LinearLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_fragment_friends_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_fragment_friends_main_news_info"/>
+
+</RelativeLayout>

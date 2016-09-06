@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">iguxuan_friends</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Main -->
+    <string name="tab_main_live">直播</string>
+    <string name="tab_main_friends">圈子</string>
+    <string name="tab_main_teacher">名师</string>
+    <string name="tab_main_me">我的</string>
+
+    <string name="value_friends_post_content">
+        ChinaJoy，全称中国国际数码互动娱乐展览会，是中国继美国E3展、日本东京电玩展、德国科隆国际游戏展之后的又一同类型互动娱乐展，犹以网络游戏为主。展会自2004年第一届在北京展览馆举行，从第二届起每年在上海浦东新国际博览中心举行。每届有中外游戏厂商参与，各自发布最新游戏及娱乐产品，发放其测试帐号，赠送游戏周边产品，另有Cosplay表演，互动游戏等。
+    </string>
+
+    <!-- Values -->
+    <string name="value_comment_count">(%d)</string>
+    <string name="value_comment_like">(%d)</string>
+</resources>

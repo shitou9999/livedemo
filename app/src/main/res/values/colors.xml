@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#FF4081</color> -->
+
+    <color name="translate">#00000000</color>
+    <color name="colorPrimary">#FFB430</color>
+    <color name="colorPrimaryDark">#FFB430</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- Base Colors -->
+    <!-- Red 红色 -->
+    <color name="colorRed050">#FFEBEE</color>
+    <color name="colorRed200">#EF9A9A</color>
+    <color name="colorRed500">#F44336</color>
+    <color name="colorRed800">#C62828</color>
+    <color name="colorRed900">#B71C1C</color>
+    <!-- Amber 琥珀色 -->
+    <color name="colorAmber300">#FFD54F</color>
+    <color name="colorAmber400">#FFCA28</color>
+    <color name="colorAmber550">#FFB430</color>
+    <color name="colorAmber700">#FBC02D</color>
+    <color name="colorAmber900">#F57F17</color>
+    <!-- Grey 灰色 feb42f -->
+    <color name="colorGrey050">#FAFAFA</color>
+    <color name="colorGrey100">#F5F5F5</color>
+    <color name="colorGrey220">#EBEBEB</color>
+    <color name="colorGrey230">#E5E5E5</color>
+    <color name="colorGrey300">#E0E0E0</color>
+    <color name="colorGrey450">#B9B9B9</color>
+    <color name="colorGrey400">#BDBDBD</color>
+    <color name="colorGrey475">#AAAAAA</color>
+    <color name="colorGrey500">#9E9E9E</color>
+    <color name="colorGrey600">#757575</color>
+    <color name="colorGrey700">#616161</color>
+    <color name="colorGrey800">#424242</color>
+    <color name="colorGrey900">#212121</color>
+
+    <!-- Blue 蓝色-->
+    <color name="colorBlue500">#2196F3</color>
+    <color name="colorBlue700">#1976d2</color>
+    <color name="colorBlue400">#42A5F5</color>
+    <!-- Not Google design color palette -->
+    <color name="colorBlue350">#569AFF</color>
+    <color name="colorBlue150">#9FCDFF</color>
+
+    <!-- Yellow 黄色 -->
+    <!-- Orange 橙色 -->
+    <!-- Green 绿色 -->
+    <color name="colorGreen">#03cc22</color>
+    <!-- White 白色 -->
+    <color name="colorWhite">#FFFFFF</color>
+    <!-- Blank 黑色 -->
+    <color name="colorBlank">#000000</color>
+</resources>
