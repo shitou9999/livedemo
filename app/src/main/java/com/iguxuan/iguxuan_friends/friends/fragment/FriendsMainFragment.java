@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  */
 public class FriendsMainFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "FriendsMainFragment";
-    @BindView(R.id.rl_fragment_friends_main_top_actionBar) HeaderTabView mHeaderTabView;
+    @BindView(R.id.rl_fragment_live_main_top_actionBar) HeaderTabView mHeaderTabView;
     @BindView(R.id.ll_fragment_friends_main_news_info) LinearLayout mLlFragmentFriendsMainNewsInfo;
     @BindView(R.id.vp_fragment_friends_main) ViewPager mViewPager;
 

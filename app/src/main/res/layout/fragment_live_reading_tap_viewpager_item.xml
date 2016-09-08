@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--直播头item布局-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivIamge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <include layout="@layout/include_liveing"/>
+</RelativeLayout>

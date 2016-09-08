@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+
+        <com.iguxuan.iguxuan_friends.widget.HeaderTabView
+            android:id="@+id/rl_fragment_live_main_top_actionBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <ImageButton
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/selector_share"/>
+
+        <ImageButton
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/selector_message"/>
+    </RelativeLayout>
+
+</merge>

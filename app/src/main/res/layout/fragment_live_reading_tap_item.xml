@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--直播列表，item-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="211dp">
+
+    <ImageView
+        android:id="@+id/ivIamge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@mipmap/net"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_translucent"/>
+
+    <include layout="@layout/include_liveing"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+
+        <include
+            android:id="@+id/il_avatar"
+            layout="@layout/include_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_teacher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/il_avatar"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorBlue500"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"
+            tools:text="王丽"/>
+
+        <TextView
+            android:id="@+id/tv_teacher_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_teacher_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorGrey220"
+            android:textSize="12sp"
+            tools:text="技术全面"/>
+
+        <TextView
+            android:id="@+id/tv_teacher_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_teacher_introduce"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            tools:text="波段交易，稳健获利"/>
+    </RelativeLayout>
+</RelativeLayout>

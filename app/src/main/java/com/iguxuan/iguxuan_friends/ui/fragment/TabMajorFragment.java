@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.iguxuan.iguxuan_friends.R;
+import com.iguxuan.iguxuan_friends.app.Theme;
 import com.iguxuan.iguxuan_friends.friends.fragment.FriendsTabFragment;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class TabMajorFragment extends BaseFragment {
         mNvpFragmentMajor.setOffscreenPageLimit(mBaseFragments.size() - 1);
 
         mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
-
+        mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"),Color.parseColor(Theme.getCommonColor()));
+        mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
         mTabFragmentMajor.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();

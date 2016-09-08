@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="正在下载"
+        android:textColor="#4DA0D6"
+        android:textSize="20sp" />
+
+    <com.iguxuan.iguxuan_friends.widget.NumberProgressBar
+        android:id="@+id/update_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+       android:layout_margin="10dp"
+        custom:progress_reached_bar_height="5dp"
+        custom:progress_reached_color="#3498DB"
+        custom:progress_text_size="10sp"
+        custom:progress_unreached_bar_height="5dp"
+        custom:progress_unreached_color="#CCCCCC" />
+
+    <Button
+        android:id="@+id/dialog_button_qx"
+        android:layout_width="100dip"
+        android:layout_height="@dimen/common_dialog_button_height"
+        android:layout_below="@id/update_progress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/common_system_update_dialog_button_sure_shape"
+        android:text="取  消"
+        android:textColor="#b5b5b5" />
+
+</RelativeLayout>

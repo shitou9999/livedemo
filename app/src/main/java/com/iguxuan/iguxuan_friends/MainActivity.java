@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.iguxuan.iguxuan_friends.app.Theme;
 import com.iguxuan.iguxuan_friends.friends.fragment.FriendsMainFragment;
+import com.iguxuan.iguxuan_friends.live.LiveMainFragment;
+import com.iguxuan.iguxuan_friends.ui.activity.BaseActivity;
 import com.iguxuan.iguxuan_friends.ui.fragment.BaseFragment;
-import com.iguxuan.iguxuan_friends.ui.fragment.MeFragment;
+import com.iguxuan.iguxuan_friends.me.MeFragment;
 import com.iguxuan.iguxuan_friends.ui.fragment.TabTempFragment;
 import com.iguxuan.iguxuan_friends.widget.NoSlideViewPager;
 
@@ -21,14 +24,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "MainActivity";
-
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.vp_main) NoSlideViewPager mVpMain;
     @BindView(R.id.tv_main_live) TextView mMainLive;
     @BindView(R.id.tv_main_friends) TextView mMainFriends;
     @BindView(R.id.tv_main_teacher) TextView mMainTeacher;
     @BindView(R.id.tv_main_me) TextView mMainMe;
+
+    @BindView(R.id.ll_main_live) LinearLayout ll_main_live;
+    @BindView(R.id.ll_main_friends) LinearLayout ll_main_friends;
+    @BindView(R.id.ll_main_teacher) LinearLayout ll_main_teacher;
+    @BindView(R.id.ll_main_me) LinearLayout ll_main_me;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
 
@@ -37,55 +43,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initView();
+        initData();
+        initListener();
 
+    }
 
-        initFragment();
-        switchFragment(0);
-        mMainLive.setOnClickListener(this);
-        mMainFriends.setOnClickListener(this);
-        mMainTeacher.setOnClickListener(this);
-        mMainMe.setOnClickListener(this);
+    private void initView() {
+        mMainLive.setTextColor(Theme.getColorSelectedStateList());
+        mMainFriends.setTextColor(Theme.getColorSelectedStateList());
+        mMainTeacher.setTextColor(Theme.getColorSelectedStateList());
+        mMainMe.setTextColor(Theme.getColorSelectedStateList());
+        ll_main_live.setSelected(true);
+    }
+
+    private void initListener() {
+        ll_main_live.setOnClickListener(this);
+        ll_main_friends.setOnClickListener(this);
+        ll_main_teacher.setOnClickListener(this);
+        ll_main_me.setOnClickListener(this);
     }
 
 
-    private void initFragment() {
+    private void initData() {
         mBaseFragments.clear();
-        mBaseFragments.add(TabTempFragment.newInstance(Color.DKGRAY, "直播"));
+        mBaseFragments.add(LiveMainFragment.newInstance());
         mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(TabTempFragment.newInstance(Color.GRAY, "名师"));
         mBaseFragments.add(MeFragment.newInstance());
 
-        mVpMain.setAdapter(new MainTabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
+        mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
         mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
+        switchFragment(0);
     }
 
     private void switchFragment(int position) {
+        ll_main_live.setSelected(position == 0);
+        ll_main_friends.setSelected(position == 1);
+        ll_main_teacher.setSelected(position == 2);
+        ll_main_me.setSelected(position == 3);
         mVpMain.setCurrentItem(position, false);
     }
 
     @Override public void onClick(View view) {
-        mMainLive.setSelected(false);
-        mMainFriends.setSelected(false);
-        mMainTeacher.setSelected(false);
-        mMainMe.setSelected(false);
         switch (view.getId()) {
-            case R.id.tv_main_live:
-                mMainLive.setSelected(true);
+            case R.id.ll_main_live:
                 switchFragment(0);
                 break;
 
-            case R.id.tv_main_friends:
-                mMainFriends.setSelected(true);
+            case R.id.ll_main_friends:
                 switchFragment(1);
                 break;
 
-            case R.id.tv_main_teacher:
-                mMainTeacher.setSelected(true);
+            case R.id.ll_main_teacher:
                 switchFragment(2);
                 break;
 
-            case R.id.tv_main_me:
-                mMainMe.setSelected(true);
+            case R.id.ll_main_me:
                 switchFragment(3);
                 break;
         }
@@ -95,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // ==================================================================================
     // nil  ||
     // ==================================================================================
-    private static class MainTabFragmentPagerAdapter extends FragmentPagerAdapter {
+    public static class TabFragmentPagerAdapter extends FragmentPagerAdapter {
         private List<BaseFragment> mFragments = new ArrayList<>();
 
-        public MainTabFragmentPagerAdapter(FragmentManager fm, List<BaseFragment> fragments) {
+        public TabFragmentPagerAdapter(FragmentManager fm, List<BaseFragment> fragments) {
             super(fm);
             mFragments = fragments;
         }

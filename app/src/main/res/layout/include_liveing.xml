@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:background="@color/colorRed500"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvLiveing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="直播中"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/live_text_size"/>
+
+        <ImageView
+            android:id="@+id/ivLiveIng"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/live_text_size"
+            android:layout_below="@+id/tvLiveing"
+            android:layout_marginTop="2dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/person_ic"/>
+
+        <TextView
+            android:id="@+id/tvLiveingNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivLiveIng"
+            android:layout_toRightOf="@+id/ivLiveIng"
+            android:gravity="center"
+            android:text="12233"
+            android:textColor="@color/colorWhite"
+            android:singleLine="true"
+            android:textSize="@dimen/live_number_text_size"/>
+
+    </RelativeLayout>
+</merge>

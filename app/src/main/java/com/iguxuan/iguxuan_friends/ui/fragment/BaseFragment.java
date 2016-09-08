@@ -2,6 +2,7 @@ package com.iguxuan.iguxuan_friends.ui.fragment;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 public class BaseFragment extends Fragment {
@@ -15,6 +16,7 @@ public class BaseFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public String TAG = "";
 
     public BaseFragment() {
         // Required empty public constructor
@@ -36,14 +38,15 @@ public class BaseFragment extends Fragment {
 //        return fragment;
 //    }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        TAG = this.getClass().getSimpleName();
+    }
 
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -1,79 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/fl_tab_frag"
+<LinearLayout android:id="@+id/fl_tab_frag"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+    android:orientation="vertical">
 
-
-    <!--<RelativeLayout
-        android:id="@+id/rl_fragment_friends_main_top_actionBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorAmber550">
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <RadioButton
-                android:id="@+id/rb_fragment_friends_main_0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_friends_main_tab0"
-                android:button="@null"
-                android:gravity="center"
-                android:text="名家观点"
-                android:textColor="@drawable/selector_friends_main_tab_text_color"
-                android:textSize="15sp"/>
-
-            <RadioButton
-                android:id="@+id/rb_fragment_friends_main_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-2dp"
-                android:layout_marginStart="-2dp"
-                android:layout_weight="1"
-                android:background="@drawable/selector_friends_main_tab1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="解盘视频"
-                android:textColor="@drawable/selector_friends_main_tab_text_color"
-                android:textSize="15sp"/>
-
-            <RadioButton
-                android:id="@+id/rb_fragment_friends_main_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-2dp"
-                android:layout_marginStart="-2dp"
-                android:layout_weight="1"
-                android:background="@drawable/selector_friends_main_tab2"
-                android:button="@null"
-                android:gravity="center"
-                android:text="订阅主题"
-                android:textColor="@drawable/selector_friends_main_tab_text_color"
-                android:textSize="15sp"/>
-
-
-        </RadioGroup>
-
-    </RelativeLayout>-->
-    <com.iguxuan.iguxuan_friends.widget.HeaderTabView
-        android:id="@+id/rl_fragment_friends_main_top_actionBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorAmber550"/>
+    <include
+        layout="@layout/include_header"/>
 
     <LinearLayout
         android:id="@+id/ll_fragment_friends_main_news_info"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_below="@id/rl_fragment_friends_main_top_actionBar"
         android:background="@color/colorGrey230"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -107,6 +45,6 @@
         android:id="@+id/vp_fragment_friends_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_fragment_friends_main_news_info"/>
+        />
 
-</RelativeLayout>
+</LinearLayout>

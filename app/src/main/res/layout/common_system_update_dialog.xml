@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="10dp" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/system_update_dialog_title"
+        android:textColor="#4DA0D6"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/title_image"
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/empty"
+        android:background="#4DA0D6" />
+
+    <TextView
+        android:id="@+id/update_text_banben"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_image"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#b5b5b5" />
+
+    <TextView
+        android:id="@+id/update_text_zxbanben"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/update_text_banben"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="#b5b5b5" />
+
+    <ScrollView
+        android:id="@+id/update_ScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/update_text_zxbanben"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/update_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#b5b5b5" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/update_ScrollView"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dip"
+        android:paddingTop="20dp" >
+
+        <Button
+            android:id="@+id/dialog_button_ok"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/common_system_update_dialog_button_cancel_shape"
+            android:text="@string/system_update_dialog_rightnow"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/dialog_button_cancel"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
+            android:background="@drawable/common_system_update_dialog_button_sure_shape"
+            android:text="@string/system_update_dialog_later"
+            android:textColor="#b5b5b5" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">iguxuan_friends</string>
     <string name="action_settings">Settings</string>
+    <string name="null_value">-</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -18,4 +19,99 @@
     <!-- Values -->
     <string name="value_comment_count">(%d)</string>
     <string name="value_comment_like">(%d)</string>
+
+    <string name="toast_not_network">无可用的网络连接，请检查后重试</string>
+    <string name="net_error">加载失败,点击可重试</string>
+
+    <!--APP更新-->
+    <string name="system_update_dialog_title">发现新版本</string>
+    <string name="system_update_dialog_rightnow">立即更新</string>
+    <string name="system_update_dialog_later">稍后更新</string>
+    <string name="update_notification">您有新版本可以下载，点击更新</string>
+    <string name="new_infor_count">%d条新消息</string>
+    <string name="empty"></string>
+
+    <!-- permission -->
+    <string name="permission_tip_dialog_positive_button_text">去设置</string>
+    <string name="permission_tip_dialog_title">权限申请</string>
+    <!--<string name="permission_tip_dialog_message_nor">在设置-应用-爱股轩-权限中开启%s权限，以正常使用%s等功能</string>-->
+    <string name="permission_tip_dialog_message_sms">本APP使用短信权限为您自动填写验证码。拒绝该权限不会影响本APP的正常使用。点击授权&#8212;&#8212;不再询问可屏蔽该消息。</string>
+    <string name="permission_tip_dialog_message_camera">请在设置-应用-权限中开启相机权限，以正常使用拍照、扫描二维码等功能。</string>
+    <string name="permission_tip_dialog_message_storage">本APP使用存储空间权限缓存数据、下载视频、记录应用日志。\n请在设置-应用-权限中开启存储空间权限。</string>
+    <string name="permission_tip_dialog_message_phone">本APP使用电话权限确定唯一的设备ID，以保证推送功能正常使用、方便直接拨打爱股轩客服电话。不会拨打其他号码或终止通话。\n请在设置-应用-权限中开启电话权限。</string>
+
+    <!-- prompt -->
+    <string name="dialog_login_prompt">您还没有登录 , 请先登录 .</string>
+    <!-- other 2016-04-05 -->
+    <string name="comment">评论</string>
+    <string name="publish">发表</string>
+    <string name="synopsis">简介</string>
+    <string name="zone_home">专区</string>
+    <string name="close">关闭</string>
+    <string name="exit">退出</string>
+    <string name="logout">注销</string>
+    <string name="register_now">立即注册</string>
+    <string name="prompt">提示</string>
+    <string name="message">消息</string>
+    <string name="message_igxhelper">股轩助手</string>
+    <string name="message_activity">活动消息</string>
+    <string name="message_activity_detail">活动详情</string>
+    <string name="message_activity_collection">活动收藏</string>
+    <string name="message_comment">评论消息</string>
+    <string name="cancel">取消</string>
+    <string name="skip">跳过</string>
+    <string name="complete">完成</string>
+    <string name="teacher">老师</string>
+    <string name="collection">收藏</string>
+    <string name="more_than_999">999+</string>
+    <string name="adjust_font_size">调整字型</string>
+    <string name="social_account_login">社交账号登录</string>
+    <string name="message_login">使用短信验证码登录</string>
+    <string name="written_verification_code">填写验证码</string>
+    <string name="next_step">下一步</string>
+    <string name="set_password">设置密码</string>
+    <string name="login">登录</string>
+    <string name="login_qc">二维码登录</string>
+    <string name="register">注册</string>
+    <string name="password">密码</string>
+    <string name="password_twoSpaces">密&#160;&#160;&#160;&#160;码</string>
+    <string name="password_fourSpaces">密&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;码</string>
+    <string name="check_code">验证码</string>
+    <string name="check_code_space_at_center">验&#160;&#160;证&#160;&#160;码</string>
+    <string name="submit_check_code">发送验证码</string>
+    <string name="hint_password">密码至少6位数</string>
+    <string name="hint_password_affirm">请再次确认密码</string>
+    <string name="hint_input_phoneNumber">请输入手机号码</string>
+    <string name="hint_input_password">请输入密码</string>
+    <string name="hint_input_check_code">请输入验证码</string>
+    <string name="hint_phoneNumber">手机号</string>
+    <string name="seek_password">找回密码</string>
+    <string name="forget_password">忘记密码</string>
+
+
+    <!-- 0o0o0o0o0-->
+    <string name="to_resend">重新发送</string>
+    <string name="alter">修改</string>
+    <string name="binding">绑定</string>
+    <string name="certificationed">已认证</string>
+    <string name="uncertification">未认证</string>
+
+    <string name="label_individuality_signature">个人资料</string>
+    <string name="label_security_settings">安全设置</string>
+    <string name="label_email_binding">邮箱绑定</string>
+    <string name="label_alter_password">修改密码</string>
+    <string name="label_login_account">登录账号</string>
+    <string name="label_identity_authentication">身份认证</string>
+    <string name="label_logout">注销登录</string>
+
+    <string name="push_setting">推送设置</string>
+    <string name="my_follow">我的关注</string>
+    <string name="my_subscription">我的订阅</string>
+    <string name="my_download">我的下载</string>
+    <string name="offline_caching">离线缓存</string>
+    <string name="my_collection">我的收藏</string>
+    <string name="play_record">播放记录</string>
+
+    <string name="remind_region_code_invalid">地区代码无效</string>
+
 </resources>

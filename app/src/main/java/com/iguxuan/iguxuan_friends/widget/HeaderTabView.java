@@ -1,11 +1,13 @@
 package com.iguxuan.iguxuan_friends.widget;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.iguxuan.iguxuan_friends.R;
+import com.iguxuan.iguxuan_friends.app.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ public class HeaderTabView extends RelativeLayout {
     private ICheckListen mICheckListen;
     RadioGroup mRadioGroup;
     private List<RadioButton> listRadioButton;
+    private final static String TAG = "HeaderTabView";
 
     public HeaderTabView(Context context) {
         this(context, null);
@@ -66,6 +70,8 @@ public class HeaderTabView extends RelativeLayout {
         if (list == null && list.size() < 1) {
             return;
         }
+        setBackgroundColor(Color.parseColor(Theme.getCommonColor()));
+        int textSize = mContext.getResources().getDimensionPixelSize(R.dimen.head_table_text_size);
         for (int i = 0; i < list.size(); i++) {
             MyHeader header = list.get(i);
             RadioButton mRadioButton = new RadioButton(mContext);
@@ -75,15 +81,10 @@ public class HeaderTabView extends RelativeLayout {
             layoutParams.gravity = Gravity.CENTER;
             mRadioButton.setLayoutParams(layoutParams);
             mRadioButton.setText(header.getTitle());
-            mRadioButton.setButtonDrawable(null);
-            mRadioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimensionPixelSize(R.dimen.head_table_text_size));
-
-            int[][] state = new int[2][];
-            state[0] = new int[]{android.R.attr.state_checked};
-            state[1] = new int[]{};
-            int[] colors = new int[]{Color.parseColor(header.getColor()), Color.parseColor("#ffffff")};
-            ColorStateList mColorStateList = new ColorStateList(state, colors);
-            mRadioButton.setTextColor(mColorStateList);
+            Bitmap a=null;
+            mRadioButton.setButtonDrawable(new BitmapDrawable(a));
+            mRadioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            mRadioButton.setTextColor(Theme.getColorCheckedStateList());
             if (i == 0 && i == (list.size() - 1)) {
                 mRadioButton.setBackgroundResource(R.drawable.selector_friends_main_tab_all);
                 mRadioButton.setEnabled(false);
@@ -103,7 +104,11 @@ public class HeaderTabView extends RelativeLayout {
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                mICheckListen.checked(i);
+                if (mICheckListen == null) {
+                    Log.e(TAG, "空指针异常HeadrtTabView 未设置点击事件监听函数");
+                } else {
+                    mICheckListen.checked(i);
+                }
             }
         });
 
