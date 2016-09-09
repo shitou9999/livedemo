@@ -85,6 +85,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".me.activity.LoginActivity"/>
+        <activity android:name=".me.activity.Register1Activity"/>
+        <activity android:name=".region.RegionSelectionActivity"/>
+        <activity android:name=".SplashActivity"/>
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->
         <activity

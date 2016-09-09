@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rl_region_selector"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/def_option_height"
+    android:background="@drawable/selector_option_normal3"
+    android:paddingLeft="@dimen/small_margin"
+    android:paddingRight="@dimen/small_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="国家/地区"
+        android:textColor="@color/colorGrey800"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="normal"
+        />
+
+    <TextView
+        android:id="@+id/tv_region_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="中国"
+        android:textColor="@color/colorBlue500"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="normal"
+        />
+
+</RelativeLayout>
+

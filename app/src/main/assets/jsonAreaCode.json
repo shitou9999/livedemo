@@ -1,0 +1,922 @@
+[
+  {
+    "firstLetter": "A",
+    "regionName": "阿尔巴尼亚",
+    "regionCode": 355
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿尔及利亚",
+    "regionCode": 213
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿富汗",
+    "regionCode": 93
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿根廷",
+    "regionCode": 54
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿拉伯联合酋长国",
+    "regionCode": 971
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿鲁巴岛",
+    "regionCode": 297
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿塞拜疆",
+    "regionCode": 994
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "阿森松",
+    "regionCode": 247
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "埃及",
+    "regionCode": 20
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "埃塞俄比亚",
+    "regionCode": 251
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "爱尔兰",
+    "regionCode": 353
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "爱沙尼亚",
+    "regionCode": 372
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "安道尔共和国",
+    "regionCode": 376
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "安哥拉",
+    "regionCode": 244
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "安圭拉岛",
+    "regionCode": 1
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "安提瓜和巴布达",
+    "regionCode": 1268
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "奥地利",
+    "regionCode": 43
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "澳大利亚",
+    "regionCode": 61
+  },
+  {
+    "firstLetter": "A",
+    "regionName": "澳门（中国）",
+    "regionCode": 853
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴巴多斯",
+    "regionCode": 1246
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴布亚新几内亚",
+    "regionCode": 675
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴哈马",
+    "regionCode": 1242
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴基斯坦",
+    "regionCode": 92
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴林",
+    "regionCode": 973
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴拿马",
+    "regionCode": 507
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "巴西",
+    "regionCode": 55
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "白俄罗斯",
+    "regionCode": 375
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "百慕大群岛",
+    "regionCode": 1441
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "保加利亚",
+    "regionCode": 359
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "贝宁",
+    "regionCode": 229
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "比利时",
+    "regionCode": 32
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "冰岛",
+    "regionCode": 354
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "波多黎各",
+    "regionCode": 1
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "波兰",
+    "regionCode": 48
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "玻利维亚",
+    "regionCode": 591
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "伯利兹",
+    "regionCode": 501
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "博茨瓦纳",
+    "regionCode": 267
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "不丹",
+    "regionCode": 975
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "布基纳法索",
+    "regionCode": 226
+  },
+  {
+    "firstLetter": "B",
+    "regionName": "布隆迪",
+    "regionCode": 257
+  },
+  {
+    "firstLetter": "C",
+    "regionName": "朝鲜",
+    "regionCode": 850
+  },
+  {
+    "firstLetter": "C",
+    "regionName": "赤道几内亚",
+    "regionCode": 240
+  },
+  {
+    "firstLetter": "D",
+    "regionName": "丹麦",
+    "regionCode": 45
+  },
+  {
+    "firstLetter": "D",
+    "regionName": "德国",
+    "regionCode": 49
+  },
+  {
+    "firstLetter": "D",
+    "regionName": "东萨摩亚(美)",
+    "regionCode": 1684
+  },
+  {
+    "firstLetter": "",
+    "regionName": "多哥",
+    "regionCode": 228
+  },
+  {
+    "firstLetter": "D",
+    "regionName": "多米尼加共和国",
+    "regionCode": 1890
+  },
+  {
+    "firstLetter": "E",
+    "regionName": "俄罗斯",
+    "regionCode": 7
+  },
+  {
+    "firstLetter": "E",
+    "regionName": "厄瓜多尔",
+    "regionCode": 593
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "法国",
+    "regionCode": 33
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "法属波利尼西亚",
+    "regionCode": 689
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "法属圭亚那",
+    "regionCode": 594
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "菲律宾",
+    "regionCode": 63
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "斐济",
+    "regionCode": 679
+  },
+  {
+    "firstLetter": "F",
+    "regionName": "芬兰",
+    "regionCode": 358
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "冈比亚",
+    "regionCode": 220
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "刚果",
+    "regionCode": 242
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "哥伦比亚",
+    "regionCode": 57
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "哥斯达黎加",
+    "regionCode": 506
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "格林纳达",
+    "regionCode": 1473
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "格鲁吉亚",
+    "regionCode": 995
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "古巴",
+    "regionCode": 53
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "关岛",
+    "regionCode": 1671
+  },
+  {
+    "firstLetter": "G",
+    "regionName": "圭亚那",
+    "regionCode": 592
+  },
+  {
+    "firstLetter": "H",
+    "regionName": "哈萨克斯坦",
+    "regionCode": 7
+  },
+  {
+    "firstLetter": "H",
+    "regionName": "荷兰",
+    "regionCode": 31
+  },
+  {
+    "firstLetter": "H",
+    "regionName": "海地",
+    "regionCode": 509
+  },
+  {
+    "firstLetter": "H",
+    "regionName": "韩国",
+    "regionCode": 82
+  },
+  {
+    "firstLetter": "H",
+    "regionName": "洪都拉斯",
+    "regionCode": 504
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "吉布提",
+    "regionCode": 253
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "吉尔吉斯坦",
+    "regionCode": 996
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "几内亚",
+    "regionCode": 224
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "加拿大",
+    "regionCode": 1
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "加纳",
+    "regionCode": 233
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "加蓬",
+    "regionCode": 241
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "柬埔寨",
+    "regionCode": 855
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "捷克",
+    "regionCode": 420
+  },
+  {
+    "firstLetter": "J",
+    "regionName": "津巴布韦",
+    "regionCode": 263
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "喀麦隆",
+    "regionCode": 237
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "卡塔尔",
+    "regionCode": 974
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "开曼群岛",
+    "regionCode": 1345
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "科特迪瓦",
+    "regionCode": 225
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "科威特",
+    "regionCode": 965
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "肯尼亚",
+    "regionCode": 254
+  },
+  {
+    "firstLetter": "K",
+    "regionName": "库克群岛",
+    "regionCode": 682
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "拉脱维亚",
+    "regionCode": 371
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "莱索托",
+    "regionCode": 266
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "老挝",
+    "regionCode": 856
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "黎巴嫩",
+    "regionCode": 961
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "立陶宛",
+    "regionCode": 370
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "利比里亚",
+    "regionCode": 231
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "利比亚",
+    "regionCode": 218
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "列支敦士登",
+    "regionCode": 423
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "留尼汪",
+    "regionCode": 262
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "卢森堡",
+    "regionCode": 352
+  },
+  {
+    "firstLetter": "L",
+    "regionName": "罗马尼亚",
+    "regionCode": 40
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马达加斯加",
+    "regionCode": 261
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马尔代夫",
+    "regionCode": 960
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马耳他",
+    "regionCode": 356
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马拉维",
+    "regionCode": 265
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马来西亚",
+    "regionCode": 60
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马里",
+    "regionCode": 223
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马里亚那群岛",
+    "regionCode": 596
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "马提尼克",
+    "regionCode": 596
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "毛里求斯",
+    "regionCode": 230
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "美国",
+    "regionCode": 1
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "美属萨摩亚",
+    "regionCode": 1684
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "孟加拉国",
+    "regionCode": 880
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "缅甸",
+    "regionCode": 95
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "摩尔多瓦",
+    "regionCode": 373
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "摩纳哥",
+    "regionCode": 377
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "莫桑比克",
+    "regionCode": 258
+  },
+  {
+    "firstLetter": "M",
+    "regionName": "墨西哥",
+    "regionCode": 52
+  },
+  {
+    "firstLetter": "N",
+    "regionName": "南非",
+    "regionCode": 27
+  },
+  {
+    "firstLetter": "N",
+    "regionName": "瑙鲁",
+    "regionCode": 674
+  },
+  {
+    "firstLetter": "N",
+    "regionName": "尼日尔",
+    "regionCode": 227
+  },
+  {
+    "firstLetter": "N",
+    "regionName": "尼日利亚",
+    "regionCode": 234
+  },
+  {
+    "firstLetter": "N",
+    "regionName": "挪威",
+    "regionCode": 47
+  },
+  {
+    "firstLetter": "P",
+    "regionName": "葡萄牙",
+    "regionCode": 351
+  },
+  {
+    "firstLetter": "R",
+    "regionName": "日本",
+    "regionCode": 81
+  },
+  {
+    "firstLetter": "R",
+    "regionName": "瑞典",
+    "regionCode": 46
+  },
+  {
+    "firstLetter": "R",
+    "regionName": "瑞士",
+    "regionCode": 41
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "萨尔瓦多",
+    "regionCode": 503
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "塞拉利昂",
+    "regionCode": 232
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "塞内加尔",
+    "regionCode": 221
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "塞浦路斯",
+    "regionCode": 357
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "塞舌尔",
+    "regionCode": 248
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "沙特",
+    "regionCode": 966
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "沙特阿拉伯",
+    "regionCode": 966
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "圣多美和普林西比",
+    "regionCode": 239
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "圣卢西亚",
+    "regionCode": 1758
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "圣马力诺",
+    "regionCode": 378
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "圣文森特",
+    "regionCode": 1784
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "斯里兰卡",
+    "regionCode": 94
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "斯洛伐克",
+    "regionCode": 421
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "斯洛文尼亚",
+    "regionCode": 386
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "斯威士兰",
+    "regionCode": 268
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "苏丹",
+    "regionCode": 249
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "苏里南",
+    "regionCode": 597
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "所罗门群岛",
+    "regionCode": 677
+  },
+  {
+    "firstLetter": "S",
+    "regionName": "索马里",
+    "regionCode": 252
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "塔吉克斯坦",
+    "regionCode": 992
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "台湾（中国）",
+    "regionCode": 886
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "泰国",
+    "regionCode": 66
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "坦桑尼亚",
+    "regionCode": 255
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "汤加",
+    "regionCode": 676
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "特立尼达和多巴哥",
+    "regionCode": 1868
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "突尼斯",
+    "regionCode": 216
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "土耳其",
+    "regionCode": 90
+  },
+  {
+    "firstLetter": "T",
+    "regionName": "土库曼斯坦",
+    "regionCode": 993
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "危地马拉",
+    "regionCode": 502
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "委内瑞拉",
+    "regionCode": 58
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "文莱",
+    "regionCode": 673
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "乌干达",
+    "regionCode": 256
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "乌克兰",
+    "regionCode": 380
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "乌拉圭",
+    "regionCode": 598
+  },
+  {
+    "firstLetter": "W",
+    "regionName": "乌兹别克斯坦",
+    "regionCode": 998
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "新西兰",
+    "regionCode": 64
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "西班牙",
+    "regionCode": 34
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "西萨摩亚",
+    "regionCode": 685
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "希腊",
+    "regionCode": 30
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "香港（中国）",
+    "regionCode": 852
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "新加坡",
+    "regionCode": 65
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "匈牙利",
+    "regionCode": 36
+  },
+  {
+    "firstLetter": "X",
+    "regionName": "叙利亚",
+    "regionCode": 963
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "牙买加",
+    "regionCode": 1876
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "亚美尼亚",
+    "regionCode": 374
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "也门",
+    "regionCode": 967
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "伊拉克",
+    "regionCode": 964
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "伊朗",
+    "regionCode": 98
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "以色列",
+    "regionCode": 972
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "意大利",
+    "regionCode": 39
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "印度",
+    "regionCode": 91
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "印尼",
+    "regionCode": 62
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "英国",
+    "regionCode": 44
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "约旦",
+    "regionCode": 962
+  },
+  {
+    "firstLetter": "Y",
+    "regionName": "越南",
+    "regionCode": 84
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "赞比亚",
+    "regionCode": 260
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "扎伊尔",
+    "regionCode": 243
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "乍得",
+    "regionCode": 235
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "直布罗陀",
+    "regionCode": 350
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "中国",
+    "regionCode": 86
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "智利",
+    "regionCode": 56
+  },
+  {
+    "firstLetter": "Z",
+    "regionName": "中非共和国",
+    "regionCode": 236
+  }
+]

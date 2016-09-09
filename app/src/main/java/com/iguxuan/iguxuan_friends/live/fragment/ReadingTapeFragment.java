@@ -54,18 +54,29 @@ public class ReadingTapeFragment extends BaseFragment {
         initView();
         initData();
         initListener();
+
         return view;
     }
 
     private void initView() {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
+
     }
 
     private void initData() {
     }
 
     private void initListener() {
+        dataBind();
     }
 
+    private void dataBind() {
+        if (mReadingTapeAdapter == null) {
+            mReadingTapeAdapter = new ReadingTapeAdapter(getActivity());
+            rvReadingTap.setAdapter(mReadingTapeAdapter);
+        } else {
+            mReadingTapeAdapter.notifyDataSetChanged();
+        }
+    }
 
 }

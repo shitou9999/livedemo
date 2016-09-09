@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.vp_main) NoSlideViewPager mVpMain;
@@ -45,7 +46,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ButterKnife.bind(this);
         initView();
         initData();
-        initListener();
 
     }
 
@@ -57,12 +57,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_main_live.setSelected(true);
     }
 
-    private void initListener() {
-        ll_main_live.setOnClickListener(this);
-        ll_main_friends.setOnClickListener(this);
-        ll_main_teacher.setOnClickListener(this);
-        ll_main_me.setOnClickListener(this);
-    }
 
 
     private void initData() {
@@ -73,7 +67,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBaseFragments.add(MeFragment.newInstance());
 
         mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
-        mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
+//        mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
         switchFragment(0);
     }
 
@@ -84,7 +78,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_main_me.setSelected(position == 3);
         mVpMain.setCurrentItem(position, false);
     }
-
+    @OnClick({R.id.ll_main_live, R.id.ll_main_friends, R.id.ll_main_teacher,R.id.ll_main_me})
     @Override public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_main_live:

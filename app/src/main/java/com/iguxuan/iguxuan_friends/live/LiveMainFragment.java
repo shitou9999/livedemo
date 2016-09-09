@@ -72,7 +72,7 @@ public class LiveMainFragment extends BaseFragment {
         mBaseFragments.add(ConsultationFragment.newInstance(0));//咨询
 
         mViewPager.setAdapter(new MainActivity.TabFragmentPagerAdapter(getChildFragmentManager(), mBaseFragments));
-        mViewPager.setOffscreenPageLimit(mBaseFragments.size() - 1);
+//        mViewPager.setOffscreenPageLimit(mBaseFragments.size() - 1);
         switchFragment(0);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

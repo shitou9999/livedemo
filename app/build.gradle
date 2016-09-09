@@ -131,5 +131,5 @@ dependencies {
     }
 //https://github.com/ongakuer/CircleIndicator
     compile 'me.relex:circleindicator:1.2.1@aar'
-
+    compile 'com.bigkoo:quicksidebar:1.0.1'
 }

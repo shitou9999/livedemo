@@ -1,16 +1,36 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="head_table_text_size">14sp</dimen>
     <dimen name="live_text_size">12sp</dimen>
     <dimen name="live_number_text_size">10sp</dimen>
     <dimen name="activity_horizontal_margin2x">20dp</dimen>
+    <dimen name="activity_horizontal_margin3x">30dp</dimen>
+    <dimen name="activity_horizontal_margin4x">40dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="activity_vertical_margin2x">20dp</dimen>
+    <dimen name="activity_vertical_margin3x">30dp</dimen>
+    <dimen name="activity_vertical_margin4x">40dp</dimen>
+    <dimen name="other_video_height">48dp</dimen>
 
     <!--APP 升级-->
+    <dimen name="titleSize">18sp</dimen>
     <dimen name="common_dialog_button_height">40dp</dimen>
     <dimen name="def_option_height">48dp</dimen>
-    <dimen name="def_divider">1dp</dimen>
     <dimen name="me_icon_left">5dp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_min">9sp</dimen>
+    <dimen name="text_size_medilum">16sp</dimen>
+    <dimen name="text_size_micro">12sp</dimen>
+    <dimen name="edit_text_size_micro">@dimen/text_size_micro</dimen>
+    <dimen name="edit_text_size_samll">@dimen/text_size_small</dimen>
+    <dimen name="edit_text_size_normal">@dimen/edit_text_size_samll</dimen>
+
+    <dimen name="small_margin">6dp</dimen>
+    <dimen name="micro_margin">3dp</dimen>
+    <dimen name="min_margin">2dp</dimen>
+    <dimen name="def_divider">1dp</dimen>
+    <dimen name="item_space_small">6dp</dimen>
 </resources>

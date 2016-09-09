@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 
 import com.iguxuan.iguxuan_friends.R;
-import com.iguxuan.iguxuan_friends.me.LoginActivity;
+import com.iguxuan.iguxuan_friends.me.activity.LoginActivity;
 
 
 /**

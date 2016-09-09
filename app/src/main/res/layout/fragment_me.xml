@@ -8,11 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:id="@+id/fl_tab_frag"
             android:layout_width="match_parent"
@@ -28,20 +23,22 @@
                 android:paddingTop="@dimen/activity_vertical_margin">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_settings_white_18dp"/>
+                    android:src="@drawable/selector_setting"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_mail_white_18dp"
+                    android:src="@drawable/selector_message"
                     />
 
                 <RelativeLayout
@@ -53,10 +50,10 @@
                     >
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ci_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
-
                         android:contentDescription="@null"
                         android:scaleType="centerCrop"
                         app:civ_border_color="@color/colorGrey500"
@@ -148,7 +145,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/tv_me_hone"
                         android:scaleType="centerInside"
-                        android:src="@drawable/selector_right"
+                        android:src="@mipmap/back_red_btn"
                         />
 
                 </RelativeLayout>
@@ -338,6 +335,17 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -356,7 +364,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/data_push_ic"
                         />
 
                     <TextView
@@ -378,7 +386,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/follow_ic"
                         />
 
                     <TextView
@@ -400,7 +408,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/rss_ic"
                         />
 
                     <TextView
@@ -422,7 +430,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/download_ic"
                         />
 
                     <TextView
@@ -444,7 +452,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/collection_ic"
                         />
 
                     <TextView
@@ -466,7 +474,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/share_btn_pre"
+                        android:src="@mipmap/log_ic"
                         />
 
                     <TextView
@@ -634,6 +642,7 @@
                     android:textSize="15sp"
                     tools:text="12"/>
             </RelativeLayout>
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
-    </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>
