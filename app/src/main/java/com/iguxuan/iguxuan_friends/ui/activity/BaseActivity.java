@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by jack on 2016/9/7.
  */
 public class BaseActivity extends AppCompatActivity {
-    private String TAG = "";
+    public String TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

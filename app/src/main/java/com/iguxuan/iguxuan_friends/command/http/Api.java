@@ -9,31 +9,20 @@ public class Api {
     /*****************************
      * 正式库
      *************************/
-    public static final String TEST_DNS_API_HOST = "http://client.api.iguxuan.com/v1/";
-    public static final String TEST_DNS_API_HOST_V2 = "http://client.api.iguxuan.com/v2/";
-    public static final String TEST_DNS_API_HOST_V21 = "http://client.api.iguxuan.com/v21/";
-    public static final String PUBLIC_KEY = "iguxuan!";
-    public static final String SALT = "gx*()";
-
-
-    /*****************************
-     * 正式库IP直连
-     *************************/
-//    public static final String TEST_DNS_API_HOST = "http://121.40.180.161/v1/";
-//    public static final String TEST_DNS_API_HOST_V2 = "http://121.40.180.161/v2/";
-//    public static final String TEST_DNS_API_HOST_V21 = "http://121.40.180.161/v21/";
-//    public static final String PUBLIC_KEY = "iguxuan!";
-//    public static final String SALT = "gx*()";
-    /*****************************正式库*************************/
+    public static final String TEST_DNS_API_HOST = "http://139.224.1.41/v1/";
+    public static final String TEST_DNS_API_HOST_V2 = "http://139.224.1.41/v1/";
+    public static final String TEST_DNS_API_HOST_V21 = "http://139.224.1.41/v1/";
+    public static final String PUBLIC_KEY = "kntv!$@)";
+    public static final String SALT = "kn&!$@)";
 
     /*****************************
      * 测试库
      *************************/
-//    public static final String TEST_DNS_API_HOST = "http://client.apitest.iguxuan.com/v1/";
-//    public static final String TEST_DNS_API_HOST_V2 = "http://client.apitest.iguxuan.com/v2/";
-//    public static final String TEST_DNS_API_HOST_V21 = "http://client.apitest.iguxuan.com/v21/";
-//    public static final String PUBLIC_KEY = "igxcom68";
-//    public static final String SALT = "gx*()_test";
+//    public static final String TEST_DNS_API_HOST = "http://139.224.1.41/v1/";
+//    public static final String TEST_DNS_API_HOST_V2 = "http://139.224.1.41/v1/";
+//    public static final String TEST_DNS_API_HOST_V21 = "http://139.224.1.41/v1/";
+//    public static final String PUBLIC_KEY = "kntv!$@)_test";
+//    public static final String SALT = "kn&*(_test";
     /*****************************
      * 测试库
      *************************/

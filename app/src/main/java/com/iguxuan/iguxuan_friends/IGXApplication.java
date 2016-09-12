@@ -62,7 +62,7 @@ public class IGXApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
-        // init();
+         init();
         // strictMode(); // 启用严格模式
     }
 
