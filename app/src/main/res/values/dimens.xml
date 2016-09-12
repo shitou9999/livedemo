@@ -33,4 +33,62 @@
     <dimen name="min_margin">2dp</dimen>
     <dimen name="def_divider">1dp</dimen>
     <dimen name="item_space_small">6dp</dimen>
+
+    <!-- Base text size -->
+    <dimen name="tab_bottom_normal">@dimen/text_size_micro</dimen>
+    <dimen name="title_size_normal">@dimen/text_size_large</dimen>
+    <dimen name="text_size_post_title">22sp</dimen>
+    <dimen name="TextSizeLarge">36sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fab_margin15">24dp</dimen>
+    <dimen name="fab_margin20">32dp</dimen>
+
+    <!-- 置顶图片高度 -->
+    <dimen name="def_top_image_height">200dp</dimen>
+    <dimen name="bannar_height">200dp</dimen>
+    <!-- 视频控制器底部导航栏高度-->
+    <dimen name="media_controller_bottombar_height">56dp</dimen>
+
+
+    <!-- Teacher -->
+    <dimen name="teacher_fg_item_image_width">101.97dip</dimen>
+    <dimen name="teacher_fg_item_image_height">101.97dip</dimen>
+    <dimen name="teacher_fg_item_bottom_height">63.03dip</dimen>
+
+    <!-- !Find -->
+    <dimen name="find_fg_flag_icon_width">36dp</dimen>
+    <dimen name="find_fg_flag_icon_height">36dp</dimen>
+
+
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="bottom_navigation_height">48dp</dimen>
+
+
+    <!-- zxing -->
+    <dimen name="zxing_hint_text_size">18sp</dimen>
+    <dimen name="zxing_hint_text_margin">30dp</dimen>
+    <dimen name="zxing_scan_line_height">5dp</dimen>
+    <dimen name="zxing_scan_line_speed">3dp</dimen>
+    <dimen name="zxing_scan_screen_rate">15dp</dimen>
+    <dimen name="zxing_scan_boder_width">1.5dp</dimen>
+    <dimen name="zxing_scan_corner_width">2dp</dimen>
+    <dimen name="zxing_scan_corner_space">2.5dp</dimen>
+    <!--直播-->
+    <dimen name="live_bar_height">40dp</dimen>
+
+    <!-- Live -->
+    <!-- Live home -->
+    <dimen name="live_home_top_group_height">256dp</dimen>
+    <dimen name="live_home_top_sub_group_height">64dp</dimen>
+    <dimen name="live_play_button_size">56dp</dimen>
+    <dimen name="live_head_top">56dp</dimen>
+    <dimen name="live_item_head">48dp</dimen>
+    <dimen name="live_item_head_half">24dp</dimen>
+    <dimen name="live_item_left_width">32dp</dimen>
+    <dimen name="live_item_bottom_space">32dp</dimen>
+    <dimen name="live_item_point_size_nor">12dp</dimen>
+    <dimen name="live_item_point_size_ing">20dp</dimen>
+    <dimen name="live_item_history_head_size">24dp</dimen>
 </resources>

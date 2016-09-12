@@ -1,14 +1,14 @@
 <resources>
-
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/head_bg</item>
         <item name="colorPrimaryDark">@color/head_bg</item>
         <item name="colorAccent">@color/head_bg</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -128,7 +128,7 @@
         <item name="android:background">@null</item>
         <item name="android:singleLine">true</item>
         <item name="android:maxLength">4</item>
-        <item name="android:textColor">@color/colorBlue500</item>
+        <item name="android:textColor">@color/colorGrey333333</item>
         <item name="android:inputType">numberDecimal</item>
         <item name="android:digits">0123456789</item>
     </style>
@@ -151,5 +151,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/text_size_medilum</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 </resources>

@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iguxuan.iguxuan_friends.IGXApplication;
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //    private static final int MSG_AUTH_COMPLETE = 5;
 
     @BindView(android.R.id.content) FrameLayout mFlRoot;
-    @BindView(R.id.rl_region_selector) RelativeLayout mRlRegionSelector;
+    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
     @BindView(R.id.tv_region_name) TextView mTvRegion;
     @BindView(R.id.tv_forget_password) TextView mTvForgetPassword;
     @BindView(R.id.tv_message_login) TextView mTvMessageLogin;
@@ -75,6 +75,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.imageButton_wechat) ImageButton mImageButtonWechat;
     @BindView(R.id.imageButton_qq) ImageButton mImageButtonQQ;
     @BindView(R.id.tbv_title) TitleBarView mTbvTitle;
+    @BindView(R.id.tvRegister) TextView tvRegister;
 
     private boolean isKeyboardShown;
     private Map<String, Region> mRegionMap;
@@ -149,6 +150,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initListener() {
         mBtnLogin.setOnClickListener(this);
+        tvRegister.setOnClickListener(this);
         mTvForgetPassword.setOnClickListener(this);
         mTvMessageLogin.setOnClickListener(this);
         mImageButtonWeibo.setOnClickListener(this);
@@ -194,12 +196,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-//    @Override protected void onRightTitleClick() {
-//        super.onRightTitleClick();
-//        Intent intent = new Intent(LoginActivity.this, Register1Activity.class);
-//        startActivity(intent);
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mEtAccount.setFocusable(true);
@@ -227,23 +223,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
 
             case R.id.tv_forget_password:
-//                Intent forget = new Intent(LoginActivity.this, ForgetPassword1Activity.class);
-//                startActivity(forget);
-//                mEtPassword.setText("");
+                Intent forget = new Intent(LoginActivity.this, ForgetPassword1Activity.class);
+                startActivity(forget);
+                mEtPassword.setText("");
                 break;
 
-            case R.id.rl_region_selector:
+            case R.id.ll_region_selector:
                 Intent intent = new Intent(LoginActivity.this, RegionSelectionActivity.class);
                 startActivityForResult(intent, 400);
                 break;
 
             case R.id.tv_message_login:
-//                Intent messageLoginIntent = new Intent(LoginActivity.this, MessageLoginOneActivity.class);
-//                messageLoginIntent.putExtra("area", mEtRegion.getText().toString().trim());
-//                messageLoginIntent.putExtra("phone", mEtAccount.getText().toString().trim());
-//                startActivity(messageLoginIntent);
+                Intent messageLoginIntent = new Intent(LoginActivity.this, MessageLoginOneActivity.class);
+                messageLoginIntent.putExtra("area", mEtRegion.getText().toString().trim());
+                messageLoginIntent.putExtra("phone", mEtAccount.getText().toString().trim());
+                startActivity(messageLoginIntent);
                 break;
-
+            case R.id.tvRegister:
+                Intent registerIntent = new Intent(LoginActivity.this, Register1Activity.class);
+                startActivity(registerIntent);
+                break;
 
             default:
                 break;

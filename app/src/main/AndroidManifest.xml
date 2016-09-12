@@ -89,6 +89,11 @@
         <activity android:name=".me.activity.Register1Activity"/>
         <activity android:name=".region.RegionSelectionActivity"/>
         <activity android:name=".SplashActivity"/>
+        <activity android:name=".me.activity.ForgetPassword1Activity"/>
+        <activity android:name=".me.activity.ForgetPassword2Activity"/>
+        <activity android:name=".me.activity.MessageLoginOneActivity"/>
+        <activity android:name=".me.activity.MessageLoginTwoActivity"/>
+        <activity android:name=".me.activity.MessageLoginThreeActivity"/>
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->
         <activity

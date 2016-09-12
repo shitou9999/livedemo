@@ -131,4 +131,197 @@
     <string name="date_of_birth">出生日期</string>
     <string name="address">地址</string>
     <string name="QQ">QQ</string>
+    <string name="action_title_message_login_">用验证码登录</string>
+
+    <string name="tab_find">发现</string>
+    <string name="tab_course">课程</string>
+    <string name="tab_live">直播</string>
+    <string name="tab_custom">定制</string>
+    <string name="tab_teacher">名师</string>
+    <string name="tab_me">我的</string>
+
+
+
+
+
+
+    <!-- teacher -->
+    <string name="lable_programs_subscription">节目订阅</string>
+    <string name="lable_teacher_recommended">名师推荐</string>
+    <string name="followed">已关注</string>
+    <string name="follow">关注</string>
+    <string name="follow_new">+&#160;关注</string>
+    <string name="subscription">订阅</string>
+    <string name="subscriptioned">已订阅</string>
+    <string name="subscription_new">+&#160;订阅</string>
+
+
+    <string name="system_setting">系统设置</string>
+    <string name="allow_not_wifi">允许在非WI-FI网络缓存</string>
+    <string name="cache_sharpness">缓存视频清晰度</string>
+    <string name="other">其它</string>
+    <string name="guide_page">引导页</string>
+    <string name="feedback">意见反馈</string>
+    <string name="give_me_the_score">给我评分</string>
+    <string name="share_app">分享APP给好友</string>
+    <string name="share">分享</string>
+    <string name="about_we">关于我们</string>
+    <string name="check_update">检查更新</string>
+    <string name="account">账号</string>
+    <string name="account_twoSpace">账&#160;&#160;&#160;&#160;号</string>
+    <string name="account_fourSpace">账&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;号</string>
+    <string name="perfect">完善</string>
+    <string name="default_date_for_birth">1970&#8211;01&#8211;01</string>
+    <string name="setting">设置</string>
+
+    <string name="hint_input_email">请输入您的邮箱</string>
+    <string name="hint_input_real_name">请填写真实姓名</string>
+    <string name="hint_input_password_new">请输入新密码,至少6位</string>
+    <string name="hint_authentication">参加官方讲座需进行身份认证</string>
+    <string name="hint_perfect_nickname">请完善昵称</string>/string>
+    <string name="hint_select_gender">请选择性别</string>
+    <string name="hint_phone_or_email">手机号/邮箱</string>
+    <string name="hint_select_city">请选择城市</string>
+
+    <string name="lable_fetch_check_code">获取验证码</string>
+    <string name="lable_wechat">公&#160;&#160;众&#160;&#160;号:</string>
+    <string name="lable_hotline">客服热线:</string>
+    <string name="lable_website">官&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;网:</string>
+
+    <string name="value_follow_count">已关注%d个老师</string>
+    <string name="value_follow_count_default">已关注0个老师</string>
+    <string name="value_subscriber_count">已订阅%d个节目</string>
+    <string name="value_subscriber_count_default">已订阅0个节目</string>
+    <string name="value_version">当前版本&#160;V%s</string>
+
+    <string name="sharpness_standard">流畅</string>
+    <string name="sharpness_high">高清</string>
+    <string name="sharpness_super">超清</string>
+
+    <!-- XXX: Remove or change this placeholder text -->
+    <string name="title_activity_register1">Register1Activity</string>
+    <string name="copyright_info">&#169;2016 iguxuan.com.all rights reserved</string>
+    <string name="hot_line">400&#8211;688&#8211;7676</string>
+    <string name="website">http://www.iguxuan.com</string>
+    <string name="temp_about_content">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;爱股轩APP为用户提供知名金融证券行业专家讲师原创的大盘分析、证券讲座、在线培训等内容，通过实施推送机制，以视频和文章等形式帮助用户提升金融证券分析能力、提高客户对市场的认知度、培养对市场的敏感性，在市场上捕捉到更多的契机。</string>
+
+    <string name="video">视频</string>
+    <string name="article">文章</string>
+    <string name="all">全部</string>
+
+    <!-- find -->
+    <string name="column_jiePan">解盘</string>
+    <string name="column_panQian">盘前</string>
+    <string name="column_panQian_No_Other_LAN">盘前</string>
+    <string name="column_panZhong">盘中</string>
+    <string name="column_panZhong_No_Other_LAN">盘中</string>
+    <string name="column_panHou">盘后</string>
+    <string name="column_panHou_No_Other_LAN">盘后</string>
+    <string name="column_citta">心法</string>
+    <string name="column_lecture">讲座</string>prəʊɡræm
+    <string name="knowledge">知识</string>
+    <string name="news">新闻</string>
+
+    <!-- programs type -->
+    <string name="programs_gdqc">股动钱潮</string>
+    <string name="programs_jqfb">金钱风暴</string>
+
+    <!-- jiepan[video] type list -->
+    <string name="jiepan_zao">早间</string>
+    <string name="jiepan_zhong">午间</string>
+    <string name="jiepan_wan">晚间</string>
+
+    <!-- news type list -->
+    <string name="news_type_CLYB">策略研报</string>
+    <string name="news_type_GGYB">个股研报</string>
+    <string name="news_type_HYYB">行业研报</string>
+    <string name="news_type_GZQH">股指期货</string>
+    <string name="news_type_RZRQ">融资融券</string>
+    <string name="news_type_GXZY">股权质押</string>
+    <string name="news_type_YJBG">业绩报告</string>
+    <string name="news_type_ZGCJ">中国财经</string>
+    <string name="news_type_QQCJ">全球财经</string>
+
+
+    <string-array name="array_news_type">
+        <item>@string/all</item>
+        <item>策略研报</item>
+        <item>个股研报</item>
+        <item>行业研报</item>
+        <item>股指期货</item>
+        <item>融资融券</item>
+        <item>股权质押</item>
+        <item>业绩报告</item>
+        <item>中国财经</item>
+        <item>全球财经</item>
+    </string-array>
+    <!-- 视频清晰度 -->
+    <string-array name="video_sharpness">
+        <item>流畅</item>
+        <item>高清</item>
+        <item>超清</item>
+    </string-array>
+
+
+
+
+
+    <!-- hint -->
+    <string name="hint_comment">我来说两句</string>
+    <string name="hint_comment2">我来评论&#8230;&#8230;&#8230;</string>
+    <string name="hint_comment3">我来评论&#8230;&#8230;&#8230;(限140个字符)</string>
+
+    <!-- tag -->
+    <string name="tag_comment_hot">热门评论</string>
+    <string name="tag_comment_all">全部评论</string>
+    <string name="tag_comment_more">更多评论&#160;▶</string>
+    <string name="tag_video_other">其它视频</string>
+    <string name="tag_video_recommend">视频推荐</string>
+    <string name="tag_jiepan_teacher">解盘名师</string>
+    <string name="tag_without_hot_comment">暂无热门评论</string>
+    <string name="tag_respond">回复了</string>
+
+
+    <!-- value -->
+    <string name="value_video_play_count">%s次播放</string>
+    <string name="value_video_fans_count">粉丝数:%d</string>
+    <string name="value_video_fans_count_s">粉丝数:%s</string>
+    <string name="value_video_subscribe_count">订阅数:%d</string>
+    <string name="value_video_subscribe_count_s">订阅数:%s</string>
+    <string name="value_video_favour_count">%d赞</string>
+    <string name="value_sdcard_capacity">已使用%1$s/剩余%2$s</string>
+    <string name="value_delete_count">删除&#160;(%d)</string>
+    <string name="value_download_ing_count">正在下载(%d)</string>
+    <string name="value_comment_source">来自%s端</string>
+    <string name="value_region_code_and_phone">+%1$s&#160;&#160;%2$s</string>
+    <string name="value_live_anchor">主持人:%s</string>
+    <string name="value_live_item_time">%1$s&#160;&#160;%2$s</string>
+
+
+
+    <!-- remind -->
+    <string name="remind_add_follow">关注老师获得推送</string>
+
+
+
+    <!-- zxing -->
+    <string name="str_zxing_scan">zxing\n条码扫描</string>
+    <string name="str_title_zxing">条码扫描</string>
+    <string name="str_zxing_torch_toggle">灯光</string>
+    <!--<string name="str_zxing_scan_text">请将二维码放入框内扫描</string>-->
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+
+
+    <!-- live -->
+    <string-array name="live_home_tab_titles">
+        <item>今日直播</item>
+        <item>历史回放</item>
+        <item>名师团队</item>
+    </string-array>
+
+    <string name="live_into_label">进入&#160;></string>
+    <string name="live_toast_not_information">未获取到直播信息</string>
+    <string name="live_toast_liked">您已赞过</string>
+    <string name="live_toast_not_started">直播正在准备中，再等一会哦</string>
+
 </resources>

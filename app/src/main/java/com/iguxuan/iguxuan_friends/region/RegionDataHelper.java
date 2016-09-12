@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
 import com.iguxuan.iguxuan_friends.util.DataConverter;
+import com.iguxuan.iguxuan_friends.util.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,27 +79,30 @@ public class RegionDataHelper {
      *
      * @return
      */
-    public static String getStringFromJson(Context context) {
+    public static String getStringFromJson(final Context context) {
         LinkedList<Region> cities = new LinkedList<>();
         StringBuilder fileContent = new StringBuilder("");
         BufferedReader reader = null;
+        InputStream is = null;
         try {
-            InputStream is = context.getAssets().open("jsonAreaCode.json");
+            is = context.getAssets().open("jsonAreaCode.json");
             reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
             String line = null;
             while ((line = reader.readLine()) != null) {
                 fileContent.append(line);
             }
-            reader.close();
         } catch (Exception e) {
-            throw new RuntimeException("Exception occurred. ", e);
+            LogUtils.e("RegionDataHelper", "读取jsonAreaCode.json失败", e);
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("IOException occurred. ", e);
+            try {
+                if (is != null) {
+                    is.close();
                 }
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                LogUtils.e("RegionDataHelper", "读取jsonAreaCode.json 关闭BufferedReader或InputStream失败", e);
             }
         }
         return fileContent.toString();

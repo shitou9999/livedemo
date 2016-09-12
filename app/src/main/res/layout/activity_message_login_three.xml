@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="@string/register"/>
+        app:title="@string/set_password"/>
 
-    <include layout="@layout/content_register1"/>
+    <include layout="@layout/content_message_login_three"/>
 
 </LinearLayout>

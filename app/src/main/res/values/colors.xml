@@ -65,8 +65,8 @@
     <color name="bg_BtnUnSubscribe">@color/colorBlue500</color>
     <color name="bg_translucent">#88000000</color>
 
-    <color name="def_EditTextColor">@color/colorGrey800</color>
+    <color name="def_EditTextColor">@color/colorGrey333333</color>
     <color name="def_EditBgColor">@color/colorGrey300</color>
-    <color name="def_HintTextColor">@color/colorGrey300</color>
+    <color name="def_HintTextColor">@color/colorGrey400</color>
     <color name="def_EditCursorTintColor">@color/colorGrey300</color>
 </resources>

@@ -10,7 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iguxuan.iguxuan_friends.IGXApplication;
@@ -50,7 +50,7 @@ import butterknife.ButterKnife;
  * 注册
  */
 public class Register1Activity extends AbsSMSPermissionActivity implements View.OnClickListener {
-    @BindView(R.id.rl_region_selector) RelativeLayout mRlRegionSelector;
+    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
     @BindView(R.id.tv_region_name) TextView mTvRegion;
     @BindView(R.id.et_region) EditText mEtRegion;
     @BindView(R.id.et_account) EditText mEtAccount;
@@ -230,7 +230,7 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
                 }
                 break;
 
-            case R.id.rl_region_selector:
+            case R.id.ll_region_selector:
                 Intent intent = new Intent(Register1Activity.this, RegionSelectionActivity.class);
                 startActivityForResult(intent, 200);
                 break;
