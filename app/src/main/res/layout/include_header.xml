@@ -7,7 +7,7 @@
         android:layout_height="?attr/actionBarSize">
 
 
-        <com.iguxuan.iguxuan_friends.widget.HeaderTabView
+        <com.kuainiutv.widget.HeaderTabView
             android:id="@+id/rl_fragment_live_main_top_actionBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -74,7 +74,7 @@
                 android:text="@string/value_friends_post_content"/>
 
 
-            <com.iguxuan.iguxuan_friends.widget.PostParentLayout
+            <com.kuainiutv.widget.PostParentLayout
                 android:id="@+id/pl_friends_post_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.iguxuan.iguxuan_friends.MainActivity">
+    tools:context="com.kuainiutv.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.iguxuan.iguxuan_friends.widget.NoSlideViewPager
+        <com.kuainiutv.widget.NoSlideViewPager
             android:id="@+id/vp_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

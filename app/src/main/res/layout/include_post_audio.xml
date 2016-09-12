@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:background="@color/colorGrey300">
 
-            <com.iguxuan.iguxuan_friends.widget.WaveformView
+            <com.kuainiutv.widget.WaveformView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

@@ -9,7 +9,7 @@
     android:orientation="vertical"
     >
 
-    <com.iguxuan.iguxuan_friends.widget.TitleBarView
+    <com.kuainiutv.widget.TitleBarView
         android:id="@+id/tbv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
