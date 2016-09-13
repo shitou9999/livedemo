@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.kuainiutv.util.AppUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 
 /**
@@ -16,14 +19,15 @@ import java.io.InputStream;
 */ 
 public class AreaDB {
 	//数据库存储路径  
-    String filePath = "data/data/com.iguxuan/databases/area.db";
-    //数据库存放的文件夹 data/data/com.iguxuan/databases/ 下面
-    String pathStr = "data/data/com.iguxuan/databases/";
+    String filePath = "data/data/%s/databases/area.db";
+    //数据库存放的文件夹 data/data/APP包名/databases/ 下面
+    String pathStr = "data/data/%s/databases/";
       
     SQLiteDatabase database;
   
     public SQLiteDatabase openDatabase(Context context){
-        System.out.println("filePath:"+filePath);
+        filePath=String.format(Locale.CHINA,filePath, AppUtils.getAppPackageName(context));
+        pathStr=String.format(Locale.CHINA,pathStr, AppUtils.getAppPackageName(context));
         File jhPath=new File(filePath);
             //查看数据库文件是否存在  
             if(jhPath.exists()){  

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iguxuan_friends</string>
+    <string name="app_name">快牛</string>
     <string name="action_settings">Settings</string>
     <string name="null_value">-</string>
 
@@ -189,7 +189,7 @@
     <string name="lable_website">官&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;网:</string>
 
     <string name="value_follow_count">已关注%d个老师</string>
-    <string name="value_follow_count_default">已关注0个老师</string>
+    <string name="value_follow_count_default">0</string>
     <string name="value_subscriber_count">已订阅%d个节目</string>
     <string name="value_subscriber_count_default">已订阅0个节目</string>
     <string name="value_version">当前版本&#160;V%s</string>

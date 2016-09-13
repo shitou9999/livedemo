@@ -94,6 +94,15 @@
         <activity android:name=".me.activity.MessageLoginOneActivity"/>
         <activity android:name=".me.activity.MessageLoginTwoActivity"/>
         <activity android:name=".me.activity.MessageLoginThreeActivity"/>
+        <activity android:name=".me.activity.PersonalActivity"/>
+        <activity android:name=".me.activity.PerfectPersonalActivity"/>
+        <activity android:name=".me.activity.IdentityActivity"/>
+        <activity android:name=".me.activity.UpdatePhone1Activity"/>
+        <activity android:name=".me.activity.UpdatePhone2Activity"/>
+        <activity android:name=".me.activity.BindEmailActivity"/>
+        <activity android:name=".me.activity.AlterPasswordActivity"/>
+        <activity android:name=".me.activity.ChooseRegionActivity"/>
+        <activity android:name=".util.TakePhotoActivity"/>
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->
         <activity

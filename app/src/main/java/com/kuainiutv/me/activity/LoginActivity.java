@@ -27,8 +27,10 @@ import com.kuainiutv.R;
 import com.kuainiutv.command.http.Api;
 import com.kuainiutv.command.http.UserHttpRequest;
 import com.kuainiutv.command.preferences.UserPreferencesManager;
+import com.kuainiutv.event.HttpEvent;
 import com.kuainiutv.event.UserEvent;
 import com.kuainiutv.modle.User;
+import com.kuainiutv.modle.cons.Action;
 import com.kuainiutv.modle.cons.Constant;
 import com.kuainiutv.region.Region;
 import com.kuainiutv.region.RegionDataHelper;
@@ -285,7 +287,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             User user = event.getUser();
             IGXApplication.setUser(user);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constant.INTENT_ACTION_GET_CUSTOM));
-
+            EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
             PreferencesUtils.putString(this, "phone", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));
             PreferencesUtils.putString(this, "area", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getArea()));
 

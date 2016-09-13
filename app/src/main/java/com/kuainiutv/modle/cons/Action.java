@@ -164,4 +164,5 @@ public enum Action {
     live_history,            // 往期直播视频
     live_teacher_need_refresh, // 直播名师团队需要刷新 XXX
     live_history_plus_one,   // 回放次数+1
+    choose_city   // 选择城市
 }

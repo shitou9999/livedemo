@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".me.activity.LoginActivity">
+
+    <com.kuainiutv.widget.TitleBarView
+        android:id="@+id/tbv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:right_visibility="invisible"
+        app:title="我的地址"/>
+
+    <ListView
+        android:id="@+id/lv_region"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:listSelector="@color/colorGrey600x"
+        android:smoothScrollbar="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
+</LinearLayout>
