@@ -59,17 +59,27 @@
                 android:layout_toRightOf="@id/tv_personallabel1"
                 tools:text="你咋不上天呢"/>
 
+            <ImageView
+                android:id="@+id/iv_Nickname_right"
+                android:layout_width="10dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:scaleType="centerInside"
+                android:src="@drawable/selector_right"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/fab_margin"
-                android:drawablePadding="@dimen/fab_margin"
-                android:drawableRight="@drawable/selector_right"
+                android:layout_toLeftOf="@+id/iv_Nickname_right"
                 android:gravity="center_vertical"
                 android:text="@string/perfect"/>
+
+
         </RelativeLayout>
 
         <!--</android.support.v7.widget.CardView>-->
@@ -108,15 +118,23 @@
                     android:layout_toRightOf="@id/tv_personallabel3"
                     tools:text="j****@163.com"/>
 
+                <ImageView
+                    android:id="@+id/iv_Email_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:drawablePadding="@dimen/fab_margin"
-                    android:drawableRight="@drawable/selector_right"
+                    android:layout_toLeftOf="@+id/iv_Email_right"
                     android:text="@string/binding"/>
             </RelativeLayout>
 
@@ -141,15 +159,23 @@
                     android:layout_toRightOf="@id/tv_personallabel2"
                     android:text=""/>
 
+                <ImageView
+                    android:id="@+id/iv_Password_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:drawablePadding="@dimen/fab_margin"
-                    android:drawableRight="@drawable/selector_right"
+                    android:layout_toLeftOf="@+id/iv_Password_right"
                     android:gravity="center_vertical"
                     android:text="@string/alter"/>
             </RelativeLayout>
@@ -176,15 +202,23 @@
                     android:layout_toRightOf="@id/tv_personallabel4"
                     tools:text="133****4567"/>
 
+                <ImageView
+                    android:id="@+id/iv_Account_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:drawablePadding="@dimen/fab_margin"
-                    android:drawableRight="@drawable/selector_right"
+                    android:layout_toLeftOf="@+id/iv_Account_right"
                     android:gravity="center_vertical"
                     android:text="@string/alter"/>
             </RelativeLayout>
@@ -211,16 +245,24 @@
                     android:layout_toRightOf="@id/tv_personallabel5"
                     tools:text="400******4561"/>
 
+                <ImageView
+                    android:id="@+id/iv_Identity_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right"
+                    />
 
                 <TextView
                     android:id="@+id/tv_personal_idno_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:drawablePadding="@dimen/fab_margin"
-                    android:drawableRight="@drawable/selector_right"
+                    android:layout_toLeftOf="@+id/iv_Identity_right"
                     android:gravity="center_vertical"
                     android:text="@string/certificationed"/>
             </RelativeLayout>
@@ -251,9 +293,13 @@
                 android:textSize="@dimen/text_size_small"/>
 
             <ImageView
-                style="@style/MeOptionStyleForArrows"
+                android:layout_width="10dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/fab_margin"
                 android:contentDescription="@string/about_we"
+                android:scaleType="centerInside"
                 android:src="@drawable/selector_right"
                 />
         </RelativeLayout>
