@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/ll_root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:id="@+id/iv_teacher_item_photo"
+        android:layout_width="@dimen/teacher_fg_item_image_width"
+        android:layout_height="@dimen/teacher_fg_item_image_height"
+        android:layout_gravity="center"
+        tools:src="@mipmap/head_nor"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_teacher_item_photo"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/iv_teacher_item_photo"
+        android:gravity="center"
+        android:textColor="@color/colorRed500"
+        android:textSize="@dimen/text_size_large"
+        tools:text="张三丰"/>
+
+    <TextView
+        android:id="@+id/tv_follow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tv_name"
+        android:background="@drawable/selector_follow_button_bg"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        tools:text="@string/follow_new"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_fans_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_name"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/tv_follow_button"
+        android:textSize="@dimen/text_size_micro"
+        tools:text="2222个粉丝"
+        />
+
+    <TextView
+        android:id="@+id/tvSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        tools:text="新奇特表现亮眼，多维布局共成长"/>
+
+    <TextView
+        android:id="@+id/tvAnalysis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tvSubject"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        tools:text="热点分析 "/>
+</RelativeLayout>

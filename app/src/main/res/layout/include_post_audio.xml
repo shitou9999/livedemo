@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:background="@color/colorGrey300">
 
-            <com.kuainiutv.widget.WaveformView
+            <tv.kuainiu.widget.WaveformView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

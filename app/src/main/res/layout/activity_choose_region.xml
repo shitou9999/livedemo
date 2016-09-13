@@ -7,9 +7,9 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".me.activity.LoginActivity">
+    tools:context="tv.kuainiu.me.activity.LoginActivity">
 
-    <com.kuainiutv.widget.TitleBarView
+    <tv.kuainiu.widget.TitleBarView
         android:id="@+id/tbv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

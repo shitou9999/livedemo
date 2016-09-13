@@ -52,8 +52,8 @@
 
 
     <!-- Teacher -->
-    <dimen name="teacher_fg_item_image_width">101.97dip</dimen>
-    <dimen name="teacher_fg_item_image_height">101.97dip</dimen>
+    <dimen name="teacher_fg_item_image_width">68dp</dimen>
+    <dimen name="teacher_fg_item_image_height">68dp</dimen>
     <dimen name="teacher_fg_item_bottom_height">63.03dip</dimen>
 
     <!-- !Find -->

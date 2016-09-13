@@ -14,7 +14,7 @@
         android:text="@string/tab_main_teacher"
         android:textColor="#FFFFFF"/>
 
-    <com.kuainiutv.widget.HeaderTabView
+    <tv.kuainiu.widget.HeaderTabView
         android:id="@+id/myhead"
         android:layout_width="match_parent"
         android:layout_height="48dp"

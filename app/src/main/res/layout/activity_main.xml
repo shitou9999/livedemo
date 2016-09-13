@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.kuainiutv.MainActivity">
+    tools:context="tv.kuainiu.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.kuainiutv.widget.NoSlideViewPager
+        <tv.kuainiu.widget.NoSlideViewPager
             android:id="@+id/vp_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
