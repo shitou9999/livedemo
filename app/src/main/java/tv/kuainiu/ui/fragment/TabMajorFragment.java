@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
-import tv.kuainiu.friends.fragment.FriendsTabFragment;
+import tv.kuainiu.ui.friends.fragment.FriendsTabFragment;
 
 /**
  * @author nanck on 2016/7/29.

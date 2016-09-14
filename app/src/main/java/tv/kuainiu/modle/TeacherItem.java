@@ -25,6 +25,14 @@ public class TeacherItem implements Parcelable {
      * is_follow : 1
      * fans_count : 10
      * is_push : 0
+     *
+     * 	"id" : "1",
+     "nickname" : "獠牙123",
+     "avatar" : "http:\/\/img.iguxuan.com\/uploadfile\/avatar\/default.png",
+     "slogan" : "信李治,得天下",
+     "listorder" : "0",
+     "fans_count" : "1",
+     "is_follow" : 0
      */
 
     public String id;
@@ -40,6 +48,43 @@ public class TeacherItem implements Parcelable {
     public int is_follow;
     public int fans_count;
     public int is_push;
+
+    public String nickname;
+    public String avatar;
+    public String slogan;
+    public String listorder;
+
+    protected TeacherItem(Parcel in) {
+        id = in.readString();
+        catid = in.readString();
+        title = in.readString();
+        url = in.readString();
+        description = in.readString();
+        thumb = in.readString();
+        banner = in.readString();
+        classX = in.readString();
+        body_thumb = in.readString();
+        vedio_count = in.readString();
+        is_follow = in.readInt();
+        fans_count = in.readInt();
+        is_push = in.readInt();
+        nickname = in.readString();
+        avatar = in.readString();
+        slogan = in.readString();
+        listorder = in.readString();
+    }
+
+    public static final Creator<TeacherItem> CREATOR = new Creator<TeacherItem>() {
+        @Override
+        public TeacherItem createFromParcel(Parcel in) {
+            return new TeacherItem(in);
+        }
+
+        @Override
+        public TeacherItem[] newArray(int size) {
+            return new TeacherItem[size];
+        }
+    };
 
     @Override public String toString() {
         return "TeacherItem{" +
@@ -63,48 +108,31 @@ public class TeacherItem implements Parcelable {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.catid);
-        dest.writeString(this.title);
-        dest.writeString(this.url);
-        dest.writeString(this.description);
-        dest.writeString(this.thumb);
-        dest.writeString(this.banner);
-        dest.writeString(this.classX);
-        dest.writeString(this.body_thumb);
-        dest.writeString(this.vedio_count);
-        dest.writeInt(this.is_follow);
-        dest.writeInt(this.fans_count);
-        dest.writeInt(this.is_push);
+    @Override public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeString(id);
+        parcel.writeString(catid);
+        parcel.writeString(title);
+        parcel.writeString(url);
+        parcel.writeString(description);
+        parcel.writeString(thumb);
+        parcel.writeString(banner);
+        parcel.writeString(classX);
+        parcel.writeString(body_thumb);
+        parcel.writeString(vedio_count);
+        parcel.writeInt(is_follow);
+        parcel.writeInt(fans_count);
+        parcel.writeInt(is_push);
+        parcel.writeString(nickname);
+        parcel.writeString(avatar);
+        parcel.writeString(slogan);
+        parcel.writeString(listorder);
     }
+
 
     public TeacherItem() {
     }
 
-    protected TeacherItem(Parcel in) {
-        this.id = in.readString();
-        this.catid = in.readString();
-        this.title = in.readString();
-        this.url = in.readString();
-        this.description = in.readString();
-        this.thumb = in.readString();
-        this.banner = in.readString();
-        this.classX = in.readString();
-        this.body_thumb = in.readString();
-        this.vedio_count = in.readString();
-        this.is_follow = in.readInt();
-        this.fans_count = in.readInt();
-        this.is_push = in.readInt();
-    }
 
-    public static final Parcelable.Creator<TeacherItem> CREATOR = new Parcelable.Creator<TeacherItem>() {
-        @Override public TeacherItem createFromParcel(Parcel source) {
-            return new TeacherItem(source);
-        }
 
-        @Override public TeacherItem[] newArray(int size) {
-            return new TeacherItem[size];
-        }
-    };
 }

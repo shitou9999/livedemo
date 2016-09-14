@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
-import tv.kuainiu.friends.model.BasePost;
+import tv.kuainiu.ui.friends.model.BasePost;
 
 /**
  * @author nanck on 2016/8/2.

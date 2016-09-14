@@ -85,23 +85,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".me.activity.LoginActivity"/>
-        <activity android:name=".me.activity.Register1Activity"/>
+        <activity android:name=".ui.me.activity.LoginActivity"/>
+        <activity android:name=".ui.me.activity.Register1Activity"/>
         <activity android:name=".region.RegionSelectionActivity"/>
         <activity android:name=".SplashActivity"/>
-        <activity android:name=".me.activity.ForgetPassword1Activity"/>
-        <activity android:name=".me.activity.ForgetPassword2Activity"/>
-        <activity android:name=".me.activity.MessageLoginOneActivity"/>
-        <activity android:name=".me.activity.MessageLoginTwoActivity"/>
-        <activity android:name=".me.activity.MessageLoginThreeActivity"/>
-        <activity android:name=".me.activity.PersonalActivity"/>
-        <activity android:name=".me.activity.PerfectPersonalActivity"/>
-        <activity android:name=".me.activity.IdentityActivity"/>
-        <activity android:name=".me.activity.UpdatePhone1Activity"/>
-        <activity android:name=".me.activity.UpdatePhone2Activity"/>
-        <activity android:name=".me.activity.BindEmailActivity"/>
-        <activity android:name=".me.activity.AlterPasswordActivity"/>
-        <activity android:name=".me.activity.ChooseRegionActivity"/>
+        <activity android:name=".ui.me.activity.ForgetPassword1Activity"/>
+        <activity android:name=".ui.me.activity.ForgetPassword2Activity"/>
+        <activity android:name=".ui.me.activity.MessageLoginOneActivity"/>
+        <activity android:name=".ui.me.activity.MessageLoginTwoActivity"/>
+        <activity android:name=".ui.me.activity.MessageLoginThreeActivity"/>
+        <activity android:name=".ui.me.activity.PersonalActivity"/>
+        <activity android:name=".ui.me.activity.PerfectPersonalActivity"/>
+        <activity android:name=".ui.me.activity.IdentityActivity"/>
+        <activity android:name=".ui.me.activity.UpdatePhone1Activity"/>
+        <activity android:name=".ui.me.activity.UpdatePhone2Activity"/>
+        <activity android:name=".ui.me.activity.BindEmailActivity"/>
+        <activity android:name=".ui.me.activity.AlterPasswordActivity"/>
+        <activity android:name=".ui.me.activity.ChooseRegionActivity"/>
         <activity android:name=".util.TakePhotoActivity"/>
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->

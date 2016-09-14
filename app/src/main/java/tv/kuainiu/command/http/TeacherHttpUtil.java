@@ -16,23 +16,37 @@ import tv.kuainiu.modle.cons.Action;
 public class TeacherHttpUtil {
 
 
+//    /**
+//     * 获取老师列表
+//     *
+//     * @param context
+//     * @param builder
+//     * @param action
+//     */
+//    public static void fetchTeacherList(Context context, ParamBuilder builder, Action action) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("is_all", builder.isAll);
+//        map.put("catid", builder.catId);
+//        map.put("is_official", builder.isOfficial);
+//        map.put("last_time", builder.lastTime);
+//        CacheConfig cacheConfig = new CacheConfig(true, true, 1, -1);
+//        OKHttpUtils.getInstance().post(context, Api.FETCH_FOLLOW_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
+//    }
+
     /**
      * 获取老师列表
-     *
      * @param context
-     * @param builder
+     * @param page
+     * @param uid
+     * @param size
      * @param action
      */
-    public static void fetchTeacherList(Context context, ParamBuilder builder, Action action) {
+    public static void fetchTeacherList(Context context,int page,String uid,int size, Action action) {
         Map<String, String> map = new HashMap<>();
-        map.put("is_all", builder.isAll);
-        map.put("catid", builder.catId);
-        map.put("is_official", builder.isOfficial);
-        map.put("last_time", builder.lastTime);
-        CacheConfig cacheConfig = new CacheConfig(true, true, 1, -1);
-        OKHttpUtils.getInstance().post(context, Api.FETCH_FOLLOW_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
+        map.put("page",String.valueOf(page));
+        map.put("size",String.valueOf(size));
+        OKHttpUtils.getInstance().post(context, Api.FIND_TEACHER_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
     }
-
 
     /**
      * 获取老师详情

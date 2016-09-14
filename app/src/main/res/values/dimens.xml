@@ -27,6 +27,9 @@
     <dimen name="edit_text_size_micro">@dimen/text_size_micro</dimen>
     <dimen name="edit_text_size_samll">@dimen/text_size_small</dimen>
     <dimen name="edit_text_size_normal">@dimen/edit_text_size_samll</dimen>
+    <dimen name="home_item_hot_name">@dimen/text_size_small</dimen>
+    <dimen name="home_item_hot_index">@dimen/text_size_large</dimen>
+    <dimen name="home_item_hot_text_percent">@dimen/text_size_micro</dimen>
 
     <dimen name="small_margin">6dp</dimen>
     <dimen name="micro_margin">3dp</dimen>

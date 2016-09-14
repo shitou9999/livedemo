@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 
 import tv.kuainiu.R;
-import tv.kuainiu.me.activity.LoginActivity;
+import tv.kuainiu.ui.me.activity.LoginActivity;
 
 
 /**

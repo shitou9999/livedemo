@@ -6,18 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 
-import tv.kuainiu.IGXApplication;
-import tv.kuainiu.command.http.Api;
-import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.cons.Action;
-import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.CacheManage;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.MeasureUtil;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.SecurityUtils;
-
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +21,17 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import tv.kuainiu.IGXApplication;
+import tv.kuainiu.command.http.Api;
+import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.cons.Action;
+import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.util.CacheManage;
+import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.util.LogUtils;
+import tv.kuainiu.util.MeasureUtil;
+import tv.kuainiu.util.NetUtils;
+import tv.kuainiu.util.SecurityUtils;
 
 /**
  * Created by guxuan on 2016/2/29.
@@ -160,6 +159,9 @@ public class OKHttpUtils {
         String urlPost = host.concat(url);
         DebugUtils.dd("url :\n=======================================================\n" +
                 urlPost +
+                "\n=======================================================");
+        DebugUtils.dd("param :\n=======================================================\n" +
+                param +
                 "\n=======================================================");
         if (!NetUtils.isOnline(context)) {
             if (cacheConfig != null && cacheConfig.isCached()) {
