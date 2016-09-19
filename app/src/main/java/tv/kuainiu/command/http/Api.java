@@ -122,5 +122,7 @@ public class Api {
     public static final String AUTH_LOGIN = "account/auth_login_android";      // 用户网页同步登录接口（V2)
     public static final String QRCODE_LOGIN = "qrcode/login";                  // 二维码登录接口（V2)
     public static final String GET_CATS = "news/get_cats";                     // 首页Flag
+    public static final String HOT_POINT = "news/hot_point";                     // 首页热门观点
+
 
 }

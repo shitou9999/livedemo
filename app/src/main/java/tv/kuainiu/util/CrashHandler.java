@@ -8,8 +8,6 @@ import android.os.Environment;
 import android.os.Looper;
 import android.widget.Toast;
 
-import tv.kuainiu.IGXApplication;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -25,6 +23,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
+
+import tv.kuainiu.IGXApplication;
 
 /**
  * @ClassName CrashHandler
@@ -227,8 +227,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                FileOutputStream fos = new FileOutputStream(FileSavePath
-                        + fileName);
+                FileOutputStream fos = new FileOutputStream(new File(FileSavePath,fileName));
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }

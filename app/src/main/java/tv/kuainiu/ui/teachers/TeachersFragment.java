@@ -39,8 +39,9 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherItem;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.ui.teachers.adapter.TeacherListAdapter;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.teachers.adapter.TeacherListAdapter;
+import tv.kuainiu.util.CustomLinearLayoutManager;
 import tv.kuainiu.util.DataConverter;
 import tv.kuainiu.util.DebugUtils;
 import tv.kuainiu.util.MeasureUtil;
@@ -62,7 +63,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     @BindView(R.id.err_layout) NetErrAddLoadView mErrView;
 
     private TeacherListAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private CustomLinearLayoutManager mLayoutManager;
     private boolean mIsLogin = false;
     //    private ProgramItem tempPro;
 //
@@ -74,7 +75,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     //    private boolean mIsLiveChild = false;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mReceiver;
-
+    private int page = 1;
     /**
      * Temp view holder
      */
@@ -101,7 +102,13 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_teachers, container, false);
+//        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_teachers, container, false);
+//        }
+//        ViewGroup viewgroup = (ViewGroup) view.getParent();
+//        if (viewgroup != null) {
+//            viewgroup.removeView(view);
+//        }
         ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -165,7 +172,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     private void initVariate() {
         mIsFirstIntoLogin = IGXApplication.isLogin();
         mAdapter = new TeacherListAdapter(getActivity());
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = new CustomLinearLayoutManager(getActivity());
 //        mLayoutManager.setSpanSizeLookup(new MySpanSizeLookup(mLayoutManager, mAdapter));
 
 //        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -177,7 +184,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
         mRvItems.setLayoutManager(mLayoutManager);
         int spaceProgram = getActivity().getResources().getDimensionPixelSize(R.dimen.def_divider);
 //        int space = getActivity().getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
-        mRvItems.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.HORIZONTAL));
+        mRvItems.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
 //        mRvItems.addItemDecoration(new TeacherItemDecoration(mAdapter, space));
         mRvItems.setAdapter(mAdapter);
     }
@@ -226,7 +233,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
      * 获取老师列表
      */
     private void fetchTeacherList() {
-        TeacherHttpUtil.fetchTeacherList(getActivity(), 1, IGXApplication.getUser() != null ? IGXApplication.getUser().getUser_id() : "", 10, Action.teacher_fg_fetch_follow_list);
+        TeacherHttpUtil.fetchTeacherList(getActivity(), page, IGXApplication.getUser() != null ? IGXApplication.getUser().getUser_id() : "", 10, Action.teacher_fg_fetch_follow_list);
     }
 
     // 添加 or 取消关注
@@ -282,11 +289,19 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                 JsonParser parser = new JsonParser();
                 JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
                 JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
-                mTeacherLIst = new DataConverter<TeacherItem>().JsonToListObject(json.toString(), new TypeToken<List<TeacherItem>>() {
+                List<TeacherItem> tempTeacherList = new DataConverter<TeacherItem>().JsonToListObject(json.toString(), new TypeToken<List<TeacherItem>>() {
                 }.getType());
+                if (page == 1) {
+                    mTeacherLIst.clear();
+                }
+                if (tempTeacherList.size() > 0) {
+                    int startIndex = mTeacherLIst.size();
+                    mTeacherLIst.addAll(tempTeacherList);
+                    mAdapter.setTeacherList(mTeacherLIst);
+                    mAdapter.notifyItemRangeInserted(startIndex, tempTeacherList.size());
+                }
 
-                mAdapter.setTeacherList(mTeacherLIst);
-                mAdapter.notifyDataSetChanged();
+
             }
             mErrView.StopLoading(event.getCode(), event.getMsg());
         }

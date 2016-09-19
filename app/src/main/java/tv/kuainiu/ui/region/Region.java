@@ -1,4 +1,4 @@
-package tv.kuainiu.region;
+package tv.kuainiu.ui.region;
 
 import android.os.Parcel;
 import android.os.Parcelable;

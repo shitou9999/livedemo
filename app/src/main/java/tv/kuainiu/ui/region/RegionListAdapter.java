@@ -1,4 +1,4 @@
-package tv.kuainiu.region;
+package tv.kuainiu.ui.region;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -10,32 +10,32 @@ import java.util.Collection;
 /**
  * Adapter holding a list of animal names of type String. Note that each item must be unique.
  */
-public abstract class CityListAdapter<VH extends RecyclerView.ViewHolder>
+public abstract class RegionListAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
-    private ArrayList<City> items = new ArrayList<City>();
+    private ArrayList<Region> items = new ArrayList<>();
 
-    public CityListAdapter() {
+    public RegionListAdapter() {
         setHasStableIds(true);
     }
 
-    public void add(City object) {
+    public void add(Region object) {
         items.add(object);
         notifyDataSetChanged();
     }
 
-    public void add(int index, City object) {
+    public void add(int index, Region object) {
         items.add(index, object);
         notifyDataSetChanged();
     }
 
-    public void addAll(Collection<? extends City> collection) {
+    public void addAll(Collection<? extends Region> collection) {
         if (collection != null) {
             items.addAll(collection);
             notifyDataSetChanged();
         }
     }
 
-    public void addAll(City... items) {
+    public void addAll(Region... items) {
         addAll(Arrays.asList(items));
     }
 
@@ -49,7 +49,7 @@ public abstract class CityListAdapter<VH extends RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    public City getItem(int position) {
+    public Region getItem(int position) {
         return items.get(position);
     }
 

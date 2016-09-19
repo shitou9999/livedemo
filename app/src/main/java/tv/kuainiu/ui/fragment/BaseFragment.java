@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 public class BaseFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -17,6 +18,7 @@ public class BaseFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     public String TAG = "";
+    public View view = null;
 
     public BaseFragment() {
         // Required empty public constructor

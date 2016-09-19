@@ -2,8 +2,8 @@ package tv.kuainiu.util;
 
 import android.app.Activity;
 
-import tv.kuainiu.MainActivity;
-import tv.kuainiu.SplashActivity;
+import tv.kuainiu.ui.MainActivity;
+import tv.kuainiu.ui.SplashActivity;
 
 import java.util.LinkedList;
 import java.util.List;

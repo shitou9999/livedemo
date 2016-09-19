@@ -1,4 +1,4 @@
-package tv.kuainiu;
+package tv.kuainiu.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,18 +21,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tv.kuainiu.IGXApplication;
+import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.ui.friends.fragment.FriendsMainFragment;
-import tv.kuainiu.ui.live.LiveMainFragment;
-import tv.kuainiu.ui.me.MeFragment;
 import tv.kuainiu.modle.InitInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.ui.teachers.TeachersFragment;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.friends.fragment.FriendsMainFragment;
+import tv.kuainiu.ui.home.HomeFragment;
+import tv.kuainiu.ui.me.MeFragment;
+import tv.kuainiu.ui.teachers.TeachersFragment;
 import tv.kuainiu.util.DebugUtils;
 import tv.kuainiu.util.LogUtils;
 import tv.kuainiu.util.NetUtils;
@@ -41,12 +43,12 @@ import tv.kuainiu.widget.NoSlideViewPager;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.vp_main) NoSlideViewPager mVpMain;
-    @BindView(R.id.tv_main_live) TextView mMainLive;
+    @BindView(R.id.tv_main_home) TextView mMainLive;
     @BindView(R.id.tv_main_friends) TextView mMainFriends;
     @BindView(R.id.tv_main_teacher) TextView mMainTeacher;
     @BindView(R.id.tv_main_me) TextView mMainMe;
 
-    @BindView(R.id.ll_main_live) LinearLayout ll_main_live;
+    @BindView(R.id.ll_main_home) LinearLayout ll_main_live;
     @BindView(R.id.ll_main_friends) LinearLayout ll_main_friends;
     @BindView(R.id.ll_main_teacher) LinearLayout ll_main_teacher;
     @BindView(R.id.ll_main_me) LinearLayout ll_main_me;
@@ -82,7 +84,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initData() {
         mBaseFragments.clear();
-        mBaseFragments.add(LiveMainFragment.newInstance());
+        mBaseFragments.add(HomeFragment.newInstance(0));
+//        mBaseFragments.add(LiveMainFragment.newInstance());
         mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(TeachersFragment.newInstance());
         mBaseFragments.add(MeFragment.newInstance());
@@ -100,10 +103,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mVpMain.setCurrentItem(position, false);
     }
 
-    @OnClick({R.id.ll_main_live, R.id.ll_main_friends, R.id.ll_main_teacher, R.id.ll_main_me})
+    @OnClick({R.id.ll_main_home, R.id.ll_main_friends, R.id.ll_main_teacher, R.id.ll_main_me})
     @Override public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ll_main_live:
+            case R.id.ll_main_home:
                 switchFragment(0);
                 break;
 

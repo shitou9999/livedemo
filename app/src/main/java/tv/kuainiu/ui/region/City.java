@@ -1,4 +1,4 @@
-package tv.kuainiu.region;
+package tv.kuainiu.ui.region;
 
 /**
  * Created by Sai on 16/3/28.

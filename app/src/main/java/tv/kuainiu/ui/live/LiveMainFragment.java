@@ -13,7 +13,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.MainActivity;
+import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.R;
 import tv.kuainiu.ui.live.fragment.ConsultationFragment;
 import tv.kuainiu.ui.live.fragment.OpenClassFragment;
@@ -44,7 +44,13 @@ public class LiveMainFragment extends BaseFragment {
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live_main, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_main, container, false);
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         ButterKnife.bind(this, view);
         initView();
         initData();

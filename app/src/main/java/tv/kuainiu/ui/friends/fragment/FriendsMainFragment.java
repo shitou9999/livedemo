@@ -31,6 +31,7 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.rl_fragment_live_main_top_actionBar) HeaderTabView mHeaderTabView;
     @BindView(R.id.ll_fragment_friends_main_news_info) LinearLayout mLlFragmentFriendsMainNewsInfo;
     @BindView(R.id.vp_fragment_friends_main) ViewPager mViewPager;
+    private List<MyHeader> list = new ArrayList<>();
 
     public static FriendsMainFragment newInstance() {
         Bundle args = new Bundle();
@@ -41,9 +42,10 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_main, container, false);
+        view = inflater.inflate(R.layout.fragment_friends_main, container, false);
         ButterKnife.bind(this, view);
-        List<MyHeader> list = new ArrayList<>();
+
+        list.clear();
         MyHeader header = new MyHeader("名家观点", "#ff0000");
         list.add(header);
         header = new MyHeader("解盘视频", "#ff0000");

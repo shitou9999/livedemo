@@ -231,7 +231,7 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private void bindTeachers(TeacherViewHolder holder, int position) {
-        if (null == mTeacherList || mTeacherList.size() < 1) {
+        if (null == mTeacherList || mTeacherList.size() < 1 && mTeacherList.size()<= position) {
             return;
         }
         TeacherItem item = mTeacherList.get(position);

@@ -1,4 +1,4 @@
-package tv.kuainiu.region;
+package tv.kuainiu.ui.region;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -3,8 +3,6 @@ package tv.kuainiu.util;
 import android.os.Environment;
 import android.util.Log;
 
-import tv.kuainiu.IGXApplication;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import tv.kuainiu.IGXApplication;
 
 /**
 * @ClassName LogUtils
@@ -275,7 +275,6 @@ public class LogUtils {
                     File file = new File(logDir + getLogFileName());
 
                     if (!file.exists()) {
-                        LogUtils.i("LogUtils", "LogUtils createNewFile log file path:" + file.getPath());
                         file.createNewFile();
                     }
                     fos = new FileOutputStream(file, true);

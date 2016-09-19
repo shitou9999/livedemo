@@ -98,7 +98,13 @@ public class MeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_me, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_me, container, false);
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         ButterKnife.bind(this, view);
         context = getActivity();
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -176,8 +182,7 @@ public class MeFragment extends BaseFragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN,
-            priority = 100)
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case login:

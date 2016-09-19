@@ -1,4 +1,4 @@
-package tv.kuainiu;
+package tv.kuainiu.ui;
 
 import tv.kuainiu.ui.activity.BaseActivity;
 

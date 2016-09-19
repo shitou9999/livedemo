@@ -29,7 +29,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.IGXApplication;
-import tv.kuainiu.MainActivity;
+import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;

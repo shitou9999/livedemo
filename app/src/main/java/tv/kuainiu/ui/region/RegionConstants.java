@@ -1,4 +1,4 @@
-package tv.kuainiu.region;
+package tv.kuainiu.ui.region;
 
 /**
  * @author nanck on 2016/5/31.

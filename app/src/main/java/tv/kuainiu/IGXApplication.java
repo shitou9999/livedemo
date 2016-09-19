@@ -6,6 +6,12 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.text.TextUtils;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.umeng.analytics.MobclickAgent;
+
+import java.io.File;
+
+import cn.jpush.android.api.JPushInterface;
 import tv.kuainiu.app.MVideoClient;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.preferences.UserPreferencesManager;
@@ -20,12 +26,6 @@ import tv.kuainiu.util.PreferencesUtils;
 import tv.kuainiu.util.SDCardUtils;
 import tv.kuainiu.util.SecurityUtils;
 import tv.kuainiu.util.StringUtils;
-import com.squareup.leakcanary.LeakCanary;
-import com.umeng.analytics.MobclickAgent;
-
-import java.io.File;
-
-import cn.jpush.android.api.JPushInterface;
 
 
 public class IGXApplication extends Application {

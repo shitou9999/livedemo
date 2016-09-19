@@ -18,14 +18,18 @@ import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.Banner;
+import tv.kuainiu.modle.HotPonit;
+import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
+import tv.kuainiu.util.ImageDisplayUtil;
+import tv.kuainiu.util.ScreenUtils;
+import tv.kuainiu.util.StringUtils;
 import tv.kuainiu.widget.NoScrollGridView;
 
 /**
  * @author nanck on 2016/7/29.
  */
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
 
 
     private Activity mContext;
@@ -44,11 +48,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * 热门观点List
      */
-    private List<Banner> mHotPointList = new ArrayList<>();
+    private List<HotPonit> mHotPointList = new ArrayList<>();
     /**
      * 实时要闻List
      */
-    private List<Banner> mNewList = new ArrayList<>();
+    private List<NewsItem> mNewList = new ArrayList<>();
+
     int mBannerListSize = 0;
     int mStockIndexListSize = 0;
     int mLiveListSize = 0;
@@ -68,7 +73,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void setBannerList(List<Banner> mBannerList) {
+        this.mBannerList.clear();
+//        this.mBannerList.add(mBannerList.get(mBannerList.size() - 1));
         this.mBannerList.addAll(mBannerList);
+//        this.mBannerList.add(mBannerList.get(0));
     }
 
     public void setLiveList(List<Banner> liveList) {
@@ -76,17 +84,25 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void setLiveListList(List<Banner> liveListList) {
-        this.mNewList.addAll(liveListList);
+//        this.mNewList.addAll(liveListList);
+    }
+
+    public void setHotPointList(List<HotPonit> mHotPointList) {
+        this.mHotPointList = mHotPointList;
+    }
+
+    public void setNewsList(List<NewsItem> mHotPointList) {
+        this.mNewList = mHotPointList;
     }
 
     @Override
     public int getItemCount() {
-        mBannerListSize = mBannerList.size() < 1 ? 0 : 1;
-        mStockIndexListSize = mStockIndexList.size() < 1 ? 0 : 1;
-        mLiveListSize = mLiveList.size() < 1 ? 0 : 1;
-        mHotPointListSize = mHotPointList.size() < 1 ? 0 : 1;
+        mBannerListSize = 1;
+        mStockIndexListSize = 1;
+        mLiveListSize = 1;
+        mHotPointListSize = 1;
         mNewListSize = mNewList.size() < 1 ? 0 : mNewList.size();
-        return mBannerListSize + mStockIndexListSize + mLiveListSize + mHotPointListSize + mNewListSize;
+        return mBannerListSize + mStockIndexListSize + mLiveListSize + mHotPointListSize + mNewListSize + 2;
     }
 
 
@@ -146,61 +162,108 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case BANNER:
+                //绑定banner
                 onBindBannerViewHolder((BannerViewHolder) holder);
                 break;
             case STOCK_INDEX:
-
+                onBindStockIndexViewHolder((BannerViewHolder) holder);
                 break;
             case LIVE:
+                //绑定中间直播信息
                 onBindLiveViewHolder((BannerViewHolder) holder);
                 break;
             case TEXT_HOT_POINT:
+                onBindTextHotPointViewHolder((TextViewHolder) holder);
                 break;
             case HOT_POINT:
+                onBindHotPointViewHolder((HotPointHolder) holder);
                 break;
             case TEXT_HOT_NEW:
+                onBindTextHotNewViewHolder((TextViewHolder) holder);
                 break;
             default:
+                //绑定新闻Item
                 onBindNewsItemViewHolder((ViewNewHolder) holder, position);
                 break;
         }
     }
 
-    @BindView(R.id.ivIamge) ImageView mIvIamge;//直播间图片
-    @BindView(R.id.tvLiveing) TextView mTvLiveing;//直播状态
-    @BindView(R.id.tvLiveingNumber) TextView mTvLiveingNumber;//直播间人数
+    //股票指数
+    private void onBindStockIndexViewHolder(BannerViewHolder holder) {
+    }
+
+    //热门观点
+    private void onBindHotPointViewHolder(HotPointHolder holder) {
+    }
+
+    private void onBindTextHotNewViewHolder(TextViewHolder holder) {
+        holder.tvHomeItemText.setText("实时要闻");
+    }
+
+    private void onBindTextHotPointViewHolder(TextViewHolder holder) {
+        holder.tvHomeItemText.setText("热门观点");
+    }
+
 
     //绑定Banner
-    public void onBindBannerViewHolder(BannerViewHolder holder) {
-        holder.mIndicator.setVisibility(View.VISIBLE);
+    public void onBindBannerViewHolder(final BannerViewHolder holder) {
+//        holder.mIndicator.setVisibility(View.GONE);
         List<View> mList = new ArrayList<>();
         for (int i = 0; i < mBannerList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item, null);
-            ButterKnife.bind(this, view);
-
+            ImageView mIvIamge = (ImageView) view.findViewById(R.id.ivIamge);//直播间图片
+            TextView mTvLiveing = (TextView) view.findViewById(R.id.tvLiveing);//直播状态
+            TextView mTvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);//直播间人数
+            RelativeLayout rl_state_living = (RelativeLayout) view.findViewById(R.id.rl_state_living);//直播间状态
+            rl_state_living.setVisibility(View.GONE);
+            ImageDisplayUtil.displayImage(mContext, mIvIamge, mBannerList.get(i).thumb);
             //TODO 绑定banner
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
         holder.mVpReadingTap.setAdapter(mViewPagerAdapter);
         holder.mIndicator.setViewPager(holder.mVpReadingTap);
+        holder.mVpReadingTap.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffsetPixels == 0.0) {
+                    if (position == mBannerList.size() - 1) {
+                        holder.mVpReadingTap.setCurrentItem(1, false);
+                    } else if (position == 0) {
+                        holder.mVpReadingTap.setCurrentItem(mBannerList.size() - 2, false);
+                    } else {
+                        holder.mVpReadingTap.setCurrentItem(position);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
-    @BindView(R.id.iv_left) ImageView mIvLeft;//左箭头
-    @BindView(R.id.iv_right) ImageView mIvRight;//右箭头
-    @BindView(R.id.tv_next_time) TextView mTvNextTime;//
-    @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;//头像
-    @BindView(R.id.tv_title) TextView mTvTitle;//直播状态
-    @BindView(R.id.tv_state) TextView mTvState;//直播间状态
-    @BindView(R.id.tv_time) TextView mTvTime;//时间
 
     //绑定Live
     public void onBindLiveViewHolder(BannerViewHolder holder) {
-        holder.mIndicator.setVisibility(View.GONE);
+//        holder.mIndicator.setVisibility(View.GONE);
         List<View> mList = new ArrayList<>();
         for (int i = 0; i < mBannerList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_item_mid, null);
-            ButterKnife.bind(this, view);
+            ImageView mIvLeft = (ImageView) view.findViewById(R.id.iv_left);//左箭头
+            ImageView mIvRight = (ImageView) view.findViewById(R.id.iv_right);//右箭头
+            TextView mTvNextTime = (TextView) view.findViewById(R.id.tv_next_time);//
+            RelativeLayout mRlAvatar = (RelativeLayout) view.findViewById(R.id.rl_avatar);//头像
+            TextView mTvTitle = (TextView) view.findViewById(R.id.tv_title);//直播状态
+            TextView mTvState = (TextView) view.findViewById(R.id.tv_state);//直播间状态
+            TextView mTvTime = (TextView) view.findViewById(R.id.tv_time);
+            ;//时间
             //TODO 绑定中间直播信息
             mList.add(view);
         }
@@ -210,19 +273,30 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //绑定Live
     public void onBindNewsItemViewHolder(ViewNewHolder holder, int position) {
-        int currentPosition = position - mBannerListSize - mStockIndexListSize-mLiveListSize-mHotPointListSize-mNewListSize;
-        //TODO 绑定新闻Item
+        int currentPosition = position - mBannerListSize - mStockIndexListSize - mLiveListSize - mHotPointListSize - mNewListSize;
+        if (currentPosition > -1 && currentPosition < mNewList.size()) {
+            //绑定新闻Item
+            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getTitle()));
+            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getDescription()));
+            ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getThumb()));
+        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         RecyclerView.ViewHolder vh = null;
-//        int height = vh.itemView.getHeight();
+        int screenWidth = ScreenUtils.getScreenWidth(mContext);
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
 //        vh.mViewFriendsPostLine.setLayoutParams(lp);
         switch (viewType) {
             case BANNER:
+
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
+                vh = new BannerViewHolder(view);
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(screenWidth, (int) (screenWidth / 1.67));
+                ((BannerViewHolder) vh).mVpReadingTap.setLayoutParams(lp);
+                break;
             case STOCK_INDEX:
             case LIVE:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
@@ -245,6 +319,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return vh;
     }
 
+    //banner ViewPager
     static class BannerViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vpReadingTap) ViewPager mVpReadingTap;
         @BindView(R.id.indicator) CircleIndicator mIndicator;
@@ -255,6 +330,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    //热点指数
     static class HotPointHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.gv_hot_point_grid) NoScrollGridView gv_hot_point_grid;
 
@@ -264,6 +340,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    //文字Item
     static class TextViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_home_item_text) TextView tvHomeItemText;
 
@@ -273,6 +350,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    //新闻Item
     static class ViewNewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivNewIamge) ImageView mIvNewIamge;
         @BindView(R.id.tvNewTitle) TextView mTvNewTitle;
