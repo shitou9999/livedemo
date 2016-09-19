@@ -1,7 +1,9 @@
 package tv.kuainiu.ui.home.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +23,11 @@ import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
+import tv.kuainiu.util.CustomLinearLayoutManager;
 import tv.kuainiu.util.ImageDisplayUtil;
 import tv.kuainiu.util.ScreenUtils;
 import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.widget.NoScrollGridView;
+import tv.kuainiu.widget.DividerItemDecoration;
 
 /**
  * @author nanck on 2016/7/29.
@@ -59,7 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     int mLiveListSize = 0;
     int mHotPointListSize = 0;
     int mNewListSize = 0;
-    private static final int BANNER = 0;
+    private static final int BANNER = 7;
     private static final int STOCK_INDEX = 1;
     private static final int LIVE = 2;
     private static final int TEXT_HOT_POINT = 3;
@@ -188,12 +191,21 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    //股票指数
+    //TODO 股票指数
     private void onBindStockIndexViewHolder(BannerViewHolder holder) {
     }
 
     //热门观点
     private void onBindHotPointViewHolder(HotPointHolder holder) {
+        CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(mContext);
+        mLayoutManager.setOrientation(CustomLinearLayoutManager.HORIZONTAL);
+        holder.rc_hot_point.setLayoutManager(mLayoutManager);
+        DividerItemDecoration mDividerItemDecoration=new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
+        mDividerItemDecoration.setColor(Color.parseColor("#00000000"));
+        mDividerItemDecoration.setItemSize(mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
+        holder.rc_hot_point.addItemDecoration(mDividerItemDecoration);
+        HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList);
+        holder.rc_hot_point.setAdapter(adp);
     }
 
     private void onBindTextHotNewViewHolder(TextViewHolder holder) {
@@ -217,7 +229,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             RelativeLayout rl_state_living = (RelativeLayout) view.findViewById(R.id.rl_state_living);//直播间状态
             rl_state_living.setVisibility(View.GONE);
             ImageDisplayUtil.displayImage(mContext, mIvIamge, mBannerList.get(i).thumb);
-            //TODO 绑定banner
+            //TODO 绑定banner click事件
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
@@ -271,7 +283,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.mVpReadingTap.setAdapter(mViewPagerAdapter);
     }
 
-    //绑定Live
+    //绑定新闻
     public void onBindNewsItemViewHolder(ViewNewHolder holder, int position) {
         int currentPosition = position - mBannerListSize - mStockIndexListSize - mLiveListSize - mHotPointListSize - mNewListSize;
         if (currentPosition > -1 && currentPosition < mNewList.size()) {
@@ -303,7 +315,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 vh = new BannerViewHolder(view);
                 break;
             case HOT_POINT:
-                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_index_grid_item, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_hot_point, parent, false);
                 vh = new HotPointHolder(view);
                 break;
             case TEXT_HOT_POINT:
@@ -332,7 +344,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //热点指数
     static class HotPointHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.gv_hot_point_grid) NoScrollGridView gv_hot_point_grid;
+        @BindView(R.id.rc_hot_point) RecyclerView rc_hot_point;
 
         public HotPointHolder(View itemView) {
             super(itemView);

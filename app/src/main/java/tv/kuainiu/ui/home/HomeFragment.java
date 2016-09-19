@@ -106,7 +106,8 @@ public class HomeFragment extends BaseFragment {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
-        rvReadingTap.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
+        DividerItemDecoration mDividerItemDecoration=new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        rvReadingTap.addItemDecoration(mDividerItemDecoration);
     }
 
     private void initData() {
