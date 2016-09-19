@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +27,6 @@ import tv.kuainiu.widget.NoScrollGridView;
  * @author nanck on 2016/7/29.
  */
 public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPointHolder> {
-
 
 
     private Activity mContext;
@@ -49,12 +49,12 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
 
     @Override
     public void onBindViewHolder(HotPointHolder holder, int position) {
-        HotPonit mHotPoint=mHotPointList.get(position);
+        HotPonit mHotPoint = mHotPointList.get(position);
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(mHotPoint.getNickname()));
         holder.mTvHotPointContent.setText(StringUtils.replaceNullToEmpty(mHotPoint.getDescription()));
-        ImageDisplayUtil.displayImage(mContext,holder.mCivAvatar,StringUtils.replaceNullToEmpty(mHotPoint.getAvatar()));
-        holder.mTvHotPointSupport.setText(StringUtils.replaceNullToEmpty(mHotPoint.getSupport_num(),"0"));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>( mContext,R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
+        ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getAvatar()));
+        holder.mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%s)", StringUtils.replaceNullToEmpty(mHotPoint.getSupport_num(), "0")));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
                 mHotPoint.getTag_list());//data既可以是数组，也可以是List集合
         holder.mLlFlag.setAdapter(adapter);
     }
@@ -63,7 +63,8 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
     @Override
     public HotPointHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
-        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams((int) (screenWidth * 0.75), (int) (screenWidth * 0.75 / 1.5));
+//        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams((int) (screenWidth * 0.75), (int) (screenWidth * 0.75 / 1.5));
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams((int) (screenWidth * 0.75), ViewGroup.LayoutParams.WRAP_CONTENT);
         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_hot_point_item, parent, false);
         view.setLayoutParams(lp);
         return new HotPointHolder(view);
