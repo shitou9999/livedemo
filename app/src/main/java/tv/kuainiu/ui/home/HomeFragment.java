@@ -188,7 +188,7 @@ public class HomeFragment extends BaseFragment {
 
                             mHomeAdapter.setHotPointList(mHotPonitList);
                             try {
-                                mHomeAdapter.notifyItemChanged(3);
+                                mHomeAdapter.notifyItemChanged(4);
                             } catch (IllegalStateException e) {
                                 e.printStackTrace();
                             }
