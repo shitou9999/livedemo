@@ -30,12 +30,13 @@ import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.ui.me.activity.LoginActivity;
-import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.me.activity.LoginActivity;
+import tv.kuainiu.ui.me.activity.PersonalActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.util.DebugUtils;
 import tv.kuainiu.util.ImageDisplayUtil;
 import tv.kuainiu.util.PreferencesUtils;
@@ -148,6 +149,8 @@ public class MeFragment extends BaseFragment {
             case R.id.rl_institution:
                 break;
             case R.id.rl_live:
+                Intent jj=new Intent(getActivity(), TeacherZoneActivity.class);
+                startActivity(jj);
                 break;
             case R.id.rl_appointment:
                 break;

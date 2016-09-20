@@ -2,9 +2,6 @@ package tv.kuainiu.ui.friends.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.fragment.TabMajorFragment;
+import tv.kuainiu.ui.friends.adapter.SimpleTabFragmentPageAdapter;
 import tv.kuainiu.widget.HeaderTabView;
 import tv.kuainiu.widget.MyHeader;
 
@@ -61,7 +58,7 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
 
         SimpleTabFragmentPageAdapter adapter = new SimpleTabFragmentPageAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(5);
+//        mViewPager.setOffscreenPageLimit(5);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -89,23 +86,5 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    // ==================================================================================
-    // nil  ||
-    // ==================================================================================
-    class SimpleTabFragmentPageAdapter extends FragmentPagerAdapter {
-        private static final int PAGE_COUNT = 3;
-
-        public SimpleTabFragmentPageAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override public Fragment getItem(int position) {
-            return TabMajorFragment.newInstance(position);
-        }
-
-        @Override public int getCount() {
-            return PAGE_COUNT;
-        }
-    }
 
 }

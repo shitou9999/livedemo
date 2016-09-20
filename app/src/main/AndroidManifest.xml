@@ -101,6 +101,7 @@
         <activity android:name=".ui.me.activity.AlterPasswordActivity"/>
         <activity android:name=".ui.me.activity.ChooseRegionActivity"/>
         <activity android:name=".util.TakePhotoActivity"/>
+        <activity android:name=".ui.teachers.activity.TeacherZoneActivity"/>
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->
         <activity

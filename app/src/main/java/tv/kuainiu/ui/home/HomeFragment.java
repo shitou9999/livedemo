@@ -60,6 +60,9 @@ public class HomeFragment extends BaseFragment {
     private List<NewsItem> mNewsItemList = new ArrayList<>();
     private int HotPointPage = 1;
     private int NewsPage = 1;
+    private boolean loading = false;
+    RecyclerView.OnScrollListener loadmoreListener;
+    CustomLinearLayoutManager mLayoutManager;
 
     public static HomeFragment newInstance(int parentPosition) {
         HomeFragment fragment = new HomeFragment();
@@ -94,20 +97,22 @@ public class HomeFragment extends BaseFragment {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        initListener();
         initView();
         dataBind();
         initData();
-        initListener();
+
 
         return view;
     }
 
     private void initView() {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
-        CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(getActivity());
+        mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
-        DividerItemDecoration mDividerItemDecoration=new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
         rvReadingTap.addItemDecoration(mDividerItemDecoration);
+        rvReadingTap.addOnScrollListener(loadmoreListener);
     }
 
     private void initData() {
@@ -134,7 +139,29 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initListener() {
+        loadmoreListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) //向下滚动
+                {
+                    int visibleItemCount = mLayoutManager.getChildCount();
+                    int totalItemCount = mLayoutManager.getItemCount();
+                    int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        loading = true;
+                        NewsPage += 1;
+                        getNews();
+                    }
+                }
+            }
+        };
     }
 
     private void dataBind() {
@@ -213,11 +240,12 @@ public class HomeFragment extends BaseFragment {
                             mNewsItemList.clear();
                         }
                         if (tempNewsList.size() > 0) {
-                            int startIndex=mNewsItemList.size()+5;
+                            int startIndex = mNewsItemList.size() + 5;
                             mNewsItemList.addAll(tempNewsList);
                             mHomeAdapter.setNewsList(mNewsItemList);
                             try {
-                                mHomeAdapter.notifyItemRangeInserted(startIndex,tempNewsList.size());
+                                loading=false;
+                                mHomeAdapter.notifyItemRangeInserted(startIndex, tempNewsList.size());
                             } catch (IllegalStateException e) {
                                 e.printStackTrace();
                             }
@@ -225,7 +253,7 @@ public class HomeFragment extends BaseFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     LogUtils.e("FindFragment", "获取实时新闻数据失败:" + event.getMsg());
                 }
                 break;

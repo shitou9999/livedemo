@@ -27,7 +27,7 @@ import tv.kuainiu.ui.friends.fragment.FriendsTabFragment;
 public class TabMajorFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
     private static final String[][] titles = {
-            {"消息", "名师"},
+            {"观点", "解盘"},
             {"直播", "点播"},
             {"小道消息", "谈古论今"}};
 
@@ -125,7 +125,7 @@ public class TabMajorFragment extends BaseFragment {
 //        mBaseFragments.add(TabTempFragment.newInstance(Color.MAGENTA, pstr + " : N次方"));
     }
 
-    static class SimpleViewPager extends FragmentPagerAdapter {
+   public static class SimpleViewPager extends FragmentPagerAdapter {
         private static final int PAGE_COUNT = 2;
         private List<BaseFragment> mFragments;
         private String[] mTitles;

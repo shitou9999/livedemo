@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="100dp"
+               android:focusable="true"
+               android:focusableInTouchMode="true"
+               android:scaleType="center"
+               android:src="@mipmap/net"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+    >
+        <RelativeLayout
+            android:id="@+id/rl_avatar"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ci_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                app:civ_border_color="@color/colorGrey500"
+                app:civ_border_width="1dp"
+                tools:src="@mipmap/net"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/vip_ic"/>
+        </RelativeLayout>
+        <TextView android:id="@+id/tvTheme"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginTop="10dp"
+                  android:layout_toRightOf="@+id/rl_avatar"
+                  android:textColor="@color/colorGrey333333"
+                  android:textSize="@dimen/text_size_large"
+                  tools:text="波段交易"/>
+        <TextView android:id="@+id/tvTeacherName"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignLeft="@+id/tvTheme"
+                  android:layout_below="@+id/tvTheme"
+                  android:layout_marginTop="10dp"
+                  android:background="@drawable/selector_bg_blue2"
+                  android:paddingBottom="5dp"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:paddingTop="5dp"
+                  android:textColor="@color/colorWhite"
+                  android:textSize="@dimen/text_size_small"
+                  tools:text="王丽"/>
+
+        <TextView
+            android:id="@+id/tv_follow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tvTeacherName"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_follow_button_bg"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            tools:text="@string/follow_new"
+        />
+
+        <TextView
+            android:id="@+id/tv_follow_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tvTeacherName"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_follow_button"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            tools:text="2.9万人关注"
+        />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_fragment_friends_main_news_info"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="断线(%68)"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="趋势波段(%23)"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="技术(%16)"/>
+
+    </LinearLayout>
+</LinearLayout>
