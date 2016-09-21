@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.tv_fans_count) TextView textFansCount;
         @BindView(R.id.tvSubject) TextView tvSubject;
         @BindView(R.id.tvAnalysis) TextView tvAnalysis;
+        @BindView(R.id.ll_root) RelativeLayout ll_root;
 
         public TeacherViewHolder(View itemView) {
             super(itemView);
@@ -171,13 +173,13 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            return vh;
 //        }
         View view = mLayoutInflater.inflate(R.layout.teacher_item_t, parent, false);
-            TeacherViewHolder vh = new TeacherViewHolder(view);
-            vh.imgPhoto.setOnClickListener(this);
-            vh.textFollow.setOnClickListener(this);
-
+        TeacherViewHolder vh = new TeacherViewHolder(view);
+        vh.imgPhoto.setOnClickListener(this);
+        vh.textFollow.setOnClickListener(this);
+        vh.ll_root.setOnClickListener(this);
 //            vh.imgPhoto.setLayoutParams(layoutParams1);
 //            vh.rlBottom.setLayoutParams(layoutParams2);
-            return vh;
+        return vh;
     }
 
 
@@ -231,14 +233,15 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private void bindTeachers(TeacherViewHolder holder, int position) {
-        if (null == mTeacherList || mTeacherList.size() < 1 && mTeacherList.size()<= position) {
+        if (null == mTeacherList || mTeacherList.size() < 1 && mTeacherList.size() <= position) {
             return;
         }
         TeacherItem item = mTeacherList.get(position);
         // 传递数据
-        holder.imgPhoto.setTag(R.id.iv_teacher_item_photo,item);
-        holder.textFollow.setTag(R.id.iv_teacher_item_photo,item);
-        holder.textFollow.setTag(R.id.tv_fans_count,holder.textFansCount);
+        holder.imgPhoto.setTag(R.id.iv_teacher_item_photo, item);
+        holder.textFollow.setTag(R.id.iv_teacher_item_photo, item);
+        holder.textFollow.setTag(R.id.tv_fans_count, holder.textFansCount);
+        holder.ll_root.setTag(R.id.ll_root,item);
 
         holder.textName.setText(item.nickname);
         ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar, R.mipmap.ic_def_error);

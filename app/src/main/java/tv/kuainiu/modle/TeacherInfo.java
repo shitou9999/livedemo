@@ -5,32 +5,24 @@ package tv.kuainiu.modle;
  */
 public class TeacherInfo {
 
+
     /**
-     * id : 8
-     * catid : 28
-     * title : 张清华
-     * url : http://www.iguxuan.com/index.php?m=content&c=teacher&a=index&teacherid=8
-     * description : BKD战法 战胜人性弱点 创造股市财富
-     * thumb : http://img.iguxuan.com/statics/images/gx/TouXiang/ZhangQingHua.jpg
-     * banner : http://img.iguxuan.com/statics/images/gx/special/zqh.jpg
-     * class : teacher
-     * vedio_count : 102
-     * news_count : 275
-     * fans_count : 17
-     * is_follow : 1
+     * id : 1
+     * nickname : 陈雨墨
+     * avatar : http://kuainiu.oss-cn-shanghai.aliyuncs.com/uploadfile/avatar/file_1460453945638_9354.jpg
+     * slogan : 玩转短线 独创理论
+     * banner :
+     * fans_count : 0
+     * is_follow : 0
      */
 
-    public String id;
-    public String catid;
-    public String title;
-    public String description;
-    public String thumb;
-    public String banner;
-    public String classification;
-    public int vedio_count;
-    public int news_count;
-    public int fans_count;
-    public int is_follow;
+    private String id;
+    private String nickname;
+    private String avatar;
+    private String slogan;
+    private String banner;
+    private int fans_count;
+    private int is_follow;
 
     public String getId() {
         return id;
@@ -40,28 +32,28 @@ public class TeacherInfo {
         this.id = id;
     }
 
-    public String getCatid() {
-        return catid;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setCatid(String catid) {
-        this.catid = catid;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSlogan() {
+        return slogan;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 
     public String getBanner() {
@@ -70,30 +62,6 @@ public class TeacherInfo {
 
     public void setBanner(String banner) {
         this.banner = banner;
-    }
-
-    public String getClassification() {
-        return classification;
-    }
-
-    public void setClassification(String classification) {
-        this.classification = classification;
-    }
-
-    public int getVedio_count() {
-        return vedio_count;
-    }
-
-    public void setVedio_count(int vedio_count) {
-        this.vedio_count = vedio_count;
-    }
-
-    public int getNews_count() {
-        return news_count;
-    }
-
-    public void setNews_count(int news_count) {
-        this.news_count = news_count;
     }
 
     public int getFans_count() {
@@ -110,13 +78,5 @@ public class TeacherInfo {
 
     public void setIs_follow(int is_follow) {
         this.is_follow = is_follow;
-    }
-
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
     }
 }

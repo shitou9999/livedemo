@@ -10,7 +10,7 @@ import tv.kuainiu.ui.fragment.TabMajorFragment;
  * Created by jack on 2016/9/20.
  */
 public class SimpleTabFragmentPageAdapter extends FragmentPagerAdapter {
-    private int PAGE_COUNT = 3;
+    private int PAGE_COUNT = 2;
 
     public SimpleTabFragmentPageAdapter(FragmentManager fm) {
         super(fm);

@@ -35,17 +35,34 @@ public class TeacherHttpUtil {
 
     /**
      * 获取老师列表
+     *
      * @param context
      * @param page
      * @param uid
      * @param size
      * @param action
      */
-    public static void fetchTeacherList(Context context,int page,String uid,int size, Action action) {
+    public static void fetchTeacherList(Context context, int page, String uid, int size, Action action) {
         Map<String, String> map = new HashMap<>();
-        map.put("page",String.valueOf(page));
-        map.put("size",String.valueOf(size));
+        map.put("page", String.valueOf(page));
+        map.put("size", String.valueOf(size));
         OKHttpUtils.getInstance().post(context, Api.FIND_TEACHER_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
+    }
+
+    /**
+     * 1.14 动态列表   news/dynamics_list     名师个人专区-动态
+     *
+     * @param context
+     * @param page
+     * @param teacherId
+     * @param action
+     */
+    public static void fetchTeacherDynamicsList(Context context, int page, String teacherId, Action action) {
+        Map<String, String> map = new HashMap<>();
+        map.put("teacher_id", teacherId);
+        map.put("page", String.valueOf(page));
+//        map.put("size", String.valueOf(size));
+        OKHttpUtils.getInstance().post(context, Api.FIND_DYNAMICS_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
     }
 
     /**
@@ -57,7 +74,7 @@ public class TeacherHttpUtil {
      */
     public static void fetchTeacherDetails(Context context, ParamBuilder builder, Action action) {
         Map<String, Object> map = new HashMap<>();
-        map.put("teacherid", builder.teacherId);
+        map.put("teacher_id", builder.teacherId);
         map.put("user_id", builder.userId);
         OKHttpUtils.getInstance().syncGet(context, Api.FETCH_TEAHCER_INFO + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
     }

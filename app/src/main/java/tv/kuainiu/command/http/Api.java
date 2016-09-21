@@ -62,6 +62,7 @@ public class Api {
     public static final String DEL_FOLLOW = "sns/del_follow";                  // 取消关注
     public static final String FETCH_TEAHCER_INFO = "news/teacher_info";       // 获取老师信息
     public static final String FIND_TEACHER_LIST = "news/teacher_list";        // 发现_老师列表
+    public static final String FIND_DYNAMICS_LIST = "news/dynamics_list";        // 名师个人专区-动态
 
     /* 节目 */
     //

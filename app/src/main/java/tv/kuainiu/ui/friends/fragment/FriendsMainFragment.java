@@ -47,8 +47,8 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
         list.add(header);
         header = new MyHeader("解盘视频", "#ff0000");
         list.add(header);
-        header = new MyHeader("订阅主题", "#ff0000");
-        list.add(header);
+//        header = new MyHeader("订阅主题", "#ff0000");
+//        list.add(header);
         mHeaderTabView.setData(list);
         mHeaderTabView.setCheckListen(new HeaderTabView.ICheckListen() {
             @Override public void checked(int index) {

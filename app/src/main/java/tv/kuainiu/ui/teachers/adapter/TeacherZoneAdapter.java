@@ -1,20 +1,36 @@
 package tv.kuainiu.ui.teachers.adapter;
 
-import android.support.v4.view.ViewPager;
+import android.graphics.Color;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Theme;
+import tv.kuainiu.modle.TeacherInfo;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.ui.friends.adapter.SimpleTabFragmentPageAdapter;
+import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.friends.model.Message;
+import tv.kuainiu.util.ImageDisplayUtil;
+import tv.kuainiu.util.ImageDisplayUtils;
+import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.widget.PostParentLayout;
 
 /**
  * @author nanck on 2016/7/29.
@@ -23,18 +39,46 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private BaseActivity mContext;
-
+    private List<TabLayout.Tab> listTab;
+    private TabLayout.OnTabSelectedListener tabSelectedListener;
     private static final int TOP = 0;
-    private static final int BODY = 1;
+    private static final int TAB = 1;
+    private static final int BODY = 2;
+    private static final int SIZE = 2;
+
+    private List<Message> mMessages = new ArrayList<>();
+    private int selectedIndex = 0;
+    private TeacherInfo teacherInfo;
 
     public TeacherZoneAdapter(BaseActivity context) {
         mContext = context;
     }
 
+    private String[] tabNames;
+
+    public void setTabNames(String[] tabNames, TabLayout.OnTabSelectedListener tabSelectedListener) {
+        this.tabNames = tabNames;
+        this.tabSelectedListener = tabSelectedListener;
+    }
+
+    public void setTeacherInfo(TeacherInfo teacherInfo) {
+        this.teacherInfo = teacherInfo;
+    }
+
+    public void setMessages(List<Message> messages) {
+        mMessages = messages;
+    }
+
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+        if (listTab != null && listTab.size() > selectedIndex) {
+            listTab.get(selectedIndex).select();
+        }
+    }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return mMessages.size() + SIZE;
     }
 
 
@@ -43,6 +87,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (position) {
             case 0:
                 type = TOP;
+                break;
+            case 1:
+                type = TAB;
                 break;
             default:
                 type = BODY;
@@ -58,21 +105,102 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case TOP:
                 //绑定Top
                 onBindTopViewHolder((TopViewHolder) holder);
+
+                break;
+            case TAB:
+                onBindTabViewHolder((TabViewHolder) holder);
                 break;
             case BODY:
                 //绑定Body
-                onBindBodyViewHolder((BodyViewHolder) holder);
+                onBindBodyViewHolder((BodyViewHolder) holder, position);
                 break;
         }
     }
 
-
-    private void onBindTopViewHolder(TopViewHolder holder) {
+    private void onBindTabViewHolder(TabViewHolder holder) {
+        if (listTab == null) {
+            listTab = new ArrayList<>();
+            holder.mTabFragmentMajor.removeAllTabs();
+            for (int i = 0; i < tabNames.length; i++) {
+                TabLayout.Tab tab = holder.mTabFragmentMajor.newTab();
+                tab.setText(tabNames[i]);
+                listTab.add(tab);
+//            tab.setTag(tabNamesTags[i]);
+                holder.mTabFragmentMajor.addTab(tab);
+            }
+            holder.mTabFragmentMajor.addOnTabSelectedListener(tabSelectedListener);
+            holder.mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
+            holder.mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
+        }/* else {
+            listTab.get(selectedIndex).select();
+        }*/
     }
 
-    private void onBindBodyViewHolder(BodyViewHolder holder) {
-        SimpleTabFragmentPageAdapter adapter = new SimpleTabFragmentPageAdapter(mContext.getSupportFragmentManager(),1);
-        holder.mNvpFragmentMajor.setAdapter(adapter);
+
+    private void onBindTopViewHolder(TopViewHolder holder) {
+        if(teacherInfo==null){
+            return;
+        }
+        ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()));
+        ImageDisplayUtil.displayImage(mContext, holder.ivBanner, StringUtils.replaceNullToEmpty(teacherInfo.getBanner()));
+        holder.mTvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
+        holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
+        holder.mTvFollowNumber.setText(String.format(Locale.CHINA,"%s人关注",StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
+        if(teacherInfo.getIs_follow()==0) {
+            holder.mTvFollowButton.setText("+关注");
+            holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow()!=0);
+        }else{
+            holder.mTvFollowButton.setText("已关注");
+        }
+    }
+
+    private List<BaseFragment> mBaseFragments = new ArrayList<>();
+
+    private void onBindBodyViewHolder(BodyViewHolder holder, int position) {
+        Message message = mMessages.get(position - SIZE);
+
+        ImageDisplayUtils.display(mContext, message.getHead_photo(), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        holder.mTvFriendsPostNickname.setText(message.getNickname());
+        holder.mTvFriendsPostContent.setText(message.getMessage_content());
+
+        String ct = mContext.getString(R.string.value_comment_count, message.getComment_count());
+        holder.mTvFriendsPostComment.setText(ct);
+
+        String lt = mContext.getString(R.string.value_comment_like, message.getLike_count());
+        holder.mTvFriendsPostLike.setText(lt);
+
+
+        holder.mPostParentLayout.setPostType(message.getType());
+        switch (message.getMessage_type()) {
+            case 1:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                break;
+
+            case 2:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+
+            default:
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+        }
+
+
+        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
+//        int height = holder.itemView.getHeight();
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
+//        holder.mViewFriendsPostLine.setLayoutParams(lp);
+//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
+
+
+        // Hide bottom live
+        int v = position == mMessages.size() - 1 ? View.GONE : View.VISIBLE;
+        holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
 
     @Override
@@ -84,8 +212,12 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_top, parent, false);
                 vh = new TopViewHolder(view);
                 break;
+            case TAB:
+                view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_tab, parent, false);
+                vh = new TabViewHolder(view);
+                break;
             case BODY:
-                view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_body, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
                 vh = new BodyViewHolder(view);
                 break;
         }
@@ -94,6 +226,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     //banner ViewPager
     static class TopViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivBanner) ImageView ivBanner;
         @BindView(R.id.ci_avatar) CircleImageView mCiAvatar;
         @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;
         @BindView(R.id.tvTheme) TextView mTvTheme;
@@ -106,11 +239,31 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    } //banner ViewPager
+
+    static class TabViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.btnPublish) Button mBtnPublish;
+        @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
+
+        public TabViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
     //banner ViewPager
     static class BodyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.nvp_fragment_major) ViewPager mNvpFragmentMajor;
+        @BindView(R.id.tv_friends_post_time) TextView mTvFriendsPostTime;
+        @BindView(R.id.view_friends_post_line) View mViewFriendsPostLine;
+        @BindView(R.id.civ_friends_post_head) CircleImageView mCivFriendsPostHead;
+        //        @BindView(R.id.iv_friends_post_temp) ImageView mIvFriendsTemp;
+        @BindView(R.id.pl_friends_post_group) PostParentLayout mPostParentLayout;
+        @BindView(R.id.tv_friends_post_nickname) TextView mTvFriendsPostNickname;
+        @BindView(R.id.tv_friends_post_content) TextView mTvFriendsPostContent;
+        @BindView(R.id.tv_friends_post_type) TextView mTvFriendsPostType;
+        @BindView(R.id.tv_friends_post_comment) TextView mTvFriendsPostComment;
+        @BindView(R.id.tv_friends_post_like) TextView mTvFriendsPostLike;
+        @BindView(R.id.view_friends_post_line_bottom) View mViewFriendsPostLineBottom;
 
         public BodyViewHolder(View itemView) {
             super(itemView);

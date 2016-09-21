@@ -92,6 +92,7 @@ public enum Action {
     teacher_fg_fetch_subscibe_list,
     teacher_fg_fetch_detail,
     teacher_fg_fetch_jie_pan_top3,
+    find_dynamics_list,
 
     /* 节目详情 ProgramZoneActivity */
     program_zone_fetch_info,
