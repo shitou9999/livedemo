@@ -32,16 +32,16 @@ android {
     signingConfigs {
         debug {
             // No debug config
-            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
-            keyAlias 'lasding_release'
-            keyPassword 'lasding_release'
-            storePassword 'lasding2016'
+//            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
+//            keyAlias 'lasding_release'
+//            keyPassword 'lasding_release'
+//            storePassword 'lasding2016'
         }
         release {
-            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
-            keyAlias 'lasding_release'
-            keyPassword 'lasding_release'
-            storePassword 'lasding2016'
+//            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
+//            keyAlias 'lasding_release'
+//            keyPassword 'lasding_release'
+//            storePassword 'lasding2016'
         }
     }
     buildTypes {

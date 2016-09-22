@@ -3,21 +3,20 @@ package tv.kuainiu.ui.friends.adapter;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
-import tv.kuainiu.ui.friends.model.Message;
+import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.util.ImageDisplayUtils;
+import tv.kuainiu.util.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**
@@ -25,42 +24,39 @@ import tv.kuainiu.widget.PostParentLayout;
  */
 public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.ViewHolder> {
     private Activity mContext;
-    private List<Message> mMessages = new ArrayList<>();
-
+//    private List<Message> mMessages = new ArrayList<>();
+    private List<TeacherZoneDynamics> teacherZoneDynamicsList;
     public FriendsPostAdapter(Activity context) {
         mContext = context;
     }
 
-    public FriendsPostAdapter(Activity context, List<Message> messages) {
+    public FriendsPostAdapter(Activity context, List<TeacherZoneDynamics> TeacherZoneDynamics) {
         mContext = context;
-        mMessages = messages;
+        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
 
-    public void setMessages(List<Message> messages) {
-        mMessages = messages;
+    public void setMessages(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
+        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
 
     @Override public int getItemCount() {
-        return mMessages == null ? 0 : mMessages.size();
+        return teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Message message = mMessages.get(position);
+        TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
-        ImageDisplayUtils.display(mContext, message.getHead_photo(), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
-        holder.mTvFriendsPostNickname.setText(message.getNickname());
-        holder.mTvFriendsPostContent.setText(message.getMessage_content());
-
-        String ct = mContext.getString(R.string.value_comment_count, message.getComment_count());
+        String ct = mContext.getString(R.string.value_comment_count,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(),"0"));
         holder.mTvFriendsPostComment.setText(ct);
 
-        String lt = mContext.getString(R.string.value_comment_like, message.getLike_count());
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(),"0"));
         holder.mTvFriendsPostLike.setText(lt);
-
-
-        holder.mPostParentLayout.setPostType(message.getType());
-        switch (message.getMessage_type()) {
+        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info().get(0));
+        switch (teacherZoneDynamics.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
@@ -80,7 +76,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         }
 
 
-        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
+//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
 //        int height = holder.itemView.getHeight();
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
 //        holder.mViewFriendsPostLine.setLayoutParams(lp);
@@ -88,7 +84,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
 
 
         // Hide bottom live
-        int v = position == mMessages.size() - 1 ? View.GONE : View.VISIBLE;
+        int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
 

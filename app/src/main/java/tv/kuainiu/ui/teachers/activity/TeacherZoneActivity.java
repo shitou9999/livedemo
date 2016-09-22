@@ -32,6 +32,7 @@ import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherInfo;
+import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
@@ -66,6 +67,7 @@ public class TeacherZoneActivity extends BaseActivity {
     private String user_id = "";
     private TeacherInfo teacherInfo;
     private int page = 1;
+    private List<TeacherZoneDynamics> teacherZoneDynamicsList = new ArrayList<>();
 
     public static void intoNewIntent(Activity context, String id) {
         Intent intent = new Intent(context, TeacherZoneActivity.class);
@@ -132,10 +134,8 @@ public class TeacherZoneActivity extends BaseActivity {
     }
 
     private void initData() {
-        parseJson();
         initTab(0);
         mTeacherZoneAdapter = new TeacherZoneAdapter(this);
-        mTeacherZoneAdapter.setMessages(mMessages);
         mTeacherZoneAdapter.setTabNames(tabNames, getOnTabSelectedListener());
         mRvReadingTap.setAdapter(mTeacherZoneAdapter);
 //        View view = LayoutInflater.from(this).inflate(R.layout.activity_teacher_zone_top, null);
@@ -180,6 +180,13 @@ public class TeacherZoneActivity extends BaseActivity {
     private void teacherInfoDataBind(TeacherInfo teacherInfo) {
         mTeacherZoneAdapter.setTeacherInfo(teacherInfo);
         mTeacherZoneAdapter.notifyItemChanged(0);
+    }
+
+    private void teacherZoneDynamicsListDataBind() {
+        if(teacherZoneDynamicsList!=null && teacherZoneDynamicsList.size()>0) {
+            mTeacherZoneAdapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
+            mTeacherZoneAdapter.notifyItemRangeInserted(TeacherZoneAdapter.SIZE, teacherZoneDynamicsList.size());
+        }
     }
 
     @NonNull
@@ -236,7 +243,32 @@ public class TeacherZoneActivity extends BaseActivity {
                 }
                 break;
             case find_dynamics_list:
+                if (Constant.SUCCEED == event.getCode()) {
+                    DataConverter<TeacherInfo> dataConverter = new DataConverter<>();
+                    if (event.getData() != null && event.getData().has("data")) {
+                        try {
+                            JSONObject jsonObject = event.getData().getJSONObject("data");
+                            List<TeacherZoneDynamics> tempTeacherZoneDynamicsList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
+                            }.getType());
+                            if (page == 1) {
+                                teacherZoneDynamicsList.clear();
+                            }
+                            if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {
+                                teacherZoneDynamicsList.addAll(tempTeacherZoneDynamicsList);
+                                teacherZoneDynamicsListDataBind();
+                            }
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ToastUtils.showToast(this, "老师信息解析失败");
+                            finish();
+                        }
+
+                    }
+                } else {
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
+                    finish();
+                }
                 break;
         }
 

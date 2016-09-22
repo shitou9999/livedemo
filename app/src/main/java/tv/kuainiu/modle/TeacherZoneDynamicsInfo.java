@@ -5,137 +5,68 @@ package tv.kuainiu.modle;
  */
 public class TeacherZoneDynamicsInfo {
 
+
     /**
-     * id : 19
-     * user_id : 1
-     * support_num : 0
-     * comment_num : 0
-     * nickname :
-     * avatar :
-     * type : 1
-     * news_id : 0
-     * description : 今日大盘走势情况很乐观，同志们加油
-     * thumb :
-     * create_date : 1474360580
-     * synchro_wb : 1
-     * status : 1
+     * news_catid : 3
+     * news_catname : 创业板
+     * news_thumb : http://img.iguxuan.com/uploadfile/2016/0920/t_20160920111208178.png
+     * news_inputtime : 1474367219
+     * type : 3
+     * news_title : 9-20时时分析
      */
 
-    private int id;
-    private int user_id;
-    private String support_num;
-    private String comment_num;
-    private String nickname;
-    private String avatar;
-    private int type;
-    private int news_id;
-    private String description;
-    private String thumb;
-    private int create_date;
-    private int synchro_wb;
-    private int status;
+    private String news_catid;
+    private String news_catname;
+    private String news_thumb;
+    private String news_inputtime;
+    private String type;
+    private String news_title;
 
-    public int getId() {
-        return id;
+    public String getNews_catid() {
+        return news_catid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNews_catid(String news_catid) {
+        this.news_catid = news_catid;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public String getNews_catname() {
+        return news_catname;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setNews_catname(String news_catname) {
+        this.news_catname = news_catname;
     }
 
-    public String getSupport_num() {
-        return support_num;
+    public String getNews_thumb() {
+        return news_thumb;
     }
 
-    public void setSupport_num(String support_num) {
-        this.support_num = support_num;
+    public void setNews_thumb(String news_thumb) {
+        this.news_thumb = news_thumb;
     }
 
-    public String getComment_num() {
-        return comment_num;
+    public String getNews_inputtime() {
+        return news_inputtime;
     }
 
-    public void setComment_num(String comment_num) {
-        this.comment_num = comment_num;
+    public void setNews_inputtime(String news_inputtime) {
+        this.news_inputtime = news_inputtime;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public int getNews_id() {
-        return news_id;
+    public String getNews_title() {
+        return news_title;
     }
 
-    public void setNews_id(int news_id) {
-        this.news_id = news_id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
-    public int getCreate_date() {
-        return create_date;
-    }
-
-    public void setCreate_date(int create_date) {
-        this.create_date = create_date;
-    }
-
-    public int getSynchro_wb() {
-        return synchro_wb;
-    }
-
-    public void setSynchro_wb(int synchro_wb) {
-        this.synchro_wb = synchro_wb;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    public void setNews_title(String news_title) {
+        this.news_title = news_title;
     }
 }

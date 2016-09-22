@@ -19,9 +19,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
-import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
-import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.friends.model.Message;
 
 /**
  * @author nanck on 2016/7/29.
@@ -53,8 +52,8 @@ public class FriendsTabFragment extends BaseFragment {
 
         parseJson();
 
-        FriendsPostAdapter adapter = new FriendsPostAdapter(context, mMessages);
-        mRecyclerView.setAdapter(adapter);
+//        FriendsPostAdapter adapter = new FriendsPostAdapter(context, mMessages);
+//        mRecyclerView.setAdapter(adapter);
 
         return view;
     }

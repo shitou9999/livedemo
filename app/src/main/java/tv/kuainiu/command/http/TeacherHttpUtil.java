@@ -58,11 +58,11 @@ public class TeacherHttpUtil {
      * @param action
      */
     public static void fetchTeacherDynamicsList(Context context, int page, String teacherId, Action action) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("teacher_id", teacherId);
         map.put("page", String.valueOf(page));
 //        map.put("size", String.valueOf(size));
-        OKHttpUtils.getInstance().post(context, Api.FIND_DYNAMICS_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(context, Api.FIND_DYNAMICS_LIST + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
     }
 
     /**

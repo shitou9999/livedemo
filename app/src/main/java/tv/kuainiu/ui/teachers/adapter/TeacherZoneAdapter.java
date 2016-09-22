@@ -3,7 +3,6 @@ package tv.kuainiu.ui.teachers.adapter;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.modle.TeacherInfo;
+import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.util.ImageDisplayUtil;
 import tv.kuainiu.util.ImageDisplayUtils;
 import tv.kuainiu.util.StringUtils;
@@ -40,13 +39,13 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private BaseActivity mContext;
     private List<TabLayout.Tab> listTab;
+    private List<TeacherZoneDynamics> teacherZoneDynamicsList;
     private TabLayout.OnTabSelectedListener tabSelectedListener;
     private static final int TOP = 0;
     private static final int TAB = 1;
     private static final int BODY = 2;
-    private static final int SIZE = 2;
+    public static final int SIZE = 2;
 
-    private List<Message> mMessages = new ArrayList<>();
     private int selectedIndex = 0;
     private TeacherInfo teacherInfo;
 
@@ -65,8 +64,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.teacherInfo = teacherInfo;
     }
 
-    public void setMessages(List<Message> messages) {
-        mMessages = messages;
+
+    public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
+        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
 
     public void setSelectedIndex(int selectedIndex) {
@@ -78,7 +78,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return mMessages.size() + SIZE;
+        int count=teacherZoneDynamicsList==null?0:teacherZoneDynamicsList.size();
+        return SIZE+count;
     }
 
 
@@ -138,18 +139,18 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private void onBindTopViewHolder(TopViewHolder holder) {
-        if(teacherInfo==null){
+        if (teacherInfo == null) {
             return;
         }
         ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()));
         ImageDisplayUtil.displayImage(mContext, holder.ivBanner, StringUtils.replaceNullToEmpty(teacherInfo.getBanner()));
         holder.mTvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
-        holder.mTvFollowNumber.setText(String.format(Locale.CHINA,"%s人关注",StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
-        if(teacherInfo.getIs_follow()==0) {
+        holder.mTvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
+        if (teacherInfo.getIs_follow() == 0) {
             holder.mTvFollowButton.setText("+关注");
-            holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow()!=0);
-        }else{
+            holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
+        } else {
             holder.mTvFollowButton.setText("已关注");
         }
     }
@@ -157,21 +158,18 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
 
     private void onBindBodyViewHolder(BodyViewHolder holder, int position) {
-        Message message = mMessages.get(position - SIZE);
+        TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position - SIZE);
+        ImageDisplayUtils.display(mContext,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
-        ImageDisplayUtils.display(mContext, message.getHead_photo(), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
-        holder.mTvFriendsPostNickname.setText(message.getNickname());
-        holder.mTvFriendsPostContent.setText(message.getMessage_content());
-
-        String ct = mContext.getString(R.string.value_comment_count, message.getComment_count());
+        String ct = mContext.getString(R.string.value_comment_count,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(),"0"));
         holder.mTvFriendsPostComment.setText(ct);
 
-        String lt = mContext.getString(R.string.value_comment_like, message.getLike_count());
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(),"0"));
         holder.mTvFriendsPostLike.setText(lt);
-
-
-        holder.mPostParentLayout.setPostType(message.getType());
-        switch (message.getMessage_type()) {
+        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info().get(0));
+        switch (teacherZoneDynamics.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
@@ -191,7 +189,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
 
-        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
+//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
 //        int height = holder.itemView.getHeight();
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
 //        holder.mViewFriendsPostLine.setLayoutParams(lp);
@@ -199,7 +197,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         // Hide bottom live
-        int v = position == mMessages.size() - 1 ? View.GONE : View.VISIBLE;
+        int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
 
