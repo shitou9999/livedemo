@@ -136,6 +136,11 @@ public class MeFragment extends BaseFragment {
 
     private void initView() {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                uploadUserInfo();
+            }
+        });
     }
 
     @OnClick({R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment})
@@ -149,7 +154,7 @@ public class MeFragment extends BaseFragment {
             case R.id.rl_institution:
                 break;
             case R.id.rl_live:
-                Intent jj=new Intent(getActivity(), TeacherZoneActivity.class);
+                Intent jj = new Intent(getActivity(), TeacherZoneActivity.class);
                 startActivity(jj);
                 break;
             case R.id.rl_appointment:
@@ -185,7 +190,8 @@ public class MeFragment extends BaseFragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    @Subscribe(threadMode = ThreadMode.MAIN,
+            priority = 100)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case login:
@@ -242,6 +248,7 @@ public class MeFragment extends BaseFragment {
         } else {
             mTvFollowCount.setText(StringUtils.getDecimal(user.getFollow_count(), Constant.TEN_THOUSAND, "万", ""));
         }
+        srlRefresh.setRefreshing(false);
     }
 
     private void displayAvatar(String imagePath) {
