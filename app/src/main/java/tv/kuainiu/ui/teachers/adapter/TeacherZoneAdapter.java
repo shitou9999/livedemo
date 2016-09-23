@@ -23,7 +23,9 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
+import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.util.ImageDisplayUtil;
@@ -40,14 +42,17 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private BaseActivity mContext;
     private List<TabLayout.Tab> listTab;
     private List<TeacherZoneDynamics> teacherZoneDynamicsList;
+    private List<CustomVideo> customVideoList;
     private TabLayout.OnTabSelectedListener tabSelectedListener;
     private static final int TOP = 0;
     private static final int TAB = 1;
     private static final int BODY = 2;
     public static final int SIZE = 2;
-
+    public static final int CUSTOM_VIEW_POINT = 0;
+    public static final int CUSTOM_VIDEO = 1;
     private int selectedIndex = 0;
     private TeacherInfo teacherInfo;
+
 
     public TeacherZoneAdapter(BaseActivity context) {
         mContext = context;
@@ -68,6 +73,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
         this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
+    public void setTeacherZoneJiePanList(List<CustomVideo> customVideoList) {
+        this.customVideoList = customVideoList;
+    }
 
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
@@ -78,8 +86,16 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        int count=teacherZoneDynamicsList==null?0:teacherZoneDynamicsList.size();
-        return SIZE+count;
+        int count=0;
+        switch (selectedIndex){
+            case CUSTOM_VIEW_POINT:
+                count = teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
+                break;
+            case CUSTOM_VIDEO:
+                count = customVideoList == null ? 0 : customVideoList.size();
+                break;
+        }
+        return SIZE + count;
     }
 
 
@@ -158,15 +174,27 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
 
     private void onBindBodyViewHolder(BodyViewHolder holder, int position) {
+        switch (selectedIndex) {
+            case CUSTOM_VIEW_POINT:
+                dataViewPoint(holder, position);
+                break;
+            case CUSTOM_VIDEO:
+                dataVideo(holder, position);
+                break;
+        }
+
+    }
+
+    private void dataViewPoint(BodyViewHolder holder, int position) {
         TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position - SIZE);
-        ImageDisplayUtils.display(mContext,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
-        String ct = mContext.getString(R.string.value_comment_count,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(),"0"));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
 
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(),"0"));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
         switch (teacherZoneDynamics.getType()) {
@@ -200,7 +228,54 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
+    private void dataVideo(BodyViewHolder holder, int position) {
+        CustomVideo teacherZoneDynamics = customVideoList.get(position-SIZE);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        holder.mTvFriendsPostComment.setText(ct);
+
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        holder.mTvFriendsPostLike.setText(lt);
+        TeacherZoneDynamicsInfo news_info=new TeacherZoneDynamicsInfo();
+        news_info.setType(teacherZoneDynamics.getType());
+        news_info.setNews_title(teacherZoneDynamics.getDescription());
+        news_info.setNews_catid(teacherZoneDynamics.getCat_id());
+        news_info.setNews_inputtime(teacherZoneDynamics.getInputtime());
+        holder.mPostParentLayout.setPostType(news_info);
+        switch (Integer.parseInt(teacherZoneDynamics.getType())) {
+            case 1:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                break;
+
+            case 2:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+
+            default:
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+        }
+
+
+//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
+//        int height = holder.itemView.getHeight();
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
+//        holder.mViewFriendsPostLine.setLayoutParams(lp);
+//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
+
+
+        // Hide bottom live
+        int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
+        holder.mViewFriendsPostLineBottom.setVisibility(v);
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
@@ -216,9 +291,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case BODY:
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
-                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-                int margin=mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
-                layoutParams.setMargins(margin,margin,margin,0);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                int margin = mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                layoutParams.setMargins(margin, margin, margin, 0);
                 vh = new BodyViewHolder(view);
                 break;
         }

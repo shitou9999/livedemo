@@ -40,6 +40,10 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         this.type=type;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
         this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }

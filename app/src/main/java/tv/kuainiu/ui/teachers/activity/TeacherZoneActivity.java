@@ -21,19 +21,27 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.Theme;
+import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.TeacherHttpUtil;
+import tv.kuainiu.command.http.core.CacheConfig;
+import tv.kuainiu.command.http.core.OKHttpUtils;
+import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.ui.teachers.adapter.TeacherZoneAdapter;
@@ -67,7 +75,9 @@ public class TeacherZoneActivity extends BaseActivity {
     private String user_id = "";
     private TeacherInfo teacherInfo;
     private int page = 1;
+    private int pageJiePan = 1;
     private List<TeacherZoneDynamics> teacherZoneDynamicsList = new ArrayList<>();
+    private List<CustomVideo> customVideoList = new ArrayList<>();
 
     public static void intoNewIntent(Activity context, String id) {
         Intent intent = new Intent(context, TeacherZoneActivity.class);
@@ -105,8 +115,13 @@ public class TeacherZoneActivity extends BaseActivity {
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                page = 1;
-                getData();
+                if (selectedIndex == 0) {
+                    page = 1;
+                    getData();
+                } else {
+                    pageJiePan =  1;
+                    getJeiPan();
+                }
             }
         });
         loadmoreListener = new RecyclerView.OnScrollListener() {
@@ -132,8 +147,14 @@ public class TeacherZoneActivity extends BaseActivity {
 
                     if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                         loading = true;
-                        page += 1;
-                        getData();
+
+                        if (selectedIndex == 0) {
+                            page += 1;
+                            getData();
+                        } else {
+                            pageJiePan += 1;
+                            getJeiPan();
+                        }
                     }
                 }
             }
@@ -157,6 +178,14 @@ public class TeacherZoneActivity extends BaseActivity {
         fetchTeacherDynamicsList();
     }
 
+    private void getJeiPan() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", String.valueOf(pageJiePan));
+        map.put("teacher_id", teacherid);
+        map.put("type", Constans.TYPE_VIDEO);
+        OKHttpUtils.getInstance().syncGet(this, Api.FIND_NEWS_LIST + ParamUtil.getParamForGet(map), Action.find_news_list, CacheConfig.getCacheConfig());
+    }
+
     /**
      * 名师个人专区-动态
      */
@@ -164,7 +193,7 @@ public class TeacherZoneActivity extends BaseActivity {
         TeacherHttpUtil.fetchTeacherDynamicsList(this, page, teacherid, Action.find_dynamics_list);
     }
 
-    private void initTab(int selectedIndex) {
+    private void initTab(int selected) {
         if (listStickTab == null) {
             listStickTab = new ArrayList<>();
             mTabFragmentMajor.removeAllTabs();
@@ -181,9 +210,19 @@ public class TeacherZoneActivity extends BaseActivity {
             mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
         } else {
             if (rl_stick.getVisibility() == View.VISIBLE) {
-                mTeacherZoneAdapter.setSelectedIndex(selectedIndex);
+                mTeacherZoneAdapter.setSelectedIndex(selected);
             } else {
-                listStickTab.get(selectedIndex).select();
+                listStickTab.get(selected).select();
+            }
+            if (selected != selectedIndex) {
+                selectedIndex = selected;
+                if (selected == 0) {
+                    page = 1;
+                    getData();
+                } else {
+                    pageJiePan = 1;
+                    getJeiPan();
+                }
             }
         }
     }
@@ -197,7 +236,16 @@ public class TeacherZoneActivity extends BaseActivity {
     private void teacherZoneDynamicsListDataBind(int oldsize) {
         if (teacherZoneDynamicsList != null && teacherZoneDynamicsList.size() > 0) {
             mTeacherZoneAdapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
+            mTeacherZoneAdapter.setSelectedIndex(TeacherZoneAdapter.CUSTOM_VIEW_POINT);
             mTeacherZoneAdapter.notifyItemRangeInserted(oldsize + TeacherZoneAdapter.SIZE, teacherZoneDynamicsList.size());
+        }
+    }
+
+    private void teacherZoneJeiPanListDataBind(int oldsize) {
+        if (customVideoList != null && customVideoList.size() > 0) {
+            mTeacherZoneAdapter.setTeacherZoneJiePanList(customVideoList);
+            mTeacherZoneAdapter.setSelectedIndex(TeacherZoneAdapter.CUSTOM_VIDEO);
+            mTeacherZoneAdapter.notifyItemRangeInserted(oldsize + TeacherZoneAdapter.SIZE, customVideoList.size());
         }
     }
 
@@ -277,13 +325,45 @@ public class TeacherZoneActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                             ToastUtils.showToast(this, "老师信息解析失败");
-                            finish();
+//                            finish();
                         }
 
                     }
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
-                    finish();
+//                    finish();
+                }
+                break;
+            case find_news_list:
+                if (pageJiePan == 1) {
+                    mSrlRefresh.setRefreshing(false);
+                }
+                if (Constant.SUCCEED == event.getCode()) {
+                    if (event.getData() != null && event.getData().has("data")) {
+                        try {
+                            if (page == 1) {
+                                customVideoList.clear();
+                            }
+                            JSONObject jsonObject = event.getData().getJSONObject("data");
+                            List<CustomVideo> tempCustomVideoList = new DataConverter<CustomVideo>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<CustomVideo>>() {
+                            }.getType());
+                            if (tempCustomVideoList != null && tempCustomVideoList.size() > 0) {
+                                loading = false;
+                                int size = customVideoList.size();
+                                customVideoList.addAll(tempCustomVideoList);
+                                teacherZoneJeiPanListDataBind(size);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ToastUtils.showToast(this, "老师信息解析失败");
+//                            finish();
+                        }
+
+                    }
+                } else {
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
+//                    finish();
                 }
                 break;
         }

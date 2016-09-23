@@ -43,10 +43,11 @@ public class TeacherHttpUtil {
      * @param action
      */
     public static void fetchTeacherList(Context context, int page, String uid, int size, Action action) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("size", String.valueOf(size));
-        OKHttpUtils.getInstance().post(context, Api.FIND_TEACHER_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig());
+        map.put("user_id", uid);
+        OKHttpUtils.getInstance().syncGet(context, Api.FIND_TEACHER_LIST + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
     }
 
     /**
