@@ -1,7 +1,5 @@
 package tv.kuainiu.modle;
 
-import java.util.List;
-
 /**
  * Created by jack on 2016/9/21.
  */
@@ -36,7 +34,7 @@ public class TeacherZoneDynamics {
     private int create_date;
     private int synchro_wb;
     private int status;
-    private List<TeacherZoneDynamicsInfo> news_info;
+    private TeacherZoneDynamicsInfo news_info;
 
     public int getId() {
         return id;
@@ -142,11 +140,11 @@ public class TeacherZoneDynamics {
         this.status = status;
     }
 
-    public List<TeacherZoneDynamicsInfo> getNews_info() {
+    public TeacherZoneDynamicsInfo getNews_info() {
         return news_info;
     }
 
-    public void setNews_info(List<TeacherZoneDynamicsInfo> news_info) {
+    public void setNews_info(TeacherZoneDynamicsInfo news_info) {
         this.news_info = news_info;
     }
 }

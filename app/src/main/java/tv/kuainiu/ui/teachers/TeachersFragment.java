@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
@@ -62,6 +64,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 
     @BindView(R.id.recyclerView) RecyclerView mRvItems;
     @BindView(R.id.err_layout) NetErrAddLoadView mErrView;
+    @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
 
     private TeacherListAdapter mAdapter;
     private CustomLinearLayoutManager mLayoutManager;
@@ -76,6 +79,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     //    private boolean mIsLiveChild = false;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mReceiver;
+    RecyclerView.OnScrollListener loadmoreListener;
     private int page = 1;
     /**
      * Temp view holder
@@ -85,6 +89,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 
     private TeacherItem tempTeacher;
     private TextView tempCheckBox;
+    private boolean loading=false;
 
     public static TeachersFragment newInstance() {
         TeachersFragment fragment = new TeachersFragment();
@@ -115,8 +120,8 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
             EventBus.getDefault().register(this);
         }
         initVariate();
-        initView();
         initListener();
+        initView();
         initHttp();
         registerBroadcast();
         return view;
@@ -182,17 +187,49 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     }
 
     private void initView() {
+        mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRvItems.setLayoutManager(mLayoutManager);
         int spaceProgram = getActivity().getResources().getDimensionPixelSize(R.dimen.def_divider);
 //        int space = getActivity().getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
         mRvItems.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
 //        mRvItems.addItemDecoration(new TeacherItemDecoration(mAdapter, space));
+        mRvItems.addOnScrollListener(loadmoreListener);
         mRvItems.setAdapter(mAdapter);
     }
 
     private void initListener() {
         mAdapter.setOnClickListener(this);
-        //TODO 下拉刷新
+        //
+        // 下拉刷新
+        mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                page=1;
+                initHttp();
+            }
+        });
+        loadmoreListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) //向下滚动
+                {
+                    int visibleItemCount = mLayoutManager.getChildCount();
+                    int totalItemCount = mLayoutManager.getItemCount();
+                    int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        loading = true;
+                        page += 1;
+                        initHttp();
+                    }
+                }
+            }
+        };
         mErrView.setOnTryCallBack(new NetErrAddLoadView.OnTryCallBack() {
             @Override
             public void callAgain() {
@@ -284,6 +321,9 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchTeacher(HttpEvent event) {
         if (Action.teacher_fg_fetch_follow_list == event.getAction()) {
+            if(page==1){
+                mSrlRefresh.setRefreshing(false);
+            }
             if (Constant.SUCCEED == event.getCode()) {
                 mRvItems.setVisibility(View.VISIBLE);
                 DebugUtils.dd(event.getData().toString());
@@ -296,6 +336,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                     mTeacherLIst.clear();
                 }
                 if (tempTeacherList.size() > 0) {
+                    loading = false;
                     int startIndex = mTeacherLIst.size();
                     mTeacherLIst.addAll(tempTeacherList);
                     mAdapter.setTeacherList(mTeacherLIst);
@@ -438,7 +479,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 //
             case R.id.ll_root:
                 tempTeacher = (TeacherItem) v.getTag(R.id.ll_root);
-                TeacherZoneActivity.intoNewIntent(getActivity(),tempTeacher.id);
+                TeacherZoneActivity.intoNewIntent(getActivity(), tempTeacher.id);
                 break;
 
             case R.id.tv_follow_button:

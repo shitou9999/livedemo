@@ -61,7 +61,7 @@ public class HomeFragment extends BaseFragment {
     private int HotPointPage = 1;
     private int NewsPage = 1;
     private boolean loading = false;
-    RecyclerView.OnScrollListener loadmoreListener;
+    RecyclerView.OnScrollListener loadMoreListener;
     CustomLinearLayoutManager mLayoutManager;
 
     public static HomeFragment newInstance(int parentPosition) {
@@ -112,7 +112,7 @@ public class HomeFragment extends BaseFragment {
         rvReadingTap.setLayoutManager(mLayoutManager);
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
         rvReadingTap.addItemDecoration(mDividerItemDecoration);
-        rvReadingTap.addOnScrollListener(loadmoreListener);
+        rvReadingTap.addOnScrollListener(loadMoreListener);
     }
 
     private void initData() {
@@ -139,7 +139,13 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initListener() {
-        loadmoreListener = new RecyclerView.OnScrollListener() {
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                NewsPage = 1;
+                initData();
+            }
+        });
+        loadMoreListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -229,6 +235,9 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
             case find_news_list:
+                if (NewsPage == 1) {
+                    srlRefresh.setRefreshing(false);
+                }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     try {
@@ -244,7 +253,7 @@ public class HomeFragment extends BaseFragment {
                             mNewsItemList.addAll(tempNewsList);
                             mHomeAdapter.setNewsList(mNewsItemList);
                             try {
-                                loading=false;
+                                loading = false;
                                 mHomeAdapter.notifyItemRangeInserted(startIndex, tempNewsList.size());
                             } catch (IllegalStateException e) {
                                 e.printStackTrace();

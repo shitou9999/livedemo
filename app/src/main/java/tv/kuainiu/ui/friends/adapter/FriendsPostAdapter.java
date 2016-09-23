@@ -15,47 +15,77 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.TeacherZoneDynamics;
+import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
+import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.util.ImageDisplayUtils;
 import tv.kuainiu.util.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**
- * @author nanck on 2016/7/29.
  */
 public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.ViewHolder> {
+    public static final int CUSTOM_VIEW_POINT = 0;
+    public static final int CUSTOM_VIDEO = 1;
     private Activity mContext;
-//    private List<Message> mMessages = new ArrayList<>();
     private List<TeacherZoneDynamics> teacherZoneDynamicsList;
+    private List<CustomVideo> customVideoList;
+    private int type = CUSTOM_VIEW_POINT;
+
     public FriendsPostAdapter(Activity context) {
         mContext = context;
     }
 
-    public FriendsPostAdapter(Activity context, List<TeacherZoneDynamics> TeacherZoneDynamics) {
+    public FriendsPostAdapter(Activity context, int type) {
         mContext = context;
+        this.type=type;
+    }
+
+    public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
         this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
 
-    public void setMessages(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
-        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
+    public void setCustomVideoList(List<CustomVideo> customVideoList) {
+        this.customVideoList = customVideoList;
     }
 
     @Override public int getItemCount() {
-        return teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
+        int count = 0;
+        switch (type) {
+            case CUSTOM_VIEW_POINT:
+                count = teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
+                break;
+            case CUSTOM_VIDEO:
+                count = customVideoList == null ? 0 : customVideoList.size();
+                break;
+        }
+        return count;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        switch (type) {
+            case CUSTOM_VIEW_POINT:
+                dataViewPoint(holder, position);
+                break;
+            case CUSTOM_VIDEO:
+                dataVideo(holder, position);
+                break;
+        }
+    }
+
+    private void dataViewPoint(ViewHolder holder, int position) {
         TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
-        String ct = mContext.getString(R.string.value_comment_count,StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(),"0"));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
 
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(),"0"));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info().get(0));
+        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
         switch (teacherZoneDynamics.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
@@ -87,6 +117,54 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
+    private void dataVideo(ViewHolder holder, int position) {
+        CustomVideo teacherZoneDynamics = customVideoList.get(position);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
+
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        holder.mTvFriendsPostComment.setText(ct);
+
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        holder.mTvFriendsPostLike.setText(lt);
+        TeacherZoneDynamicsInfo news_info=new TeacherZoneDynamicsInfo();
+        news_info.setType(teacherZoneDynamics.getType());
+        news_info.setNews_title(teacherZoneDynamics.getDescription());
+        news_info.setNews_catid(teacherZoneDynamics.getCat_id());
+        news_info.setNews_inputtime(teacherZoneDynamics.getInputtime());
+        holder.mPostParentLayout.setPostType(news_info);
+        switch (Integer.parseInt(teacherZoneDynamics.getType())) {
+            case 1:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                break;
+
+            case 2:
+//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+
+            default:
+                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                break;
+        }
+
+
+//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
+//        int height = holder.itemView.getHeight();
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
+//        holder.mViewFriendsPostLine.setLayoutParams(lp);
+//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
+
+
+        // Hide bottom live
+        int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
+        holder.mViewFriendsPostLineBottom.setVisibility(v);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -97,6 +175,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
 //        vh.mViewFriendsPostLine.setLayoutParams(lp);
         return vh;
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_friends_post_time) TextView mTvFriendsPostTime;

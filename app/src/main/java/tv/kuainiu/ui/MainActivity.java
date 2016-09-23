@@ -159,6 +159,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onClientInitEvent(HttpEvent event) {
+        initClientPost(event.getCode(), this);
         switch (event.getAction()) {
             case client_init:
                 if (Constant.SUCCEED == event.getCode()) {

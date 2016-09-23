@@ -168,7 +168,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(),"0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info().get(0));
+        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
         switch (teacherZoneDynamics.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
@@ -191,7 +191,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 //        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
 //        int height = holder.itemView.getHeight();
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(2, height);
 //        holder.mViewFriendsPostLine.setLayoutParams(lp);
 //        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
 
@@ -216,6 +216,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case BODY:
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
+                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+                int margin=mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                layoutParams.setMargins(margin,margin,margin,0);
                 vh = new BodyViewHolder(view);
                 break;
         }

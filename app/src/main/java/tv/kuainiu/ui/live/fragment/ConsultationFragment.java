@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
-import tv.kuainiu.ui.friends.fragment.FriendsTabFragment;
+import tv.kuainiu.ui.friends.fragment.CustomViewPointFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
 
 /**
@@ -99,8 +99,8 @@ public class ConsultationFragment extends BaseFragment {
     private void initFragment() {
         mBaseFragments.clear();
 
-        mBaseFragments.add(FriendsTabFragment.newInstance());
-        mBaseFragments.add(FriendsTabFragment.newInstance());
+        mBaseFragments.add(CustomViewPointFragment.newInstance());
+        mBaseFragments.add(CustomViewPointFragment.newInstance());
 
 //        String pstr;
 //        switch (mParentPosition) {

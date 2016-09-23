@@ -21,6 +21,9 @@ public class TeacherZoneDynamicsInfo {
     private String news_inputtime;
     private String type;
     private String news_title;
+    private String news_video_id;
+    private String news_voice_url;
+    private String video_id;
 
     public String getNews_catid() {
         return news_catid;
@@ -68,5 +71,29 @@ public class TeacherZoneDynamicsInfo {
 
     public void setNews_title(String news_title) {
         this.news_title = news_title;
+    }
+
+    public String getNews_video_id() {
+        return news_video_id;
+    }
+
+    public void setNews_video_id(String news_video_id) {
+        this.news_video_id = news_video_id;
+    }
+
+    public String getNews_voice_url() {
+        return news_voice_url;
+    }
+
+    public void setNews_voice_url(String news_voice_url) {
+        this.news_voice_url = news_voice_url;
+    }
+
+    public String getVideo_id() {
+        return video_id;
+    }
+
+    public void setVideo_id(String video_id) {
+        this.video_id = video_id;
     }
 }

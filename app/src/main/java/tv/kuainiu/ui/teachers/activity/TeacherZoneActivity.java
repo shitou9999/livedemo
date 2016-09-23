@@ -6,13 +6,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +54,7 @@ public class TeacherZoneActivity extends BaseActivity {
     @BindView(R.id.rl_stick) RelativeLayout rl_stick;
     @BindView(R.id.btnPublish) Button mBtnPublish;
     @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
+    @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
     private TeacherZoneAdapter mTeacherZoneAdapter;
     RecyclerView.OnScrollListener loadmoreListener;
     private CustomLinearLayoutManager mLayoutManager;
@@ -95,6 +95,7 @@ public class TeacherZoneActivity extends BaseActivity {
     }
 
     private void initView() {
+        mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         rl_stick.setVisibility(View.INVISIBLE);
         mLayoutManager = new CustomLinearLayoutManager(this);
         mRvReadingTap.setLayoutManager(mLayoutManager);
@@ -102,6 +103,12 @@ public class TeacherZoneActivity extends BaseActivity {
     }
 
     private void initListener() {
+        mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                page = 1;
+                getData();
+            }
+        });
         loadmoreListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -125,8 +132,8 @@ public class TeacherZoneActivity extends BaseActivity {
 
                     if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                         loading = true;
-//                        NewsPage += 1;
-//                        getNews();
+                        page += 1;
+                        getData();
                     }
                 }
             }
@@ -142,6 +149,10 @@ public class TeacherZoneActivity extends BaseActivity {
 //        mRvReadingTap.addView(view);
 //        FriendsPostAdapter adapter = new FriendsPostAdapter(this, mMessages);
 //        mRvReadingTap.setAdapter(adapter);
+        getData();
+    }
+
+    private void getData() {
         TeacherHttpUtil.fetchTeacherDetails(this, new TeacherHttpUtil.ParamBuilder(teacherid, user_id), Action.teacher_fg_fetch_detail);
         fetchTeacherDynamicsList();
     }
@@ -178,14 +189,15 @@ public class TeacherZoneActivity extends BaseActivity {
     }
 
     private void teacherInfoDataBind(TeacherInfo teacherInfo) {
+        mTbvTitle.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         mTeacherZoneAdapter.setTeacherInfo(teacherInfo);
         mTeacherZoneAdapter.notifyItemChanged(0);
     }
 
-    private void teacherZoneDynamicsListDataBind() {
-        if(teacherZoneDynamicsList!=null && teacherZoneDynamicsList.size()>0) {
+    private void teacherZoneDynamicsListDataBind(int oldsize) {
+        if (teacherZoneDynamicsList != null && teacherZoneDynamicsList.size() > 0) {
             mTeacherZoneAdapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
-            mTeacherZoneAdapter.notifyItemRangeInserted(TeacherZoneAdapter.SIZE, teacherZoneDynamicsList.size());
+            mTeacherZoneAdapter.notifyItemRangeInserted(oldsize + TeacherZoneAdapter.SIZE, teacherZoneDynamicsList.size());
         }
     }
 
@@ -243,8 +255,10 @@ public class TeacherZoneActivity extends BaseActivity {
                 }
                 break;
             case find_dynamics_list:
+                if (page == 1) {
+                    mSrlRefresh.setRefreshing(false);
+                }
                 if (Constant.SUCCEED == event.getCode()) {
-                    DataConverter<TeacherInfo> dataConverter = new DataConverter<>();
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
@@ -254,8 +268,10 @@ public class TeacherZoneActivity extends BaseActivity {
                                 teacherZoneDynamicsList.clear();
                             }
                             if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {
+                                loading = false;
+                                int size = teacherZoneDynamicsList.size();
                                 teacherZoneDynamicsList.addAll(tempTeacherZoneDynamicsList);
-                                teacherZoneDynamicsListDataBind();
+                                teacherZoneDynamicsListDataBind(size);
                             }
 
                         } catch (Exception e) {
@@ -273,174 +289,4 @@ public class TeacherZoneActivity extends BaseActivity {
         }
 
     }
-
-
-    private static final String JSON = "[\n" +
-            "  {\n" +
-            "    \"publish_timestamp\": 2342342342,\n" +
-            "    \"head_photo\": \"http://img4.imgtn.bdimg.com/it/u=687186100,1032324030&fm=21&gp=0.jpg\",\n" +
-            "    \"nickname\": \"王丽\",\n" +
-            "    \"message_type\": 1,\n" +
-            "    \"message_content\": \"写完此文, 偶然机会在InfoQ上看到Uber的技术主管Raffi Krikorian在 O’Reilly Software Architecture conference上谈及的关于架构重构的12条规则, 共勉之。\",\n" +
-            "    \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "    \"comment_count\": 233,\n" +
-            "    \"like_count\": 134,\n" +
-            "    \"like_before\": 0,\n" +
-            "    \"type\": 2\n" +
-            "  },\n" +
-            "  {\n" +
-            "    \"publish_timestamp\": 2342342342,\n" +
-            "    \"head_photo\": \"http://img1.imgtn.bdimg.com/it/u=380201267,4002174318&fm=23&gp=0.jpg\",\n" +
-            "    \"nickname\": \"angel\",\n" +
-            "    \"message_type\": 2,\n" +
-            "    \"message_content\": \"写完此文, 偶然机会在InfoQ上看到Uber的技术主管Raffi Krikorian在 O’Reilly Software Architecture conference上谈及的关于架构重构的12条规则, 共勉之。\",\n" +
-            "    \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "    \"comment_count\": 456,\n" +
-            "    \"like_count\": 764,\n" +
-            "    \"like_before\": 0,\n" +
-            "    \"type\": 1\n" +
-            "  },\n" +
-            "  {\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"miss\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 4\n" +
-            "    },\n" +
-            "   {\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"周小川\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"写完此文, 偶然机会在InfoQ上看到Uber的技术主管Raffi Krikorian在 O’Reilly Software Architecture conference上谈及的关于架构重构的12条规则, 共勉之。\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 4\n" +
-            "    },\n" +
-            "  {\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"papi酱\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 1\n" +
-            "    },\n" +
-            "   {\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"周小川\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"写完此文, 偶然机会在InfoQ上看到Uber的技术主管Raffi Krikorian在 O’Reilly Software Architecture conference上谈及的关于架构重构的12条规则, 共勉之。\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 2\n" +
-            "    },\n" +
-            "\t {\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"刘念\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 4\n" +
-            "    },\n" +
-            "\t{\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"李青\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\":2\n" +
-            "    },\n" +
-            "\t{\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"大冰\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 0\n" +
-            "    },\n" +
-            "\t{\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"王丽\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 3\n" +
-            "    },\n" +
-            "\t{\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"李青\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 3\n" +
-            "    },\n" +
-            "\t{\n" +
-            "      \"publish_timestamp\": 2342342342,\n" +
-            "      \"head_photo\": \"http://img2.imgtn.bdimg.com/it/u=1397191400,1806124380&fm=21&gp=0.jpg\",\n" +
-            "      \"nickname\": \"miss\",\n" +
-            "      \"message_type\": 2,\n" +
-            "      \"message_content\": \"鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！\",\n" +
-            "      \"message_image\": \"http://mmbiz.qpic.cn/mmbiz_png/EcVEm2j3oz3rSODQniaCSoibs2icPyQwQaXpQyAHjBibuhPyNNEibGWF3O6zxqn9qKWhgQ4ibf35pYA0GCd3d12oLyVQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1\",\n" +
-            "      \"comment_count\": 26,\n" +
-            "      \"like_count\": 7,\n" +
-            "      \"like_before\": 0,\n" +
-            "      \"type\": 3\n" +
-            "    }\n" +
-            "]";
-
-    private void parseJson() {
-//        try {
-//            InputStream in = getActivity().getAssets().open("friends_message.txt");
-//            InputStreamReader ir = new InputStreamReader(in, "UTF-8");
-//            BufferedReader br = new BufferedReader(ir);
-//            String info;
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Message>>() {
-        }.getType();
-//            while ((info = br.readLine()) != null) {
-        mMessages = gson.fromJson(JSON, type);
-//            }
-//            br.close();
-//            ir.close();
-//            in.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-
 }

@@ -124,6 +124,8 @@ public class Api {
     public static final String QRCODE_LOGIN = "qrcode/login";                  // 二维码登录接口（V2)
     public static final String GET_CATS = "news/get_cats";                     // 首页Flag
     public static final String HOT_POINT = "news/hot_point";                     // 首页热门观点
+    public static final String CUSTOM_LIST = "sns/custom_list";                     //2.9 定制列表 - 名师观点   sns/custom_list     圈子-名师观点
+    public static final String CUSTOM_VIDEO_LIST = "sns/custom_video_list"; //2.10 定制列表 - 解盘视频   sns/custom_video_list     圈子-解盘视频
 
 
 }

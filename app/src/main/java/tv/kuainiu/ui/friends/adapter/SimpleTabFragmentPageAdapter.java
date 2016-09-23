@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import tv.kuainiu.ui.fragment.TabMajorFragment;
+import tv.kuainiu.ui.friends.fragment.TabMajorFragment;
 
 /**
  * Created by jack on 2016/9/20.

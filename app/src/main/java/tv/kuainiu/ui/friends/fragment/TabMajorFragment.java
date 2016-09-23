@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.fragment;
+package tv.kuainiu.ui.friends.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
-import tv.kuainiu.ui.friends.fragment.FriendsTabFragment;
+import tv.kuainiu.ui.fragment.BaseFragment;
 
 /**
  * @author nanck on 2016/7/29.
@@ -64,7 +64,7 @@ public class TabMajorFragment extends BaseFragment {
 
 
         mNvpFragmentMajor.setAdapter(new SimpleViewPager(getChildFragmentManager(), mBaseFragments, titles[mParentPosition]));
-        mNvpFragmentMajor.setOffscreenPageLimit(mBaseFragments.size() - 1);
+//        mNvpFragmentMajor.setOffscreenPageLimit(mBaseFragments.size() - 1);
 
         mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
         mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"),Color.parseColor(Theme.getCommonColor()));
@@ -98,28 +98,19 @@ public class TabMajorFragment extends BaseFragment {
     private void initFragment() {
         mBaseFragments.clear();
 
-        mBaseFragments.add(FriendsTabFragment.newInstance());
-        mBaseFragments.add(FriendsTabFragment.newInstance());
+        switch (mParentPosition) {
+            case 0:
+                mBaseFragments.add(CustomViewPointFragment.newInstance());
+                mBaseFragments.add(CustomVideoFragment.newInstance());
+                break;
 
-//        String pstr;
-//        switch (mParentPosition) {
-//            case 0:
-//                pstr = "名家观点";
-//                break;
-//
-//            case 1:
-//                pstr = "解盘视频";
-//                break;
-//
-//            case 2:
-//                pstr = "订阅主题";
-//                break;
-//
-//            default:
-//                pstr = "0.0";
-//                break;
-//
-//        }
+            case 1:
+                mBaseFragments.add(CustomViewPointFragment.newInstance());
+                mBaseFragments.add(CustomVideoFragment.newInstance());
+
+                break;
+
+        }
 //
 //        mBaseFragments.add(TabTempFragment.newInstance(Color.GRAY, pstr + " : 水的"));
 //        mBaseFragments.add(TabTempFragment.newInstance(Color.MAGENTA, pstr + " : N次方"));
