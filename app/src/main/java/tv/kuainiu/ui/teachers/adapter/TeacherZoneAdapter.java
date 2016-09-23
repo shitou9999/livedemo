@@ -291,9 +291,10 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case BODY:
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 int margin = mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
-                layoutParams.setMargins(margin, margin, margin, 0);
+                layoutParams.setMargins(margin, 0, margin, 0);
+                view.setLayoutParams(layoutParams);
                 vh = new BodyViewHolder(view);
                 break;
         }
