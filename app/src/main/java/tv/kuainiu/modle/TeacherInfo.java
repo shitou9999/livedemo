@@ -21,8 +21,10 @@ public class TeacherInfo {
     private String avatar;
     private String slogan;
     private String banner;
+    private String introduce;
     private int fans_count;
     private int is_follow;
+
 
     public String getId() {
         return id;
@@ -62,6 +64,14 @@ public class TeacherInfo {
 
     public void setBanner(String banner) {
         this.banner = banner;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
     public int getFans_count() {

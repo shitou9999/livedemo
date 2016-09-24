@@ -157,7 +157,9 @@ public class DateUtil {
     public static String getDurationString(long value) {
         return getDurationString("yyyy-MM-dd", value);
     }
-
+    public static String getDurationString(String value) {
+        return getDurationString("yyyy-MM-dd", Long.parseLong(value));
+    }
     /**
      * 计算两个日期相隔的分钟
      *

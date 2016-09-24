@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrey220"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rlVideo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/selector_video_play" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_color"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTiltle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="王丽-解盘视频技术分析" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:paddingBottom="@dimen/activity_horizontal_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:id="@+id/tvDescripion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="基本面" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        tools:text="2016-06-12" />
+                </RelativeLayout>
+
+                <include
+                    layout="@layout/include_line_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_margin="10dp" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvViewNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:drawableLeft="@mipmap/play_nor"
+                        tools:text="10万次" />
+
+                    <TextView
+                        android:id="@+id/tvSupport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:drawableTop="@drawable/selector_video_suport_number"
+                        android:text="点赞" />
+
+                    <TextView
+                        android:id="@+id/tvCollection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/activity_vertical_margin"
+                        android:layout_toLeftOf="@+id/tvSupport"
+                        android:drawableTop="@drawable/selector_video_collection_number"
+                        android:text="收藏" />
+
+                    <TextView
+                        android:id="@+id/tvShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/activity_vertical_margin"
+                        android:layout_toLeftOf="@+id/tvCollection"
+                        android:drawableTop="@drawable/selector_video_share_number"
+                        android:text="分享" />
+
+                    <TextView
+                        android:id="@+id/tvDown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/activity_vertical_margin"
+                        android:layout_toLeftOf="@+id/tvShare"
+                        android:drawableTop="@drawable/selector_video_down_number"
+                        android:text="下载" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/colorGrey220" />
+
+                <include layout="@layout/include_teacher_info" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="介绍"
+                android:textSize="@dimen/text_size_large" />
+
+            <TextView
+                android:id="@+id/tvIntroduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:textSize="@dimen/text_size_small"
+                tools:text="曾任某环境好的艰苦实践的时刻" />
+
+            <include
+                layout="@layout/include_line_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="1px" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="热论"
+                android:textSize="@dimen/text_size_large" />
+
+            <tv.kuainiu.widget.ExpandListView
+                android:id="@+id/elvComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/include_comments_text_input" />
+</LinearLayout>
+
+

@@ -1,6 +1,7 @@
 package tv.kuainiu.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -16,6 +17,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.friends.model.BasePost;
+import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.util.ImageDisplayUtil;
 import tv.kuainiu.util.StringUtils;
 import tv.kuainiu.util.ToastUtils;
@@ -99,6 +101,12 @@ public class PostParentLayout extends RelativeLayout {
                 ImageView ivivPlay = (ImageView) view.findViewById(R.id.ivPlay);
                 TextView tvTitle2 = (TextView) view.findViewById(R.id.tvTitle);
                 tvTitle2.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        VideoActivity.intoNewIntent(mContext,teacherZoneDynamicsInfo.getNews_video_id());
+                    }
+                });
                 addView(view);
                 break;
             //音频

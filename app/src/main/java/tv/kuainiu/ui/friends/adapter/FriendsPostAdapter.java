@@ -134,9 +134,11 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info=new TeacherZoneDynamicsInfo();
         news_info.setType(teacherZoneDynamics.getType());
+        news_info.setNews_video_id(teacherZoneDynamics.getId());
         news_info.setNews_title(teacherZoneDynamics.getDescription());
         news_info.setNews_catid(teacherZoneDynamics.getCat_id());
         news_info.setNews_inputtime(teacherZoneDynamics.getInputtime());
+        news_info.setVideo_id(teacherZoneDynamics.getVideo_id());
         holder.mPostParentLayout.setPostType(news_info);
         switch (Integer.parseInt(teacherZoneDynamics.getType())) {
             case 1:

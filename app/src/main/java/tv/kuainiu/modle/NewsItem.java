@@ -24,7 +24,7 @@ public class NewsItem implements Serializable {
      * views : 7338
      */
     private String id;
-    private String catid;
+    private String cat_id;
     private String title;
     private String thumb;
     private String daoshi;
@@ -56,12 +56,12 @@ public class NewsItem implements Serializable {
         this.id = id;
     }
 
-    public String getCatid() {
-        return catid;
+    public String getCatId() {
+        return cat_id;
     }
 
-    public void setCatid(String catid) {
-        this.catid = catid;
+    public void setCatId(String catid) {
+        this.cat_id = catid;
     }
 
     public String getTitle() {
@@ -170,7 +170,7 @@ public class NewsItem implements Serializable {
 
     @Override public String toString() {
         return "NewsItem{" +
-                "catid='" + catid + '\'' +
+                "catid='" + cat_id + '\'' +
                 ", id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", thumb='" + thumb + '\'' +
