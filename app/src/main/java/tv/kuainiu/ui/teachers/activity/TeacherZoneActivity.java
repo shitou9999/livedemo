@@ -218,7 +218,7 @@ public class TeacherZoneActivity extends BaseActivity {
                 selectedIndex = selected;
                 if (selected == 0) {
                     page = 1;
-                    getData();
+                    fetchTeacherDynamicsList();
                 } else {
                     pageJiePan = 1;
                     getJeiPan();
