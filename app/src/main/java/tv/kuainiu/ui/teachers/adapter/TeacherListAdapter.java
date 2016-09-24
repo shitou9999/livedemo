@@ -244,7 +244,7 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.ll_root.setTag(R.id.ll_root,item);
 
         holder.textName.setText(item.nickname);
-        ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar, R.mipmap.ic_def_error);
+        ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar,R.mipmap.default_avatar);
         holder.tvAnalysis.setText(StringUtils.replaceNullToEmpty(item.listorder));
         holder.tvSubject.setText(StringUtils.replaceNullToEmpty(item.slogan));
         resetFollowCheckBox(holder.textFollow, holder.textFansCount, item);

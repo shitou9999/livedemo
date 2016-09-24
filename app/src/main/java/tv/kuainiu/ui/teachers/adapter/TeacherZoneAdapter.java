@@ -158,7 +158,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (teacherInfo == null) {
             return;
         }
-        ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()));
+        ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()),R.mipmap.default_avatar);
         ImageDisplayUtil.displayImage(mContext, holder.ivBanner, StringUtils.replaceNullToEmpty(teacherInfo.getBanner()));
         holder.mTvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
@@ -187,7 +187,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void dataViewPoint(BodyViewHolder holder, int position) {
         TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position - SIZE);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 
@@ -230,7 +230,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     private void dataVideo(BodyViewHolder holder, int position) {
         CustomVideo teacherZoneDynamics = customVideoList.get(position-SIZE);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.ic_launcher);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
 

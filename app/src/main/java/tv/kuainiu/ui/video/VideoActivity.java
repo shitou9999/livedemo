@@ -140,7 +140,7 @@ public class VideoActivity extends BaseActivity {
         //评论次数
         tvCommentNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(Integer.parseInt(StringUtils.replaceNullToEmpty(mVideoDetail.getComment_num(), "0")), Constant.TEN_THOUSAND, "万", "")));
         teacherDataBind(mVideoDetail.getTeacher_info());
-        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""));
+        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""),R.mipmap.default_avatar);
 
     }
 
@@ -148,7 +148,7 @@ public class VideoActivity extends BaseActivity {
         if (teacherInfo == null) {
             return;
         }
-        ImageDisplayUtil.displayImage(this, ciAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()));
+        ImageDisplayUtil.displayImage(this, ciAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()),R.mipmap.default_avatar);
         tvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         tvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
