@@ -3,12 +3,12 @@ package tv.kuainiu.modle;
 import java.io.Serializable;
 
 /**
- * @author nanck on 2016/4/20.
+ *
  */
 public class NewsItem implements Serializable {
     /**
      * id : 3075
-     * catid : 10
+     * cat_id : 10
      * title : 毛鹏皓解盘——政策护盘，操盘标的 2016-01-06
      * thumb : http://img.iguxuan.com/statics/images/gx/slt/MaoPengHao.jpg
      * daoshi : 6
@@ -170,7 +170,7 @@ public class NewsItem implements Serializable {
 
     @Override public String toString() {
         return "NewsItem{" +
-                "catid='" + cat_id + '\'' +
+                "cat_id='" + cat_id + '\'' +
                 ", id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", thumb='" + thumb + '\'' +

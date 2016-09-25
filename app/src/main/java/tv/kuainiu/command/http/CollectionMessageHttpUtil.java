@@ -12,33 +12,49 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author jack on 2016/4/22.
+ * 收藏相关请求
  */
 public class CollectionMessageHttpUtil {
 
 
 /**
-     * 2.1 添加收藏
+     * 2.6 添加收藏
      * <p/>
      * news_id     文章ID   必传
      * news_type   文章类型  1视频 2新闻 3活动     默认1
      * 备注：需要签名跟加密
      */
-    public static void addCollect(Context context, String mId, String type, Action action) {
+    public static void addCollect(Context context, String news_id, String type) {
         Map<String, String> map = new HashMap();
-        map.put("news_id", mId);
+        map.put("news_id", news_id);
         map.put("news_type", type);
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.ADD_COLLECT, ParamUtil.getParam(map), action);
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.ADD_COLLECT, ParamUtil.getParam(map), Action.add_collect);
     }
 
     /**
      * 取消收藏
      */
-    public static void delCollect(Context context, String mId, String type, Action action) {
+    public static void delCollect(Context context, String mId, String type) {
         Map<String, String> map = new HashMap();
         map.put("news_id", mId);
         map.put("news_type", type);
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.DEL_COLLECT, ParamUtil.getParam(map), action);
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.DEL_COLLECT, ParamUtil.getParam(map),Action.del_collect);
+    }
+    /**
+     2.8 用户收藏列表   sns/collect_list
+
+     固定参数  user_id, time ,sign
+     业务参数
+     page          页面          非必传     默认1
+     size           每页条数     非必传     默认20
+     备注：需要签名跟加密
+     {"status"="0","data"="json"}
+
+     */
+    public static void collectList(Context context, String mId, String type, int page) {
+        Map<String, String> map = new HashMap();
+        map.put("page", String.valueOf(page));
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.COLLECT_LIST, ParamUtil.getParam(map), Action.collect_list);
     }
 
     /**

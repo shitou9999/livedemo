@@ -324,4 +324,17 @@
     <string name="live_toast_liked">您已赞过</string>
     <string name="live_toast_not_started">直播正在准备中，再等一会哦</string>
 
+    <!--点播-->
+    <string name="download">离线下载</string>
+    <string name="play">播放</string>
+    <string name="upload_video_info">视频信息</string>
+    <string name="download_list">离线列表</string>
+    <string name="screensize">画面尺寸</string>
+    <string name="definition">清晰度</string>
+    <string name="subtitle">字幕</string>
+    <string name="speed">倍速</string>
+    <string name="account_info">账户信息</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="close_ad">关闭广告</string>
+    <string name="ad_info">了解详情</string>
 </resources>

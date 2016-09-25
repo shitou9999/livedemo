@@ -86,6 +86,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
 
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNews_info()!=null?teacherZoneDynamics.getNews_info().getNews_catname():""));
 
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
@@ -126,7 +127,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
-
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
 

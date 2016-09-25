@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/rl_root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_option_normal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/small_margin">
+
+    <LinearLayout
+        android:id="@+id/ll_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_head"
+            android:layout_width="@dimen/article_comment_head_width"
+            android:layout_height="@dimen/article_comment_head_width"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            app:civ_border_color="@color/colorAmber400"
+            app:civ_border_width="1dp"
+            tools:src="@mipmap/default_avatar"/>
+
+        <TextView
+            android:id="@+id/tv_teacher_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/draw_comment_teacher_flag_bg"
+            android:gravity="center"
+            android:paddingLeft="@dimen/micro_margin"
+            android:paddingRight="@dimen/micro_margin"
+            android:text="@string/teacher"
+            android:textColor="@color/colorWhite800"
+            android:textSize="@dimen/text_size_min"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/small_margin"
+        android:textColor="@color/colorDefaultTime"
+        android:textSize="@dimen/text_size_micro"
+        tools:text="@string/default_date_for_birth"/>
+
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_toEndOf="@+id/ll_left"
+        android:layout_toLeftOf="@id/tv_date"
+        android:layout_toRightOf="@+id/ll_left"
+        android:layout_toStartOf="@id/tv_date"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/colorBlue500"
+            tools:text="张三丰"/>
+
+
+        <ImageView
+            android:id="@+id/iv_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:src="@mipmap/vip_ic"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_reply_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_top"
+        android:layout_marginTop="@dimen/micro_margin"
+        android:layout_toEndOf="@id/ll_left"
+        android:layout_toRightOf="@id/ll_left"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_reply_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="@string/tag_respond"
+            android:textColor="@color/colorGrey400"/>
+
+        <TextView
+            android:id="@+id/tv_nickname2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/colorBlue500"
+            tools:text="西门吹雪"/>
+
+        <ImageView
+            android:id="@+id/iv_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:layout_marginRight="@dimen/small_margin"
+            android:src="@mipmap/vip_ic"/>
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fl_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_reply_area"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_toEndOf="@id/ll_left"
+        android:layout_toRightOf="@id/ll_left"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        >
+
+        <TextView
+            android:id="@+id/tv_device_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorDefaultTime"
+            android:textSize="@dimen/text_size_micro"
+            tools:text="Android用户"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fl_source"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_toEndOf="@+id/ll_left"
+        android:layout_toRightOf="@+id/ll_left"
+        android:orientation="vertical">
+
+
+        <tv.kuainiu.widget.LinkTextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:linksClickable="true"
+            android:textColor="@color/colorGrey900"
+            android:textColorLink="@color/colorBlue500"
+            tools:text="@string/temp_about_content"/>
+
+        <TextView
+            android:id="@+id/tv_content_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:textColor="@color/def_TextColor"
+            tools:text="@string/temp_about_content"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin">
+
+
+            <TextView
+                android:id="@+id/tv_favour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_marginRight="@dimen/small_margin"
+                android:drawableLeft="@drawable/selector_suport"
+                android:drawablePadding="@dimen/small_margin"
+                android:drawableStart="@drawable/selector_suport"
+                android:gravity="center"
+                tools:text="56"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

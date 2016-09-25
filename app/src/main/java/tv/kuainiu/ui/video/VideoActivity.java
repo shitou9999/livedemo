@@ -3,17 +3,23 @@ package tv.kuainiu.ui.video;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,10 +31,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.CommentHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.CommentItem;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.VideoDetail;
@@ -36,6 +44,8 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
+import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
+import tv.kuainiu.util.CustomLinearLayoutManager;
 import tv.kuainiu.util.DataConverter;
 import tv.kuainiu.util.DateTimeUtils;
 import tv.kuainiu.util.DateUtil;
@@ -43,6 +53,7 @@ import tv.kuainiu.util.ImageDisplayUtil;
 import tv.kuainiu.util.LogUtils;
 import tv.kuainiu.util.StringUtils;
 import tv.kuainiu.util.ToastUtils;
+import tv.kuainiu.widget.DividerItemDecoration;
 import tv.kuainiu.widget.ExpandListView;
 
 /**
@@ -52,6 +63,7 @@ import tv.kuainiu.widget.ExpandListView;
 
 public class VideoActivity extends BaseActivity {
     public static final String VIDEO_ID = "video_id";
+    public static final String CAT_ID = "cat_id";
     @BindView(R.id.rlVideo)
     RelativeLayout rlVideo;
     @BindView(R.id.tvTiltle)
@@ -85,7 +97,7 @@ public class VideoActivity extends BaseActivity {
     @BindView(R.id.tvIntroduce)
     TextView tvIntroduce;
     @BindView(R.id.elvComments)
-    ExpandListView elvComments;
+    RecyclerView elvComments;
     @BindView(R.id.ciCommentAavatar)
     CircleImageView ciCommentAavatar;
     @BindView(R.id.rlCommentAvatar)
@@ -98,11 +110,19 @@ public class VideoActivity extends BaseActivity {
     RelativeLayout rlCommentBtn;
 
     private String video_id = "";
+    private String cat_id = "";
     private VideoDetail mVideoDetail = null;
+    private List<CommentItem> listCommentItem=new ArrayList<>();
 
-    public static void intoNewIntent(Context context, String video_id) {
+    /**
+     * @param context
+     * @param video_id 视频文章id
+     * @param cat_id   栏目id
+     */
+    public static void intoNewIntent(Context context, String video_id, String cat_id) {
         Intent intent = new Intent(context, VideoActivity.class);
         intent.putExtra(VIDEO_ID, video_id);
+        intent.putExtra(CAT_ID, cat_id);
         context.startActivity(intent);
     }
 
@@ -116,16 +136,32 @@ public class VideoActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         video_id = getIntent().getStringExtra(VIDEO_ID);
+        cat_id = getIntent().getStringExtra(CAT_ID);
         if (TextUtils.isEmpty(video_id)) {
             ToastUtils.showToast(this, "未获取到视频信息");
             finish();
             return;
         }
+        initView();
         initData();
+    }
+
+    private void initView() {
+        CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(this);
+        elvComments.setLayoutManager(mLayoutManager);
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+
     }
 
     private void initData() {
         getNews();
+        getHotCommentList();
+    }
+
+    private void dataBindComment() {
+        VideoCommentAdapter videoCommentAdapter=new VideoCommentAdapter(this);
+        videoCommentAdapter.setData(listCommentItem);
+        elvComments.setAdapter(videoCommentAdapter);
     }
 
     private void dataBind() {
@@ -140,7 +176,7 @@ public class VideoActivity extends BaseActivity {
         //评论次数
         tvCommentNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(Integer.parseInt(StringUtils.replaceNullToEmpty(mVideoDetail.getComment_num(), "0")), Constant.TEN_THOUSAND, "万", "")));
         teacherDataBind(mVideoDetail.getTeacher_info());
-        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""),R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""), R.mipmap.default_avatar);
 
     }
 
@@ -148,7 +184,7 @@ public class VideoActivity extends BaseActivity {
         if (teacherInfo == null) {
             return;
         }
-        ImageDisplayUtil.displayImage(this, ciAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()),R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(this, ciAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()), R.mipmap.default_avatar);
         tvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         tvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
@@ -166,6 +202,10 @@ public class VideoActivity extends BaseActivity {
         map.put("id", video_id);
         map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
         OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_DETAILS + ParamUtil.getParamForGet(map), Action.video_details, CacheConfig.getCacheConfig());
+    }
+
+    private void getHotCommentList() {
+        CommentHttpUtil.hotComment(this, "1", cat_id, video_id, "", 1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -191,8 +231,33 @@ public class VideoActivity extends BaseActivity {
                     finish();
                 }
                 break;
+            case comment_list_hot:
+                if (Constant.SUCCEED == event.getCode()) {
+                    String json = event.getData().optString("data");
+                    LogUtils.e("VideoActivity", "json=" + json);
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        JSONArray jsonArray = object.optJSONArray("list");
+                        List<CommentItem> tempNewsList = new DataConverter<CommentItem>().JsonToListObject(jsonArray.toString(), new TypeToken<List<CommentItem>>() {
+                        }.getType());
+                        if (tempNewsList != null && tempNewsList.size() > 0) {
+                            listCommentItem.addAll(tempNewsList);
+                            dataBindComment();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        LogUtils.e("VideoActivity", "解析视频热门评论数据失败:" + event.getMsg());
+                        ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "解析视频热门评论数据失败"));
+                    }
+                } else {
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取视频热门评论失败"));
+                    LogUtils.e("VideoActivity", "获取视频热门评论失败：" + event.getMsg());
+                }
+                break;
         }
     }
+
 
     @Override
     protected void onDestroy() {

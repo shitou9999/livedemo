@@ -122,7 +122,7 @@ dependencies {
 
     compile files('libs/jikmediaplayer.jar')
     compile files('libs/jikmediawidget.jar')
-    compile files('libs/polyvSDK1.0.27.jar')
+    compile files('libs/CCSDK.jar')
     compile files('libs/dwsdk_iguxuan_v1.4.1.jar')
     compile('io.socket:socket.io-client:0.7.0') {
         // excluding org.json which is provided by Android

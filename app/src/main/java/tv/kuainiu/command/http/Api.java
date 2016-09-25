@@ -57,7 +57,6 @@ public class Api {
     /* 老师 */
     //
     public static final String FOLLOW_LSIT = "sns/follow_list";                // 用户关注列表
-    public static final String FETCH_FOLLOW_LIST = "sns/follow_list";          // 获取关注列表
     public static final String ADD_FOLLOW = "sns/add_follow";                  // 添加关注
     public static final String DEL_FOLLOW = "sns/del_follow";                  // 取消关注
     public static final String FETCH_TEAHCER_INFO = "news/teacher_info";       // 获取老师信息
@@ -82,7 +81,7 @@ public class Api {
     public static final String VIDEO_OR_POST_DETAILS = "news/get_news";        // 视频/文章详情
     public static final String VIDEO_OR_POST_FAVOUR = "news/support_news";     // 视频/文章点赞
     public static final String COMMENT_LIST = "sns/comment_list";              // 评论列表
-    public static final String COMMENT_LIST_HOT = "sns/hottest_comment";       // 文章/视频最热评论列表
+    public static final String COMMENT_LIST_HOT = "sns/hot_comment";       // 文章/视频最热评论列表
     public static final String ADD_COMMENT = "sns/add_comment";                // 添加评论
     public static final String FAVOUR_COMMENT = "sns/support_comment";         // 评论点赞
     public static final String VIDEO_RECOMMEND = "news/recommend_video_list";  // 推荐视频列表
@@ -126,6 +125,7 @@ public class Api {
     public static final String HOT_POINT = "news/hot_point";                     // 首页热门观点
     public static final String CUSTOM_LIST = "sns/custom_list";                     //2.9 定制列表 - 名师观点   sns/custom_list     圈子-名师观点
     public static final String CUSTOM_VIDEO_LIST = "sns/custom_video_list"; //2.10 定制列表 - 解盘视频   sns/custom_video_list     圈子-解盘视频
+
 
 
 }

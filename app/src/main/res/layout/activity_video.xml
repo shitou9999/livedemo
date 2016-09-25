@@ -162,7 +162,7 @@
                 android:text="热论"
                 android:textSize="@dimen/text_size_large" />
 
-            <tv.kuainiu.widget.ExpandListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/elvComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

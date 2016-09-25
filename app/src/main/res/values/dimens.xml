@@ -94,4 +94,12 @@
     <dimen name="live_item_point_size_nor">12dp</dimen>
     <dimen name="live_item_point_size_ing">20dp</dimen>
     <dimen name="live_item_history_head_size">24dp</dimen>
+
+    <!-- 文章评论列表头像大小 -->
+    <dimen name="article_comment_head_width">32dp</dimen>
+    <dimen name="article_comment_head_height">32dp</dimen>
+    <!--点播-->
+    <dimen name="popmenu_width">100.0dip</dimen>
+    <dimen name="popmenu_yoff">5.0dip</dimen>
+    <dimen name="dip2pix">1.0dip</dimen>
 </resources>

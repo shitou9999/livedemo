@@ -100,7 +100,10 @@
         <activity android:name=".ui.me.activity.ChooseRegionActivity" />
         <activity android:name=".util.TakePhotoActivity" />
         <activity android:name=".ui.teachers.activity.TeacherZoneActivity" />
-        <activity android:name=".ui.video.VideoActivity" />
+        <activity
+            android:name=".ui.video.VideoActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="sensor" />
         <!-- JPUSH start -->
         <!-- Required SDK核心功能 -->
         <activity
