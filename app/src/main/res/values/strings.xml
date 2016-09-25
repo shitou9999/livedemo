@@ -334,7 +334,6 @@
     <string name="subtitle">字幕</string>
     <string name="speed">倍速</string>
     <string name="account_info">账户信息</string>
-    <string name="hello_world">Hello world!</string>
     <string name="close_ad">关闭广告</string>
     <string name="ad_info">了解详情</string>
 </resources>

@@ -104,7 +104,7 @@ public class PostParentLayout extends RelativeLayout {
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VideoActivity.intoNewIntent(mContext,teacherZoneDynamicsInfo.getNews_video_id(),teacherZoneDynamicsInfo.getNews_catid());
+                        VideoActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_video_id(), teacherZoneDynamicsInfo.getVideo_id(), teacherZoneDynamicsInfo.getNews_catid());
                     }
                 });
                 addView(view);
@@ -118,7 +118,8 @@ public class PostParentLayout extends RelativeLayout {
                 ImageView ivPlayVoice = (ImageView) view.findViewById(R.id.ivPlay);
 
                 ivPlayVoice.setOnClickListener(new OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         if (!TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_voice_url())) {
                             MediaPlayer mp = new MediaPlayer();
                             try {

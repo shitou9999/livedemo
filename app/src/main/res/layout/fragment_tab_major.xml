@@ -42,7 +42,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            app:showText="true"/>
+            app:showText="true"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

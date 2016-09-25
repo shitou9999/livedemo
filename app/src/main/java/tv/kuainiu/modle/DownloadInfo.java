@@ -1,154 +1,130 @@
 package tv.kuainiu.modle;
 
+import java.util.Date;
+
+import com.bokecc.sdk.mobile.download.Downloader;
+
 public class DownloadInfo {
-    private int _id;
-    private String title;
-    private String status;
-    private String vid;
-    private String newsId;
-    private String catId;
-    private String teacherId;
-    private String firstImage;
-    private String duration;
-    private long filesize;
-    private long timeStamp;
-    private int bitrate;
-    private int percent;
+	
+	private int id;
+	
+	private String videoId;
+	
+	private String title;
+	
+	private int progress;
+	
+	private String progressText;
+	
+	private int status;
+	
+	private Date createTime;
+	
+	private int definition;
+	
+	public DownloadInfo(String videoId, String title, int progress, String progressText, int status, Date createTime) {
+		this.videoId = videoId;
+		this.title = title;
+		this.progress = progress;
+		this.progressText = progressText;
+		this.status = status;
+		this.createTime = createTime;
+		this.definition = -1;
+	}
+	
+	public DownloadInfo(String videoId, String title, int progress, String progressText, int status, Date createTime, int definition) {
+		this(videoId, title, progress, progressText, status, createTime);
+		this.definition = definition;
+	}
+	
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public DownloadInfo() {
-    }
+	public String getVideoId() {
+		return videoId;
+	}
 
-    public DownloadInfo(String vid) {
-        this.vid = vid;
-    }
+	public void setVideoId(String videoId) {
+		this.videoId = videoId;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
 
-    public DownloadInfo(String vid, String duration, long filesize, int bitrate) {
-        this.vid = vid;
-        this.duration = duration;
-        this.filesize = filesize;
-        this.bitrate = bitrate;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public int get_id() {
-        return _id;
-    }
+	public int getProgress() {
+		return progress;
+	}
 
-    public void set_id(int _id) {
-        this._id = _id;
-    }
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
 
-    public int getBitrate() {
-        return bitrate;
-    }
+	public int getStatus() {
+		return status;
+	}
 
-    public void setBitrate(int bitrate) {
-        this.bitrate = bitrate;
-    }
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
-    public String getCatId() {
-        return catId;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setCatId(String catId) {
-        this.catId = catId;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	public int getDefinition() {
+		return definition;
+	}
 
-    public String getDuration() {
-        return duration;
-    }
+	public void setDefinition(int definition) {
+		this.definition = definition;
+	}
 
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
+	public String getProgressText() {
+		if (progressText == null) {
+			progressText = "0M / 0M";
+		}
+		return progressText;
+	}
 
-    public long getFilesize() {
-        return filesize;
-    }
-
-    public void setFilesize(long filesize) {
-        this.filesize = filesize;
-    }
-
-    public String getFirstImage() {
-        return firstImage;
-    }
-
-    public void setFirstImage(String firstImage) {
-        this.firstImage = firstImage;
-    }
-
-    public String getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(String newsId) {
-        this.newsId = newsId;
-    }
-
-    public int getPercent() {
-        return percent;
-    }
-
-    public void setPercent(int percent) {
-        this.percent = percent;
-    }
-
-    public String getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getVid() {
-        return vid;
-    }
-
-    public void setVid(String vid) {
-        this.vid = vid;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override public String toString() {
-        return "DownloadInfo{" +
-                "_id=" + _id +
-                ", title='" + title + '\'' +
-                ", status='" + status + '\'' +
-                ", vid='" + vid + '\'' +
-                ", newsId='" + newsId + '\'' +
-                ", catId='" + catId + '\'' +
-                ", teacherId='" + teacherId + '\'' +
-                ", firstImage='" + firstImage + '\'' +
-                ", duration='" + duration + '\'' +
-                ", filesize=" + filesize +
-                ", timeStamp=" + timeStamp +
-                ", bitrate=" + bitrate +
-                ", percent=" + percent +
-                '}';
-    }
+	public void setProgressText(String progressText) {
+		this.progressText = progressText;
+	}
+	
+	public String getStatusInfo(){
+		String statusInfo = "";
+		switch (status) {
+		case Downloader.WAIT:
+			statusInfo = "等待中";
+			break;
+		case Downloader.DOWNLOAD:
+			statusInfo = "下载中";
+			break;
+		case Downloader.PAUSE:
+			statusInfo = "暂停中";
+			break;
+		case Downloader.FINISH:
+			statusInfo = "已下载";
+			break;
+		default:
+			statusInfo = "下载失败";
+			break;
+		}
+		
+		return statusInfo;
+	}
+	
 }

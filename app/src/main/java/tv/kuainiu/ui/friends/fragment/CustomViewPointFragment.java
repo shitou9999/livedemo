@@ -122,6 +122,7 @@ public class CustomViewPointFragment extends BaseFragment {
     public void fetchTeacherDynamicsList() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
+        map.put("page", String.valueOf(page));
         OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIST, ParamUtil.getParam(map), Action.CUSTOM_LIST, CacheConfig.getCacheConfig());
     }
 

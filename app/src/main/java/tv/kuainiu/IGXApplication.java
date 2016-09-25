@@ -12,7 +12,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 
 import cn.jpush.android.api.JPushInterface;
-import tv.kuainiu.app.MVideoClient;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.preferences.UserPreferencesManager;
 import tv.kuainiu.modle.User;
@@ -78,7 +77,7 @@ public class IGXApplication extends Application {
             // 设置开启日志,发布时请关闭日志
             JPushInterface.setDebugMode(IsDegbug);
 
-            MVideoClient.getmInstance(this).initPolyvCilent();  // 初始化保利威视SDK
+
 
             if (IsDegbug) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

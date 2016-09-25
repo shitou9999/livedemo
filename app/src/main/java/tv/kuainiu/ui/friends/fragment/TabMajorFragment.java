@@ -27,8 +27,8 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 public class TabMajorFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
     private static final String[][] titles = {
-            {"观点", "解盘"},
-            {"直播", "点播"},
+            {"观点", "名师"},
+            {"点播"},
             {"小道消息", "谈古论今"}};
 
     @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
@@ -84,12 +84,12 @@ public class TabMajorFragment extends BaseFragment {
             }
         });
 
-        int visibility = mParentPosition == 0 ? View.VISIBLE : View.GONE;
-        mSwitchCompat.setVisibility(visibility);
-        mSwitchCompat.setTextOn("热");
-        mSwitchCompat.setTextOff("");
-
-        mSwitchCompat.setTextColor(Color.RED);
+//        int visibility = mParentPosition == 0 ? View.VISIBLE : View.GONE;
+//        mSwitchCompat.setVisibility(visibility);
+//        mSwitchCompat.setTextOn("热");
+//        mSwitchCompat.setTextOff("");
+//
+//        mSwitchCompat.setTextColor(Color.RED);
 
         return view;
     }
@@ -97,17 +97,14 @@ public class TabMajorFragment extends BaseFragment {
 
     private void initFragment() {
         mBaseFragments.clear();
-
         switch (mParentPosition) {
             case 0:
                 mBaseFragments.add(CustomViewPointFragment.newInstance());
-                mBaseFragments.add(CustomVideoFragment.newInstance());
+                mBaseFragments.add(CustomTeacherFragment.newInstance());
                 break;
 
             case 1:
-                mBaseFragments.add(CustomViewPointFragment.newInstance());
                 mBaseFragments.add(CustomVideoFragment.newInstance());
-
                 break;
 
         }
@@ -117,7 +114,6 @@ public class TabMajorFragment extends BaseFragment {
     }
 
    public static class SimpleViewPager extends FragmentPagerAdapter {
-        private static final int PAGE_COUNT = 2;
         private List<BaseFragment> mFragments;
         private String[] mTitles;
 
@@ -133,7 +129,7 @@ public class TabMajorFragment extends BaseFragment {
         }
 
         @Override public int getCount() {
-            return PAGE_COUNT;
+            return mFragments.size();
         }
 
         @Override public CharSequence getPageTitle(int position) {

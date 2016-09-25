@@ -24,7 +24,7 @@ public class FollowHttpUtil {
      * 业务参数
      * user_id     当前用户ID     必传
      * is_all         是否返回全部      非必传   0否1是   默认0 默认只返回关注的老师列表
-     * is_official   是否返回官方栏目     非必传     0否1是     默认1
+     * is_official   是否返回官方栏目     非必传     0否1是     默认0
      * 备注：需要签名跟加密
      * {"status"="0","data"="json"}
      */

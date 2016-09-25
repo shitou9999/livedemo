@@ -8,7 +8,7 @@ import android.text.TextUtils;
 
 import tv.kuainiu.command.db.DbOpenHelper;
 import tv.kuainiu.command.db.VDLContract;
-import tv.kuainiu.modle.DownloadInfo;
+import tv.kuainiu.modle.DownloadInfo2;
 
 import java.util.LinkedList;
 
@@ -23,7 +23,7 @@ public class VideoDownloadDao {
         this.dbHelper = DbOpenHelper.getInstance(context);
     }
 
-    public boolean addDownloadFile(DownloadInfo info) {
+    public boolean addDownloadFile(DownloadInfo2 info) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = ContentValueFactory.getContentValue(info);
         db.beginTransaction(); // 开始事务
@@ -37,7 +37,7 @@ public class VideoDownloadDao {
         return (lineCount > 0);
     }
 
-    public boolean deleteDownloadFile(DownloadInfo info) {
+    public boolean deleteDownloadFile(DownloadInfo2 info) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = VDLContract.VDLEntry.COLUMN_VID + " = ? AND " + VDLContract.VDLEntry.COLUMN_BITRATE + " = ?";
         String[] selectionArgs = {info.getVid(), String.valueOf(info.getBitrate())};
@@ -48,7 +48,7 @@ public class VideoDownloadDao {
         return lineCount > 0;
     }
 
-    public void updatePercent(DownloadInfo info, int percent) {
+    public void updatePercent(DownloadInfo2 info, int percent) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = "UPDATE " + VDLContract.VDLEntry.TABLE_NAME + " SET percent=? WHERE vid=? AND bitrate=?";
         db.execSQL(
@@ -57,7 +57,7 @@ public class VideoDownloadDao {
     }
 
 
-    public boolean updateStatus(DownloadInfo info, String status) {
+    public boolean updateStatus(DownloadInfo2 info, String status) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(VDLContract.VDLEntry.COLUMN_STATUS, status);
@@ -79,7 +79,7 @@ public class VideoDownloadDao {
         return flag;
     }
 
-    public boolean has(DownloadInfo info) {
+    public boolean has(DownloadInfo2 info) {
         if (info == null || TextUtils.isEmpty(info.getVid())) {
             return false;
         }
@@ -111,9 +111,9 @@ public class VideoDownloadDao {
     }
 
 
-    public LinkedList<DownloadInfo> getDownloadAllFiles(String selection, String[] selectionArgs) {
+    public LinkedList<DownloadInfo2> getDownloadAllFiles(String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        LinkedList<DownloadInfo> infoList = new LinkedList<>();
+        LinkedList<DownloadInfo2> infoList = new LinkedList<>();
 
         String[] projection = {
                 VDLContract.VDLEntry.COLUMN_VID,
@@ -158,7 +158,7 @@ public class VideoDownloadDao {
                     int percent = cursor.getInt(cursor.getColumnIndex(VDLContract.VDLEntry.COLUMN_PERCENT));
                     long timeStamp = cursor.getInt(cursor.getColumnIndex(VDLContract.VDLEntry.COLUMN_TIMESTAMP));
 
-                    DownloadInfo info = new DownloadInfo(vid, duration, fileSize, bitrate);
+                    DownloadInfo2 info = new DownloadInfo2(vid, duration, fileSize, bitrate);
                     info.setPercent(percent);
                     info.setTitle(title);
                     info.setNewsId(newsId);
@@ -177,14 +177,14 @@ public class VideoDownloadDao {
     }
 
 
-    public LinkedList<DownloadInfo> getDownloadAllEdFiles() {
+    public LinkedList<DownloadInfo2> getDownloadAllEdFiles() {
         String selection = VDLContract.VDLEntry.COLUMN_PERCENT + " >= ?";
         String[] selectionArgs = {"100"};
         return getDownloadAllFiles(selection, selectionArgs);
     }
 
 
-    public LinkedList<DownloadInfo> getDownloadAllIngFiles() {
+    public LinkedList<DownloadInfo2> getDownloadAllIngFiles() {
         String selection = VDLContract.VDLEntry.COLUMN_PERCENT + " < ?";
         String[] selectionArgs = {"100"};
         return getDownloadAllFiles(selection, selectionArgs);
@@ -192,13 +192,13 @@ public class VideoDownloadDao {
 
 
     /**
-     * Convert DownloadInfo into a ContentValues
+     * Convert DownloadInfo2 into a ContentValues
      *
      * @author nanck
      * @since 2.1.0
      */
     private static class ContentValueFactory {
-        public static ContentValues getContentValue(DownloadInfo info) {
+        public static ContentValues getContentValue(DownloadInfo2 info) {
             ContentValues cv = new ContentValues();
             cv.put(VDLContract.VDLEntry.COLUMN_VID, info.getVid());
             cv.put(VDLContract.VDLEntry.COLUMN_NEWS_ID, info.getNewsId());
