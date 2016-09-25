@@ -35,10 +35,10 @@ import tv.kuainiu.ui.friends.fragment.FriendsMainFragment;
 import tv.kuainiu.ui.home.HomeFragment;
 import tv.kuainiu.ui.me.MeFragment;
 import tv.kuainiu.ui.teachers.TeachersFragment;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.PreferencesUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.widget.NoSlideViewPager;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {

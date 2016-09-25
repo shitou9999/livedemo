@@ -46,12 +46,12 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.PermissionManager;
-import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.util.TakePhotoActivity;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.PermissionManager;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.widget.PermissionDialog;
 import tv.kuainiu.widget.dialog.SelectPicPopupWindow;
 

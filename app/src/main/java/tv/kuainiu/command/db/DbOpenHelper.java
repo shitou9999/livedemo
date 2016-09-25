@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import tv.kuainiu.modle.NewsItem;
-import tv.kuainiu.util.ClassRefUtil;
-import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.utils.ClassRefUtil;
+import tv.kuainiu.utils.DebugUtils;
 
 
 /**

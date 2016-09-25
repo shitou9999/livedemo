@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -23,9 +22,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.CommentItem;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.DateUtil;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.Utils;
+import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.Utils;
 
 /**
  * @author nanck on 2016/4/12.

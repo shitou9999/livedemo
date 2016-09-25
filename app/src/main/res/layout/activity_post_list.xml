@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    >
+
+    <tv.kuainiu.widget.TitleBarView
+        android:id="@+id/tbv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:left_visibility="invisible"
+        app:right_visibility="invisible"
+        app:title="文章列表"/>
+
+
+    <include layout="@layout/content_post_list"/>
+
+</android.support.design.widget.CoordinatorLayout>

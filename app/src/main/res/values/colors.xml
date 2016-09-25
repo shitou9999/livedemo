@@ -11,7 +11,7 @@
 
     <!-- Base Colors -->
     <!-- Red 红色 -->
-    <color name="colorRed050">#FFEBEE</color>
+    <color name="colorRed50">#FFEBEE</color>
     <color name="colorRed200">#EF9A9A</color>
     <color name="colorRed500">#F44336</color>
     <color name="colorRed800">#C62828</color>
@@ -25,6 +25,7 @@
     <!-- Grey 灰色 feb42f -->
     <color name="colorGrey050">#FAFAFA</color>
     <color name="colorGrey100">#F5F5F5</color>
+    <color name="colorGrey200">#efeeeeee</color>
     <color name="colorGrey220">#EBEBEB</color>
     <color name="colorGrey230">#E5E5E5</color>
     <color name="colorGrey300">#E0E0E0</color>
@@ -85,4 +86,9 @@
     <color name="yellow">#ffffcc00</color>
     <color name="title">#ff274462</color>
     <color name="ad_color">#66000000</color>
+
+    <!-- 栏目标签 背景色 -->
+    <color name="colorZaopan">@color/colorAmber550</color>
+    <color name="colorWupan">@color/colorBlue500</color>
+    <color name="colorWanpan">#c477ff</color>
 </resources>

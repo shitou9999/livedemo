@@ -33,8 +33,8 @@ import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.CheckCodePicker;
-import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.utils.CheckCodePicker;
+import tv.kuainiu.utils.DebugUtils;
 
 
 /**

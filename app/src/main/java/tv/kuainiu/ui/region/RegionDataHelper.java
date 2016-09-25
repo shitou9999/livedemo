@@ -3,8 +3,8 @@ package tv.kuainiu.ui.region;
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
-import tv.kuainiu.util.DataConverter;
-import tv.kuainiu.util.LogUtils;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

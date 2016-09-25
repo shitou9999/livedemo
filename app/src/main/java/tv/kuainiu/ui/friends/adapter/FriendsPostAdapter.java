@@ -17,8 +17,8 @@ import tv.kuainiu.R;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.push.CustomVideo;
-import tv.kuainiu.util.ImageDisplayUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.ImageDisplayUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**

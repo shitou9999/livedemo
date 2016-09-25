@@ -33,10 +33,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 
 import com.bokecc.sdk.mobile.exception.ErrorCode;
 import com.bokecc.sdk.mobile.play.DWMediaPlayer;
@@ -79,18 +79,16 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
-import tv.kuainiu.util.CustomLinearLayoutManager;
-import tv.kuainiu.util.DataConverter;
-import tv.kuainiu.util.DateUtil;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.ParamsUtil;
-import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.util.ToastUtils;
+import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.ParamsUtil;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.cc.PopMenu;
 import tv.kuainiu.widget.cc.VerticalSeekBar;
-
-import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * Created by sirius on 2016/9/24.

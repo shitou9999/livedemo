@@ -26,12 +26,12 @@ import tv.kuainiu.command.http.Api;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.CacheManage;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.MeasureUtil;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.SecurityUtils;
+import tv.kuainiu.utils.CacheManage;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.MeasureUtil;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.SecurityUtils;
 
 /**
  * Created by guxuan on 2016/2/29.

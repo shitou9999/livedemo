@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 
-import tv.kuainiu.util.AppUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+
+import tv.kuainiu.utils.AppUtils;
 
 
 /**

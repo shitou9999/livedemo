@@ -11,7 +11,7 @@ import android.widget.TextView;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.AppVersion;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.AppUtils;
+import tv.kuainiu.utils.AppUtils;
 
 
 public class SystemUpdateDialog extends Dialog implements OnClickListener {

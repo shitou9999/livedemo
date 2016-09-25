@@ -98,8 +98,13 @@
         <activity android:name=".ui.me.activity.BindEmailActivity" />
         <activity android:name=".ui.me.activity.AlterPasswordActivity" />
         <activity android:name=".ui.me.activity.ChooseRegionActivity" />
-        <activity android:name=".util.TakePhotoActivity" />
+        <activity android:name=".utils.TakePhotoActivity" />
         <activity android:name=".ui.teachers.activity.TeacherZoneActivity" />
+        <activity android:name=".ui.activity.WebActivity" />
+        <activity android:name=".ui.articles.activity.PostListActivity" />
+        <activity android:name=".ui.articles.activity.PostZoneActivity" />
+        <activity android:name=".ui.articles.activity.PicturePreviewFullScreenActivity" />
+        <activity android:name=".ui.comments.CommentListActivity" />
         <activity
             android:name=".ui.video.VideoActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"

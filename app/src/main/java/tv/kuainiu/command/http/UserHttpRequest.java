@@ -11,10 +11,10 @@ import tv.kuainiu.event.UserEvent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.AppUtils;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.SecurityUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.AppUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.SecurityUtils;
+import tv.kuainiu.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;

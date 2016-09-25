@@ -28,9 +28,9 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.ImageDisplayUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.ImageDisplayUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**

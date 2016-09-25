@@ -39,10 +39,10 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.PreferencesUtils;
-import tv.kuainiu.util.SecurityUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.SecurityUtils;
 
 
 /**

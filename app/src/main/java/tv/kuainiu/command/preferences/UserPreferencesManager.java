@@ -4,8 +4,8 @@ package tv.kuainiu.command.preferences;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.modle.User;
-import tv.kuainiu.util.PreferencesUtils;
-import tv.kuainiu.util.SecurityUtils;
+import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.SecurityUtils;
 
 /**
  * @author nanck on 2016/6/3.

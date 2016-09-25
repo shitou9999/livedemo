@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorGrey900"
+   >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.iguxuan.widgets.ViewPagerFixed
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"/>
+
+        <com.synnapps.carouselview.CirclePageIndicator
+            android:id="@+id/cpi_circle_page_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="56dp"
+            android:padding="5dp"
+            app:fillColor="@color/white_color"
+            app:pageColor="@color/colorGrey600"
+            app:strokeColor="@color/colorGrey600"
+            />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

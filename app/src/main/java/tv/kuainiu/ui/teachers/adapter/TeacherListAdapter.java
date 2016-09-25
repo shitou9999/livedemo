@@ -19,9 +19,9 @@ import tv.kuainiu.R;
 import tv.kuainiu.modle.ProgramItem;
 import tv.kuainiu.modle.TeacherItem;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.ScreenUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.ScreenUtils;
+import tv.kuainiu.utils.StringUtils;
 
 
 public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {

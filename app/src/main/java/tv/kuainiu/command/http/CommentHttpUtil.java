@@ -3,15 +3,15 @@ package tv.kuainiu.command.http;
 import android.content.Context;
 import android.os.Build;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.AppUtils;
-
-import java.util.HashMap;
-import java.util.Map;
+import tv.kuainiu.utils.AppUtils;
 
 /**
  * 评论请求工具

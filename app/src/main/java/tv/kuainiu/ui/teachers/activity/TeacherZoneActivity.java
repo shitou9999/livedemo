@@ -45,10 +45,10 @@ import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.ui.teachers.adapter.TeacherZoneAdapter;
-import tv.kuainiu.util.CustomLinearLayoutManager;
-import tv.kuainiu.util.DataConverter;
-import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.util.ToastUtils;
+import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
 
 /**

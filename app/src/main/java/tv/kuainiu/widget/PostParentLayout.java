@@ -1,7 +1,6 @@
 package tv.kuainiu.widget;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -18,9 +17,9 @@ import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.friends.model.BasePost;
 import tv.kuainiu.ui.video.VideoActivity;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.util.ToastUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 
 /**
  * @author nanck on 2016/8/2.

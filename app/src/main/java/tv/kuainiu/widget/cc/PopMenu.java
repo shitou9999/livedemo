@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 
 import tv.kuainiu.R;
-import tv.kuainiu.util.DensityUtils;
+import tv.kuainiu.utils.DensityUtils;
 
 /**
  * 

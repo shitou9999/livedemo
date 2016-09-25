@@ -26,7 +26,7 @@ import tv.kuainiu.modle.Area;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.utils.DebugUtils;
 
 /**
  * 选择地区

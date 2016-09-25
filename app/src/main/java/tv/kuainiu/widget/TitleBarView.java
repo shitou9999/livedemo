@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
-import tv.kuainiu.util.LogUtils;
+import tv.kuainiu.utils.LogUtils;
 
 /**
  * @author nanck on 2016/8/2.

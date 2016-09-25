@@ -16,15 +16,15 @@ import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.preferences.UserPreferencesManager;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.AppUtils;
-import tv.kuainiu.util.CrashHandler;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.FileUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.PreferencesUtils;
-import tv.kuainiu.util.SDCardUtils;
-import tv.kuainiu.util.SecurityUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.AppUtils;
+import tv.kuainiu.utils.CrashHandler;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.FileUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.SDCardUtils;
+import tv.kuainiu.utils.SecurityUtils;
+import tv.kuainiu.utils.StringUtils;
 
 
 public class IGXApplication extends Application {

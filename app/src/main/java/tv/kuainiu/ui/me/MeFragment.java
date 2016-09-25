@@ -36,10 +36,10 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.PreferencesUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 /**

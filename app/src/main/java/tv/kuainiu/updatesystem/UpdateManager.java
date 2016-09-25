@@ -37,11 +37,11 @@ import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.AppVersion;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.DataConverter;
-import tv.kuainiu.util.ExitUtil;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.PreferencesUtils;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.ExitUtil;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.widget.NumberProgressBar;
 
 

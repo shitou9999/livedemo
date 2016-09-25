@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import tv.kuainiu.command.db.DBConstant;
 import tv.kuainiu.command.db.DbOpenHelper;
 import tv.kuainiu.modle.NewsItem;
-import tv.kuainiu.util.ClassRefUtil;
-import tv.kuainiu.util.LogUtils;
+import tv.kuainiu.utils.ClassRefUtil;
+import tv.kuainiu.utils.LogUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

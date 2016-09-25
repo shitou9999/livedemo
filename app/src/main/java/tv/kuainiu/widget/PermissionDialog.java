@@ -9,7 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 
 import tv.kuainiu.R;
-import tv.kuainiu.util.ExitUtil;
+import tv.kuainiu.utils.ExitUtil;
 
 
 /**

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_post_list">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/ptr_rv_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+     >
+
+        <RecyclerView
+            android:id="@+id/rv_posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/small_margin"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.iguxuan.widgets.NetErrAddLoadView
+        android:id="@+id/err_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+</RelativeLayout>

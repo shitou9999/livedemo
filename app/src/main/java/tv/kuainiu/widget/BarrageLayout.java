@@ -14,13 +14,13 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.RelativeLayout;
 
-import tv.kuainiu.util.FaceStringUtil;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import tv.kuainiu.utils.FaceStringUtil;
 
 /**
  * 弹幕布局类

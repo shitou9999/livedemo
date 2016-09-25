@@ -29,7 +29,7 @@ import tv.kuainiu.onekeyshare.OnekeySharePage;
 import tv.kuainiu.onekeyshare.OnekeyShareThemeImpl;
 import tv.kuainiu.onekeyshare.themes.classic.land.FriendListPageLand;
 import tv.kuainiu.onekeyshare.themes.classic.port.FriendListPagePort;
-import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.utils.DebugUtils;
 import com.mob.tools.gui.AsyncImageView;
 import com.mob.tools.utils.DeviceHelper;
 

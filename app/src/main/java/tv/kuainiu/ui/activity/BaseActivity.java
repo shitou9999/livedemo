@@ -23,12 +23,12 @@ import tv.kuainiu.event.UserEvent;
 import tv.kuainiu.modle.InitInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.DateUtil;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.DialogUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.PreferencesUtils;
+import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.DialogUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.PreferencesUtils;
 
 /**
  * Created by jack on 2016/9/7.

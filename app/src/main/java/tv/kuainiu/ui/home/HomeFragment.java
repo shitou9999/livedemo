@@ -38,10 +38,10 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.home.adapter.HomeAdapter;
-import tv.kuainiu.util.CustomLinearLayoutManager;
-import tv.kuainiu.util.DataConverter;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.LogUtils;
+import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
 
 /**

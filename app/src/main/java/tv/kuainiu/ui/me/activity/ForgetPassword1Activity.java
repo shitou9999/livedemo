@@ -36,10 +36,10 @@ import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.KeyBoardUtil;
-import tv.kuainiu.util.MatcherUtils;
-import tv.kuainiu.util.NetUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.KeyBoardUtil;
+import tv.kuainiu.utils.MatcherUtils;
+import tv.kuainiu.utils.NetUtils;
 
 
 /**

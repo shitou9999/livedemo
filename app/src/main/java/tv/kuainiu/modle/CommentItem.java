@@ -53,6 +53,9 @@ public class CommentItem implements Parcelable {
     private String parent_comment_id;
     private String system_version;
 
+    public CommentItem() {
+    }
+
     protected CommentItem(Parcel in) {
         source_show = in.readString();
         model = in.readString();

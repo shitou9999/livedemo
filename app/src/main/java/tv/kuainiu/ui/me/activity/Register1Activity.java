@@ -36,13 +36,13 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
-import tv.kuainiu.util.CheckCodePicker;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.SMSUtils;
-import tv.kuainiu.util.SecurityUtils;
-import tv.kuainiu.util.ToastUtils;
-import tv.kuainiu.util.WeakHandler;
+import tv.kuainiu.utils.CheckCodePicker;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.SMSUtils;
+import tv.kuainiu.utils.SecurityUtils;
+import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.utils.WeakHandler;
 
 
 /**

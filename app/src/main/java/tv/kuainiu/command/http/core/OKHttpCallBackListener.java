@@ -3,9 +3,9 @@ package tv.kuainiu.command.http.core;
 
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;

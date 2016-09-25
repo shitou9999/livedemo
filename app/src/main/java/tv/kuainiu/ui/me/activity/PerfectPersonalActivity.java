@@ -32,9 +32,9 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.util.DateUtil;
-import tv.kuainiu.util.DebugUtils;
-import tv.kuainiu.util.NetUtils;
+import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.widget.dialog.MainDialog;
 
 

@@ -23,10 +23,10 @@ import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
-import tv.kuainiu.util.CustomLinearLayoutManager;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.ScreenUtils;
-import tv.kuainiu.util.StringUtils;
+import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.ScreenUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
 
 /**

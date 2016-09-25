@@ -102,4 +102,5 @@
     <dimen name="popmenu_width">100.0dip</dimen>
     <dimen name="popmenu_yoff">5.0dip</dimen>
     <dimen name="dip2pix">1.0dip</dimen>
+    <dimen name="default_circle_indicator_radius">3dp</dimen>
 </resources>

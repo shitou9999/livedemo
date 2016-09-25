@@ -17,7 +17,7 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.text.TextUtils;
 
-import tv.kuainiu.util.DebugUtils;
+import tv.kuainiu.utils.DebugUtils;
 import com.mob.tools.utils.UIHandler;
 
 import java.io.File;

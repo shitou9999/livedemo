@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_post_zone">
+
+    <RelativeLayout
+        android:id="@+id/rl_top_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/def_option_height"
+        android:background="@color/colorWhite800"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:id="@+id/ll_teacher_info_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/civ_teacher_head"
+                android:layout_width="@dimen/activity_horizontal_margin2x"
+                android:layout_height="@dimen/activity_vertical_margin2x"
+                android:layout_gravity="center_vertical"
+                app:civ_border_overlay="true"
+                tools:src="@mipmap/head_nor" />
+
+            <TextView
+                android:id="@+id/tv_teacher_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:layout_marginStart="@dimen/small_margin"
+                android:textColor="@color/colorBlue500"
+                tools:text="张三丰" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_follow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_follow_button_bg"
+            android:gravity="center"
+            android:text="@string/follow_new"
+            android:textColor="@drawable/selector_follow_button_text_color" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/rl_top_navigation"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/progressbar_color" />
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/ptr_rv_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line_bottom"
+        android:layout_below="@id/pb_loading">
+
+        <WebView
+            android:id="@+id/web_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <!-- oo oo -->
+    <!-- oo oo -->
+    <!-- oo bottom nav oo -->
+    <View
+        android:id="@+id/line_bottom"
+        style="@style/IGXDefault_Divider"
+        android:layout_height="1dp"
+        android:layout_above="@+id/ll_bottom_bar" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/def_option_height"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_favour"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_option_normal"
+            android:gravity="center"
+            android:textColor="@drawable/selector_text_color_enabled_state"
+            tools:text="赞" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/def_DividerColor" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_option_normal"
+            android:gravity="center"
+            android:text="@string/comment"
+            android:textColor="@drawable/selector_text_color_enabled_state" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/def_DividerColor" />
+
+        <TextView
+            android:id="@+id/tv_share"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_option_normal"
+            android:gravity="center"
+            android:text="@string/share"
+            android:textColor="@drawable/selector_text_color_enabled_state" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/def_DividerColor" />
+
+        <TextView
+            android:id="@+id/tv_collect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_option_normal"
+            android:gravity="center"
+            android:textColor="@drawable/selector_text_color_enabled_state"
+            tools:text="@string/collection" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/layout_adjust_font_size"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

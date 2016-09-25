@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup
+    android:id="@+id/radioGroup"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/colorGrey600"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:weightSum="4">
+
+
+    <RadioButton
+        android:id="@+id/radioButton1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingStart="0dp"
+        android:text="小"/>
+
+    <RadioButton
+        android:id="@+id/radioButton2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingStart="0dp"
+        android:text="标准"/>
+
+    <RadioButton
+        android:id="@+id/radioButton3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:drawablePadding="0dp"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingStart="0dp"
+        android:text="大"/>
+
+    <RadioButton
+        android:id="@+id/radioButton4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingStart="0dp"
+        android:text="最大"/>
+
+</RadioGroup>

@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import tv.kuainiu.R;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.util.ImageDisplayUtil;
-import tv.kuainiu.util.LogUtils;
-import tv.kuainiu.util.NetUtils;
-import tv.kuainiu.util.StringUtils;
-import tv.kuainiu.util.ToastUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 
 
 /**
