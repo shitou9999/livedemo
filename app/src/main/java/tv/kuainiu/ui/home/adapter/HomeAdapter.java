@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
+import tv.kuainiu.ui.articles.activity.PostZoneActivity;
+import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
@@ -57,10 +61,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     private List<NewsItem> mNewList = new ArrayList<>();
 
-    int mBannerListSize = 0;
-    int mStockIndexListSize = 0;
-    int mLiveListSize = 0;
-    int mHotPointListSize = 0;
+    int mBannerListSize = 1;
+    int mStockIndexListSize = 1;
+    int mLiveListSize = 1;
+    int mHotPointListSize = 1;
     int mNewListSize = 0;
     private static final int BANNER = 7;
     private static final int STOCK_INDEX = 1;
@@ -69,11 +73,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int HOT_POINT = 4;
     private static final int TEXT_HOT_NEW = 5;
     private static final int HOT_NEW = 6;
+    private OnItemClickListener mOnItemClickListener;
 
     public HomeAdapter(Activity context) {
         mContext = context;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
 
     public void setBannerList(List<Banner> mBannerList) {
         this.mBannerList.clear();
@@ -100,10 +108,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        mBannerListSize = 1;
-        mStockIndexListSize = 1;
-        mLiveListSize = 1;
-        mHotPointListSize = 1;
         mNewListSize = mNewList.size() < 1 ? 0 : mNewList.size();
         return mBannerListSize + mStockIndexListSize + mLiveListSize + mHotPointListSize + mNewListSize + 2;
     }
@@ -200,11 +204,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(mContext);
         mLayoutManager.setOrientation(CustomLinearLayoutManager.HORIZONTAL);
         holder.rc_hot_point.setLayoutManager(mLayoutManager);
-        DividerItemDecoration mDividerItemDecoration=new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
         mDividerItemDecoration.setColor(Color.parseColor("#00000000"));
         mDividerItemDecoration.setItemSize(mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
         holder.rc_hot_point.addItemDecoration(mDividerItemDecoration);
-        HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList);
+        HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList,mOnItemClickListener);
         holder.rc_hot_point.setAdapter(adp);
     }
 
@@ -285,13 +289,27 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //绑定新闻
     public void onBindNewsItemViewHolder(ViewNewHolder holder, int position) {
-        int currentPosition = position - mBannerListSize - mStockIndexListSize - mLiveListSize - mHotPointListSize - mNewListSize;
+        int currentPosition = position - mBannerListSize - mStockIndexListSize - mLiveListSize - mHotPointListSize - 2;
         if (currentPosition > -1 && currentPosition < mNewList.size()) {
+            final NewsItem newsItem = mNewList.get(currentPosition);
+            final String videoId = newsItem.getUpVideoId();
             //绑定新闻Item
-            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getTitle()));
-            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getDescription()));
-            ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(mNewList.get(currentPosition).getThumb()));
+            holder.mTvNewTitle.setText(StringUtils.replaceNullToEmpty(newsItem.getTitle()));
+            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(newsItem.getDescription()));
+            ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(newsItem.getThumb()));
+            holder.rootview.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    if (TextUtils.isEmpty(videoId)) {
+                        PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId(), newsItem.getCatname());
+                    } else {
+                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId());
+                    }
+                }
+            });
+            //TODO 列表直播是否显示
+            holder.tvType.setVisibility(View.INVISIBLE);
         }
+//
     }
 
     @Override
@@ -367,9 +385,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.ivNewIamge) ImageView mIvNewIamge;
         @BindView(R.id.tvNewTitle) TextView mTvNewTitle;
         @BindView(R.id.tvNewContent) TextView mTvNewContent;
+        @BindView(R.id.tvType) TextView tvType;
+        View rootview;
 
         public ViewNewHolder(View itemView) {
             super(itemView);
+            rootview = itemView;
             ButterKnife.bind(this, itemView);
         }
     }

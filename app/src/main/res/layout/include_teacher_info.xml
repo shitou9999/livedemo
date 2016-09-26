@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
+        android:id="@+id/rl_top_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
@@ -29,6 +30,7 @@
                 android:src="@mipmap/default_avatar"/>
 
             <ImageView
+                android:id="@+id/ivIsVip"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"

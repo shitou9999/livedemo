@@ -125,6 +125,7 @@ public class Api {
     public static final String HOT_POINT = "news/hot_point";                     // 首页热门观点
     public static final String CUSTOM_LIST = "sns/custom_list";                     //2.9 定制列表 - 名师观点   sns/custom_list     圈子-名师观点
     public static final String CUSTOM_VIDEO_LIST = "sns/custom_video_list"; //2.10 定制列表 - 解盘视频   sns/custom_video_list     圈子-解盘视频
+    public static final String SUPPORT_DYNAMICS = "news/support_dynamics"; //1.7-1 文字动态点赞  news/support_dynamics
 
 
 

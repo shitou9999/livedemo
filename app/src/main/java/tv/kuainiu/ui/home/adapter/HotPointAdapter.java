@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
@@ -30,15 +31,16 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
 
 
     private Activity mContext;
-
+    private OnItemClickListener mOnItemClickListener;
     /**
      * 热门观点List
      */
     private List<HotPonit> mHotPointList = new ArrayList<>();
 
-    public HotPointAdapter(Activity context, List<HotPonit> hotPointList) {
+    public HotPointAdapter(Activity context, List<HotPonit> hotPointList, OnItemClickListener mOnItemClickListener) {
         mContext = context;
         mHotPointList = hotPointList;
+        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     @Override
@@ -48,15 +50,47 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
 
 
     @Override
-    public void onBindViewHolder(HotPointHolder holder, int position) {
-        HotPonit mHotPoint = mHotPointList.get(position);
+    public void onBindViewHolder(final HotPointHolder holder, int position) {
+        final HotPonit mHotPoint = mHotPointList.get(position);
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(mHotPoint.getNickname()));
         holder.mTvHotPointContent.setText(StringUtils.replaceNullToEmpty(mHotPoint.getDescription()));
-        ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getAvatar()),R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getAvatar()), R.mipmap.default_avatar);
         holder.mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%s)", StringUtils.replaceNullToEmpty(mHotPoint.getSupport_num(), "0")));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
-                mHotPoint.getTag_list());//data既可以是数组，也可以是List集合
-        holder.mLlFlag.setAdapter(adapter);
+        if (mHotPoint.getTag_list() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
+                    mHotPoint.getTag_list());//data既可以是数组，也可以是List集合
+            holder.mLlFlag.setAdapter(adapter);
+        }
+        if (mHotPoint.getIs_follow() == 0) {
+            holder.mTvFollowButton.setText("+关注");
+        } else {
+            holder.mTvFollowButton.setText("已关注");
+        }
+        holder.mTvFollowButton.setSelected(mHotPoint.getIs_follow() != 0);
+        holder.mTvFollowButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (mOnItemClickListener != null) {
+                    view.setTag(mHotPoint);
+                    mOnItemClickListener.onClick(view);
+                }
+            }
+        });
+        if (mHotPoint.getIs_support() == 0) {
+            holder.mLlHotPointSupport.setSelected(false);
+        } else {
+            holder.mLlHotPointSupport.setSelected(true);
+        }
+        holder.mLlHotPointSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                //点赞
+                if (mOnItemClickListener != null) {
+                    view.setTag(mHotPoint);
+                    view.setTag(R.id.tv_hot_point_support,holder.mTvHotPointSupport);
+                    mOnItemClickListener.onClick(view);
+                }
+//
+            }
+        });
     }
 
 
@@ -86,5 +120,4 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
             ButterKnife.bind(this, itemView);
         }
     }
-
 }

@@ -1,35 +1,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/ptr_rv_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/comment_view_group"
-        app:ptr_duration_to_close="150"
-        app:ptr_duration_to_close_header="2000"
-        app:ptr_keep_header_when_refresh="true"
-        app:ptr_ratio_of_header_height_to_refresh="1.2"
-        app:ptr_resistance="1.7">
+    >
 
-        <RecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_items"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="true" />
+            android:focusable="true"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <include
         android:id="@id/comment_view_group"
-        layout="@layout/include_comments_edite_input"
+        layout="@layout/layout_comment_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+    />
 
 
 </RelativeLayout>

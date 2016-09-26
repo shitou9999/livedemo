@@ -174,7 +174,6 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //        }
         View view = mLayoutInflater.inflate(R.layout.teacher_item_t, parent, false);
         TeacherViewHolder vh = new TeacherViewHolder(view);
-        vh.imgPhoto.setOnClickListener(this);
         vh.textFollow.setOnClickListener(this);
         vh.ll_root.setOnClickListener(this);
 //            vh.imgPhoto.setLayoutParams(layoutParams1);

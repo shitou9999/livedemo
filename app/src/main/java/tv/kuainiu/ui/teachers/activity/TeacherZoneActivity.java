@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -47,6 +49,7 @@ import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.ui.teachers.adapter.TeacherZoneAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
@@ -119,7 +122,7 @@ public class TeacherZoneActivity extends BaseActivity {
                     page = 1;
                     getData();
                 } else {
-                    pageJiePan =  1;
+                    pageJiePan = 1;
                     getJeiPan();
                 }
             }
@@ -161,9 +164,24 @@ public class TeacherZoneActivity extends BaseActivity {
         };
     }
 
+    private TextView tv_follow_button;
+    private TextView tv_follow_number;
+
     private void initData() {
         initTab(0);
         mTeacherZoneAdapter = new TeacherZoneAdapter(this);
+        mTeacherZoneAdapter.setOnClickListener(new TeacherZoneAdapter.OnClickListener() {
+            @Override public void onClick(View v, Object o) {
+                switch (v.getId()) {
+                    case R.id.tv_follow_button:
+                        TeacherInfo teacherInfo = (TeacherInfo) v.getTag(R.id.tv_follow_button);
+                        tv_follow_button = (TextView) v;
+                        tv_follow_number = (TextView) v.getTag(R.id.tv_follow_number);
+                        addFollow(teacherInfo.getIs_follow(), teacherInfo.getId());
+                        break;
+                }
+            }
+        });
         mTeacherZoneAdapter.setTabNames(tabNames, getOnTabSelectedListener());
         mRvReadingTap.setAdapter(mTeacherZoneAdapter);
 //        View view = LayoutInflater.from(this).inflate(R.layout.activity_teacher_zone_top, null);
@@ -171,6 +189,48 @@ public class TeacherZoneActivity extends BaseActivity {
 //        FriendsPostAdapter adapter = new FriendsPostAdapter(this, mMessages);
 //        mRvReadingTap.setAdapter(adapter);
         getData();
+    }
+
+    // Call del follow
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventFollow(HttpEvent event) {
+        if (Action.teacher_fg_del_follow == event.getAction()) {
+            if (Constant.SUCCEED == event.getCode()) {
+                teacherInfo.setIs_follow(0);
+                int size = teacherInfo.getFans_count();
+                size = size - 1;
+                teacherInfo.setFans_count(size);
+                mTeacherZoneAdapter.setTeacherInfo(teacherInfo);
+                tv_follow_number.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
+                tv_follow_button.setText("+关注");
+                tv_follow_button.setSelected(false);
+            } else {
+                DebugUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
+            }
+        }
+        if (Action.teacher_fg_add_follow == event.getAction()) {
+            if (Constant.SUCCEED == event.getCode()) {
+                teacherInfo.setIs_follow(1);
+                int size = teacherInfo.getFans_count();
+                size = size + 1;
+                teacherInfo.setFans_count(size);
+                mTeacherZoneAdapter.setTeacherInfo(teacherInfo);
+                tv_follow_number.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
+                tv_follow_button.setText("已关注");
+                tv_follow_button.setSelected(true);
+            } else {
+                DebugUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
+            }
+        }
+    }
+
+    // 添加 or 取消关注
+    private void addFollow(int is_follow, String id) {
+        if (Constant.FOLLOWED == is_follow) {
+            TeacherHttpUtil.delFollowForTeacherId(this, id, Action.teacher_fg_del_follow);
+        } else {
+            TeacherHttpUtil.addFollowForTeacherID(this, id, Action.teacher_fg_add_follow);
+        }
     }
 
     private void getData() {

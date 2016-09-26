@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/ll_bottom_bar"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/colorGrey200"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="horizontal"
+              android:padding="6dp">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@drawable/bg_long_edittext"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_comment3"
+        android:maxLength="140"
+        android:maxLines="10"
+        android:minHeight="40dp"
+        android:paddingLeft="@dimen/small_margin"
+        android:paddingStart="@dimen/small_margin"
+        android:textColor="@color/colorGrey800"
+        android:textColorHint="@color/colorGrey500"
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/edit_text_size_normal"
+        />
+
+    <Button
+        android:id="@+id/btn_publish"
+        style="@style/IGXButtonStyle_v21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/publish"
+        />
+
+</LinearLayout>

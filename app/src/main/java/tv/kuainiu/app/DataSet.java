@@ -1,5 +1,12 @@
 package tv.kuainiu.app;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,24 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import com.bokecc.sdk.mobile.upload.VideoInfo;
-
 import tv.kuainiu.modle.DownloadInfo;
-import tv.kuainiu.modle.UploadInfo;
+//import tv.kuainiu.modle.UploadInfo;
 
 public class DataSet {
 	private final static String DOWNLOADINFO = "downloadinfo";
 	private final static String UPLOADINFO = "uploadinfo";
 	private final static String VIDEOPOSITION = "videoposition";
 	
-	private static Map<String, UploadInfo> uploadInfoMap;
+//	private static Map<String, UploadInfo> uploadInfoMap;
 	private static Map<String, DownloadInfo> downloadInfoMap;
 	
 	private static SQLiteOpenHelper sqLiteOpenHelper;
@@ -67,15 +65,15 @@ public class DataSet {
 			}
 		};
 		
-		uploadInfoMap = new HashMap<String, UploadInfo>();
+//		uploadInfoMap = new HashMap<String, UploadInfo>();
 		downloadInfoMap = new HashMap<String, DownloadInfo>();
 		reloadData();
 	}
 	
-	public static List<UploadInfo> getUploadInfos(){
-		
-		return new ArrayList<UploadInfo>(uploadInfoMap.values());
-	}
+//	public static List<UploadInfo> getUploadInfos(){
+//
+//		return new ArrayList<UploadInfo>(uploadInfoMap.values());
+//	}
 	
 	private static void reloadData(){
 		
@@ -83,14 +81,14 @@ public class DataSet {
 		Cursor cursor = null; 
 		try {
 			// 重载上传信息
-			synchronized(uploadInfoMap){
-				cursor = db.rawQuery("SELECT * FROM " + UPLOADINFO, null);
-				for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-					
-					UploadInfo uploadInfo = buildUploadInfo(cursor);
-					uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
-				}
-			}
+//			synchronized(uploadInfoMap){
+//				cursor = db.rawQuery("SELECT * FROM " + UPLOADINFO, null);
+//				for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+//
+//					UploadInfo uploadInfo = buildUploadInfo(cursor);
+//					uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
+//				}
+//			}
 			
 			// 重载下载信息
 			synchronized (downloadInfoMap) {
@@ -114,33 +112,33 @@ public class DataSet {
 		}
 	}
 	
-	public static UploadInfo getUploadInfo(String uploadId){
-		
-		return uploadInfoMap.get(uploadId);
-	}
-	
-	public static void addUploadInfo(UploadInfo uploadInfo){
-		synchronized (uploadInfoMap) {
-			
-			if (uploadInfoMap.containsKey(uploadInfo.getUploadId())) {
-				return;
-			}
-			
-			uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
-		}
-	}
-	
-	public static void updateUploadInfo(UploadInfo uploadInfo){
-		synchronized (uploadInfoMap) {
-			uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
-		}
-	}
-	
-	public static void removeUploadInfo(String uploadId){
-		synchronized(uploadInfoMap){
-			uploadInfoMap.remove(uploadId);
-		}
-	}
+//	public static UploadInfo getUploadInfo(String uploadId){
+//
+//		return uploadInfoMap.get(uploadId);
+//	}
+//
+//	public static void addUploadInfo(UploadInfo uploadInfo){
+//		synchronized (uploadInfoMap) {
+//
+//			if (uploadInfoMap.containsKey(uploadInfo.getUploadId())) {
+//				return;
+//			}
+//
+//			uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
+//		}
+//	}
+//
+//	public static void updateUploadInfo(UploadInfo uploadInfo){
+//		synchronized (uploadInfoMap) {
+//			uploadInfoMap.put(uploadInfo.getUploadId(), uploadInfo);
+//		}
+//	}
+//
+//	public static void removeUploadInfo(String uploadId){
+//		synchronized(uploadInfoMap){
+//			uploadInfoMap.remove(uploadId);
+//		}
+//	}
 	
 	public static void saveData(){
 		SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
@@ -148,35 +146,35 @@ public class DataSet {
 		
 		try {
 			//清除当前数据
-			db.delete(UPLOADINFO, null, null);
-			for (UploadInfo uploadInfo : uploadInfoMap.values()) {
-				
-				ContentValues values = new ContentValues();
-				values.put("uploadId", uploadInfo.getUploadId());
-				values.put("status", uploadInfo.getStatus());
-				values.put("progress", uploadInfo.getProgress());
-				values.put("progressText", uploadInfo.getProgressText());
-				
-				VideoInfo videoInfo = uploadInfo.getVideoInfo();
-				//video
-				values.put("videoId", videoInfo.getVideoId());
-				values.put("title", videoInfo.getTitle());
-				values.put("tags", videoInfo.getDescription());
-				values.put("description", videoInfo.getDescription());
-				values.put("filePath", videoInfo.getFilePath());
-				values.put("fileName", videoInfo.getFileName());
-				values.put("fileByteSize", videoInfo.getFileByteSize());
-				values.put("md5", videoInfo.getMd5());
-				values.put("uploadServer", videoInfo.getServer());
-				values.put("serviceType", videoInfo.getServicetype());
-				values.put("priority", videoInfo.getPriority());
-				values.put("encodeType", videoInfo.getEncodetype());
-				values.put("uploadOrResume", videoInfo.getUploadOrResume());
-				values.put("createTime", videoInfo.getCreationTime());
-				values.put("categoryId", videoInfo.getCategoryId());
-				
-				db.insert(UPLOADINFO, null, values);
-			}
+//			db.delete(UPLOADINFO, null, null);
+//			for (UploadInfo uploadInfo : uploadInfoMap.values()) {
+//
+//				ContentValues values = new ContentValues();
+//				values.put("uploadId", uploadInfo.getUploadId());
+//				values.put("status", uploadInfo.getStatus());
+//				values.put("progress", uploadInfo.getProgress());
+//				values.put("progressText", uploadInfo.getProgressText());
+//
+//				VideoInfo videoInfo = uploadInfo.getVideoInfo();
+//				//video
+//				values.put("videoId", videoInfo.getVideoId());
+//				values.put("title", videoInfo.getTitle());
+//				values.put("tags", videoInfo.getDescription());
+//				values.put("description", videoInfo.getDescription());
+//				values.put("filePath", videoInfo.getFilePath());
+//				values.put("fileName", videoInfo.getFileName());
+//				values.put("fileByteSize", videoInfo.getFileByteSize());
+//				values.put("md5", videoInfo.getMd5());
+//				values.put("uploadServer", videoInfo.getServer());
+//				values.put("serviceType", videoInfo.getServicetype());
+//				values.put("priority", videoInfo.getPriority());
+//				values.put("encodeType", videoInfo.getEncodetype());
+//				values.put("uploadOrResume", videoInfo.getUploadOrResume());
+//				values.put("createTime", videoInfo.getCreationTime());
+//				values.put("categoryId", videoInfo.getCategoryId());
+//
+//				db.insert(UPLOADINFO, null, values);
+//			}
 			
 			//清除当前数据
 			db.delete(DOWNLOADINFO, null, null);
@@ -206,31 +204,31 @@ public class DataSet {
 		db.close();
 	}
 	
-	private static UploadInfo buildUploadInfo(Cursor cursor) {
-		String uploadId = cursor.getString(cursor.getColumnIndex("uploadId"));
-		int status = cursor.getInt(cursor.getColumnIndex("status"));
-		int progress = cursor.getInt(cursor.getColumnIndex("progress"));
-		String progressText = cursor.getString(cursor.getColumnIndex("progressText"));
-		
-		VideoInfo videoInfo = new VideoInfo();
-		videoInfo.setVideoId(cursor.getString(cursor.getColumnIndex("videoId")));
-		videoInfo.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-		videoInfo.setTags(cursor.getString(cursor.getColumnIndex("tags")));
-		videoInfo.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-		videoInfo.setFilePath(cursor.getString(cursor.getColumnIndex("filePath")));
-		videoInfo.setFileName(cursor.getString(cursor.getColumnIndex("fileName")));
-		videoInfo.setFileByteSize(cursor.getString(cursor.getColumnIndex("fileByteSize")));
-		videoInfo.setMd5(cursor.getString(cursor.getColumnIndex("md5")));
-		videoInfo.setServer(cursor.getString(cursor.getColumnIndex("uploadServer")));
-		videoInfo.setServicetype(cursor.getString(cursor.getColumnIndex("serviceType")));
-		videoInfo.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
-		videoInfo.setEncodetype(cursor.getString(cursor.getColumnIndex("encodeType")));
-		videoInfo.setUploadOrResume(cursor.getString(cursor.getColumnIndex("uploadOrResume")));
-		videoInfo.setCreationTime(cursor.getString(cursor.getColumnIndex("createTime")));
-		videoInfo.setCategoryId(cursor.getString(cursor.getColumnIndex("categoryId")));
-		
-		return new UploadInfo(uploadId, videoInfo, status, progress, progressText);
-	}
+//	private static UploadInfo buildUploadInfo(Cursor cursor) {
+//		String uploadId = cursor.getString(cursor.getColumnIndex("uploadId"));
+//		int status = cursor.getInt(cursor.getColumnIndex("status"));
+//		int progress = cursor.getInt(cursor.getColumnIndex("progress"));
+//		String progressText = cursor.getString(cursor.getColumnIndex("progressText"));
+//
+//		VideoInfo videoInfo = new VideoInfo();
+//		videoInfo.setVideoId(cursor.getString(cursor.getColumnIndex("videoId")));
+//		videoInfo.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+//		videoInfo.setTags(cursor.getString(cursor.getColumnIndex("tags")));
+//		videoInfo.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+//		videoInfo.setFilePath(cursor.getString(cursor.getColumnIndex("filePath")));
+//		videoInfo.setFileName(cursor.getString(cursor.getColumnIndex("fileName")));
+//		videoInfo.setFileByteSize(cursor.getString(cursor.getColumnIndex("fileByteSize")));
+//		videoInfo.setMd5(cursor.getString(cursor.getColumnIndex("md5")));
+//		videoInfo.setServer(cursor.getString(cursor.getColumnIndex("uploadServer")));
+//		videoInfo.setServicetype(cursor.getString(cursor.getColumnIndex("serviceType")));
+//		videoInfo.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
+//		videoInfo.setEncodetype(cursor.getString(cursor.getColumnIndex("encodeType")));
+//		videoInfo.setUploadOrResume(cursor.getString(cursor.getColumnIndex("uploadOrResume")));
+//		videoInfo.setCreationTime(cursor.getString(cursor.getColumnIndex("createTime")));
+//		videoInfo.setCategoryId(cursor.getString(cursor.getColumnIndex("categoryId")));
+//
+//		return new UploadInfo(uploadId, videoInfo, status, progress, progressText);
+//	}
 	
 	public static List<DownloadInfo> getDownloadInfos(){
 		

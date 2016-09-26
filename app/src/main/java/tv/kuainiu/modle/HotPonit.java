@@ -15,6 +15,7 @@ private String nickname;//"曾国良",
     private String[] tag_list;// ["新1", "金子", "大涨"],
     private String fans_count;//"1",
     private int is_follow;//0
+    private int is_support;//0
 
     public String getNickname() {
         return nickname;
@@ -102,5 +103,13 @@ private String nickname;//"曾国良",
 
     public void setIs_follow(int is_follow) {
         this.is_follow = is_follow;
+    }
+
+    public int getIs_support() {
+        return is_support;
+    }
+
+    public void setIs_support(int is_support) {
+        this.is_support = is_support;
     }
 }

@@ -36,7 +36,7 @@ import tv.kuainiu.widget.PostParentLayout;
 /**
  * @author nanck on 2016/7/29.
  */
-public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
 
     private BaseActivity mContext;
@@ -44,15 +44,15 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<TeacherZoneDynamics> teacherZoneDynamicsList;
     private List<CustomVideo> customVideoList;
     private TabLayout.OnTabSelectedListener tabSelectedListener;
-    private static final int TOP = 0;
-    private static final int TAB = 1;
-    private static final int BODY = 2;
+    public static final int TOP = 0;
+    public static final int TAB = 1;
+    public static final int BODY = 2;
     public static final int SIZE = 2;
     public static final int CUSTOM_VIEW_POINT = 0;
     public static final int CUSTOM_VIDEO = 1;
     private int selectedIndex = 0;
     private TeacherInfo teacherInfo;
-
+    private OnClickListener mOnClickListener;
 
     public TeacherZoneAdapter(BaseActivity context) {
         mContext = context;
@@ -69,10 +69,14 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.teacherInfo = teacherInfo;
     }
 
+    public void setOnClickListener(OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
 
     public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
         this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
+
     public void setTeacherZoneJiePanList(List<CustomVideo> customVideoList) {
         this.customVideoList = customVideoList;
     }
@@ -86,8 +90,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        int count=0;
-        switch (selectedIndex){
+        int count = 0;
+        switch (selectedIndex) {
             case CUSTOM_VIEW_POINT:
                 count = teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
                 break;
@@ -158,17 +162,20 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (teacherInfo == null) {
             return;
         }
-        ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()),R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(mContext, holder.mCiAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()), R.mipmap.default_avatar);
         ImageDisplayUtil.displayImage(mContext, holder.ivBanner, StringUtils.replaceNullToEmpty(teacherInfo.getBanner()));
         holder.mTvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         holder.mTvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
         if (teacherInfo.getIs_follow() == 0) {
             holder.mTvFollowButton.setText("+关注");
-            holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
         } else {
             holder.mTvFollowButton.setText("已关注");
         }
+        holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
+        holder.mTvFollowButton.setOnClickListener(this);
+        holder.mTvFollowButton.setTag(R.id.tv_follow_button,teacherInfo);
+        holder.mTvFollowButton.setTag(R.id.tv_follow_number,holder.mTvFollowNumber);
     }
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
@@ -193,7 +200,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNews_info()!=null?teacherZoneDynamics.getNews_info().getNews_catname():""));
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNews_info() != null ? teacherZoneDynamics.getNews_info().getNews_catname() : ""));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
@@ -228,8 +235,9 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
+
     private void dataVideo(BodyViewHolder holder, int position) {
-        CustomVideo teacherZoneDynamics = customVideoList.get(position-SIZE);
+        CustomVideo teacherZoneDynamics = customVideoList.get(position - SIZE);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
@@ -239,7 +247,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        TeacherZoneDynamicsInfo news_info=new TeacherZoneDynamicsInfo();
+        TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
         news_info.setType(teacherZoneDynamics.getType());
         news_info.setNews_video_id(teacherZoneDynamics.getId());
         news_info.setNews_title(teacherZoneDynamics.getDescription());
@@ -278,6 +286,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
@@ -302,6 +311,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         return vh;
     }
+
+
 
     //banner ViewPager
     static class TopViewHolder extends RecyclerView.ViewHolder {
@@ -349,5 +360,12 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
-
+    @Override public void onClick(View view) {
+        if (null != mOnClickListener) {
+            mOnClickListener.onClick(view, view.getTag());
+        }
+    }
+    public interface OnClickListener {
+        void onClick(View v, Object o);
+    }
 }

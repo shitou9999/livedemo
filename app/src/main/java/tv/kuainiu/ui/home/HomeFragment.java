@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -24,9 +25,12 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -42,7 +46,11 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
+import tv.kuainiu.widget.dialog.LoginPromptDialog;
+
+import static tv.kuainiu.R.id.tv_follow_button;
 
 /**
  * 咨询
@@ -127,9 +135,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getHotPoint() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("page", String.valueOf(HotPointPage));
-        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.HOT_POINT, ParamUtil.getParam(map), Action.hot_point);
+        map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
+        OKHttpUtils.getInstance().syncGet(getContext(), Api.HOT_POINT + ParamUtil.getParamForGet(map), Action.hot_point, CacheConfig.getCacheConfig());
     }
 
     private void getNews() {
@@ -170,12 +179,64 @@ public class HomeFragment extends BaseFragment {
         };
     }
 
+    TextView mTvFollowButton;
+    TextView mTvHotPointSupport;
+
+    class itemClick implements OnItemClickListener {
+
+        @Override public void onClick(View v) {
+            switch (v.getId()) {
+                case tv_follow_button:
+                    HotPonit mHotPoint = (HotPonit) v.getTag();
+                    mTvFollowButton = (TextView) v;
+                    //关注
+                    if (!IGXApplication.isLogin()) {
+                        new LoginPromptDialog(getActivity()).show();
+                        return;
+                    } else {
+                        addFollow(mHotPoint.getIs_follow(), mHotPoint.getUser_id());
+                    }
+                    break;
+                case R.id.ll_hot_point_support:
+                    HotPonit mHotPoint2 = (HotPonit) v.getTag();
+                    mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
+                    if (!IGXApplication.isLogin()) {
+                        new LoginPromptDialog(getActivity()).show();
+                        return;
+                    } else {
+                        addFollow(mHotPoint2.getIs_follow(), mHotPoint2.getUser_id());
+                    }
+                    break;
+            }
+
+        }
+    }
+
     private void dataBind() {
         if (mHomeAdapter == null) {
             mHomeAdapter = new HomeAdapter(getActivity());
+            mHomeAdapter.setOnItemClickListener(new itemClick());
             rvReadingTap.setAdapter(mHomeAdapter);
         } else {
             mHomeAdapter.notifyDataSetChanged();
+        }
+    }
+
+    // 添加 or 取消关注
+    private void addFollow(int is_follow, String teacherId) {
+        if (Constant.FOLLOWED == is_follow) {
+            TeacherHttpUtil.delFollowForTeacherId(getActivity(), teacherId, Action.teacher_fg_del_follow);
+        } else {
+            TeacherHttpUtil.addFollowForTeacherID(getActivity(), teacherId, Action.teacher_fg_add_follow);
+        }
+    }
+
+    // 添加 or 取消 赞
+    private void addSupport(int is_support, String teacherId) {
+        if (Constant.FAVOURED == is_support) {
+            TeacherHttpUtil.delFollowForTeacherId(getActivity(), teacherId, Action.teacher_fg_del_follow);
+        } else {
+            TeacherHttpUtil.addFollowForTeacherID(getActivity(), teacherId, Action.teacher_fg_add_follow);
         }
     }
 
@@ -264,6 +325,22 @@ public class HomeFragment extends BaseFragment {
                     }
                 } else {
                     LogUtils.e("FindFragment", "获取实时新闻数据失败:" + event.getMsg());
+                }
+                break;
+            case teacher_fg_del_follow:
+                if (Constant.SUCCEED == event.getCode()) {
+                    mTvFollowButton.setText("+关注");
+                    mTvFollowButton.setSelected(false);
+                } else {
+                    DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
+                }
+                break;
+            case teacher_fg_add_follow:
+                if (Constant.SUCCEED == event.getCode()) {
+                    mTvFollowButton.setText("已关注");
+                    mTvFollowButton.setSelected(true);
+                } else {
+                    DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
                 }
                 break;
         }

@@ -494,11 +494,6 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                     addFollow(tempTeacher);
                 }
                 break;
-
-            case R.id.iv_teacher_item_photo:
-//                TeacherItem teacherItem = (TeacherItem) v.getTag(R.id.iv_teacher_item_photo);
-//                TeacherZoneActivity.intoNewIntent(getActivity(), teacherItem.id);
-                break;
         }
     }
 

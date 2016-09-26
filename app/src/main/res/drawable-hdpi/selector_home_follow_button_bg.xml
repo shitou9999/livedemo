@@ -7,7 +7,7 @@
                 android:width="1dp"
                 android:color="@color/colorGrey450"
                 />
-            <solid android:color="@color/translate"/>
+            <solid android:color="@color/colorGrey450"/>
 
         </shape>
 

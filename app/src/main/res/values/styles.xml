@@ -11,6 +11,7 @@
         <item name="colorAccent">@color/head_bg</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay"
@@ -178,5 +179,12 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:src">@drawable/selector_right</item>
+    </style>
+
+    <style name="IGXButtonStyle_v21">
+        <item name="android:buttonStyle">@android:style/Widget.Button</item>
+        <item name="android:textAppearance">
+            @android:style/TextAppearance.DeviceDefault.Widget.TextView
+        </item>
     </style>
 </resources>

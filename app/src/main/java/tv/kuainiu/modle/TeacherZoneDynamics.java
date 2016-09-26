@@ -34,6 +34,7 @@ public class TeacherZoneDynamics {
     private int create_date;
     private int synchro_wb;
     private int status;
+    private int is_support;
     private TeacherZoneDynamicsInfo news_info;
 
     public int getId() {
@@ -146,5 +147,13 @@ public class TeacherZoneDynamics {
 
     public void setNews_info(TeacherZoneDynamicsInfo news_info) {
         this.news_info = news_info;
+    }
+
+    public int getIs_support() {
+        return is_support;
+    }
+
+    public void setIs_support(int is_support) {
+        this.is_support = is_support;
     }
 }

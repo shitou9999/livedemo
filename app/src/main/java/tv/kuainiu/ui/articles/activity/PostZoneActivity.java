@@ -21,6 +21,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -41,19 +42,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.CollectionMessageHttpUtil;
-import tv.kuainiu.command.http.ProgramHttpUtil;
+import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.ArticleDetailsEntity;
+import tv.kuainiu.modle.ArticleDetailsEntity2;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.CatalogType;
@@ -61,6 +63,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.WebActivity;
 import tv.kuainiu.ui.comments.CommentListActivity;
+import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.umeng.UMEventManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -70,7 +73,6 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
-import tv.kuainiu.utils.TextColorUtil;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
@@ -93,10 +95,8 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     TitleBarView tbv_title;
     @BindView(R.id.rl_top_navigation)
     RelativeLayout mRlTopNavigation;
-    @BindView(R.id.civ_teacher_head)
+    @BindView(R.id.ci_avatar)
     CircleImageView mCivTeacherHead;
-    @BindView(R.id.tv_teacher_name)
-    TextView mTvTeacherName;
     @BindView(R.id.tv_follow_button)
     TextView mTVFollowButton;
     @BindView(R.id.ptr_rv_layout)
@@ -124,6 +124,10 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     RadioButton mRadioButton3;
     @BindView(R.id.radioButton4)
     RadioButton mRadioButton4;
+    @BindView(R.id.ivIsVip) ImageView mIvIsVip;
+    @BindView(R.id.tvTheme) TextView mTvTheme;
+    @BindView(R.id.tvTeacherName) TextView mTvTeacherName;
+    @BindView(R.id.tv_follow_number) TextView mTvFollowNumber;
     /**
      * 来源
      */
@@ -179,7 +183,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private String session_id;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mReceiver;
-    private ArticleDetailsEntity mDetailsEntity;
+    private ArticleDetailsEntity2 mDetailsEntity;
 
     /**
      * 停留7秒则算一次有效阅读
@@ -211,6 +215,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_zone);
+        ButterKnife.bind(this);
         initData(getIntent());
         mRadioGroup.setVisibility(View.GONE);
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -481,6 +486,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
             if (pb_loading != null) {
                 pb_loading.setVisibility(View.GONE);
             }
+            mContentFrameLayout.setRefreshing(false);
         }
 
         @Override
@@ -548,14 +554,15 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                     new LoginPromptDialog(this).show();
                     return;
                 }
-                OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_FAVOUR + prepareParamForFavour(), Action.post_favour);
+                SupportHttpUtil.supportVideoDynamics(this, mDetailsEntity.getCat_id(), mDetailsEntity.getId());
                 break;
 
             case R.id.tv_comment:
-                Intent intent = new Intent(this, CommentListActivity.class);
-                intent.putExtra(Constant.KEY_ID, mId);
-                intent.putExtra(Constant.KEY_CATID, mCatId);
-                startActivity(intent);
+                CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_ARTICLE, mId, mCatId);
+//                Intent intent = new Intent(this, CommentListActivity.class);
+//                intent.putExtra(Constant.KEY_ID, mId);
+//                intent.putExtra(Constant.KEY_CATID, mCatId);
+//                startActivity(intent);
                 break;
 
             case R.id.tv_share:
@@ -581,21 +588,12 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                     if (mDetailsEntity == null) {
                         return;
                     }
-                    if (mDetailsEntity.getDaoshi() != null && mDetailsEntity.getCat_info() == null) {
-                        if (Constant.FOLLOWED == mDetailsEntity.getDaoshi_info().getIs_follow()) {
-                            TeacherHttpUtil.delFollowForTeacherId(PostZoneActivity.this, mDetailsEntity.getDaoshi_info().getId(), Action.del_follow);
+                    if (mDetailsEntity.getTeacher_info() != null) {
+                        if (Constant.FOLLOWED == mDetailsEntity.getTeacher_info().getIs_follow()) {
+                            TeacherHttpUtil.delFollowForTeacherId(PostZoneActivity.this, mDetailsEntity.getTeacher_info().getId(), Action.del_follow);
                         } else {
-                            TeacherHttpUtil.addFollowForTeacherID(PostZoneActivity.this, mDetailsEntity.getDaoshi_info().getId(), Action.add_follow);
+                            TeacherHttpUtil.addFollowForTeacherID(PostZoneActivity.this, mDetailsEntity.getTeacher_info().getId(), Action.add_follow);
                         }
-                    }
-                    if (mDetailsEntity.getCat_info() != null && mDetailsEntity.getDaoshi_info() == null) {
-                        DebugUtils.dd("entity click is subscibe : " + mDetailsEntity.getCat_info().getIs_subscibe());
-                        if (Constant.SUBSCRIBEED == mDetailsEntity.getCat_info().getIs_subscibe()) {
-                            ProgramHttpUtil.delSubscriptionForCatId(PostZoneActivity.this, mDetailsEntity.getCatid(), Action.del_subscribe);
-                        } else {
-                            ProgramHttpUtil.addSubscriptionForCatId(PostZoneActivity.this, mDetailsEntity.getCatid(), Action.add_subscribe);
-                        }
-
                     }
                 }
                 break;
@@ -670,7 +668,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
             case post_details:
                 getContent(event);
                 break;
-            case post_favour:
+            case video_favour:
                 if (Constant.SUCCEED == event.getCode()) {
                     DebugUtils.showToast(PostZoneActivity.this, "支持成功");
                     mIsFavour = true;
@@ -735,7 +733,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
             case add_follow:
                 if (Constant.SUCCEED == event.getCode()) {
-                    mDetailsEntity.getDaoshi_info().setIs_follow(Constant.FAVOURED);
+                    mDetailsEntity.getTeacher_info().setIs_follow(Constant.FAVOURED);
                     bindTopNavigation(mDetailsEntity);
                 } else {
                     DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
@@ -744,32 +742,32 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
             case del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
-                    mDetailsEntity.getDaoshi_info().setIs_follow(Constant.UNFAVOUR);
+                    mDetailsEntity.getTeacher_info().setIs_follow(Constant.UNFAVOUR);
                     bindTopNavigation(mDetailsEntity);
                 } else {
                     DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
                 }
                 break;
 
-            case add_subscribe:
-                DebugUtils.dd("entity add_sub response " + event.getCode() + event.getMsg());
-                if (Constant.SUCCEED == event.getCode()) {
-                    mDetailsEntity.getCat_info().setIs_subscibe(Constant.SUBSCRIBEED);
-                    bindTopNavigation(mDetailsEntity);
-                } else {
-                    DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
-                }
-                break;
-
-            case del_subscribe:
-                DebugUtils.dd("entity del_sub response " + event.getCode() + event.getMsg());
-                if (Constant.SUCCEED == event.getCode()) {
-                    mDetailsEntity.getCat_info().setIs_subscibe(Constant.UNSUBSCRIBE);
-                    bindTopNavigation(mDetailsEntity);
-                } else {
-                    DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
-                }
-                break;
+//            case add_subscribe:
+//                DebugUtils.dd("entity add_sub response " + event.getCode() + event.getMsg());
+//                if (Constant.SUCCEED == event.getCode()) {
+//                    mDetailsEntity.getCat_info().setIs_subscibe(Constant.SUBSCRIBEED);
+//                    bindTopNavigation(mDetailsEntity);
+//                } else {
+//                    DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
+//                }
+//                break;
+//
+//            case del_subscribe:
+//                DebugUtils.dd("entity del_sub response " + event.getCode() + event.getMsg());
+//                if (Constant.SUCCEED == event.getCode()) {
+//                    mDetailsEntity.getCat_info().setIs_subscibe(Constant.UNSUBSCRIBE);
+//                    bindTopNavigation(mDetailsEntity);
+//                } else {
+//                    DebugUtils.showToastResponse(PostZoneActivity.this, event.getMsg());
+//                }
+//                break;
         }
     }
 
@@ -783,7 +781,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 JSONObject object = new JSONObject(json);
                 JSONObject info = object.optJSONObject("info");
 
-                mDetailsEntity = new DataConverter<ArticleDetailsEntity>().JsonToObject(info.toString(), ArticleDetailsEntity.class);
+                mDetailsEntity = new DataConverter<ArticleDetailsEntity2>().JsonToObject(info.toString(), ArticleDetailsEntity2.class);
 
                 // log
                 DebugUtils.dd(info.toString());
@@ -833,47 +831,50 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     }
 
 
-    private void bindTopNavigation(ArticleDetailsEntity entity) {
+    private void bindTopNavigation(ArticleDetailsEntity2 entity) {
         if (entity == null) {
             return;
         }
         // log
         DebugUtils.dd("---------a entity : " + entity.toString());
 
-        if (entity.getDaoshi_info() == null && entity.getCat_info() == null) {
+        if (mDetailsEntity.getTeacher_info() == null) {
             mRlTopNavigation.setVisibility(View.GONE);
         }
 
-        if (entity.getDaoshi() != null && entity.getCat_info() == null && entity.getDaoshi_info() != null) {
-            bindTopNavigation(entity.getDaoshi_thumb(), entity.getDaoshi_name());
-            boolean flag = Constant.FOLLOWED == entity.getDaoshi_info().getIs_follow();
+        if (mDetailsEntity.getTeacher_info() != null) {
+            bindTopNavigation(mDetailsEntity.getTeacher_info().getAvatar(), mDetailsEntity.getTeacher_info().getNickname());
+            boolean flag = Constant.FOLLOWED == mDetailsEntity.getTeacher_info().getIs_follow();
             mTVFollowButton.setSelected(flag);
             if (flag) {
                 mTVFollowButton.setText(getString(R.string.followed));
             } else {
                 mTVFollowButton.setText(getString(R.string.follow_new));
             }
+            mTvTheme.setText(StringUtils.replaceNullToEmpty(mDetailsEntity.getTeacher_info().getSlogan()));
         }
-        if (entity.getCat_info() != null && entity.getDaoshi_info() == null) {
-            DebugUtils.dd("entity program info : " + entity.getCat_info().toString());
-            bindTopNavigation(entity.getCat_info().getImage(), entity.getCatname());
-            boolean flag = Constant.SUBSCRIBEED == entity.getCat_info().getIs_subscibe();
-            mTVFollowButton.setSelected(flag);
-            if (flag) {
-                mTVFollowButton.setText(getString(R.string.subscriptioned));
-            } else {
-                mTVFollowButton.setText(getString(R.string.subscription_new));
-            }
-        }
+//        if (entity.getCat_info() != null && entity.getDaoshi_info() == null) {
+//            DebugUtils.dd("entity program info : " + entity.getCat_info().toString());
+//            bindTopNavigation(entity.getCat_info().getImage(), entity.getCatname());
+//            boolean flag = Constant.SUBSCRIBEED == entity.getCat_info().getIs_subscibe();
+//            mTVFollowButton.setSelected(flag);
+//            if (flag) {
+//                mTVFollowButton.setText(getString(R.string.subscriptioned));
+//            } else {
+//                mTVFollowButton.setText(getString(R.string.subscription_new));
+//            }
+//        }
     }
 
 
     private void bindViewForCollect() {
+        mTvFavour.setEnabled(!mIsCoolect);
+        mTvFavour.setSelected(mIsCoolect);
         if (mIsCoolect) {
-            mTvCollect.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
+//            mTvCollect.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
             mTvCollect.setText("已收藏");
         } else {
-            mTvCollect.setTextColor(TextColorUtil.generateColor(R.color.colorAmber400));
+//            mTvCollect.setTextColor(TextColorUtil.generateColor(R.color.colorGrey333333));
             mTvCollect.setText("收藏");
         }
     }
@@ -881,14 +882,15 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private void bindViewForFavour() {
         String tempFavour;
         mTvFavour.setEnabled(!mIsFavour);
+        mTvFavour.setSelected(mIsFavour);
         if (mIsFavour) {
-            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
+//            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
             tempFavour = StringUtils.getDecimal2(mCurFavourCount, Constant.TEN_THOUSAND,
-                    String.format(Locale.CHINA, "已赞(%d万)", mCurFavourCount), String.format(Locale.CHINA, "已赞(%d)", mCurFavourCount));
+                    String.format(Locale.CHINA, "%d万", mCurFavourCount), String.format(Locale.CHINA, "%d", mCurFavourCount));
         } else {
-            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.colorAmber400));
+//            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.colorGrey333333));
             tempFavour = StringUtils.getDecimal2(mCurFavourCount, Constant.TEN_THOUSAND,
-                    String.format(Locale.CHINA, "赞(%d万)", mCurFavourCount), String.format(Locale.CHINA, "赞(%d)", mCurFavourCount));
+                    String.format(Locale.CHINA, "%d万", mCurFavourCount), String.format(Locale.CHINA, "%d", mCurFavourCount));
         }
         mTvFavour.setText(tempFavour);
     }

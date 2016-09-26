@@ -495,24 +495,27 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     private void fetchAllComment(int page, boolean just_teacher, Action action) {
         String just = just_teacher ? "1" : "0";
         Map<String, String> map = new HashMap<>();
-        map.put(Constant.KEY_ID, mPostId);
-        map.put(Constant.KEY_CATID, mCatId);
+        map.put("type",String.valueOf(mMode));
+        map.put("news_id", mPostId);
+        map.put("dynamics_id", mPostId);
+        map.put("cat_id", mCatId);
         map.put(Constant.KEY_PAGE, String.valueOf(page));
-        map.put(Constant.KEY_SIZE, String.valueOf(PAGE_SIZE));
         map.put("just_teacher", just);
         String param = ParamUtil.getParam(map);
-        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST_V2, Api.COMMENT_LIST, param, action);
+        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.COMMENT_LIST, param, action);
     }
 
 
     /* 获取热门评论 */
     private void fetchHotComment() {
         Map<String, String> map = new HashMap<>();
-        map.put(Constant.KEY_ID, mPostId);
-        map.put(Constant.KEY_CATID, mCatId);
-        map.put("has_support", "1");
+        map.put("type",String.valueOf(mMode));
+        map.put("news_id", mPostId);
+        map.put("dynamics_id", mPostId);
+        map.put("cat_id", mCatId);
+        map.put("page", "1");
         String param = ParamUtil.getParam(map);
-        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST_V2, Api.COMMENT_LIST_HOT, param, Action.comment_list_hot);
+        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.COMMENT_LIST_HOT, param, Action.comment_list_hot);
     }
 
 
@@ -524,9 +527,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     private void favourForCommentId(String commentId) {
         if (IGXApplication.isLogin()) {
             Map<String, String> map = new HashMap<>();
-            map.put(Constant.KEY_ID, commentId);
-            map.put(Constant.KEY_CATID, mCatId);
-            map.put("news_id", mPostId);
+            map.put("id", commentId);
             String param = ParamUtil.getParam(map);
             OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST_V2, Api.FAVOUR_COMMENT, param, Action.favour_comment);
         } else {
@@ -561,6 +562,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchAllComment(HttpEvent event) {
         if (Action.comment_list == event.getAction() && 0 == mPage) {
+            mContentFrameLayout.setRefreshing(false);
             if (SUCCEED == event.getCode()) {
                 DebugUtils.dd("comment list : " + event.getData().toString());
 
@@ -600,7 +602,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchTeacherComment(HttpEvent event) {
         if (Action.comment_teacher == event.getAction() && 1 == mPage) {
-
+            mContentFrameLayout.setRefreshing(false);
             LoadingProgressDialog.stopProgressDialog();
             if (SUCCEED == event.getCode()) {
                 DebugUtils.dd("comment list : " + event.getData().toString());

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,65 +12,96 @@
     <RelativeLayout
         android:id="@+id/rl_top_navigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/def_option_height"
-        android:background="@color/colorWhite800"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin">
-
-        <LinearLayout
-            android:id="@+id/ll_teacher_info_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+    >
+        <RelativeLayout
+            android:id="@+id/rl_avatar"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_centerVertical="true"
-            android:orientation="horizontal">
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        >
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/civ_teacher_head"
-                android:layout_width="@dimen/activity_horizontal_margin2x"
-                android:layout_height="@dimen/activity_vertical_margin2x"
-                android:layout_gravity="center_vertical"
-                app:civ_border_overlay="true"
-                tools:src="@mipmap/head_nor" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ci_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/default_avatar"
+                app:civ_border_color="@color/colorGrey500"
+                app:civ_border_width="1dp"/>
 
-            <TextView
-                android:id="@+id/tv_teacher_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/small_margin"
-                android:layout_marginStart="@dimen/small_margin"
-                android:textColor="@color/colorBlue500"
-                tools:text="张三丰" />
-
-
-        </LinearLayout>
-
+            <ImageView
+                android:id="@+id/ivIsVip"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/vip_ic"/>
+        </RelativeLayout>
+        <TextView android:id="@+id/tvTheme"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginTop="10dp"
+                  android:layout_toRightOf="@+id/rl_avatar"
+                  android:textColor="@color/colorGrey333333"
+                  android:textSize="@dimen/text_size_large"
+                  tools:text="波段交易"/>
+        <TextView android:id="@+id/tvTeacherName"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignLeft="@+id/tvTheme"
+                  android:layout_below="@+id/tvTheme"
+                  android:layout_marginTop="10dp"
+                  android:background="@drawable/selector_bg_blue2"
+                  android:paddingBottom="5dp"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:paddingTop="5dp"
+                  android:textColor="@color/colorWhite"
+                  android:textSize="@dimen/text_size_small"
+                  tools:text="王丽"/>
 
         <TextView
             android:id="@+id/tv_follow_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_alignTop="@+id/tvTeacherName"
+            android:layout_marginRight="10dp"
             android:background="@drawable/selector_follow_button_bg"
             android:gravity="center"
-            android:text="@string/follow_new"
-            android:textColor="@drawable/selector_follow_button_text_color" />
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            tools:text="@string/follow_new"
+        />
+
+        <TextView
+            android:id="@+id/tv_follow_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tvTeacherName"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_follow_button"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            tools:text="2.9万人关注"
+        />
 
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/pb_loading"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/rl_top_navigation"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/progressbar_color" />
 
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -75,15 +109,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/line_bottom"
-        android:layout_below="@id/pb_loading">
-
+        android:layout_below="@id/rl_top_navigation"
+    >
         <WebView
             android:id="@+id/web_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"
+        />
     </android.support.v4.widget.SwipeRefreshLayout>
-
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/progressbar_color"/>
 
     <!-- oo oo -->
     <!-- oo oo -->
@@ -92,7 +133,7 @@
         android:id="@+id/line_bottom"
         style="@style/IGXDefault_Divider"
         android:layout_height="1dp"
-        android:layout_above="@+id/ll_bottom_bar" />
+        android:layout_above="@+id/ll_bottom_bar"/>
 
     <LinearLayout
         android:id="@+id/ll_bottom_bar"
@@ -100,21 +141,38 @@
         android:layout_height="@dimen/def_option_height"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_share"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/selector_video_share_number"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="@string/share"
+            android:textColor="@drawable/selector_text_color_enabled_state"/>
 
+        <TextView
+            android:id="@+id/tv_collect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/selector_video_collection_number"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:textColor="@drawable/selector_text_color_enabled_state"
+            tools:text="@string/collection"/>
         <TextView
             android:id="@+id/tv_favour"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selector_option_normal"
+            android:drawableTop="@drawable/selector_video_suport_number"
             android:gravity="center"
+            android:paddingTop="5dp"
             android:textColor="@drawable/selector_text_color_enabled_state"
-            tools:text="赞" />
+            tools:text="赞"/>
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/def_DividerColor" />
 
         <TextView
             android:id="@+id/tv_comment"
@@ -122,39 +180,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_option_normal"
+            android:drawableTop="@drawable/news_btn"
             android:gravity="center"
+            android:paddingTop="5dp"
             android:text="@string/comment"
-            android:textColor="@drawable/selector_text_color_enabled_state" />
+            android:textColor="@drawable/selector_text_color_enabled_state"/>
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/def_DividerColor" />
-
-        <TextView
-            android:id="@+id/tv_share"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_option_normal"
-            android:gravity="center"
-            android:text="@string/share"
-            android:textColor="@drawable/selector_text_color_enabled_state" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/def_DividerColor" />
-
-        <TextView
-            android:id="@+id/tv_collect"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_option_normal"
-            android:gravity="center"
-            android:textColor="@drawable/selector_text_color_enabled_state"
-            tools:text="@string/collection" />
 
     </LinearLayout>
 
@@ -162,5 +193,5 @@
         layout="@layout/layout_adjust_font_size"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

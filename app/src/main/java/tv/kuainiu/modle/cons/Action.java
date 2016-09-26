@@ -169,4 +169,5 @@ public enum Action {
     hot_point,   // 热门观点
     CUSTOM_LIST,   //2.9 定制列表 - 名师观点   sns/custom_list     圈子-名师观点
     CUSTOM_VIDEO_LIST,   // 圈子-解盘视频
+    SUPPORT_DYNAMICS,   // 文章动态点赞
 }

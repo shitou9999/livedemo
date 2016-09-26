@@ -300,6 +300,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:gravity="center"
                         android:drawableTop="@drawable/selector_video_suport_number"
                         android:text="点赞" />
 
