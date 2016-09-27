@@ -28,6 +28,7 @@ public enum Action {
     update_phone_sendcode,
     update_avatar,         // 上传用户头像
     follow_list,             // 我的关注
+    me_follow,             // 我的关注
     add_follow,            // 添加关注
     del_follow,            // 取消关注
 

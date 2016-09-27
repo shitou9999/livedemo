@@ -4,6 +4,7 @@
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
     <!--<color name="colorAccent">#FF4081</color> -->
 
+    <color name="transparent">#00000000</color>
     <color name="translate">#00000000</color>
     <color name="colorPrimary">#FFB430</color>
     <color name="colorPrimaryDark">#FFB430</color>
@@ -31,6 +32,7 @@
     <color name="colorGrey300">#E0E0E0</color>
     <color name="colorGrey450">#B9B9B9</color>
     <color name="colorGrey400">#BDBDBD</color>
+    <color name="colorGrey420">#B4ABAB</color>
     <color name="colorGrey475">#AAAAAA</color>
     <color name="colorGrey500">#9E9E9E</color>
     <color name="colorGrey600">#757575</color>
@@ -39,6 +41,7 @@
     <color name="colorGrey700">#616161</color>
     <color name="colorGrey800">#424242</color>
     <color name="colorGrey900">#212121</color>
+    <color name="colorGrey000">#000000</color>
 
     <!-- Blue 蓝色-->
     <color name="colorBlue500">#2196F3</color>

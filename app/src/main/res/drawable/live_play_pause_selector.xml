@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按下时的背景图片 -->
+    <item
+        android:drawable="@mipmap/pause_hover"
+        android:state_selected="true"/>
+    <!-- 按下时的背景图片 -->
+    <item
+        android:drawable="@mipmap/play_hover"
+        android:state_selected="true"/>
+    <!-- 默认时的背景图片 -->
+    <item android:drawable="@mipmap/play_hover"/>
+</selector> 

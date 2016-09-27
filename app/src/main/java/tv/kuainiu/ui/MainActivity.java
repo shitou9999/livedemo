@@ -33,6 +33,7 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.fragment.FriendsMainFragment;
 import tv.kuainiu.ui.home.HomeFragment;
+import tv.kuainiu.ui.liveold.fragment.LiveFragment;
 import tv.kuainiu.ui.me.MeFragment;
 import tv.kuainiu.ui.teachers.TeachersFragment;
 import tv.kuainiu.utils.DebugUtils;
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initData() {
         mBaseFragments.clear();
         mBaseFragments.add(HomeFragment.newInstance(0));
-//        mBaseFragments.add(LiveMainFragment.newInstance());
+        mBaseFragments.add(new LiveFragment());
         mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(TeachersFragment.newInstance());
         mBaseFragments.add(MeFragment.newInstance());
@@ -97,29 +98,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void switchFragment(int position) {
         ll_main_live.setSelected(position == 0);
-        ll_main_friends.setSelected(position == 1);
-        ll_main_teacher.setSelected(position == 2);
-        ll_main_me.setSelected(position == 3);
+        ll_main_live.setSelected(position == 1);
+        ll_main_friends.setSelected(position == 2);
+        ll_main_teacher.setSelected(position == 3);
+        ll_main_me.setSelected(position == 4);
         mVpMain.setCurrentItem(position, false);
     }
 
-    @OnClick({R.id.ll_main_home, R.id.ll_main_friends, R.id.ll_main_teacher, R.id.ll_main_me})
+    @OnClick({R.id.ll_main_home, R.id.ll_main_live, R.id.ll_main_friends, R.id.ll_main_teacher, R.id.ll_main_me})
     @Override public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_main_home:
                 switchFragment(0);
                 break;
-
-            case R.id.ll_main_friends:
+            case R.id.ll_main_live:
                 switchFragment(1);
                 break;
-
-            case R.id.ll_main_teacher:
+            case R.id.ll_main_friends:
                 switchFragment(2);
                 break;
 
-            case R.id.ll_main_me:
+            case R.id.ll_main_teacher:
                 switchFragment(3);
+                break;
+
+            case R.id.ll_main_me:
+                switchFragment(4);
                 break;
         }
     }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_follow"
+    >
+
+
+    <cn.finalteam.loadingviewfinal.PtrClassicFrameLayout
+        android:id="@+id/ptr_rv_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        app:ptr_duration_to_close="150"
+        app:ptr_duration_to_close_header="2000"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+
+
+        <cn.finalteam.loadingviewfinal.RecyclerViewFinal
+            android:id="@+id/rv_follows"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            app:noLoadMoreHideView="false"/>
+
+    </cn.finalteam.loadingviewfinal.PtrClassicFrameLayout>
+
+    <!--<include layout="@layout/layout_empty_view"/>-->
+
+
+</RelativeLayout>

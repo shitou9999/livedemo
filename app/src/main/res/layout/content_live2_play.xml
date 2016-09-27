@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_play2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorGrey900">
+
+        <SurfaceView
+            android:id="@+id/sv2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            />
+
+        <com.iguxuan.widgets.BarrageLayout
+            android:id="@+id/bl_barrage2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+        </com.iguxuan.widgets.BarrageLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_control2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_bar_height"
+                android:background="#88000000">
+
+                <ImageView
+                    android:id="@+id/iv_back2"
+                    android:layout_width="@dimen/live_bar_height"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@mipmap/back_icon"/>
+
+                <ImageView
+                    android:id="@+id/iv_share2"
+                    android:layout_width="@dimen/live_bar_height"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="center"
+                    android:src="@drawable/live_share_selector"/>
+
+                <TextView
+                    android:id="@+id/tvCount2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:drawableLeft="@mipmap/online_ppl"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:text="人"
+                    android:textColor="@color/white_color"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_bar_height"
+                android:layout_alignParentBottom="true"
+                android:background="#88000000">
+
+                <ImageView
+                    android:id="@+id/iv_control2"
+                    android:layout_width="@dimen/live_bar_height"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/live_play_pause_selector"/>
+
+                <ImageView
+                    android:id="@+id/full_screen2"
+                    android:layout_width="@dimen/live_bar_height"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/full_screen_b"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_fullscreen_msg_send2"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:layout_toLeftOf="@+id/full_screen2"
+                    android:layout_toRightOf="@+id/iv_control2"
+                    android:background="@drawable/bg_live_chat"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <EditText
+                        android:id="@+id/et_fullscreen2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100"
+                        android:background="@android:color/transparent"
+                        android:focusable="true"
+                        android:hint="请输入聊天内容"
+                        android:imeOptions="actionSend"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:maxLines="2"
+                        android:padding="3dp"
+                        android:textSize="14sp"/>
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"/>
+
+                    <Button
+                        android:id="@+id/btn_fullscreen_send2"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+                        android:text="发送"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_seek"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/full_screen2"
+                    android:layout_toRightOf="@+id/iv_control2"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    >
+
+                    <TextView
+                        android:id="@+id/current_time"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#FFF"
+                        android:gravity="end"
+                        android:textSize="10sp"/>
+
+                    <SeekBar
+                        android:id="@+id/play_seekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/linearLayout1"
+                        android:layout_weight="100"/>
+
+                    <TextView
+                        android:id="@+id/total_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:textColor="#FFF"
+                        android:textSize="10sp"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_live_play_button2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/start"
+            android:visibility="gone"
+            />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"/>
+
+        <include layout="@layout/touch_over"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_avatar2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/ic_launcher"
+                app:civ_border_color="@color/colorGrey500"
+                app:civ_border_overlay="true"/>
+
+            <TextView
+                android:id="@+id/tv_live_title2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_toRightOf="@+id/civ_avatar2"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="开启财富之门"
+                android:textColor="@color/colorGrey900"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_live_teacher2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignLeft="@+id/tv_live_title2"
+                android:layout_below="@+id/tv_live_title2"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="廖英强"
+                android:textColor="@color/colorBlue500"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_live_teacher_zan2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/tv_live_teacher2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@drawable/live_spourt_selector"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="8885赞"
+                android:textColor="@color/colorGrey500"
+                android:textSize="14sp"/>
+
+            <Button
+                android:id="@+id/btn_teacher_follow2"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/tv_live_teacher_zan2"
+                android:background="@drawable/selector_follow_button_bg"
+                android:gravity="center"
+                android:text="+关注"
+                android:textColor="@drawable/selector_follow_button_text_color"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tv_teacher_fans2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignTop="@id/tv_live_teacher_zan2"
+                android:layout_toLeftOf="@id/btn_teacher_follow2"
+                android:gravity="right"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="444粉丝"
+                android:textColor="@color/colorGrey500"
+                android:textSize="14sp"/>
+
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/colorGrey230"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_live_top2"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_custom_tab"
+            app:tabIndicatorColor="@color/colorAmber550"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/colorAmber550"
+            app:tabTextColor="@color/def_TextColor"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mPager2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGrey230"/>
+    </LinearLayout>
+</LinearLayout>

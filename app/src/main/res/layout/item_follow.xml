@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rl_follow_root_group"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_option_normal"
+    android:paddingBottom="@dimen/small_margin"
+    android:paddingLeft="@dimen/fab_margin"
+    android:paddingRight="@dimen/fab_margin"
+    android:paddingTop="@dimen/small_margin">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_photo"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerVertical="true"
+        tools:src="@mipmap/default_avatar"/>
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginTop="@dimen/micro_margin"
+        android:layout_toRightOf="@id/civ_photo"
+        android:textColor="@color/colorGrey800"
+        android:textSize="@dimen/text_size_medilum"
+        tools:text="德玛西亚皇子"/>
+
+    <TextView
+        android:id="@+id/tv_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_toLeftOf="@+id/tv_follow"
+        android:layout_toRightOf="@id/civ_photo"
+        android:maxLength="14"
+        android:singleLine="true"
+        android:textColor="@color/def_TextColor"
+        tools:text="陷阵之志，有死无生.拉啦啦啦啦啦啦啦啦啦啦"/>
+
+    <TextView
+        android:id="@+id/tv_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/selector_follow_button_bg"
+        android:gravity="center"
+        android:text="@string/followed"
+        android:textColor="@drawable/selector_follow_button_text_color"
+        />
+    <!--android:paddingBottom="@dimen/micro_margin"-->
+    <!--android:paddingLeft="@dimen/small_margin"-->
+    <!--android:paddingRight="@dimen/small_margin"-->
+    <!--android:paddingTop="@dimen/micro_margin"-->
+
+
+</RelativeLayout>

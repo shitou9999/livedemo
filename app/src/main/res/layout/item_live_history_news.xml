@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/rl_news_item_root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/selector_option_normal"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/small_margin">
+
+    <RelativeLayout
+        android:id="@+id/rl_group"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription"
+            tools:src="@mipmap/ic_def_error"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/rl_group"
+        android:layout_toRightOf="@id/rl_group"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textColor="@color/colorGrey700"
+        tools:text="张三丰--9月29日武當山頂現在示範太极四两拨千斤"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/rl_group"
+        android:layout_toRightOf="@id/rl_group"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_head"
+            android:layout_width="@dimen/live_item_history_head_size"
+            android:layout_height="@dimen/live_item_history_head_size"
+            tools:src="@mipmap/head_nor"
+            />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:textColor="@color/colorBlue700"
+            android:textSize="@dimen/text_size_micro"
+            tools:text="张三丰"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_time_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/colorDefaultTime"
+        android:textSize="@dimen/text_size_micro"
+        tools:text="3小时前"/>
+
+
+    <TextView
+        android:id="@+id/tv_view_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:layout_marginRight="@dimen/small_margin"
+        android:layout_toLeftOf="@+id/tv_time_before"
+        android:layout_toStartOf="@+id/tv_time_before"
+        android:textColor="@color/colorDefaultTime"
+        android:textSize="@dimen/text_size_micro"
+        tools:ignore="RelativeOverlap"
+        tools:text="3.7万次播放"/>
+
+
+</RelativeLayout>

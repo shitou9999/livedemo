@@ -45,11 +45,11 @@ import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.CommentHttpUtil;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.CommentItem;
-import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.SubCommentItem;
@@ -90,21 +90,22 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String ARG_MODE = "ARG_MODE";
-    public static final int MODE_VIDEO = 0x1;
-    public static final int MODE_ARTICLE = 0x2;
-    public static final int MODE_DYNAMIC = 0x3;
+    public static final int MODE_ARTICLE = 1;
+    public static final int MODE_DYNAMIC = 2;
 
 
     private CommentListAdapter mPostCommentListAdapter;
     private SimpleCommentAdapter mTeacherCommentAdapter;
 
     private String mPostId;
+    private String dynamics_id;
     private String mCatId;
     private LinkedList<CommentItem> mAllCommentList = new LinkedList<>();
     private LinkedList<CommentItem> mTeacherCommentList = new LinkedList<>();
 
     private String mTempCommentID;
     private String tempParentNickname;
+    private String tempParentId;
     private TextView mTempFavourTextView;
     private CommentItem mTempCommentItem;
 
@@ -137,6 +138,10 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         }
         mPostId = data.getStringExtra(Constant.KEY_ID);
         mCatId = data.getStringExtra(Constant.KEY_CATID);
+        if (MODE_DYNAMIC == mMode) {
+            dynamics_id = mPostId;
+            mPostId = "";
+        }
         mCurPageIndex = Constant.DEFAULT_PAGE_NUMBER;
         mTempCommentID = "";
     }
@@ -259,6 +264,8 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 if (commentItem == null) return;
 //                mEtContent.setHint("回复:" + commentItem.getNickname());
                 tempParentNickname = commentItem.getNickname();
+//                tempParentId = commentItem.getNickname();
+
                 mTempCommentID = commentItem.getId();
                 showCommentPopupWindows("回复:" + commentItem.getNickname());
 //                KeyBoardUtil.showKeyBoard(getActivity(), mEtContent);
@@ -431,7 +438,18 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 String nickname = IGXApplication.getUser().getNickname();
                 LoadingProgressDialog.startProgressDialog(getActivity());
 //                TODO: 添加评论
-//                CommentHttpUtil.addComment(getActivity(), mPostId, mCatId, content, mTempCommentID, nickname, "0");
+//                  type          评论类型     必传      1是对文章的评论 2是对动态的评论
+//                nick_name     用户名     非必传
+//                news_id               文章ID     type为1时必传
+//                dynamics_id     动态ID     type为2时必传
+//                is_reply          非必传     是否为回复评论   否0是1
+//                comment_id  父评论ID      选填      如为回复的话，需传
+//                content      评论内容    必传
+//                key_id          评论消息列表的key_id
+//                reply_teacher         是否为回复老师的评论
+                CommentHttpUtil.addComment(getActivity(), String.valueOf(mMode), nickname,
+                        mPostId, dynamics_id, isReply ? "1" : "0",mTempCommentID, content, mTempCommentID, "0");
+
                 editComment.setHint(HINT);
                 editComment.setText("");
                 keyboardPopup.dismiss();
@@ -495,7 +513,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     private void fetchAllComment(int page, boolean just_teacher, Action action) {
         String just = just_teacher ? "1" : "0";
         Map<String, String> map = new HashMap<>();
-        map.put("type",String.valueOf(mMode));
+        map.put("type", String.valueOf(mMode));
         map.put("news_id", mPostId);
         map.put("dynamics_id", mPostId);
         map.put("cat_id", mCatId);
@@ -509,11 +527,10 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     /* 获取热门评论 */
     private void fetchHotComment() {
         Map<String, String> map = new HashMap<>();
-        map.put("type",String.valueOf(mMode));
+        map.put("type", String.valueOf(mMode));
         map.put("news_id", mPostId);
         map.put("dynamics_id", mPostId);
         map.put("cat_id", mCatId);
-        map.put("page", "1");
         String param = ParamUtil.getParam(map);
         OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.COMMENT_LIST_HOT, param, Action.comment_list_hot);
     }
@@ -561,7 +578,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     // EventBus call all comment list
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchAllComment(HttpEvent event) {
-        if (Action.comment_list == event.getAction() && 0 == mPage) {
+        if (Action.comment_list == event.getAction()) {
             mContentFrameLayout.setRefreshing(false);
             if (SUCCEED == event.getCode()) {
                 DebugUtils.dd("comment list : " + event.getData().toString());
@@ -601,7 +618,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
     // EventBus call teacher comment list
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchTeacherComment(HttpEvent event) {
-        if (Action.comment_teacher == event.getAction() && 1 == mPage) {
+        if (Action.comment_teacher == event.getAction()) {
             mContentFrameLayout.setRefreshing(false);
             LoadingProgressDialog.stopProgressDialog();
             if (SUCCEED == event.getCode()) {
@@ -649,12 +666,11 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 DebugUtils.dd("sub comment result :" + subCommentItem.toString());
 
                 CommentItem commentItem = new CommentItem();
-                commentItem.setParent_comment_id(subCommentItem.getComment_info().getCommentid());
+                commentItem.setParent_comment_id(mTempCommentID);
                 commentItem.setId(subCommentItem.getComment_data_id());
 
-                User user = IGXApplication.getUser();
-                commentItem.setNickname(user.getNickname());
-                commentItem.setAvatar(user.getAvatar());
+                commentItem.setNickname(subCommentItem.getComment_info().getUser_name());
+                commentItem.setAvatar(subCommentItem.getComment_info().getDefault_avatar());
 
                 commentItem.setIs_support(0);
                 commentItem.setSupport(0);
@@ -662,14 +678,14 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 commentItem.setIs_teacher(subCommentItem.getComment_info().getIs_teacher());
 
                 commentItem.setParent_is_teacher(subCommentItem.getComment_info().getParent_is_teacher());
-                commentItem.setCreate_date(String.valueOf(subCommentItem.getComment_info().getCreat_at()));
+                commentItem.setCreate_date(String.valueOf(subCommentItem.getComment_info().getCreate_date()));
 
                 commentItem.setContent(subCommentItem.getComment_info().getContent());
 
                 commentItem.setSource_show(subCommentItem.getComment_info().getSource_show());
 
                 if (isReply) {
-                    commentItem.setParent_comment_id(subCommentItem.getComment_info().getCommentid());
+                    commentItem.setParent_comment_id(mTempCommentID);
                     commentItem.setParent_user_name(tempParentNickname);
                     commentItem.setParent_comment_content(subCommentItem.getComment_info().getParent_comment_content());
                     commentItem.setParent_is_teacher(subCommentItem.getComment_info().getParent_is_teacher());

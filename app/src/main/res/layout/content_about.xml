@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin2x"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_about">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/small_margin"
+            android:text="@string/value_version"
+            android:textColor="@color/colorGrey900"
+            android:textSize="@dimen/text_size_large"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_vertical_margin2x"
+            android:lineSpacingMultiplier="1.5"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/temp_about_content"
+            android:textColor="@color/def_TextColor"
+            android:textSize="@dimen/text_size_micro"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_wechat"
+            style="@style/IGXDefault_Option_ViewGroup"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lable_wechat"
+                />
+
+            <TextView
+                android:id="@+id/tv_wechat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:text="iguxuan"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/ll_hotline"
+            style="@style/IGXDefault_Option_ViewGroup"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lable_hotline"
+                />
+
+            <TextView
+                android:id="@+id/tv_hotline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:text="@string/hot_line"
+                android:textColor="@color/colorBlue500"
+                />
+            <!--android:autoLink="phone"-->
+            <!--android:linksClickable="true"-->
+            <!--android:textColorLink="@color/colorBlue500"-->
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_website"
+            style="@style/IGXDefault_Option_ViewGroup"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lable_website"
+                />
+
+            <TextView
+                android:id="@+id/tv_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/website"
+                android:textColorLink="@color/colorBlue500"
+                />
+            <!--android:autoLink="web"-->
+            <!--android:linksClickable="true"-->
+            <!--android:textColorLink="@color/colorBlue500"-->
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/company"
+            android:textSize="@dimen/text_size_micro"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/micro_margin"
+            android:text="@string/copyright_info"
+            android:textSize="@dimen/text_size_micro"
+            />
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

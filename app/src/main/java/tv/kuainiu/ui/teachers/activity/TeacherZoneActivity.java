@@ -202,7 +202,7 @@ public class TeacherZoneActivity extends BaseActivity {
                 teacherInfo.setFans_count(size);
                 mTeacherZoneAdapter.setTeacherInfo(teacherInfo);
                 tv_follow_number.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
-                tv_follow_button.setText("+关注");
+                tv_follow_button.setText("+ 关注");
                 tv_follow_button.setSelected(false);
             } else {
                 DebugUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));

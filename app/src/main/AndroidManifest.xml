@@ -105,6 +105,9 @@
         <activity android:name=".ui.articles.activity.PostZoneActivity" />
         <activity android:name=".ui.articles.activity.PicturePreviewFullScreenActivity" />
         <activity android:name=".ui.comments.CommentListActivity" />
+        <activity android:name=".ui.me.activity.CollectActivity" />
+        <activity android:name=".ui.me.activity.AboutActivity" />
+        <activity android:name=".ui.me.activity.FollowActivity" />
         <activity
             android:name=".ui.video.VideoActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"

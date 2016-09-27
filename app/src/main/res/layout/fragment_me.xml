@@ -405,6 +405,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rlFollow"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
@@ -427,6 +428,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rlSub"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
@@ -449,6 +451,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rlDown"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
@@ -471,6 +474,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rlCollect"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
@@ -493,6 +497,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rlRecorder"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import tv.kuainiu.utils.LogUtils;
  */
 public class TitleBarView extends RelativeLayout {
     @BindView(R.id.tv_title) TextView mTvTitle;
+    @BindView(R.id.tvRightText) TextView tvRightText;
     @BindView(R.id.ivLeft) ImageView ivLeft;
     @BindView(R.id.ivRight) ImageView ivRight;
     @BindView(R.id.rl_title_bar_left) RelativeLayout mRlTitleBarLeft;
@@ -37,6 +39,7 @@ public class TitleBarView extends RelativeLayout {
     private Drawable leftSrc = null;
     private Drawable rightSrc = null;
     private String titleText = "";
+    private String rightText = "";
 
     public TitleBarView(Context context) {
         this(context, null);
@@ -54,7 +57,8 @@ public class TitleBarView extends RelativeLayout {
         setBackgroundColor(Color.parseColor(Theme.getCommonColor()));
         final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.title_bar_view,
                 defStyleAttr, 0);
-        titleText=attributes.getString(R.styleable.title_bar_view_title);
+        titleText = attributes.getString(R.styleable.title_bar_view_title);
+        rightText = attributes.getString(R.styleable.title_bar_view_rightText);
         leftVisibility = attributes.getInt(R.styleable.title_bar_view_left_visibility, View.VISIBLE);
         rightVisibility = attributes.getInt(R.styleable.title_bar_view_right_visibility, View.VISIBLE);
         leftSrc = attributes.getDrawable(R.styleable.title_bar_view_leftSrc);
@@ -63,11 +67,19 @@ public class TitleBarView extends RelativeLayout {
         mRlTitleBarLeft.setVisibility(leftVisibility == View.INVISIBLE ? View.INVISIBLE : View.VISIBLE);
         mRlTitleBarRight.setVisibility(rightVisibility == View.INVISIBLE ? View.INVISIBLE : View.VISIBLE);
         mTvTitle.setText(titleText);
+        tvRightText.setText(rightText);
         if (rightSrc != null) {
             ivRight.setImageDrawable(rightSrc);
         }
         if (leftSrc != null) {
             ivLeft.setImageDrawable(leftSrc);
+        }
+        if (TextUtils.isEmpty(rightText)) {
+            tvRightText.setVisibility(View.GONE);
+            ivRight.setVisibility(View.VISIBLE);
+        } else {
+            tvRightText.setVisibility(View.VISIBLE);
+            ivRight.setVisibility(View.GONE);
         }
         mTvTitle.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View view) {
@@ -80,11 +92,11 @@ public class TitleBarView extends RelativeLayout {
             @Override public void onClick(View view) {
                 if (mICheckListen != null) {
                     mICheckListen.leftClick();
-                }else{
+                } else {
                     try {
                         ((Activity) mContext).finish();
-                    }catch (Exception e){
-                        LogUtils.e("TitleBarView","关闭Activity失败",e);
+                    } catch (Exception e) {
+                        LogUtils.e("TitleBarView", "关闭Activity失败", e);
                     }
                 }
             }

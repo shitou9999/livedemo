@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,6 +35,8 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.me.activity.CollectActivity;
+import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.utils.DebugUtils;
@@ -78,6 +81,13 @@ public class MeFragment extends BaseFragment {
     @BindView(R.id.tv_appointment_tip) TextView mTvAppointmentTip;
     @BindView(R.id.rl_appointment) RelativeLayout mRlAppointment;
     @BindView(R.id.fl_tab_frag) LinearLayout mFlTabFrag;
+    @BindView(R.id.llJurisdiction) LinearLayout mLlJurisdiction;
+    @BindView(R.id.btnPublish) Button mBtnPublish;
+    @BindView(R.id.rlFollow) RelativeLayout mRlFollow;
+    @BindView(R.id.rlSub) RelativeLayout mRlSub;
+    @BindView(R.id.rlDown) RelativeLayout mRlDown;
+    @BindView(R.id.rlCollect) RelativeLayout mRlCollect;
+    @BindView(R.id.rlRecorder) RelativeLayout mRlRecorder;
 
     private Context context;
 
@@ -141,8 +151,7 @@ public class MeFragment extends BaseFragment {
             }
         });
     }
-
-    @OnClick({R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment})
+    @OnClick({R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ci_avatar:
@@ -160,6 +169,22 @@ public class MeFragment extends BaseFragment {
                 Intent loginIntent = new Intent();
                 loginIntent.setClass(getActivity(), LoginActivity.class);
                 startActivity(loginIntent);
+                break;
+            case R.id.rlFollow:
+                Intent intentFollow = new Intent();
+                intentFollow.setClass(getActivity(), FollowActivity.class);
+                startActivity(intentFollow);
+                break;
+            case R.id.rlSub:
+                break;
+            case R.id.rlDown:
+                break;
+            case R.id.rlCollect:
+                Intent intentCollect = new Intent();
+                intentCollect.setClass(getActivity(), CollectActivity.class);
+                startActivity(intentCollect);
+                break;
+            case R.id.rlRecorder:
                 break;
         }
     }
@@ -255,4 +280,6 @@ public class MeFragment extends BaseFragment {
             ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.head_nor);
         }
     }
+
+
 }

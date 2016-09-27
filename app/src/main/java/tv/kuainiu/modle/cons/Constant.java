@@ -113,6 +113,10 @@ public class Constant {
      */
     public static final String KEY_ID = "id";
     /**
+     * 动态id
+     */
+    public static final String KEY_DYNAMICS_ID = "key_dynamics_id";
+    /**
      * 栏目ID
      */
     public static final String KEY_CATID = "catid";

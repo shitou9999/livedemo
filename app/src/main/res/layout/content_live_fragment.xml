@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_live"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_home_top_group_height">
+
+
+        <ImageView
+            android:id="@+id/iv_live_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            />
+
+
+        <!-- XXX LinearLayout can delete? -->
+        <LinearLayout
+            android:id="@+id/ll_live_online_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_live_count"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_live_online_user_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:textColor="@color/white_color"
+                tools:text="8888888888 人在线"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_live_play_button"
+            android:layout_width="@dimen/live_play_button_size"
+            android:layout_height="@dimen/live_play_button_size"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/app_name"
+            tools:src="@mipmap/start"
+            />
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom_group"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_home_top_sub_group_height"
+            android:layout_alignParentBottom="true"
+            android:background="#991b0229"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_avatar"
+                android:layout_width="@dimen/live_head_top"
+                android:layout_height="@dimen/live_head_top"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_marginRight="@dimen/small_margin"
+                app:civ_border_color="@color/def_DividerColor"
+                app:civ_border_overlay="true"
+                tools:src="@mipmap/ic_launcher"/>
+
+
+            <Space
+                android:id="@+id/space_center_v"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/micro_margin"
+                />
+
+            <TextView
+                android:id="@+id/tv_live_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/micro_margin"
+                android:layout_marginRight="@dimen/micro_margin"
+                android:layout_marginTop="@dimen/micro_margin"
+                android:layout_toEndOf="@+id/civ_avatar"
+                android:layout_toLeftOf="@+id/tv_live_into"
+                android:layout_toRightOf="@+id/civ_avatar"
+                android:layout_toStartOf="@+id/tv_live_into"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:minLines="1"
+                android:textColor="@color/white_color"
+                android:textSize="@dimen/text_size_small"
+                tools:text="正在直：廖英强开启财富之门dgdgsgsdgsdfjsadfgjashdfagfasdfjisadfisjiodfjsoifhsdofhsohfosdfosdfsdf播"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/space_center_v"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:layout_toEndOf="@+id/civ_avatar"
+                android:layout_toRightOf="@+id/civ_avatar"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_live_anchor_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/small_margin"
+                    android:layout_marginRight="@dimen/small_margin"
+                    android:ellipsize="end"
+                    android:maxLength="16"
+                    android:paddingTop="0dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorBlue700"
+                    android:textSize="@dimen/text_size_small"
+                    tools:text="张三丰"/>
+
+                <ImageButton
+                    android:id="@+id/ib_live_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@null"
+                    android:src="@mipmap/praise_btn"/>
+
+                <TextView
+                    android:id="@+id/tv_live_like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/min_margin"
+                    android:layout_marginStart="@dimen/min_margin"
+                    android:layout_marginTop="-1dp"
+                    android:gravity="top"
+                    android:singleLine="true"
+                    android:textColor="@color/colorGrey400"
+                    android:textSize="@dimen/text_size_medilum"
+                    tools:text="1000"/>
+            </LinearLayout>
+            <!--</RelativeLayout>-->
+
+            <TextView
+                android:id="@id/tv_live_into"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_black_content_white_border"
+                android:gravity="center"
+                android:text="@string/live_into_label"
+                android:textColor="@color/colorWhite800"
+                android:textSize="@dimen/text_size_small"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_live_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_custom_tab"
+        app:tabIndicatorColor="@color/colorAmber550"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorAmber550"
+        app:tabTextColor="@color/def_TextColor"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_live_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -788,10 +788,9 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
                 mIsCoolect = Constant.COLLECTED == info.optInt("collected");
                 mIsFavour = Constant.FAVOURED == info.optInt("is_support");
-                mCurFavourCount = info.optInt("zan_count");
-                mCurCommentCount = info.optInt("comment_count");
+                mCurFavourCount = info.optInt("support_num");
+                mCurCommentCount = info.optInt("comment_num");
                 String catName = info.optString("catname");
-                mCatId = info.optString("catid");
                 // 文章简述
                 mPostDescription = info.optString("description");
                 mPostThumb = info.optString("thumb");
@@ -868,8 +867,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
 
     private void bindViewForCollect() {
-        mTvFavour.setEnabled(!mIsCoolect);
-        mTvFavour.setSelected(mIsCoolect);
+        mTvCollect.setSelected(mIsCoolect);
         if (mIsCoolect) {
 //            mTvCollect.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
             mTvCollect.setText("已收藏");
@@ -882,7 +880,6 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private void bindViewForFavour() {
         String tempFavour;
         mTvFavour.setEnabled(!mIsFavour);
-        mTvFavour.setSelected(mIsFavour);
         if (mIsFavour) {
 //            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
             tempFavour = StringUtils.getDecimal2(mCurFavourCount, Constant.TEN_THOUSAND,

@@ -48,30 +48,52 @@ public class SubCommentItem {
     }
 
     public static class CommentInfoEntity {
-        private String commentid;
+
+        /**
+         * default_avatar : http://kuainiu.oss-cn-shanghai.aliyuncs.com/uploadfile/avatar/default.png
+         * source_show : 来自android端
+         * model : Coolpad Y82-820
+         * status : 1
+         * is_teacher : 0
+         * app_version : 1
+         * dynamics_id : 0
+         * type : 1
+         * ip : 116.236.199.6
+         * content : 看咯
+         * cat_id : 3
+         * user_name : 大龙猫
+         * news_id : 22
+         * source : android
+         * create_date : 1474958462
+         * parent_comment_content :
+         * reply : 0
+         * user_id : 4
+         * teacher_id : 1
+         * parent_is_teacher : 0
+         * system_version : 4.4.4
+         */
+
         private String default_avatar;
+        private String source_show;
+        private String model;
         private int status;
         private int is_teacher;
-        private int direction;
-        private int userid;
+        private String app_version;
+        private int dynamics_id;
+        private int type;
         private String ip;
         private String content;
-        private String username;
+        private String cat_id;
+        private String user_name;
+        private int news_id;
+        private String source;
+        private int create_date;
         private String parent_comment_content;
-        private String teacher_id;
-        private String source_show;
         private int reply;
-        private int siteid;
-        private long creat_at;
+        private int user_id;
+        private String teacher_id;
         private int parent_is_teacher;
-
-        public String getCommentid() {
-            return commentid;
-        }
-
-        public void setCommentid(String commentid) {
-            this.commentid = commentid;
-        }
+        private String system_version;
 
         public String getDefault_avatar() {
             return default_avatar;
@@ -79,6 +101,22 @@ public class SubCommentItem {
 
         public void setDefault_avatar(String default_avatar) {
             this.default_avatar = default_avatar;
+        }
+
+        public String getSource_show() {
+            return source_show;
+        }
+
+        public void setSource_show(String source_show) {
+            this.source_show = source_show;
+        }
+
+        public String getModel() {
+            return model;
+        }
+
+        public void setModel(String model) {
+            this.model = model;
         }
 
         public int getStatus() {
@@ -97,20 +135,28 @@ public class SubCommentItem {
             this.is_teacher = is_teacher;
         }
 
-        public int getDirection() {
-            return direction;
+        public String getApp_version() {
+            return app_version;
         }
 
-        public void setDirection(int direction) {
-            this.direction = direction;
+        public void setApp_version(String app_version) {
+            this.app_version = app_version;
         }
 
-        public int getUserid() {
-            return userid;
+        public int getDynamics_id() {
+            return dynamics_id;
         }
 
-        public void setUserid(int userid) {
-            this.userid = userid;
+        public void setDynamics_id(int dynamics_id) {
+            this.dynamics_id = dynamics_id;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
         }
 
         public String getIp() {
@@ -129,20 +175,44 @@ public class SubCommentItem {
             this.content = content;
         }
 
-        public long getCreat_at() {
-            return creat_at;
+        public String getCat_id() {
+            return cat_id;
         }
 
-        public void setCreat_at(long creat_at) {
-            this.creat_at = creat_at;
+        public void setCat_id(String cat_id) {
+            this.cat_id = cat_id;
         }
 
-        public String getUsername() {
-            return username;
+        public String getUser_name() {
+            return user_name;
         }
 
-        public void setUsername(String username) {
-            this.username = username;
+        public void setUser_name(String user_name) {
+            this.user_name = user_name;
+        }
+
+        public int getNews_id() {
+            return news_id;
+        }
+
+        public void setNews_id(int news_id) {
+            this.news_id = news_id;
+        }
+
+        public String getSource() {
+            return source;
+        }
+
+        public void setSource(String source) {
+            this.source = source;
+        }
+
+        public int getCreate_date() {
+            return create_date;
+        }
+
+        public void setCreate_date(int create_date) {
+            this.create_date = create_date;
         }
 
         public String getParent_comment_content() {
@@ -161,12 +231,12 @@ public class SubCommentItem {
             this.reply = reply;
         }
 
-        public int getSiteid() {
-            return siteid;
+        public int getUser_id() {
+            return user_id;
         }
 
-        public void setSiteid(int siteid) {
-            this.siteid = siteid;
+        public void setUser_id(int user_id) {
+            this.user_id = user_id;
         }
 
         public String getTeacher_id() {
@@ -177,14 +247,6 @@ public class SubCommentItem {
             this.teacher_id = teacher_id;
         }
 
-        public String getSource_show() {
-            return source_show;
-        }
-
-        public void setSource_show(String source_show) {
-            this.source_show = source_show;
-        }
-
         public int getParent_is_teacher() {
             return parent_is_teacher;
         }
@@ -193,25 +255,12 @@ public class SubCommentItem {
             this.parent_is_teacher = parent_is_teacher;
         }
 
-        @Override public String toString() {
-            return "CommentInfoEntity{" +
-                    "commentid='" + commentid + '\'' +
-                    ", default_avatar='" + default_avatar + '\'' +
-                    ", status=" + status +
-                    ", is_teacher=" + is_teacher +
-                    ", direction=" + direction +
-                    ", userid=" + userid +
-                    ", ip='" + ip + '\'' +
-                    ", content='" + content + '\'' +
-                    ", username='" + username + '\'' +
-                    ", parent_comment_content='" + parent_comment_content + '\'' +
-                    ", teacher_id='" + teacher_id + '\'' +
-                    ", source_show='" + source_show + '\'' +
-                    ", reply=" + reply +
-                    ", siteid=" + siteid +
-                    ", creat_at=" + creat_at +
-                    ", parent_is_teacher=" + parent_is_teacher +
-                    '}';
+        public String getSystem_version() {
+            return system_version;
+        }
+
+        public void setSystem_version(String system_version) {
+            this.system_version = system_version;
         }
     }
 

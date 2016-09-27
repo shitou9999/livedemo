@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_mInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#80000000"
+        android:padding="5dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_mInfo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
+            tools:src="@mipmap/ic_volume_up_white_48dp"/>
+
+        <TextView
+            android:id="@+id/mInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_mInfo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white_color"
+            android:textSize="14sp"
+            tools:text="快进"/>
+    </RelativeLayout>
+</merge>

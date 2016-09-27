@@ -329,8 +329,11 @@ public class HomeFragment extends BaseFragment {
                 break;
             case teacher_fg_del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
-                    mTvFollowButton.setText("+关注");
+                    mTvFollowButton.setText("+ 关注");
                     mTvFollowButton.setSelected(false);
+                    HotPonit mHotPoint = (HotPonit) mTvFollowButton.getTag();
+                    mHotPoint.setIs_follow(0);
+                    mTvFollowButton.setTag(mHotPoint);
                 } else {
                     DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
                 }
@@ -339,6 +342,9 @@ public class HomeFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode()) {
                     mTvFollowButton.setText("已关注");
                     mTvFollowButton.setSelected(true);
+                    HotPonit mHotPoint = (HotPonit) mTvFollowButton.getTag();
+                    mHotPoint.setIs_follow(1);
+                    mTvFollowButton.setTag(mHotPoint);
                 } else {
                     DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
                 }

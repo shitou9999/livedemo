@@ -2,7 +2,6 @@ package tv.kuainiu.command.db;
 
 
 /**
- * TODO
  * <p>
  * version 4  [2.X]<br>
  * 增加直播预约表 @see{@link LiveSubscribeContract}
