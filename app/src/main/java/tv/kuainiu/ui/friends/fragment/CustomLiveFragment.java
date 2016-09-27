@@ -111,7 +111,7 @@ public class CustomLiveFragment extends BaseFragment {
                     if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                         loading = true;
                         page += 1;
-                        getData();
+//                        getData();
                     }
                 }
             }

@@ -9,7 +9,14 @@ def releaseTime() {
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
+    dexOptions {
+        javaMaxHeapSize "10g"
+    }
     defaultConfig {
         applicationId "tv.kuainiu"
         minSdkVersion 15
@@ -33,16 +40,16 @@ android {
     signingConfigs {
         debug {
             // No debug config
-//            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
-//            keyAlias 'lasding_release'
-//            keyPassword 'lasding_release'
-//            storePassword 'lasding2016'
+//            storeFile file('D:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
+//            keyAlias 'kuainiuKeyStore'
+//            keyPassword 'kuainiuKey'
+//            storePassword 'kuaiNIU20160927tv'
         }
         release {
-//            storeFile file('F:/eclipse_workspace/8-worker-app/lsd_release.jks')
-//            keyAlias 'lasding_release'
-//            keyPassword 'lasding_release'
-//            storePassword 'lasding2016'
+            storeFile file('D:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
+            keyAlias 'kuainiuKeyStore'
+            keyPassword 'kuainiuKey'
+            storePassword 'kuaiNIU20160927tv'
         }
     }
     buildTypes {
@@ -52,8 +59,8 @@ android {
             debuggable false
             jniDebuggable false
             zipAlignEnabled true
-            minifyEnabled false//是否开启混淆
-            shrinkResources true//去除无用的resource文件
+            minifyEnabled true//是否开启混淆
+            shrinkResources false//android studio 2.2 设置为false 去除无用的resource文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             applicationVariants.all { variant ->

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.friends.model.BasePost;
 import tv.kuainiu.ui.video.VideoActivity;
@@ -29,6 +30,7 @@ public class PostParentLayout extends RelativeLayout {
     private int mPostType = 0;
     private BasePost mBasePost;
     private TeacherZoneDynamicsInfo teacherZoneDynamicsInfo;
+    private LiveInfo liveInfo;
 
     public PostParentLayout(Context context) {
         super(context);
@@ -56,6 +58,17 @@ public class PostParentLayout extends RelativeLayout {
         }
     }
 
+    public void setPostType(LiveInfo liveInfo) {
+        this.liveInfo = liveInfo;
+        if (this.liveInfo != null) {
+            if (liveInfo.getLive_status() == 1)
+                mPostType = Constans.TYPE_LIVE_END;
+            loadPostView();
+        } else {
+            setVisibility(View.GONE);
+        }
+    }
+
     private void init(Context context) {
         mContext = context;
 
@@ -76,21 +89,30 @@ public class PostParentLayout extends RelativeLayout {
 //                addView(view);
 //                break;
 
-//            case Constans.TYPE_LIVING:
-//                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_living, this, false);
-//                if (getChildAt(0) != null) {
-//                    removeAllViews();
-//                }
-//                addView(view);
-//                break;
+            case Constans.TYPE_LIVING:
+                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_living, this, false);
+                if (getChildAt(0) != null) {
+                    removeAllViews();
+                }
+                TextView tvState = (TextView) view.findViewById(R.id.tvLiveState);
+                TextView tvLiveDescription = (TextView) view.findViewById(R.id.tvLiveDescription);
+                tvState.setText(liveInfo.getLive_msg());
+                tvLiveDescription.setText(liveInfo.getDescription());
+                addView(view);
+                break;
 //
-//            case Constans.TYPE_LIVE:
-//                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_live, this, false);
-//                if (getChildAt(0) != null) {
-//                    removeAllViews();
-//                }
-//                addView(view);
-//                break;
+            case Constans.TYPE_LIVE:
+            case Constans.TYPE_LIVE_END:
+                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_live, this, false);
+                if (getChildAt(0) != null) {
+                    removeAllViews();
+                }
+                TextView tvState2 = (TextView) view.findViewById(R.id.tvLiveState);
+                TextView tvLiveDescription2 = (TextView) view.findViewById(R.id.tvLiveDescription);
+                tvState2.setText(liveInfo.getLive_msg() + "/n" + liveInfo.getStart_date());
+                tvLiveDescription2.setText(liveInfo.getDescription());
+                addView(view);
+                break;
             //视频
             case Constans.TYPE_VIDEO:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_video, this, false);
