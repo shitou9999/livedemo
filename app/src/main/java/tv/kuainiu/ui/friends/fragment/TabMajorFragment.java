@@ -28,7 +28,7 @@ public class TabMajorFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
     private static final String[][] titles = {
             {"观点", "名师"},
-            {"点播"},
+            {"直播", "点播"},
             {"小道消息", "谈古论今"}};
 
     @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
@@ -67,7 +67,7 @@ public class TabMajorFragment extends BaseFragment {
 //        mNvpFragmentMajor.setOffscreenPageLimit(mBaseFragments.size() - 1);
 
         mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
-        mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"),Color.parseColor(Theme.getCommonColor()));
+        mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
         mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
         mTabFragmentMajor.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
@@ -104,6 +104,7 @@ public class TabMajorFragment extends BaseFragment {
                 break;
 
             case 1:
+                mBaseFragments.add(CustomLiveFragment.newInstance());
                 mBaseFragments.add(CustomVideoFragment.newInstance());
                 break;
 
@@ -113,7 +114,7 @@ public class TabMajorFragment extends BaseFragment {
 //        mBaseFragments.add(TabTempFragment.newInstance(Color.MAGENTA, pstr + " : N次方"));
     }
 
-   public static class SimpleViewPager extends FragmentPagerAdapter {
+    public static class SimpleViewPager extends FragmentPagerAdapter {
         private List<BaseFragment> mFragments;
         private String[] mTitles;
 

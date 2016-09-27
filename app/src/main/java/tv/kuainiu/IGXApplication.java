@@ -1,9 +1,9 @@
 package tv.kuainiu;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.squareup.leakcanary.LeakCanary;
@@ -27,7 +27,7 @@ import tv.kuainiu.utils.SecurityUtils;
 import tv.kuainiu.utils.StringUtils;
 
 
-public class IGXApplication extends Application {
+public class IGXApplication extends android.support.multidex.MultiDexApplication {
     private static final String TAG = "IGXApplication";
     private static User user;
     public static final boolean IsDegbug = true;
@@ -36,8 +36,6 @@ public class IGXApplication extends Application {
      * <p>
      * 用户被引导关注的老师列表
      * </p>
-     *
-
      */
     public static String followTeaCherIds = "";
 
@@ -55,13 +53,14 @@ public class IGXApplication extends Application {
 
     @Override protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         mApplication = this;
-         init();
+        init();
         // strictMode(); // 启用严格模式
     }
 
@@ -76,7 +75,6 @@ public class IGXApplication extends Application {
             JPushInterface.init(this);
             // 设置开启日志,发布时请关闭日志
             JPushInterface.setDebugMode(IsDegbug);
-
 
 
             if (IsDegbug) {
@@ -180,5 +178,6 @@ public class IGXApplication extends Application {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
     }
+
 
 }

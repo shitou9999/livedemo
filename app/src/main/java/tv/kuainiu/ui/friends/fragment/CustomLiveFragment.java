@@ -23,6 +23,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
@@ -30,26 +31,27 @@ import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 /**
- * 定制解盘视频
+ * 定制直播
  */
-public class CustomVideoFragment extends BaseFragment {
+public class CustomLiveFragment extends BaseFragment {
     private static final String TAG = "CustomVideoFragment";
 
     @BindView(R.id.rv_fragment_friends_tab) RecyclerView mRecyclerView;
     @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
     private int page = 1;
-    private List<CustomVideo> customVideoList = new ArrayList<>();
+    private List<LiveInfo> customLiveList = new ArrayList<>();
     private FriendsPostAdapter adapter;
     private String caid = "";
     Activity context;
@@ -57,9 +59,9 @@ public class CustomVideoFragment extends BaseFragment {
     private RecyclerView.OnScrollListener loadMoreListener;
     CustomLinearLayoutManager mLayoutManager;
 
-    public static CustomVideoFragment newInstance() {
+    public static CustomLiveFragment newInstance() {
         Bundle args = new Bundle();
-        CustomVideoFragment fragment = new CustomVideoFragment();
+        CustomLiveFragment fragment = new CustomLiveFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,7 +80,7 @@ public class CustomVideoFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO);
+        adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_LIVE);
         mRecyclerView.setAdapter(adapter);
         getData();
         return view;
@@ -121,13 +123,13 @@ public class CustomVideoFragment extends BaseFragment {
      */
     public void getData() {
         Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(page));
-        OKHttpUtils.getInstance().post(context, Api.CUSTOM_VIDEO_LIST, ParamUtil.getParam(map), Action.CUSTOM_VIDEO_LIST, CacheConfig.getCacheConfig());
+        map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
+        OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIVE_LIST, ParamUtil.getParam(map), Action.CUSTOM_VIDEO_LIST, CacheConfig.getCacheConfig());
     }
 
     private void dataBind(int size) {
-        adapter.setCustomVideoList(customVideoList);
-        adapter.notifyItemRangeInserted(size, customVideoList.size());
+        adapter.setCustomLiveList(customLiveList);
+        adapter.notifyItemRangeInserted(size, customLiveList.size());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -141,15 +143,16 @@ public class CustomVideoFragment extends BaseFragment {
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
-                            List<CustomVideo> tempCustomVideoList = new DataConverter<CustomVideo>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<CustomVideo>>() {
+                            LogUtils.i("data",event.getData().toString());
+                            List<LiveInfo> tempCustomLiveList = new DataConverter<LiveInfo>().JsonToListObject(jsonObject.getString("live_list"), new TypeToken<List<LiveInfo>>() {
                             }.getType());
                             if (page == 1) {
-                                customVideoList.clear();
+                                customLiveList.clear();
                             }
-                            if (tempCustomVideoList != null && tempCustomVideoList.size() > 0) {
+                            if (tempCustomLiveList != null && tempCustomLiveList.size() > 0) {
                                 loading = false;
-                                int size = customVideoList.size();
-                                customVideoList.addAll(tempCustomVideoList);
+                                int size = customLiveList.size();
+                                customLiveList.addAll(tempCustomLiveList);
                                 dataBind(size);
                             }
 

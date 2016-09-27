@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mobstat.SendStrategyEnum;
+import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +69,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
         initData();
 
+    }
+
+    @Override protected void onStart() {
+        super.onStart();
+        //百度统计
+        StatService.setSendLogStrategy(this, SendStrategyEnum.APP_START, 1, false);
     }
 
     @Override protected void onResume() {

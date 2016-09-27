@@ -131,6 +131,12 @@
 -keep class m.framework.**{*;}
 #share sdk
 
+#百度统计
+-keep class com.baidu.bottom.** { *; }
+-keep class com.baidu.kirin.** { *; }
+-keep class com.baidu.mobstat.** { *; }
+#百度统计
+
 #event bus--------------------------------
 #参考：http://greenrobot.org/eventbus/documentation/proguard/
 -keepclassmembers class ** {
