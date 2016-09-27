@@ -9,10 +9,10 @@ import java.util.HashMap;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import tv.kuainiu.R;
-import tv.kuainiu.onekeyshare.OnekeyShare;
-import tv.kuainiu.onekeyshare.ShareContentCustomizeCallback;
 import tv.kuainiu.umeng.UMEventManager;
 
 /**

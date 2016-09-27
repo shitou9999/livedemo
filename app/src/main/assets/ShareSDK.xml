@@ -53,7 +53,7 @@
     -->
 
     <ShareSDK
-        AppKey="fc4040cd8d2c"/>
+        AppKey="178106bbcab45"/>
     <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
@@ -66,18 +66,24 @@
         ShareByAppClient="false"
         SortId="1"/>
 
-
+<!--    微信开放平台
+    AppID: wx559567ddffdfe793
+    AppSecret: cbf8c6a29daab2c1796fa1b3b4bb72eb
+    廖强-ios  15:57:45
+    qq
+    APP ID：1105649771
+    APP KEY：fx1Eu5jtfqYmTrXf-->
     <QZone
-        AppId="1105340981"
-        AppKey="KEYADkjlKMz9taKYJbP"
+        AppId="1105649771"
+        AppKey="fx1Eu5jtfqYmTrXf"
         Enable="true"
         Id="3"
         ShareByAppClient="true"
         SortId="2"/>
 
     <QQ
-        AppId="1105340981"
-        AppKey="KEYADkjlKMz9taKYJbP"
+        AppId="1105649771"
+        AppKey="fx1Eu5jtfqYmTrXf"
         Enable="true"
         Id="7"
         ShareByAppClient="true"
@@ -85,8 +91,8 @@
 
 
     <Wechat
-        AppId="wx2b0c21da84e67617"
-        AppSecret="71a3c7d27bc4f4e349378fce55042e49"
+        AppId="wx559567ddffdfe793"
+        AppSecret="cbf8c6a29daab2c1796fa1b3b4bb72eb"
         BypassApproval="false"
         Enable="true"
         Id="4"
@@ -94,8 +100,8 @@
 
 
     <WechatMoments
-        AppId="wx2b0c21da84e67617"
-        AppSecret="71a3c7d27bc4f4e349378fce55042e49"
+        AppId="wx559567ddffdfe793"
+        AppSecret="cbf8c6a29daab2c1796fa1b3b4bb72eb"
         BypassApproval="false"
         Enable="true"
         Id="5"
