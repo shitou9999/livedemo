@@ -1,6 +1,7 @@
 package tv.kuainiu.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -17,7 +18,10 @@ import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.friends.model.BasePost;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
@@ -61,8 +65,7 @@ public class PostParentLayout extends RelativeLayout {
     public void setPostType(LiveInfo liveInfo) {
         this.liveInfo = liveInfo;
         if (this.liveInfo != null) {
-            if (liveInfo.getLive_status() == 1)
-                mPostType = Constans.TYPE_LIVE_END;
+            mPostType = Constans.TYPE_LIVE;
             loadPostView();
         } else {
             setVisibility(View.GONE);
@@ -77,39 +80,60 @@ public class PostParentLayout extends RelativeLayout {
     private void loadPostView() {
         View view;
         switch (mPostType) {
-//            case Constans.TYPE_POST:
-//                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_normal, this, false);
-//                if (getChildAt(0) != null) {
-//                    removeAllViews();
-//                }
-//                ImageView  ivThumb= (ImageView) view.findViewById(R.id.ivThumb);
-//                TextView  tvTitle= (TextView) view.findViewById(R.id.tvTitle);
-//                ImageDisplayUtil.displayImage(mContext,ivThumb,teacherZoneDynamicsInfo.getNews_thumb());
-//                tvTitle.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
-//                addView(view);
-//                break;
-
-            case Constans.TYPE_LIVING:
-                view = LayoutInflater.from(mContext).inflate(R.layout.include_post_living, this, false);
-                if (getChildAt(0) != null) {
-                    removeAllViews();
-                }
-                TextView tvState = (TextView) view.findViewById(R.id.tvLiveState);
-                TextView tvLiveDescription = (TextView) view.findViewById(R.id.tvLiveDescription);
-                tvState.setText(liveInfo.getLive_msg());
-                tvLiveDescription.setText(liveInfo.getDescription());
-                addView(view);
-                break;
-//
             case Constans.TYPE_LIVE:
-            case Constans.TYPE_LIVE_END:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_live, this, false);
                 if (getChildAt(0) != null) {
                     removeAllViews();
                 }
                 TextView tvState2 = (TextView) view.findViewById(R.id.tvLiveState);
+                View vLine = view.findViewById(R.id.vLine);
                 TextView tvLiveDescription2 = (TextView) view.findViewById(R.id.tvLiveDescription);
-                tvState2.setText(liveInfo.getLive_msg() + "/n" + liveInfo.getStart_date());
+                switch (liveInfo.getLive_status()) {
+                    case Constans.LIVE_ING:
+                        tvState2.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg(), "直播中"));
+                        tvState2.setBackgroundColor(Color.RED);
+                        vLine.setBackgroundColor(Color.RED);
+                        break;
+                    case Constans.LiVE_UN_START:
+                        tvState2.setText(liveInfo.getLive_msg() + "/n" + DateUtil.formatDate(liveInfo.getStart_date()));
+                        tvState2.setBackgroundColor(Color.RED);
+                        vLine.setBackgroundColor(Color.RED);
+                        break;
+                    case Constans.LIVE_END:
+                        tvState2.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
+                        vLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
+                        tvState2.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg(), "已结束"));
+                        break;
+
+                }
+                view.setOnClickListener(new OnClickListener() {
+                    @Override public void onClick(View view) {
+                        switch (liveInfo.getLive_status()) {
+                            case Constans.LIVE_ING:
+                                //TODO 完善直播参数传递
+                                LiveParameter liveParameter = new LiveParameter();
+                                liveParameter.setFansNumber(0);
+                                liveParameter.setIsFollow(liveInfo.getIs_follow());
+                                liveParameter.setIsSupport(liveInfo.getIs_supported());
+                                liveParameter.setLiveId(liveInfo.getIns_id());
+                                liveParameter.setLiveTitle(liveInfo.getTitle());
+                                liveParameter.setOnLineNumber(0);
+                                liveParameter.setTeacherAvatar(liveInfo.getTeacher_info().getAvatar());
+                                liveParameter.setRoomId(liveInfo.getTeacher_info().getLive_roomid());
+                                liveParameter.setSupportNumber(0);
+                                liveParameter.setTeacherId(liveInfo.getTeacher_info().getId());
+                                PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+                                break;
+                            case Constans.LiVE_UN_START:
+                                ToastUtils.showToast(mContext, "直播未开始");
+                                break;
+                            case Constans.LIVE_END:
+                                ToastUtils.showToast(mContext, "直播已结束");
+                                break;
+
+                        }
+                    }
+                });
                 tvLiveDescription2.setText(liveInfo.getDescription());
                 addView(view);
                 break;
@@ -119,7 +143,7 @@ public class PostParentLayout extends RelativeLayout {
                 if (getChildAt(0) != null) {
                     removeAllViews();
                 }
-                ImageView ivivPlay = (ImageView) view.findViewById(R.id.ivPlay);
+//                ImageView ivivPlay = (ImageView) view.findViewById(R.id.ivPlay);
                 TextView tvTitle2 = (TextView) view.findViewById(R.id.tvTitle);
                 tvTitle2.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
                 view.setOnClickListener(new OnClickListener() {

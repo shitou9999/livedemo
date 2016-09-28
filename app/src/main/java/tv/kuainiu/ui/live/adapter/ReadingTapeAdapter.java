@@ -12,13 +12,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.Banner;
+import tv.kuainiu.modle.LiveItem;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
+import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.StringUtils;
 
 /**
  * @author nanck on 2016/7/29.
@@ -27,9 +35,9 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private Activity mContext;
-    private List<Banner> mBannerList = new ArrayList<>();
-    private List<Banner> mLiveList = new ArrayList<>();
-    private List<Banner> mLiveListList = new ArrayList<>();
+    private List<Banner> mBannerList;
+    private List<Banner> mLiveList;
+    private List<LiveItem> mLiveListList;
     int mBannerListSize = 0;
     int mLiveListSize = 0;
     int mLiveListListSize = 0;
@@ -43,22 +51,22 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     public void setBannerList(List<Banner> mBannerList) {
-        this.mBannerList.addAll(mBannerList);
+        this.mBannerList = mBannerList;
     }
 
     public void setLiveList(List<Banner> liveList) {
-        this.mLiveList.addAll(liveList);
+        this.mLiveList = liveList;
     }
 
-    public void setLiveListList(List<Banner> liveListList) {
-        this.mLiveListList.addAll(liveListList);
+    public void setLiveListList(List<LiveItem> liveListList) {
+        this.mLiveListList = liveListList;
     }
 
     @Override
     public int getItemCount() {
-        mBannerListSize = mBannerList.size() < 1 ? 0 : 1;
-        mLiveListSize = mLiveList.size() < 1 ? 0 : 1;
-        mLiveListListSize = mLiveListList.size() < 1 ? 0 : mLiveListList.size();
+        mBannerListSize = (mBannerList == null || mBannerList.size() < 1) ? 0 : 1;
+        mLiveListSize = (mLiveList == null || mLiveList.size() < 1) ? 0 : 1;
+        mLiveListListSize = (mLiveListList == null || mLiveListList.size() < 1) ? 0 : mLiveListList.size();
         return mBannerListSize + mLiveListSize + mLiveListListSize;
     }
 
@@ -132,7 +140,33 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //绑定Live
     public void onBindLiveItemViewHolder(ViewHolder holder, int position) {
         int currentPosition = position - mBannerListSize - mLiveListSize;
+        final LiveItem liveItem = mLiveListList.get(currentPosition);
         //TODO 绑定直播Item
+        ImageDisplayUtil.displayImage(mContext, holder.mIvIamge, liveItem.getThumb());
+        ImageDisplayUtil.displayImage(mContext, holder.civ_avatar, liveItem.getLive_thumb(), R.mipmap.default_avatar);
+        holder.mTvLiveing.setText("直播中");
+        holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+        holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(liveItem.getNickname()));
+        holder.mTvTeacherIntroduce.setText(StringUtils.replaceNullToEmpty(liveItem.getSlogan()));
+        holder.mTvTeacherTheme.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_title()));
+        holder.mIvIamge.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                //TODO 完善直播参数传递
+                LiveParameter liveParameter = new LiveParameter();
+                liveParameter.setFansNumber(0);
+                liveParameter.setIsFollow(0);
+                liveParameter.setIsSupport(0);
+                liveParameter.setLiveId(liveItem.getIns_id());
+                liveParameter.setLiveTitle(liveItem.getLive_title());
+                liveParameter.setOnLineNumber(liveItem.getOnline_num());
+                liveParameter.setTeacherAvatar("");
+                liveParameter.setRoomId(liveItem.getLive_roomid());
+                liveParameter.setSupportNumber(0);
+                liveParameter.setTeacherId(liveItem.getTeacher_id());
+
+                PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+            }
+        });
     }
 
     @Override
@@ -171,8 +205,9 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivIamge) ImageView mIvIamge;
+        @BindView(R.id.ivIsVip) ImageView ivIsVip;
         @BindView(R.id.tvLiveing) TextView mTvLiveing;
-        @BindView(R.id.ivLiveIng) ImageView mIvLiveIng;
+        @BindView(R.id.civ_avatar) CircleImageView civ_avatar;
         @BindView(R.id.tvLiveingNumber) TextView mTvLiveingNumber;
         @BindView(R.id.tv_teacher_name) TextView mTvTeacherName;
         @BindView(R.id.tv_teacher_introduce) TextView mTvTeacherIntroduce;

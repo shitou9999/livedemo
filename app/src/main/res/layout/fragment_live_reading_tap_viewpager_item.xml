@@ -9,6 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
-
+    <TextView
+        android:id="@+id/tvBannarTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#66000000"
+        android:padding="5dp"
+        android:textColor="@color/colorWhite"/>
     <include layout="@layout/include_liveing"/>
 </RelativeLayout>

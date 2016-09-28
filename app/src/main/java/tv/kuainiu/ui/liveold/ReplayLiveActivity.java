@@ -163,11 +163,11 @@ public class ReplayLiveActivity extends BaseActivity implements
     /**
      * 直播平台用户id
      */
-    private String userId = "C7B73B10BF4E7316";
+    private String userId = "514F2E686C96FF47";
     /**
      * 房间号
      */
-    private String roomId = "454153203D9994519C33DC5901307461";
+    private String roomId = "7h89Z1uHcCTEOTDsn6rQkCaj8lwaztWM";
 
     /**
      * 直播平台用户名

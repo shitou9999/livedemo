@@ -156,12 +156,12 @@ public class CustomViewPointFragment extends BaseFragment {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            ToastUtils.showToast(getActivity(), "老师信息解析失败");
+                            ToastUtils.showToast(getActivity(), "观点信息解析失败");
                         }
 
                     }
                 } else {
-                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取观点信息失败"));
                 }
                 break;
         }

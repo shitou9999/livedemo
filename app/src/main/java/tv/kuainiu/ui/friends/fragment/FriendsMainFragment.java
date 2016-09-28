@@ -3,7 +3,6 @@ package tv.kuainiu.ui.friends.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,42 +38,47 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_friends_main, container, false);
-        ButterKnife.bind(this, view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_friends_main, container, false);
+            ButterKnife.bind(this, view);
 
-        list.clear();
-        MyHeader header = new MyHeader("名家观点", "#ff0000");
-        list.add(header);
-        header = new MyHeader("解盘视频", "#ff0000");
-        list.add(header);
+            list.clear();
+            MyHeader header = new MyHeader("名家观点", "#ff0000");
+            list.add(header);
+            header = new MyHeader("解盘视频", "#ff0000");
+            list.add(header);
 //        header = new MyHeader("订阅主题", "#ff0000");
 //        list.add(header);
-        mHeaderTabView.setData(list);
-        mHeaderTabView.setCheckListen(new HeaderTabView.ICheckListen() {
-            @Override public void checked(int index) {
-                mViewPager.setCurrentItem(index);
-            }
-        });
+            mHeaderTabView.setData(list);
+            mHeaderTabView.setCheckListen(new HeaderTabView.ICheckListen() {
+                @Override public void checked(int index) {
+                    mViewPager.setCurrentItem(index);
+                }
+            });
 
-        SimpleTabFragmentPageAdapter adapter = new SimpleTabFragmentPageAdapter(getChildFragmentManager());
-        mViewPager.setAdapter(adapter);
-//        mViewPager.setOffscreenPageLimit(5);
+            SimpleTabFragmentPageAdapter adapter = new SimpleTabFragmentPageAdapter(getChildFragmentManager());
+            mViewPager.setAdapter(adapter);
+//            mViewPager.setOffscreenPageLimit(2);
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(TAG, "onPageScrolled position : " + position);
-            }
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
 
-            @Override public void onPageSelected(int position) {
-                mHeaderTabView.setChecked(position);
-            }
+                @Override public void onPageSelected(int position) {
+                    mHeaderTabView.setChecked(position);
+                }
 
-            @Override public void onPageScrollStateChanged(int state) {
+                @Override public void onPageScrollStateChanged(int state) {
 
-            }
-        });
+                }
+            });
+        }
 
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         return view;
     }
 

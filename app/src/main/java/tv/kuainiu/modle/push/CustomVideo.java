@@ -33,7 +33,7 @@ public class CustomVideo {
     private String url;
     private String user_id;
     private String description;
-    private String inputtime;
+    private long inputtime;
     private String video_id;
     private String support_num;
     private String comment_num;
@@ -107,11 +107,11 @@ public class CustomVideo {
         this.description = description;
     }
 
-    public String getInputtime() {
+    public long getInputtime() {
         return inputtime;
     }
 
-    public void setInputtime(String inputtime) {
+    public void setInputtime(long inputtime) {
         this.inputtime = inputtime;
     }
 

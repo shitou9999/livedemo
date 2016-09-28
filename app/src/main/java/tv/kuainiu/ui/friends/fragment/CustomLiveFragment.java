@@ -124,7 +124,7 @@ public class CustomLiveFragment extends BaseFragment {
     public void getData() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
-        OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIVE_LIST, ParamUtil.getParam(map), Action.CUSTOM_VIDEO_LIST, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIVE_LIST, ParamUtil.getParam(map), Action.CUSTOM_LIVE_LIST, CacheConfig.getCacheConfig());
     }
 
     private void dataBind(int size) {
@@ -135,7 +135,7 @@ public class CustomLiveFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
-            case CUSTOM_VIDEO_LIST:
+            case CUSTOM_LIVE_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);
                 }
@@ -158,12 +158,12 @@ public class CustomLiveFragment extends BaseFragment {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            ToastUtils.showToast(getActivity(), "老师信息解析失败");
+                            ToastUtils.showToast(getActivity(), "直播信息解析失败");
                         }
 
                     }
                 } else {
-                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取直播信息失败"));
                 }
                 break;
         }

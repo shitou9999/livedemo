@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.baidu.mobstat.SendStrategyEnum;
 import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,8 +36,9 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.fragment.FriendsMainFragment;
 import tv.kuainiu.ui.home.HomeFragment;
-import tv.kuainiu.ui.liveold.fragment.LiveFragment;
+import tv.kuainiu.ui.live.LiveMainFragment;
 import tv.kuainiu.ui.me.MeFragment;
+import tv.kuainiu.ui.me.activity.SettingActivity;
 import tv.kuainiu.ui.teachers.TeachersFragment;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
@@ -46,17 +48,20 @@ import tv.kuainiu.widget.NoSlideViewPager;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.vp_main) NoSlideViewPager mVpMain;
-    @BindView(R.id.tv_main_home) TextView mMainLive;
+    @BindView(R.id.tv_main_home) TextView mMainHome;
+    @BindView(R.id.tv_main_live) TextView mMainLive;
     @BindView(R.id.tv_main_friends) TextView mMainFriends;
     @BindView(R.id.tv_main_teacher) TextView mMainTeacher;
     @BindView(R.id.tv_main_me) TextView mMainMe;
 
-    @BindView(R.id.ll_main_home) LinearLayout ll_main_live;
+    @BindView(R.id.ll_main_home) LinearLayout ll_main_home;
+    @BindView(R.id.ll_main_live) LinearLayout ll_main_live;
     @BindView(R.id.ll_main_friends) LinearLayout ll_main_friends;
     @BindView(R.id.ll_main_teacher) LinearLayout ll_main_teacher;
     @BindView(R.id.ll_main_me) LinearLayout ll_main_me;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
+    public static boolean isOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        isOpened = true;
         initView();
         initData();
 
@@ -80,21 +86,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override protected void onResume() {
         super.onResume();
         requestInit();
+        MobclickAgent.onResume(this);
+        if (Constant.IS_FIRIST) {
+            SettingActivity.CheckAppUpdate(this);
+            Constant.IS_FIRIST = false;
+        }
     }
 
     private void initView() {
+        mMainHome.setTextColor(Theme.getColorSelectedStateList());
         mMainLive.setTextColor(Theme.getColorSelectedStateList());
         mMainFriends.setTextColor(Theme.getColorSelectedStateList());
         mMainTeacher.setTextColor(Theme.getColorSelectedStateList());
         mMainMe.setTextColor(Theme.getColorSelectedStateList());
-        ll_main_live.setSelected(true);
+        ll_main_home.setSelected(true);
     }
 
 
     private void initData() {
         mBaseFragments.clear();
         mBaseFragments.add(HomeFragment.newInstance(0));
-        mBaseFragments.add(new LiveFragment());
+        mBaseFragments.add(LiveMainFragment.newInstance());
         mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(TeachersFragment.newInstance());
         mBaseFragments.add(MeFragment.newInstance());
@@ -105,7 +117,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void switchFragment(int position) {
-        ll_main_live.setSelected(position == 0);
+        ll_main_home.setSelected(position == 0);
         ll_main_live.setSelected(position == 1);
         ll_main_friends.setSelected(position == 2);
         ll_main_teacher.setSelected(position == 3);
@@ -196,6 +208,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isOpened = false;
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }

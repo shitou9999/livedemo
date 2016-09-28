@@ -24,6 +24,7 @@ import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.NewsItem;
+import tv.kuainiu.ui.activity.WebActivity;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
@@ -208,7 +209,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mDividerItemDecoration.setColor(Color.parseColor("#00000000"));
         mDividerItemDecoration.setItemSize(mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
         holder.rc_hot_point.addItemDecoration(mDividerItemDecoration);
-        HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList,mOnItemClickListener);
+        HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList, mOnItemClickListener);
         holder.rc_hot_point.setAdapter(adp);
     }
 
@@ -227,13 +228,28 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         List<View> mList = new ArrayList<>();
         for (int i = 0; i < mBannerList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item, null);
-            ImageView mIvIamge = (ImageView) view.findViewById(R.id.ivIamge);//直播间图片
+            final ImageView mIvIamge = (ImageView) view.findViewById(R.id.ivIamge);//直播间图片
             TextView mTvLiveing = (TextView) view.findViewById(R.id.tvLiveing);//直播状态
+            TextView tvBannarTitle = (TextView) view.findViewById(R.id.tvBannarTitle);//直播状态
             TextView mTvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);//直播间人数
             RelativeLayout rl_state_living = (RelativeLayout) view.findViewById(R.id.rl_state_living);//直播间状态
             rl_state_living.setVisibility(View.GONE);
-            ImageDisplayUtil.displayImage(mContext, mIvIamge, mBannerList.get(i).thumb);
-            //TODO 绑定banner click事件
+            Banner banner = mBannerList.get(i);
+            view.setTag(banner);
+            if (TextUtils.isEmpty(banner.title)) {
+                tvBannarTitle.setVisibility(View.INVISIBLE);
+            } else {
+                tvBannarTitle.setVisibility(View.VISIBLE);
+            }
+            tvBannarTitle.setText(banner.title);
+            ImageDisplayUtil.displayImage(mContext, mIvIamge, banner.thumb);
+            //绑定banner click事件
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    Banner banner = (Banner) view.getTag();
+                    WebActivity.intoNewIntent(mContext, banner.url);
+                }
+            });
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);

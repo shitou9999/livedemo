@@ -208,18 +208,18 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
                 break;
 
             case 2:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
 
             default:
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
         }
 
@@ -259,18 +259,18 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
                 break;
 
             case 2:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
 
             default:
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
         }
 

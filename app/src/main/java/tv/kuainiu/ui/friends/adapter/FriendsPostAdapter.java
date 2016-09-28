@@ -15,10 +15,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.push.CustomVideo;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
@@ -94,95 +96,48 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataViewPoint(ViewHolder holder, int position) {
-        TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
-        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
+        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
 
-        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNews_info() != null ? teacherZoneDynamics.getNews_info().getNews_catname() : ""));
-
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss",info.getCreate_date()));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
-        switch (teacherZoneDynamics.getType()) {
-            case 1:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
-                break;
-
-            case 2:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
-                break;
-
-            default:
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
-                break;
-        }
-
-
-//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
-//        int height = holder.itemView.getHeight();
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
-//        holder.mViewFriendsPostLine.setLayoutParams(lp);
-//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
-
-
-        // Hide bottom live
+        holder.mPostParentLayout.setPostType(info.getNews_info());
+        //不是直播中就是黑色边框
+        holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+        holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
+        // Hide bottom line
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
     }
 
     private void dataVideo(ViewHolder holder, int position) {
-        CustomVideo teacherZoneDynamics = customVideoList.get(position);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
-        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getTitle()));
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getCatname()));
-        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        CustomVideo info = customVideoList.get(position);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getTitle()));
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss",info.getInputtime()));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
-        news_info.setType(teacherZoneDynamics.getType());
-        news_info.setNews_video_id(teacherZoneDynamics.getId());
-        news_info.setNews_title(teacherZoneDynamics.getDescription());
-        news_info.setNews_catid(teacherZoneDynamics.getCat_id());
-        news_info.setNews_inputtime(teacherZoneDynamics.getInputtime());
-        news_info.setVideo_id(teacherZoneDynamics.getVideo_id());
+        news_info.setType(info.getType());
+        news_info.setNews_video_id(info.getId());
+        news_info.setNews_title(info.getDescription());
+        news_info.setNews_catid(info.getCat_id());
+        news_info.setNews_inputtime(info.getInputtime());
+        news_info.setVideo_id(info.getVideo_id());
         holder.mPostParentLayout.setPostType(news_info);
-        switch (Integer.parseInt(teacherZoneDynamics.getType())) {
-            case 1:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
-                break;
-
-            case 2:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
-                break;
-
-            default:
-                holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
-                break;
-        }
-
-
-//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
-//        int height = holder.itemView.getHeight();
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
-//        holder.mViewFriendsPostLine.setLayoutParams(lp);
-//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
-
+        //不是直播中就是黑色边框
+        holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+        holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
 
         // Hide bottom live
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
@@ -190,47 +145,39 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataLive(ViewHolder holder, int position) {
-        LiveInfo teacherZoneDynamics = customLiveList.get(position);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
-        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAnchor()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getTitle()));
+        LiveInfo info = customLiveList.get(position);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getAnchor()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getTitle()));
         holder.mTvFriendsPostType.setText("");
-
+        holder.mTvFriendsPostTime.setText(DateUtil.formatDate(info.getCreate_date()));
         holder.mTvFriendsPostComment.setVisibility(View.GONE);
 
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport(), "0"));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         holder.mTvFriendsPostLike.setLayoutParams(lp);
-        holder.mPostParentLayout.setPostType(teacherZoneDynamics);
-        switch (FriendsPostAdapter.CUSTOM_LIVE) {
-            case 1:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
+        holder.mPostParentLayout.setPostType(info);
+        switch (info.getLive_status()) {
+            case Constans.LIVE_END://直播结束
+                holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_gred);
+                break;
+
+            case Constans.LIVE_ING://直播中
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time1);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
                 break;
-
-            case 2:
-//                ImageDisplayUtils.display(mContext, R.drawable.temp2, holder.mIvFriendsTemp);
+            case Constans.LiVE_UN_START://直播未开始
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
-
             default:
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time2);
+                holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
                 break;
         }
-
-
-//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
-//        int height = holder.itemView.getHeight();
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
-//        holder.mViewFriendsPostLine.setLayoutParams(lp);
-//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
-
-
         // Hide bottom live
         int v = position == customLiveList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
@@ -240,9 +187,6 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
         ViewHolder vh = new ViewHolder(view);
-//        int height = vh.itemView.getHeight();
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(2, height);
-//        vh.mViewFriendsPostLine.setLayoutParams(lp);
         return vh;
     }
 

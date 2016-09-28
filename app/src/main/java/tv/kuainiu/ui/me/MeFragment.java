@@ -35,10 +35,12 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.me.activity.AboutActivity;
 import tv.kuainiu.ui.me.activity.CollectActivity;
 import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
+import tv.kuainiu.ui.me.activity.SettingActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -51,6 +53,10 @@ import tv.kuainiu.widget.dialog.LoginPromptDialog;
 public class MeFragment extends BaseFragment {
 
     @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
+
+    @BindView(R.id.ivSetting) ImageView ivSetting;
+    @BindView(R.id.ivMessage) ImageView ivMessage;
+
     @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;
     @BindView(R.id.rlLogOut) RelativeLayout rlLogOut;
     @BindView(R.id.rlHomePage) RelativeLayout rlHomePage;
@@ -110,17 +116,17 @@ public class MeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_me, container, false);
+            ButterKnife.bind(this, view);
+            context = getActivity();
+            initView();
         }
         ViewGroup viewgroup = (ViewGroup) view.getParent();
         if (viewgroup != null) {
             viewgroup.removeView(view);
         }
-        ButterKnife.bind(this, view);
-        context = getActivity();
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initView();
         return view;
     }
 
@@ -151,7 +157,9 @@ public class MeFragment extends BaseFragment {
             }
         });
     }
-    @OnClick({R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder})
+
+    @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
+            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.rl_about})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ci_avatar:
@@ -185,6 +193,16 @@ public class MeFragment extends BaseFragment {
                 startActivity(intentCollect);
                 break;
             case R.id.rlRecorder:
+                break;
+            case R.id.rl_about:
+                Intent intentAbout = new Intent();
+                intentAbout.setClass(getActivity(), AboutActivity.class);
+                startActivity(intentAbout);
+                break;
+            case R.id.ivSetting:
+                Intent intentSettingActivity = new Intent();
+                intentSettingActivity.setClass(getActivity(), SettingActivity.class);
+                startActivity(intentSettingActivity);
                 break;
         }
     }

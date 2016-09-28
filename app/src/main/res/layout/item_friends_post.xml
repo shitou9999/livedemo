@@ -68,10 +68,10 @@
                 <ImageView
                     android:id="@+id/ivSupport"
                     android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentRight="true"
-                           android:layout_gravity="right"
-                           android:src="@mipmap/feyzin_btn"/>
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:src="@mipmap/feyzin_btn"/>
             </RelativeLayout>
 
             <TextView
@@ -107,9 +107,9 @@
                     android:id="@+id/tv_friends_post_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="基本面"
                     android:textColor="@color/colorGrey450"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    tools:text="模块名称"/>
 
                 <TextView
                     android:id="@+id/tv_friends_post_comment"

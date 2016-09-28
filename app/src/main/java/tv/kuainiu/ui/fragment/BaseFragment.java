@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class BaseFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,6 +78,9 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
 //        mListener = null;
     }
 

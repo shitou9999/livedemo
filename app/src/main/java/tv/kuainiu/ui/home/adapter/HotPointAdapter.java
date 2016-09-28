@@ -66,6 +66,7 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
         } else {
             holder.mTvFollowButton.setText("已关注");
         }
+        holder.mTvFollowType.setVisibility(View.INVISIBLE);
         holder.mTvFollowButton.setSelected(mHotPoint.getIs_follow() != 0);
         holder.mTvFollowButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -85,7 +86,7 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
                 //点赞
                 if (mOnItemClickListener != null) {
                     view.setTag(mHotPoint);
-                    view.setTag(R.id.tv_hot_point_support,holder.mTvHotPointSupport);
+                    view.setTag(R.id.tv_hot_point_support, holder.mTvHotPointSupport);
                     mOnItemClickListener.onClick(view);
                 }
 //

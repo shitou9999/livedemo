@@ -22,6 +22,7 @@ public class TeacherInfo {
     private String slogan;
     private String banner;
     private String introduce;
+    private String live_roomid;
     private int fans_count;
     private int is_follow;
 
@@ -88,5 +89,13 @@ public class TeacherInfo {
 
     public void setIs_follow(int is_follow) {
         this.is_follow = is_follow;
+    }
+
+    public String getLive_roomid() {
+        return live_roomid;
+    }
+
+    public void setLive_roomid(String live_roomid) {
+        this.live_roomid = live_roomid;
     }
 }

@@ -37,10 +37,10 @@
         android:layout_alignTop="@+id/tv_name"
         android:background="@drawable/selector_follow_button_bg"
         android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
         tools:text="@string/follow_new"
         />
 

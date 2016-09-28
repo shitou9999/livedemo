@@ -22,7 +22,7 @@
         <ImageView
             android:id="@+id/ivLiveIng"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/live_text_size"
+            android:layout_height="@dimen/live_number_text_size"
             android:layout_below="@+id/tvLiveing"
             android:layout_marginTop="2dp"
             android:scaleType="fitCenter"

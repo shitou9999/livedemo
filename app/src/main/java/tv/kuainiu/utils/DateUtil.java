@@ -36,6 +36,37 @@ public class DateUtil {
         }
     }
 
+    /**
+     * 日期格式为转换
+     *
+     * @param dateString
+     * @return
+     */
+    public static String formatDate(String dateString) {
+        return formatDate(dateString, "yyyy-MM-dd HH:mm:ss", "HH:mm");
+    }
+
+    /**
+     * 日期格式为转换
+     *
+     * @param inputDateString
+     * @param inputDateStringFormat
+     * @param outDateStringFormat
+     * @return
+     */
+    public static String formatDate(String inputDateString, String inputDateStringFormat, String outDateStringFormat) {
+        String result = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(inputDateStringFormat, Locale.CHINA);
+            Date date = sdf.parse(inputDateString);
+            SimpleDateFormat sdf2 = new SimpleDateFormat(outDateStringFormat, Locale.CHINA);
+            result = sdf2.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
+    }
 
     /**
      * 将日期格式的字符串转换成时间戳
@@ -157,9 +188,11 @@ public class DateUtil {
     public static String getDurationString(long value) {
         return getDurationString("yyyy-MM-dd", value);
     }
+
     public static String getDurationString(String value) {
         return getDurationString("yyyy-MM-dd", Long.parseLong(value));
     }
+
     /**
      * 计算两个日期相隔的分钟
      *

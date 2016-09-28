@@ -89,7 +89,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 
     private TeacherItem tempTeacher;
     private TextView tempCheckBox;
-    private boolean loading=false;
+    private boolean loading = false;
 
     public static TeachersFragment newInstance() {
         TeachersFragment fragment = new TeachersFragment();
@@ -108,22 +108,24 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (view == null) {
-        view = inflater.inflate(R.layout.fragment_teachers, container, false);
-//        }
-//        ViewGroup viewgroup = (ViewGroup) view.getParent();
-//        if (viewgroup != null) {
-//            viewgroup.removeView(view);
-//        }
-        ButterKnife.bind(this, view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_teachers, container, false);
+            ButterKnife.bind(this, view);
+            initVariate();
+            initListener();
+            initView();
+            initHttp();
+            registerBroadcast();
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
+
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initVariate();
-        initListener();
-        initView();
-        initHttp();
-        registerBroadcast();
+
         return view;
     }
 
@@ -203,7 +205,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
         // 下拉刷新
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                page=1;
+                page = 1;
                 initHttp();
             }
         });
@@ -321,7 +323,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventFetchTeacher(HttpEvent event) {
         if (Action.teacher_fg_fetch_follow_list == event.getAction()) {
-            if(page==1){
+            if (page == 1) {
                 mSrlRefresh.setRefreshing(false);
             }
             if (Constant.SUCCEED == event.getCode()) {

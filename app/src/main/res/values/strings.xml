@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">快牛TV</string>
+    <string name="app_name">快牛直播</string>
     <string name="action_settings">Settings</string>
     <string name="null_value">-</string>
     <!-- Main -->
@@ -30,11 +30,11 @@
     <!-- permission -->
     <string name="permission_tip_dialog_positive_button_text">去设置</string>
     <string name="permission_tip_dialog_title">权限申请</string>
-    <!--<string name="permission_tip_dialog_message_nor">在设置-应用-快牛TV-权限中开启%s权限，以正常使用%s等功能</string>-->
+    <!--<string name="permission_tip_dialog_message_nor">在设置-应用-快牛直播-权限中开启%s权限，以正常使用%s等功能</string>-->
     <string name="permission_tip_dialog_message_sms">本APP使用短信权限为您自动填写验证码。拒绝该权限不会影响本APP的正常使用。点击授权&#8212;&#8212;不再询问可屏蔽该消息。</string>
-    <string name="permission_tip_dialog_message_camera">请在设置-快牛TV-权限中开启相机权限，以正常使用拍照、扫描二维码等功能。</string>
-    <string name="permission_tip_dialog_message_storage">本APP使用存储空间权限缓存数据、下载视频、记录应用日志。\n请在设置-快牛TV-权限中开启存储空间权限。</string>
-    <string name="permission_tip_dialog_message_phone">本APP使用电话权限确定唯一的设备ID，以保证推送功能正常使用、方便直接拨打快牛TV客服电话。不会拨打其他号码或终止通话。\n请在设置-快牛TV-权限中开启电话权限。</string>
+    <string name="permission_tip_dialog_message_camera">请在设置-快牛直播-权限中开启相机权限，以正常使用拍照、扫描二维码等功能。</string>
+    <string name="permission_tip_dialog_message_storage">本APP使用存储空间权限缓存数据、下载视频、记录应用日志。\n请在设置-快牛直播-权限中开启存储空间权限。</string>
+    <string name="permission_tip_dialog_message_phone">本APP使用电话权限确定唯一的设备ID，以保证推送功能正常使用、方便直接拨打快牛TV客服电话。不会拨打其他号码或终止通话。\n请在设置-快牛直播-权限中开启电话权限。</string>
 
     <!-- prompt -->
     <string name="dialog_login_prompt">您还没有登录 , 请先登录 .</string>
@@ -331,10 +331,10 @@
     <!--关于-->
     <!-- XXX: Remove or change this placeholder text -->
     <string name="title_activity_register1">Register1Activity</string>
-    <string name="company">上海股轩文化创意有限公司</string>
-    <string name="copyright_info">&#169;2016 iguxuan.com.all rights reserved</string>
-    <string name="hot_line">400&#8211;688&#8211;7676</string>
-    <string name="website">http://www.iguxuan.com</string>
-    <string name="temp_about_content">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;爱股轩APP为用户提供知名金融证券行业专家讲师原创的大盘分析、证券讲座、在线培训等内容，通过实施推送机制，以视频和文章等形式帮助用户提升金融证券分析能力、提高客户对市场的认知度、培养对市场的敏感性，在市场上捕捉到更多的契机。</string>
+    <string name="company">北京玩控网络科技有限公司</string>
+    <string name="copyright_info">&#169;2016 kuianiu.tv.all rights reserved</string>
+    <string name="hot_line">010&#8211;58295196</string>
+    <string name="website">http://www.kuainiu.tv</string>
+    <string name="temp_about_content">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;快牛直播聚合资深商务牛人，为您创建价值资讯空间，线上点播，直播，同步查看数据分析，多维度分析揭秘，多视角透析行情；快牛直播，让价值讯息传递变得更简单！</string>
 
 </resources>

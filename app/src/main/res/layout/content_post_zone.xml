@@ -62,10 +62,10 @@
                   android:layout_below="@+id/tvTheme"
                   android:layout_marginTop="10dp"
                   android:background="@drawable/selector_bg_blue2"
-                  android:paddingBottom="5dp"
-                  android:paddingLeft="10dp"
-                  android:paddingRight="10dp"
-                  android:paddingTop="5dp"
+                  android:paddingBottom="2dp"
+                  android:paddingLeft="5dp"
+                  android:paddingRight="5dp"
+                  android:paddingTop="2dp"
                   android:textColor="@color/colorWhite"
                   android:textSize="@dimen/text_size_small"
                   tools:text="王丽"/>
@@ -79,10 +79,10 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/selector_follow_button_bg"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
             tools:text="@string/follow_new"
         />
 
@@ -94,10 +94,10 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/tv_follow_button"
             android:gravity="center"
-            android:paddingBottom="5dp"
+            android:paddingBottom="2dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:paddingTop="2dp"
             tools:text="2.9万人关注"
         />
 

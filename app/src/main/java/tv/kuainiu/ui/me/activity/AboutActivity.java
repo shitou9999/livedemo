@@ -15,19 +15,24 @@ import android.widget.TextView;
 
 import com.google.gson.JsonParseException;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.Company;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.NetUtils;
+import tv.kuainiu.utils.StringUtils;
 
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
@@ -54,6 +59,10 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         fetchAboutInfo();
         String version = getResources().getString(R.string.value_version);
         version = String.format(version, OKHttpUtils.Utils.getAppVersionName(this));
@@ -206,18 +215,17 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
             if (SUCCEED == event.getCode()) {
                 try {
                     JSONObject jsonObject = event.getData().optJSONObject("data");
-                    String weChat = jsonObject.optString("weixin");
-                    mTvWeChat.setText(weChat);
+                    DataConverter<Company> dc = new DataConverter<>();
+                    Company mCompany = dc.JsonToObject(jsonObject.toString(), Company.class);
+                    mTvWeChat.setText(StringUtils.replaceNullToEmpty(mCompany.getWeixin(), "kuainiu"));
+                    mTvWebsite.setText(StringUtils.replaceNullToEmpty(mCompany.getWeb_url(), "kuainiu"));
 
-                    String url = jsonObject.optString("web_url");
-                    mTvWebsite.setText(url);
-
-                    String phone = jsonObject.optString("phone");
+                    String phone = StringUtils.replaceNullToEmpty(mCompany.getPhone(), "010-58295196");
                     SpannableString sp = new SpannableString(phone);
                     sp.setSpan(new UnderlineSpan(), 0, phone.length(), SpannedString.SPAN_COMPOSING);
                     mTvHotLine.setText(sp);
 
-                    String content = jsonObject.optString("content");
+                    String content = StringUtils.replaceNullToEmpty(mCompany.getContent(), "快牛直播聚合资深商务牛人，为您创建价值资讯空间，线上点播，直播，同步查看数据分析，多维度分析揭秘，多视角透析行情；快牛直播，让价值讯息传递变得更简单！");
                     mTvContent.setText(content);
 
                 } catch (JsonParseException | NullPointerException e) {

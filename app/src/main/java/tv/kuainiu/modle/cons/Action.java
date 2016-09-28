@@ -172,4 +172,6 @@ public enum Action {
     CUSTOM_VIDEO_LIST,   // 圈子-解盘视频
     SUPPORT_DYNAMICS,   // 文章动态点赞
     CUSTOM_LIVE_LIST,   // 圈子-直播
+    live_zhi_bo_kan_pan,   // 直播看盘
+    live_zhi_bo_yu_gao,   // 直播预告
 }

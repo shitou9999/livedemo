@@ -13,20 +13,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.R;
-import tv.kuainiu.ui.live.fragment.ConsultationFragment;
-import tv.kuainiu.ui.live.fragment.OpenClassFragment;
-import tv.kuainiu.ui.live.fragment.ReadingTapeFragment;
+import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.live.fragment.LivePreviewFragment;
+import tv.kuainiu.ui.live.fragment.ReadingTapeFragment;
 import tv.kuainiu.widget.HeaderTabView;
 import tv.kuainiu.widget.MyHeader;
 
 /**
  * 直播模块：
- * 1.今日看盘（ReadingTapeFragment）；
- * 2.公开课（OpenClassFragment）；
- * 3.咨询（ConsultationFragment）
+ * 1.直播看盘（ReadingTapeFragment）；
+ * 2.直播预告（ReadingTapeFragment）；
  */
 public class LiveMainFragment extends BaseFragment {
     private static final String TAG = "FriendsMainFragment";
@@ -34,6 +32,7 @@ public class LiveMainFragment extends BaseFragment {
     @BindView(R.id.vp_fragment_live_main) ViewPager mViewPager;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
+    List<MyHeader> list = new ArrayList<>();
 
     public static LiveMainFragment newInstance() {
         Bundle args = new Bundle();
@@ -46,35 +45,32 @@ public class LiveMainFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_live_main, container, false);
+            ButterKnife.bind(this, view);
+            initView();
+            initData();
+            initListener();
         }
         ViewGroup viewgroup = (ViewGroup) view.getParent();
         if (viewgroup != null) {
             viewgroup.removeView(view);
         }
-        ButterKnife.bind(this, view);
-        initView();
-        initData();
-        initListener();
         return view;
     }
 
     private void initView() {
 
-        List<MyHeader> list = new ArrayList<>();
+        list.clear();
         MyHeader header = new MyHeader("直播看盘", "#ff0000");
         list.add(header);
-        header = new MyHeader("  公开课  ", "#ff0000");
-        list.add(header);
-        header = new MyHeader("  咨询  ", "#ff0000");
+        header = new MyHeader("直播预告", "#ff0000");
         list.add(header);
         mHeaderTabView.setData(list);
     }
 
     private void initData() {
         mBaseFragments.clear();
-        mBaseFragments.add(ReadingTapeFragment.newInstance(0));//今日看盘
-        mBaseFragments.add(OpenClassFragment.newInstance(0));//公开课
-        mBaseFragments.add(ConsultationFragment.newInstance(0));//咨询
+        mBaseFragments.add(ReadingTapeFragment.newInstance(0));//直播看盘
+        mBaseFragments.add(LivePreviewFragment.newInstance(1));//直播预告
 
         mViewPager.setAdapter(new MainActivity.TabFragmentPagerAdapter(getChildFragmentManager(), mBaseFragments));
 //        mViewPager.setOffscreenPageLimit(mBaseFragments.size() - 1);

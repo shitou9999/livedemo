@@ -2,7 +2,6 @@ package tv.kuainiu.ui.liveold.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -37,7 +36,6 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.liveold.LiveHttpUtil;
-import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LivingInfo;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -192,9 +190,9 @@ public class LiveFragment extends BaseFragment implements View.OnClickListener, 
             DebugUtils.showToast(context, R.string.live_toast_not_started);
             return;
         }
-        Intent intent = new Intent(context, PlayLiveActivity.class);
-        intent.putExtra(ARG_LIVING, mLivingInfo);
-        startActivity(intent);
+//        Intent intent = new Intent(context, PlayLiveActivity.class);
+//        intent.putExtra(ARG_LIVING, mLivingInfo);
+//        startActivity(intent);
     }
 
 

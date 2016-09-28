@@ -3,51 +3,40 @@
               android:layout_width="match_parent"
               android:layout_height="56dp"
               android:orientation="horizontal">
-
-    <FrameLayout
+    <TextView
+        android:id="@+id/tvLiveState"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:background="@color/colorRed500">
+        android:layout_gravity="center"
+        android:background="@color/colorRed500"
+        android:gravity="center"
+        android:text="18:49\n直播"
+        android:textColor="@color/colorWhite"/>
 
-        <TextView
-            android:id="@+id/tvLiveState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="18:49\n直播"
-            android:textColor="@color/colorWhite"/>
-
-    </FrameLayout>
-
-    <FrameLayout
+    <TextView
+        android:id="@+id/tvLiveDescription"
         android:layout_width="0dp"
         android:layout_height="56dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:layout_weight="1"
-        android:background="@color/colorGrey300">
-
-        <TextView
-            android:id="@+id/tvLiveDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:minLines="2"
-            android:paddingEnd="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingStart="8dp"
-            android:text="鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！"
-            android:textColor="@color/colorGrey800"
-            />
-
-    </FrameLayout>
+        android:background="@color/colorGrey200"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:text="鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！"
+        android:textColor="@color/colorGrey800"
+    />
 
     <View
+        android:id="@+id/vLine"
         android:layout_width="6dp"
         android:layout_height="match_parent"
         android:background="@color/colorRed500"
-        />
+    />
 
 </LinearLayout>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:showIn="@layout/activity_setting">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/def_option_height"
+            android:background="@color/colorGrey200"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/system_setting"
+            android:textColor="@color/colorGrey500"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingAllowWifi"
+            style="@style/IGXDefault_Option_ViewGroup"
+            android:background="@null">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/allow_not_wifi"
+                android:textSize="@dimen/text_size_small"/>
+
+
+            <tv.kuainiu.widget.SwitchView
+                android:id="@+id/switch_allow_notWifi"
+                android:layout_width="56dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingSharpness"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/cache_sharpness"
+                android:textSize="@dimen/text_size_small"/>
+
+
+            <TextView
+                android:id="@+id/tv_settingSharpness"
+                style="@style/MeOptionStyleForArrows"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableEnd="@mipmap/rightarrow_gray"
+                android:drawablePadding="@dimen/small_margin"
+                android:drawableRight="@mipmap/rightarrow_gray"
+                android:gravity="center_vertical"
+                android:text="@string/sharpness_standard"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/def_option_height"
+            android:background="@color/colorGrey200"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/other"
+            android:textColor="@color/colorGrey500"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingGuidePage"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/guide_page"
+                android:textSize="@dimen/text_size_small"/>
+
+
+            <ImageView style="@style/MeOptionStyleForArrows"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingFeedback"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/feedback"
+                android:textSize="@dimen/text_size_small"/>
+
+
+            <ImageView style="@style/MeOptionStyleForArrows"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingScore"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/give_me_the_score"
+                android:textSize="@dimen/text_size_small"/>
+
+            <ImageView style="@style/MeOptionStyleForArrows"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingShareApp"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/share_app"
+                android:textSize="@dimen/text_size_small"/>
+
+
+            <ImageView style="@style/MeOptionStyleForArrows"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_clear_caech"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="清除缓存"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:id="@+id/tv_caech_size"
+                style="@style/MeOptionStyleForArrows"
+                android:drawableEnd="@mipmap/rightarrow_gray"
+                android:drawablePadding="@dimen/small_margin"
+                android:drawableRight="@mipmap/rightarrow_gray"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/text_size_small"
+                tools:text="0.88M"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingCheckUpdate"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/check_update"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:id="@+id/tv_version_state"
+                style="@style/MeOptionStyleForArrows"
+                android:drawableEnd="@mipmap/rightarrow_gray"
+                android:drawablePadding="@dimen/small_margin"
+                android:drawableRight="@mipmap/rightarrow_gray"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/text_size_small"
+                tools:text="2.1.1"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_settingAboutMe"
+            style="@style/IGXDefault_Option_ViewGroup">
+
+            <TextView
+                style="@style/MeOptionStyleForTextView"
+                android:text="@string/about_we"
+                android:textSize="@dimen/text_size_small"/>
+
+            <ImageView style="@style/MeOptionStyleForArrows"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/def_DividerColor"/>
+    </LinearLayout>
+
+</ScrollView>

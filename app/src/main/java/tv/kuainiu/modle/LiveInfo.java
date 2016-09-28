@@ -6,6 +6,7 @@ package tv.kuainiu.modle;
 
 public class LiveInfo {
 
+
     /**
      * live_msg : 已结束
      * ins_id : 0
@@ -46,7 +47,7 @@ public class LiveInfo {
     private String playback_id;
     private String description;
     private int is_supported;
-    private int live_status;
+    private int live_status;//1直播结束，2直播中，3直播未开始
     private String user_id;
     private int is_follow;
     private String support;

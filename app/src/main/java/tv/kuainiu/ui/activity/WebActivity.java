@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.UserHttpRequest;
@@ -61,6 +62,7 @@ public class WebActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        ButterKnife.bind(this);
         initContentView();
     }
 

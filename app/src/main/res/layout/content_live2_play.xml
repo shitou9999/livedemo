@@ -21,12 +21,12 @@
             android:layout_centerInParent="true"
             />
 
-        <com.iguxuan.widgets.BarrageLayout
+        <tv.kuainiu.widget.BarrageLayout
             android:id="@+id/bl_barrage2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-        </com.iguxuan.widgets.BarrageLayout>
+        </tv.kuainiu.widget.BarrageLayout>
 
         <RelativeLayout
             android:id="@+id/rl_control2"

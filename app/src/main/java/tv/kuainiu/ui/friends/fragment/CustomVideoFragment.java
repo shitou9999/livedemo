@@ -155,12 +155,12 @@ public class CustomVideoFragment extends BaseFragment {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            ToastUtils.showToast(getActivity(), "老师信息解析失败");
+                            ToastUtils.showToast(getActivity(), "解盘信息解析失败");
                         }
 
                     }
                 } else {
-                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取老师信息失败"));
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取解盘信息失败"));
                 }
                 break;
         }

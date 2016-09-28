@@ -96,21 +96,19 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+            ButterKnife.bind(this, view);
+            initListener();
+            initView();
+            dataBind();
+            initData();
         }
         ViewGroup viewgroup = (ViewGroup) view.getParent();
         if (viewgroup != null) {
             viewgroup.removeView(view);
         }
-        ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        initListener();
-        initView();
-        dataBind();
-        initData();
-
-
         return view;
     }
 

@@ -18,7 +18,7 @@ public class TeacherZoneDynamicsInfo {
     private String news_catid;
     private String news_catname;
     private String news_thumb;
-    private String news_inputtime;
+    private long news_inputtime;
     private String type;
     private String news_title;
     private String news_video_id;
@@ -49,11 +49,11 @@ public class TeacherZoneDynamicsInfo {
         this.news_thumb = news_thumb;
     }
 
-    public String getNews_inputtime() {
+    public long getNews_inputtime() {
         return news_inputtime;
     }
 
-    public void setNews_inputtime(String news_inputtime) {
+    public void setNews_inputtime(long news_inputtime) {
         this.news_inputtime = news_inputtime;
     }
 
