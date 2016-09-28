@@ -252,7 +252,8 @@ public class HomeFragment extends BaseFragment {
 
                         mHomeAdapter.setBannerList(mBannerList);
                         try {
-                            mHomeAdapter.notifyItemChanged(0);
+//                            mHomeAdapter.notifyItemChanged(0);
+                            mHomeAdapter.notifyDataSetChanged();
                         } catch (IllegalStateException e) {
                             e.printStackTrace();
                         }
@@ -280,7 +281,8 @@ public class HomeFragment extends BaseFragment {
 
                             mHomeAdapter.setHotPointList(mHotPonitList);
                             try {
-                                mHomeAdapter.notifyItemChanged(4);
+//                                mHomeAdapter.notifyItemChanged(4);
+                                mHomeAdapter.notifyDataSetChanged();
                             } catch (IllegalStateException e) {
                                 e.printStackTrace();
                             }
@@ -313,7 +315,8 @@ public class HomeFragment extends BaseFragment {
                             mHomeAdapter.setNewsList(mNewsItemList);
                             try {
                                 loading = false;
-                                mHomeAdapter.notifyItemRangeInserted(startIndex, tempNewsList.size());
+//                                mHomeAdapter.notifyItemRangeInserted(startIndex, tempNewsList.size());
+                                mHomeAdapter.notifyDataSetChanged();
                             } catch (IllegalStateException e) {
                                 e.printStackTrace();
                             }

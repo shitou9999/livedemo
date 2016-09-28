@@ -62,11 +62,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     private List<NewsItem> mNewList = new ArrayList<>();
 
-    int mBannerListSize = 1;
-    int mStockIndexListSize = 1;
-    int mLiveListSize = 1;
-    int mHotPointListSize = 1;
-    int mNewListSize = 0;
     private static final int BANNER = 7;
     private static final int STOCK_INDEX = 1;
     private static final int LIVE = 2;
@@ -75,9 +70,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TEXT_HOT_NEW = 5;
     private static final int HOT_NEW = 6;
     private OnItemClickListener mOnItemClickListener;
+    List<Integer> types = new ArrayList<>();
 
     public HomeAdapter(Activity context) {
         mContext = context;
+    }
+
+    public List<Integer> getTypes() {
+        return types;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -109,60 +109,36 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        mNewListSize = mNewList.size() < 1 ? 0 : mNewList.size();
-        return mBannerListSize + mStockIndexListSize + mLiveListSize + mHotPointListSize + mNewListSize + 2;
+        types.clear();
+        if (mBannerList.size() > 0) {
+            types.add(BANNER);
+        }
+        if (mStockIndexList.size() > 0) {
+            types.add(STOCK_INDEX);
+        }
+        if (mLiveList.size() > 0) {
+            types.add(LIVE);
+        }
+        if (mHotPointList.size() > 0) {
+            types.add(TEXT_HOT_POINT);
+            types.add(HOT_POINT);
+        }
+        if (mNewList.size() > 0) {
+            types.add(TEXT_HOT_NEW);
+        }
+        int mNewListSize = mNewList.size() < 1 ? 0 : mNewList.size();
+        return types.size() + mNewListSize;
     }
 
 
-    @Override public int getItemViewType(int position) {
-//        if (mBannerListSize > 0 && position == 0) {
-//            return BANNER;
-//        } else if (mStockIndexListSize > 0 && position <= 1) {
-//            return STOCK_INDEX;
-//        } else if (mLiveListSize > 0 && position <= 2) {
-//            return LIVE;
-//        } else if (mHotPointListSize > 0 && position <= 3) {
-//            return TEXT_HOT_POINT;
-//        } else if (mHotPointListSize > 0 && position <= 4) {
-//            return HOT_POINT;
-//        } else if (position <= 5) {
-//            return TEXT_HOT_NEW;
-//        }
+    @Override
+    public int getItemViewType(int position) {
         int type = 0;
-        switch (position) {
-            case 0:
-//                if (mBannerListSize > 0) {
-//                    type = BANNER;
-//                }else{
-//                    type = STOCK_INDEX;
-//                }
-                type = BANNER;
-                break;
-            case 1:
-//                if(mBannerListSize>0) {
-//                    type = STOCK_INDEX;
-//                }else{
-//                    type = LIVE;
-//                }
-                type = STOCK_INDEX;
-                break;
-            case 2:
-                type = LIVE;
-                break;
-            case 3:
-                type = TEXT_HOT_POINT;
-                break;
-            case 4:
-                type = HOT_POINT;
-                break;
-            case 5:
-                type = TEXT_HOT_NEW;
-                break;
-            default:
-                type = HOT_NEW;
-                break;
+        if (position < types.size()) {
+            type = types.get(position);
+        } else {
+            type = HOT_NEW;
         }
-
         return type;
     }
 
@@ -245,7 +221,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ImageDisplayUtil.displayImage(mContext, mIvIamge, banner.thumb);
             //绑定banner click事件
             view.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     Banner banner = (Banner) view.getTag();
                     WebActivity.intoNewIntent(mContext, banner.url);
                 }
@@ -305,7 +282,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //绑定新闻
     public void onBindNewsItemViewHolder(ViewNewHolder holder, int position) {
-        int currentPosition = position - mBannerListSize - mStockIndexListSize - mLiveListSize - mHotPointListSize - 2;
+        int currentPosition = position - types.size();
         if (currentPosition > -1 && currentPosition < mNewList.size()) {
             final NewsItem newsItem = mNewList.get(currentPosition);
             final String videoId = newsItem.getUpVideoId();
@@ -314,7 +291,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(newsItem.getDescription()));
             ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(newsItem.getThumb()));
             holder.rootview.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     if (TextUtils.isEmpty(videoId)) {
                         PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId(), newsItem.getCatname());
                     } else {
@@ -367,8 +345,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //banner ViewPager
     static class BannerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.vpReadingTap) ViewPager mVpReadingTap;
-        @BindView(R.id.indicator) CircleIndicator mIndicator;
+        @BindView(R.id.vpReadingTap)
+        ViewPager mVpReadingTap;
+        @BindView(R.id.indicator)
+        CircleIndicator mIndicator;
 
         public BannerViewHolder(View itemView) {
             super(itemView);
@@ -378,7 +358,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //热点指数
     static class HotPointHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.rc_hot_point) RecyclerView rc_hot_point;
+        @BindView(R.id.rc_hot_point)
+        RecyclerView rc_hot_point;
 
         public HotPointHolder(View itemView) {
             super(itemView);
@@ -388,7 +369,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //文字Item
     static class TextViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_home_item_text) TextView tvHomeItemText;
+        @BindView(R.id.tv_home_item_text)
+        TextView tvHomeItemText;
 
         public TextViewHolder(View itemView) {
             super(itemView);
@@ -398,10 +380,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //新闻Item
     static class ViewNewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivNewIamge) ImageView mIvNewIamge;
-        @BindView(R.id.tvNewTitle) TextView mTvNewTitle;
-        @BindView(R.id.tvNewContent) TextView mTvNewContent;
-        @BindView(R.id.tvType) TextView tvType;
+        @BindView(R.id.ivNewIamge)
+        ImageView mIvNewIamge;
+        @BindView(R.id.tvNewTitle)
+        TextView mTvNewTitle;
+        @BindView(R.id.tvNewContent)
+        TextView mTvNewContent;
+        @BindView(R.id.tvType)
+        TextView tvType;
         View rootview;
 
         public ViewNewHolder(View itemView) {
