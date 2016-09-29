@@ -2,7 +2,6 @@ package tv.kuainiu.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -48,7 +47,7 @@ import static tv.kuainiu.modle.cons.Constant.SUCCEED;
  * @ClassName GuideActivity
  * @Description (引导页)
  */
-public class GuideActivity extends FragmentActivity implements
+public class GuideActivity extends BaseActivity implements
         OnClickListener, OnPageChangeListener {
     private GuideAdapter vpAdapter;
     private List<View> views = new ArrayList<View>();

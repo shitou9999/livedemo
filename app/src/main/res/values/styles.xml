@@ -87,7 +87,8 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="full_image_progressbar" parent="@android:style/Widget.ProgressBar.Large">
+    <style name="full_image_progressbar"
+           parent="@android:style/Widget.ProgressBar.Large">
         <item name="android:indeterminateDrawable">
             @drawable/common_progress_large_holo
         </item>
@@ -192,5 +193,11 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:background">@drawable/selector_option_normal</item>
+    </style>
+    <style name="view_gone_visibility">
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="view_invisibility">
+        <item name="android:visibility">invisible</item>
     </style>
 </resources>

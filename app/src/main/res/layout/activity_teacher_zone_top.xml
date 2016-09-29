@@ -23,7 +23,8 @@
         android:layout_height="32dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible">
+        style="@style/view_gone_visibility"
+       >
 
         <TextView
             android:layout_width="wrap_content"

@@ -175,8 +175,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
         holder.mTvFollowButton.setOnClickListener(this);
-        holder.mTvFollowButton.setTag(R.id.tv_follow_button,teacherInfo);
-        holder.mTvFollowButton.setTag(R.id.tv_follow_number,holder.mTvFollowNumber);
+        holder.mTvFollowButton.setTag(R.id.tv_follow_button, teacherInfo);
+        holder.mTvFollowButton.setTag(R.id.tv_follow_number, holder.mTvFollowNumber);
     }
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
@@ -296,10 +296,10 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case TOP:
                 view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_top, parent, false);
                 TopViewHolder topViewHolder = new TopViewHolder(view);
-                int screenWidth= ScreenUtils.getScreenWidth(mContext);
+                int screenWidth = ScreenUtils.getScreenWidth(mContext);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, (int) (screenWidth / 1.67));
                 topViewHolder.ivBanner.setLayoutParams(lp);
-                vh=topViewHolder;
+                vh = topViewHolder;
                 break;
             case TAB:
                 view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_tab, parent, false);
@@ -311,12 +311,14 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 int margin = mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
                 layoutParams.setMargins(margin, 0, margin, 0);
                 view.setLayoutParams(layoutParams);
-                vh = new BodyViewHolder(view);
+                BodyViewHolder bodyViewHolder = new BodyViewHolder(view);
+                bodyViewHolder.mCivFriendsPostHead.setVisibility(View.GONE);
+                bodyViewHolder.mTvFriendsPostNickname.setVisibility(View.GONE);
+                vh = bodyViewHolder;
                 break;
         }
         return vh;
     }
-
 
 
     //banner ViewPager
@@ -365,11 +367,13 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
+
     @Override public void onClick(View view) {
         if (null != mOnClickListener) {
             mOnClickListener.onClick(view, view.getTag());
         }
     }
+
     public interface OnClickListener {
         void onClick(View v, Object o);
     }

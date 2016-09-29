@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBaseFragments.add(MeFragment.newInstance());
 
         mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
-//        mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
+        mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
         switchFragment(0);
     }
 
@@ -201,6 +201,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     PreferencesUtils.putInt(this, Constant.MSG_NUM, initInfo.getMsg_num());
 //                    localBroadcastManager.sendBroadcast(new Intent(Constant.INTENT_ACTION_ACTIVITY_MSG_NUM));
                 }
+                break;
+            case switch_teacher_fragment:
+                switchFragment(3);
                 break;
         }
     }

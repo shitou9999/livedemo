@@ -351,6 +351,7 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    style="@style/view_invisibility"
                     android:layout_weight="2">
 
                     <Button
@@ -382,96 +383,6 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/activity_horizontal_margin">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:src="@mipmap/data_push_ic"
-                        />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="推送"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="12sp"/>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rlFollow"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:src="@mipmap/follow_ic"
-                        />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="关注"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="12sp"/>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rlSub"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:src="@mipmap/rss_ic"
-                        />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="订阅"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="12sp"/>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rlDown"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:src="@mipmap/download_ic"
-                        />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="下载"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="12sp"/>
-                    </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/rlCollect"
@@ -495,10 +406,104 @@
                             android:textColor="@color/colorGrey333333"
                             android:textSize="12sp"/>
                     </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlFollow"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@mipmap/follow_ic"
+                        />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="关注"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        style="@style/view_invisibility"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@mipmap/data_push_ic"
+                        />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="推送"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlSub"
+                        android:layout_width="0dp"
+                        style="@style/view_invisibility"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@mipmap/rss_ic"
+                        />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="订阅"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlDown"
+                        android:layout_width="0dp"
+                        style="@style/view_invisibility"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@mipmap/download_ic"
+                        />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="下载"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+
+
 
                     <RelativeLayout
                         android:id="@+id/rlRecorder"
                         android:layout_width="0dp"
+                        style="@style/view_invisibility"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
@@ -522,6 +527,7 @@
                 <!--签约-->
                 <RelativeLayout
                     android:id="@+id/rl_institution"
+                    style="@style/view_gone_visibility"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/colorWhite">
@@ -572,6 +578,7 @@
                 <!--直播-->
                 <RelativeLayout
                     android:id="@+id/rl_live"
+                    style="@style/view_gone_visibility"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="10dp"
@@ -629,6 +636,7 @@
                 <!--预约-->
                 <RelativeLayout
                     android:id="@+id/rl_appointment"
+                    style="@style/view_gone_visibility"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/colorWhite">

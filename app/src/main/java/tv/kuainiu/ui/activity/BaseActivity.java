@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,6 +24,7 @@ import tv.kuainiu.event.UserEvent;
 import tv.kuainiu.modle.InitInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.DialogUtils;
@@ -56,6 +58,7 @@ public class BaseActivity extends AppCompatActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        MobclickAgent.onResume(this);
     }
 //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onRequestError(HttpEvent event) {
@@ -68,10 +71,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override protected void onStop() {
-        super.onStop();
-        if (EventBus.getDefault().isRegistered(this)) {
+       super.onStop();
+        if (!(this instanceof MainActivity) && EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        MobclickAgent.onPause(this);
     }
 
     /**
