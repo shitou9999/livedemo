@@ -125,7 +125,7 @@ public class ShareUtils {
         public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
             if (SinaWeibo.NAME.equals(platform.getName())) {
                 // 新浪微博不支持Title字段
-                paramsToShare.setText("#爱股轩看盘#".concat(paramsToShare.getText()).concat(paramsToShare.getUrl()));
+                paramsToShare.setText("#快牛直播#".concat(paramsToShare.getText()).concat(paramsToShare.getUrl()));
             }
         }
     }

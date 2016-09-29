@@ -29,6 +29,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.LiveHttpUtil;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -36,6 +37,7 @@ import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -46,6 +48,7 @@ import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
@@ -64,6 +67,7 @@ public class HomeFragment extends BaseFragment {
     private HomeAdapter mHomeAdapter;
 
     private List<Banner> mBannerList = new ArrayList<>();
+    public List<LiveInfo> mLiveItemList = new ArrayList<>();
     private List<HotPonit> mHotPonitList = new ArrayList<>();
     private List<NewsItem> mNewsItemList = new ArrayList<>();
     private int HotPointPage = 1;
@@ -130,6 +134,7 @@ public class HomeFragment extends BaseFragment {
 
     private void getBannerData() {
         OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar, CacheConfig.getCacheConfig());
+        LiveHttpUtil.liveIndex(getActivity(), "1", 1,1, Action.live_zhi_bo_home);
     }
 
     private void getHotPoint() {
@@ -347,6 +352,29 @@ public class HomeFragment extends BaseFragment {
                     mTvFollowButton.setTag(mHotPoint);
                 } else {
                     DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
+                }
+                break;
+            case live_zhi_bo_home:
+                if (Constant.SUCCEED == event.getCode()) {
+                    String json = event.getData().optString("data");
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
+                        }.getType());
+                        mLiveItemList.clear();
+                        if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
+                            loading = false;
+                            int size = mLiveItemList.size();
+                            mLiveItemList.addAll(tempLiveItemList);
+                            mHomeAdapter.setLiveList(mLiveItemList);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ToastUtils.showToast(getActivity(), "直播信息解析失败");
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), event.getMsg());
                 }
                 break;
         }

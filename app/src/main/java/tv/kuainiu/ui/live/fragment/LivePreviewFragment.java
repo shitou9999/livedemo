@@ -23,7 +23,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.LiveHttpUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.LiveItem;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
@@ -45,7 +45,7 @@ public class LivePreviewFragment extends BaseFragment {
     private ReadingTapeAdapter mReadingTapeAdapter;
     private int page = 1;
     private boolean loading = false;
-    public List<LiveItem> mLiveItemList = new ArrayList<>();
+    public List<LiveInfo> mLiveItemList = new ArrayList<>();
 
     public static LivePreviewFragment newInstance(int parentPosition) {
         LivePreviewFragment fragment = new LivePreviewFragment();
@@ -101,7 +101,7 @@ public class LivePreviewFragment extends BaseFragment {
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
 
-        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity());
+        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(),ReadingTapeAdapter.YU_YUE);
         rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }
@@ -162,7 +162,7 @@ public class LivePreviewFragment extends BaseFragment {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
-                        List<LiveItem> tempLiveItemList = new DataConverter<LiveItem>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveItem>>() {
+                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
                         if (page == 1) {
                             mLiveItemList.clear();

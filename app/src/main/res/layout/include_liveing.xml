@@ -4,7 +4,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_state_living"
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
         android:background="@color/colorRed500"

@@ -23,12 +23,16 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.ui.activity.WebActivity;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -52,7 +56,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * 直播List
      */
-    private List<Banner> mLiveList = new ArrayList<>();
+    private List<LiveInfo> mLiveList = new ArrayList<>();
     /**
      * 热门观点List
      */
@@ -91,7 +95,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        this.mBannerList.add(mBannerList.get(0));
     }
 
-    public void setLiveList(List<Banner> liveList) {
+    public void setLiveList(List<LiveInfo> liveList) {
+        this.mLiveList.clear();
         this.mLiveList.addAll(liveList);
     }
 
@@ -256,7 +261,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindLiveViewHolder(BannerViewHolder holder) {
 //        holder.mIndicator.setVisibility(View.GONE);
         List<View> mList = new ArrayList<>();
-        for (int i = 0; i < mBannerList.size(); i++) {
+        for (int i = 0; i < mLiveList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_item_mid, null);
             ImageView mIvLeft = (ImageView) view.findViewById(R.id.iv_left);//左箭头
             ImageView mIvRight = (ImageView) view.findViewById(R.id.iv_right);//右箭头
@@ -265,8 +270,22 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             TextView mTvTitle = (TextView) view.findViewById(R.id.tv_title);//直播状态
             TextView mTvState = (TextView) view.findViewById(R.id.tv_state);//直播间状态
             TextView mTvTime = (TextView) view.findViewById(R.id.tv_time);
+
+            mIvLeft.setVisibility(View.INVISIBLE);
+            mIvRight.setVisibility(View.INVISIBLE);
+
+           final LiveInfo liveInfo=mLiveList.get(i);
+            mTvTitle.setText(StringUtils.replaceNullToEmpty(liveInfo.getTitle()));
+            mTvState.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg()));
+            mTvTime.setText(DateUtil.formatDate(liveInfo.getStart_date())+"-"+DateUtil.formatDate(liveInfo.getEnd_date()));
             ;//时间
             //TODO 绑定中间直播信息
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickPlayLive(liveInfo);
+                }
+            });
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
@@ -396,5 +415,19 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
     }
+    public void clickPlayLive(LiveInfo liveItem) {
+        LiveParameter liveParameter = new LiveParameter();
+        liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
+        liveParameter.setIsFollow(liveItem.getIs_follow());
+        liveParameter.setIsSupport(liveItem.getIs_supported());
+        liveParameter.setLiveId(liveItem.getId());
+        liveParameter.setLiveTitle(liveItem.getTitle());
+        liveParameter.setOnLineNumber(liveItem.getOnline_num());
+        liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
+        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+        liveParameter.setSupportNumber(liveItem.getSupport());
+        liveParameter.setTeacherId(liveItem.getTeacher_id());
 
+        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+    }
 }

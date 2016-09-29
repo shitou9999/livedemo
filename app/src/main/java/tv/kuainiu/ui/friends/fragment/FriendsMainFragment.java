@@ -58,7 +58,7 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
 
             SimpleTabFragmentPageAdapter adapter = new SimpleTabFragmentPageAdapter(getChildFragmentManager());
             mViewPager.setAdapter(adapter);
-//            mViewPager.setOffscreenPageLimit(2);
+            mViewPager.setOffscreenPageLimit(2);
 
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override

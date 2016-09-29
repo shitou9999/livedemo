@@ -239,7 +239,7 @@ public class Constant {
     /**
      * 验证码内容
      */
-    public static final String YZM_CONTENTS_HEAD = "【爱股轩】";
+    public static final String YZM_CONTENTS_HEAD = "【快牛TV】";
     /**
      * 验证码短信号码
      */

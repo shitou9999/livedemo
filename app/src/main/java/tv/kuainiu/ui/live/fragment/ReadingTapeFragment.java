@@ -23,7 +23,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.LiveHttpUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.LiveItem;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
@@ -32,21 +32,27 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.ToastUtils;
 
+import static android.R.attr.type;
+import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.ZHI_BO;
+
 /**
  * 咨询
  */
 public class ReadingTapeFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
 
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
-    @BindView(R.id.rvReadingTap) RecyclerView rvReadingTap;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout srlRefresh;
+    @BindView(R.id.rvReadingTap)
+    RecyclerView rvReadingTap;
     CustomLinearLayoutManager mLayoutManager;
     private int mParentPosition;
     private ReadingTapeAdapter mReadingTapeAdapter;
     private int page = 1;
     private boolean loading = false;
-    public List<LiveItem> mLiveItemList = new ArrayList<>();
-    public List<LiveItem> mLiveHuiFangItemList = new ArrayList<>();
+    public List<LiveInfo> mLiveItemList = new ArrayList<>();
+    public List<LiveInfo> mLiveHuiFangItemList = new ArrayList<>();
+
 
     public static ReadingTapeFragment newInstance(int parentPosition) {
         ReadingTapeFragment fragment = new ReadingTapeFragment();
@@ -86,7 +92,8 @@ public class ReadingTapeFragment extends BaseFragment {
         return view;
     }
 
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
         super.onStart();
         initView();
         initListener();
@@ -98,7 +105,7 @@ public class ReadingTapeFragment extends BaseFragment {
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
 
-        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity());
+        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), ZHI_BO);
         rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }
@@ -109,15 +116,17 @@ public class ReadingTapeFragment extends BaseFragment {
     }
 
     private void getData() {
-        LiveHttpUtil.liveIndex(getActivity(), "2", page, Action.live_zhi_bo_kan_pan);
+        LiveHttpUtil.liveIndex(getActivity(), "1", page, Action.live_zhi_bo_kan_pan);
     }
+
     private void getHuiFangData() {
         LiveHttpUtil.liveIndex(getActivity(), "3", page, Action.live_hui_fang_kan_pan);
     }
 
     private void initListener() {
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 page = 1;
                 getData();
             }
@@ -158,11 +167,13 @@ public class ReadingTapeFragment extends BaseFragment {
 //        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
         mReadingTapeAdapter.notifyDataSetChanged();
     }
+
     private void dataBannerBind() {
         mReadingTapeAdapter.setBannerList(mLiveItemList);
 //        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
         mReadingTapeAdapter.notifyDataSetChanged();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
@@ -172,7 +183,7 @@ public class ReadingTapeFragment extends BaseFragment {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
-                        List<LiveItem> tempLiveItemList = new DataConverter<LiveItem>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveItem>>() {
+                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
                         if (page == 1) {
                             mLiveItemList.clear();
@@ -202,7 +213,7 @@ public class ReadingTapeFragment extends BaseFragment {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
-                        List<LiveItem> tempLiveItemList = new DataConverter<LiveItem>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveItem>>() {
+                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
                         if (page == 1) {
                             mLiveHuiFangItemList.clear();

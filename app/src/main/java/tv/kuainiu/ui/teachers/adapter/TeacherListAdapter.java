@@ -66,13 +66,20 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // Teacher view item
     static class TeacherViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.iv_teacher_item_photo) ImageView imgPhoto;
-        @BindView(R.id.tv_follow_button) TextView textFollow;
-        @BindView(R.id.tv_name) TextView textName;
-        @BindView(R.id.tv_fans_count) TextView textFansCount;
-        @BindView(R.id.tvSubject) TextView tvSubject;
-        @BindView(R.id.tvAnalysis) TextView tvAnalysis;
-        @BindView(R.id.ll_root) RelativeLayout ll_root;
+        @BindView(R.id.iv_teacher_item_photo)
+        ImageView imgPhoto;
+        @BindView(R.id.tv_follow_button)
+        TextView textFollow;
+        @BindView(R.id.tv_name)
+        TextView textName;
+        @BindView(R.id.tv_fans_count)
+        TextView textFansCount;
+        @BindView(R.id.tvSubject)
+        TextView tvSubject;
+        @BindView(R.id.tvAnalysis)
+        TextView tvAnalysis;
+        @BindView(R.id.ll_root)
+        RelativeLayout ll_root;
 
         public TeacherViewHolder(View itemView) {
             super(itemView);
@@ -119,7 +126,8 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         mOnClickListener = onClickListener;
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
 //        if (isLiveChild) {
 //            return mTeacherList == null ? 0 : mTeacherList.size();
 //        } else {
@@ -174,15 +182,15 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //        }
         View view = mLayoutInflater.inflate(R.layout.teacher_item_t, parent, false);
         TeacherViewHolder vh = new TeacherViewHolder(view);
-        vh.textFollow.setOnClickListener(this);
-        vh.ll_root.setOnClickListener(this);
+
 //            vh.imgPhoto.setLayoutParams(layoutParams1);
 //            vh.rlBottom.setLayoutParams(layoutParams2);
         return vh;
     }
 
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
 //        if (isLiveChild) {
 //            return ITEM_TYPE_TEACHER;
 //        } else {
@@ -240,13 +248,21 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.imgPhoto.setTag(R.id.iv_teacher_item_photo, item);
         holder.textFollow.setTag(R.id.iv_teacher_item_photo, item);
         holder.textFollow.setTag(R.id.tv_fans_count, holder.textFansCount);
-        holder.ll_root.setTag(R.id.ll_root,item);
+        holder.ll_root.setTag(R.id.ll_root, item);
 
         holder.textName.setText(item.nickname);
-        ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar,R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar, R.mipmap.default_avatar);
         holder.tvAnalysis.setText(StringUtils.replaceNullToEmpty(item.listorder));
         holder.tvSubject.setText(StringUtils.replaceNullToEmpty(item.slogan));
         resetFollowCheckBox(holder.textFollow, holder.textFansCount, item);
+        if (item.nickname != null && !item.nickname.contains("助手")) {
+            holder.textFollow.setOnClickListener(this);
+            holder.ll_root.setOnClickListener(this);
+            holder.textFollow.setVisibility(View.VISIBLE);
+        }else{
+            holder.textFollow.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 
@@ -272,7 +288,8 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         if (null != mOnClickListener) {
             mOnClickListener.onClick(v, v.getTag());
         }

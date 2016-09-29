@@ -50,7 +50,7 @@ public class LiveInfo {
     private int live_status;//1直播结束，2直播中，3直播未开始
     private String user_id;
     private int is_follow;
-    private String support;
+    private int support;
     private String status;
     private String permission;
     private String avatar;
@@ -68,6 +68,7 @@ public class LiveInfo {
     private String start_date;
     private String thumb;
     private String synchro_wb;
+    private int online_num;
 
     public String getLive_msg() {
         return live_msg;
@@ -181,11 +182,11 @@ public class LiveInfo {
         this.is_follow = is_follow;
     }
 
-    public String getSupport() {
+    public int getSupport() {
         return support;
     }
 
-    public void setSupport(String support) {
+    public void setSupport(int support) {
         this.support = support;
     }
 
@@ -275,5 +276,13 @@ public class LiveInfo {
 
     public void setSynchro_wb(String synchro_wb) {
         this.synchro_wb = synchro_wb;
+    }
+
+    public int getOnline_num() {
+        return online_num;
+    }
+
+    public void setOnline_num(int online_num) {
+        this.online_num = online_num;
     }
 }
