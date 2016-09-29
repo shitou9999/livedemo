@@ -61,13 +61,17 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
 import tv.kuainiu.app.DataSet;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.CollectionMessageHttpUtil;
 import tv.kuainiu.command.http.CommentHttpUtil;
+import tv.kuainiu.command.http.SupportHttpUtil;
+import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -78,17 +82,27 @@ import tv.kuainiu.modle.VideoDetail;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.comments.CommentListActivity;
+import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
+import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
+import tv.kuainiu.umeng.UMEventManager;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.ParamsUtil;
+import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.cc.PopMenu;
 import tv.kuainiu.widget.cc.VerticalSeekBar;
+import tv.kuainiu.widget.dialog.LoginPromptDialog;
+
+import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
 /**
  * Created by sirius on 2016/9/24.
@@ -154,7 +168,7 @@ public class VideoActivity extends BaseActivity implements
     /*点播*/
     private boolean networkConnected = true;
     private DWMediaPlayer player;
-//    private Subtitle subtitle;
+    //    private Subtitle subtitle;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
     private ProgressBar bufferProgressBar;
@@ -204,7 +218,7 @@ public class VideoActivity extends BaseActivity implements
     private float scrollTotalDistance, scrollCurrentPosition;
     private int lastPlayPosition, currentPlayPosition;
     private String videoId;
-    private RelativeLayout rlPlay,rlComment;
+    private RelativeLayout rlPlay, rlComment;
     private ScrollView rlBelow;
     private WindowManager wm;
     private ImageView ivFullscreen;
@@ -216,13 +230,15 @@ public class VideoActivity extends BaseActivity implements
             setLayoutVisibility(View.GONE, false);
         }
     };
+    private boolean isShowLoginTip;
+    private boolean isCollect;
 
     /**
      * @param context
      * @param video_id 视频文章id
      * @param cat_id   栏目id
      */
-    public static void intoNewIntent(Context context,String id, String video_id, String cat_id) {
+    public static void intoNewIntent(Context context, String id, String video_id, String cat_id) {
         Intent intent = new Intent(context, VideoActivity.class);
         intent.putExtra(ID, id);
         intent.putExtra(VIDEO_ID, video_id);
@@ -301,7 +317,7 @@ public class VideoActivity extends BaseActivity implements
         /*点播*/
         rlPlay = (RelativeLayout) findViewById(R.id.rl_play);
         rlComment = (RelativeLayout) findViewById(R.id.rlComment);
-        rlBelow=(ScrollView)findViewById(R.id.svBelow);
+        rlBelow = (ScrollView) findViewById(R.id.svBelow);
         rlPlay.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -377,6 +393,68 @@ public class VideoActivity extends BaseActivity implements
         getHotCommentList();
     }
 
+    @OnClick({R.id.tvDown, R.id.tvCollection, R.id.tvShare, R.id.tvSupport, R.id.rlComment, R.id.tv_follow_button})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tvDown:
+                //TODO 视频下载
+                break;
+            case R.id.tvCollection:
+                if (!IGXApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
+                if (mVideoDetail.getCollected() != Constant.COLLECTED) {
+                    addCollect();
+                } else {
+                    delCollect();
+                }
+                break;
+            case R.id.tvShare:
+                ShareUtils.showShare(ShareUtils.VIDEO, this, "", mVideoDetail.getTitle(), mVideoDetail.getThumb(), StringUtils.replaceNullToEmpty(mVideoDetail.getUrl(), "http://www.kuainiu.tv"), null);
+                break;
+            case R.id.tvSupport:
+                if (!IGXApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
+                if (null == mVideoDetail) {
+                    DebugUtils.showToast(this, "未获取到相关信息，请刷新或稍后重试");
+                    return;
+                }
+
+                if (!NetUtils.isOnline(this)) {
+                    DebugUtils.showToast(this, getString(R.string.toast_not_network));
+                    return;
+                }
+                SupportHttpUtil.supportVideoDynamics(this, cat_id, video_id);
+                break;
+            case R.id.rlComment:
+                CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_ARTICLE, video_id, cat_id);
+                break;
+            case R.id.tv_follow_button:
+                addFollow(mVideoDetail.getTeacher_info().getIs_follow(), mVideoDetail.getTeacher_info().getId());
+                break;
+        }
+    }
+
+    private void addCollect() {
+        CollectionMessageHttpUtil.addCollect(this, video_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
+    }
+
+    private void delCollect() {
+        CollectionMessageHttpUtil.delCollect(this, video_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
+    }
+
+    // 添加 or 取消关注
+    private void addFollow(int is_follow, String teacherId) {
+        if (Constant.FOLLOWED == is_follow) {
+            TeacherHttpUtil.delFollowForTeacherId(this, teacherId, Action.del_follow);
+        } else {
+            TeacherHttpUtil.addFollowForTeacherID(this, teacherId, Action.add_follow);
+        }
+    }
+
     private void dataBindComment() {
         VideoCommentAdapter videoCommentAdapter = new VideoCommentAdapter(this);
         videoCommentAdapter.setData(listCommentItem);
@@ -397,6 +475,8 @@ public class VideoActivity extends BaseActivity implements
         teacherDataBind(mVideoDetail.getTeacher_info());
         ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""), R.mipmap.default_avatar);
         videoIdText.setText(mVideoDetail.getTitle());
+        tvCollection.setSelected(mVideoDetail.getCollected() == Constant.COLLECTED);
+        tvSupport.setSelected(mVideoDetail.getIs_support() == Constant.FAVOURED);
 
     }
 
@@ -408,9 +488,10 @@ public class VideoActivity extends BaseActivity implements
         tvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         tvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
-        if (teacherInfo.getIs_follow() == 0) {
+        tvFollowButton.setSelected(teacherInfo.getIs_follow() == Constant.FOLLOWED);
+        if (teacherInfo.getIs_follow()!= Constant.FOLLOWED) {
             tvFollowButton.setText("+关注");
-            tvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
+
         } else {
             tvFollowButton.setText("已关注");
         }
@@ -432,7 +513,7 @@ public class VideoActivity extends BaseActivity implements
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case video_details:
-                if (Constant.SUCCEED == event.getCode()) {
+                if (SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
@@ -452,7 +533,7 @@ public class VideoActivity extends BaseActivity implements
                 }
                 break;
             case comment_list_hot:
-                if (Constant.SUCCEED == event.getCode()) {
+                if (SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     LogUtils.e("VideoActivity", "json=" + json);
                     try {
@@ -473,6 +554,65 @@ public class VideoActivity extends BaseActivity implements
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取视频热门评论失败"));
                     LogUtils.e("VideoActivity", "获取视频热门评论失败：" + event.getMsg());
+                }
+                break;
+            // 添加收藏回调
+            case add_collect:
+                if (SUCCEED == event.getCode()) {
+                    isCollect = true;
+                    mVideoDetail.setCollected(Constant.COLLECTED);
+                    DebugUtils.showToast(this, event.getMsg());
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("type", "video");
+                    UMEventManager.onEvent(this, UMEventManager.ID_COLLECTION, map);
+                    dataBind();
+                } else {
+                    DebugUtils.showToast(this, event.getMsg());
+                }
+                break;
+
+            // 取消收藏回调
+            case del_collect:
+                if (SUCCEED == event.getCode()) {
+                    isCollect = false;
+                    mVideoDetail.setCollected(Constant.UNCOLLECT);
+                    DebugUtils.showToast(this, event.getMsg());
+                    dataBind();
+                }
+                break;
+            // 视频点赞回调
+            case video_favour:
+                if (SUCCEED == event.getCode()) {
+                    DebugUtils.showToast(VideoActivity.this, event.getMsg());
+                    mVideoDetail.setSupport_num(mVideoDetail.getSupport_num() + 1);
+                    mVideoDetail.setIs_support(Constant.FAVOURED);
+                    dataBind();
+                    DebugUtils.showToast(VideoActivity.this, "点赞成功");
+                } else if (-2 == event.getCode()) {
+                    DebugUtils.showToastResponse(this, "已支持过");
+                } else {
+                    DebugUtils.showToastResponse(this, "点赞失败,请稍后重试");
+                }
+                break;
+            // 添加关注回调
+            case add_follow:
+                if (SUCCEED == event.getCode()) {
+                    mVideoDetail.getTeacher_info().setIs_follow(Constant.FOLLOWED);
+                    mVideoDetail.getTeacher_info().setFans_count(mVideoDetail.getTeacher_info().getFans_count() + 1);
+                    dataBind();
+                } else {
+                    DebugUtils.showToastResponse(this, event.getMsg());
+                }
+                break;
+
+            // 取消关注回调
+            case del_follow:
+                if (SUCCEED == event.getCode()) {
+                    mVideoDetail.getTeacher_info().setIs_follow(Constant.UNFOLLOW);
+                    mVideoDetail.getTeacher_info().setFans_count(mVideoDetail.getTeacher_info().getFans_count() - 1);
+                    dataBind();
+                } else {
+                    DebugUtils.showToast(this, event.getMsg());
                 }
                 break;
         }
@@ -529,8 +669,6 @@ public class VideoActivity extends BaseActivity implements
         player.setOnErrorListener(this);
         player.setOnVideoSizeChangedListener(this);
         player.setOnInfoListener(this);
-
-
 
 
         isLocalPlay = getIntent().getBooleanExtra("isLocalPlay", false);
@@ -1306,5 +1444,31 @@ public class VideoActivity extends BaseActivity implements
         }
 
         setSurfaceViewLayout();
+    }
+
+    private void showLoginTip() {
+        if (isShowLoginTip) {
+            return;
+        }
+        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(VideoActivity.this);
+        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
+            @Override
+            public void onCancel(DialogInterface dialog, int which) {
+
+            }
+
+            @Override
+            public void onLogin(DialogInterface dialog, int which) {
+                Intent intent = new Intent(VideoActivity.this, LoginActivity.class);
+                VideoActivity.this.startActivity(intent);
+                isShowLoginTip = true;
+            }
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowLoginTip = false;
+            }
+        });
+        loginPromptDialog.show();
     }
 }

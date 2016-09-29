@@ -2,14 +2,14 @@ package tv.kuainiu.command.http;
 
 import android.content.Context;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 收藏相关请求
@@ -17,11 +17,12 @@ import java.util.Map;
 public class CollectionMessageHttpUtil {
 
 
-/**
+    /**
      * 2.6 添加收藏
-     * <p/>
-     * news_id     文章ID   必传
-     * news_type   文章类型  1视频 2新闻 3活动     默认1
+     *
+     * 业务参数
+     * news_id     文章ID     必传
+     * news_type     文章类型 必传  区分收藏类型 1文章 2视频 3声音 11活动消息     默认1
      * 备注：需要签名跟加密
      */
     public static void addCollect(Context context, String news_id, String type) {
@@ -32,24 +33,31 @@ public class CollectionMessageHttpUtil {
     }
 
     /**
+     * 2.7 取消收藏   sns/del_collect
      * 取消收藏
+     * 固定参数  user_id, time ,sign
+     * 业务参数
+     * news_id     文章ID     必传   多个以英文逗号隔开
+     * news_type     文章类型 必传  区分收藏类型 1文章 2视频 3声音 11活动消息     默认1
+     * 备注：需要签名跟加密
+     * {"status"="0","data"="json"}
      */
-    public static void delCollect(Context context, String mId, String type) {
+    public static void delCollect(Context context, String news_id, String type) {
         Map<String, String> map = new HashMap();
-        map.put("news_id", mId);
+        map.put("news_id", news_id);
         map.put("news_type", type);
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.DEL_COLLECT, ParamUtil.getParam(map),Action.del_collect);
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.DEL_COLLECT, ParamUtil.getParam(map), Action.del_collect);
     }
+
     /**
-     2.8 用户收藏列表   sns/collect_list
-
-     固定参数  user_id, time ,sign
-     业务参数
-     page          页面          非必传     默认1
-     size           每页条数     非必传     默认20
-     备注：需要签名跟加密
-     {"status"="0","data"="json"}
-
+     * 2.8 用户收藏列表   sns/collect_list
+     * <p>
+     * 固定参数  user_id, time ,sign
+     * 业务参数
+     * page          页面          非必传     默认1
+     * size           每页条数     非必传     默认20
+     * 备注：需要签名跟加密
+     * {"status"="0","data"="json"}
      */
     public static void collectList(Context context, String mId, String type, int page) {
         Map<String, String> map = new HashMap();

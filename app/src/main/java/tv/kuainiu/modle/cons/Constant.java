@@ -67,16 +67,21 @@ public class Constant {
     /**
      * TYPE-视频
      */
-    public static final int NEWS_TYPE_VIDEO = 1;
+    public static final int NEWS_TYPE_VIDEO = 2;
+
+    /**
+     * TYPE-声音
+     */
+    public static final int NEWS_TYPE_VOICE = 3;
 
     /**
      * TYPE-文章
      */
-    public static final int NEWS_TYPE_ARTICLE = 2;
+    public static final int NEWS_TYPE_ARTICLE = 1;
     /**
      * TYPE-活动
      */
-    public static final int NEWS_TYPE_ACTIVITY = 3;
+    public static final int NEWS_TYPE_ACTIVITY = 11;
     /**
      * 请求评论默认条数
      */
