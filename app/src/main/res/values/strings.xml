@@ -190,7 +190,7 @@
     <string name="value_subscriber_count_default">已订阅0个节目</string>
     <string name="value_version">当前版本&#160;V%s</string>
 
-    <string name="sharpness_standard">流畅</string>
+    <string name="sharpness_standard">清晰</string>
     <string name="sharpness_high">高清</string>
     <string name="sharpness_super">超清</string>
 
@@ -247,9 +247,9 @@
     </string-array>
     <!-- 视频清晰度 -->
     <string-array name="video_sharpness">
-        <item>流畅</item>
+        <item>清晰</item>
         <item>高清</item>
-        <item>超清</item>
+<!--        <item>超清</item>-->
     </string-array>
 
 

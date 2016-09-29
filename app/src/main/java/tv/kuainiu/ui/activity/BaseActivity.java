@@ -51,6 +51,12 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
 //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onRequestError(HttpEvent event) {
 //        initClientPost(event.getCode(), this);
@@ -59,6 +65,13 @@ public class BaseActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRequestError(UserEvent event) {
         initClientPost(event.getCode(), this);
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     /**

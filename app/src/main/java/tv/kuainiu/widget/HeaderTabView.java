@@ -69,6 +69,8 @@ public class HeaderTabView extends RelativeLayout {
         if (list == null && list.size() < 1) {
             return;
         }
+        mRadioGroup.removeAllViews();
+        listRadioButton.clear();
         setBackgroundColor(Color.parseColor(Theme.getCommonColor()));
         int textSize = mContext.getResources().getDimensionPixelSize(R.dimen.head_table_text_size);
         for (int i = 0; i < list.size(); i++) {
@@ -80,7 +82,7 @@ public class HeaderTabView extends RelativeLayout {
             layoutParams.gravity = Gravity.CENTER;
             mRadioButton.setLayoutParams(layoutParams);
             mRadioButton.setText(header.getTitle());
-            Bitmap a=null;
+            Bitmap a = null;
             mRadioButton.setButtonDrawable(new BitmapDrawable(a));
             mRadioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             mRadioButton.setTextColor(Theme.getColorCheckedStateList());

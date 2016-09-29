@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 /**
@@ -38,7 +38,6 @@ import tv.kuainiu.utils.ToastUtils;
  */
 public class LivePreviewFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
-
     @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
     @BindView(R.id.rvReadingTap) RecyclerView rvReadingTap;
     CustomLinearLayoutManager mLayoutManager;
@@ -70,15 +69,31 @@ public class LivePreviewFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        return view;
+    }
+
+    @Override public void onStart() {
+        super.onStart();
         initView();
         initListener();
         initData();
-        return view;
+        LogUtils.e("LogUtils", "onStart");
+    }
+
+    @Override public void onStop() {
+        super.onStop();
+        LogUtils.e("LogUtils", "onStop");
     }
 
     private void initView() {
@@ -133,8 +148,10 @@ public class LivePreviewFragment extends BaseFragment {
 
     private void dataLiveListBind(int size) {
         mReadingTapeAdapter.setLiveListList(mLiveItemList);
-        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+        mReadingTapeAdapter.notifyDataSetChanged();
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
@@ -157,14 +174,16 @@ public class LivePreviewFragment extends BaseFragment {
                             dataLiveListBind(size);
                         }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        ToastUtils.showToast(getActivity(),"直播列表解析失败");
+                    } catch (Exception e) {
+                        LogUtils.e("直播预告解析失败", "直播预告解析失败" + "," + event.getData().toString(), e);
+                        ToastUtils.showToast(getActivity(), "直播预告解析失败");
                     }
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());
                 }
-                srlRefresh.setRefreshing(false);
+                if (page == 1) {
+                    srlRefresh.setRefreshing(false);
+                }
                 break;
         }
     }

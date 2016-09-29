@@ -43,6 +43,7 @@ public enum Action {
     fetch_follow_list,     // 获取关注列表
     find_bannar,           // 发现_bannar
     find_teacher_list,     // 发现_老师列表
+    find_home_news_list,        // 发现_视频/文章列表
     find_news_list,        // 发现_视频/文章列表
     find_teacher_news_list,        // 老师_视频/文章列表
     find_important_news,   // 发现_重点资讯、前三条
@@ -173,5 +174,6 @@ public enum Action {
     SUPPORT_DYNAMICS,   // 文章动态点赞
     CUSTOM_LIVE_LIST,   // 圈子-直播
     live_zhi_bo_kan_pan,   // 直播看盘
+    live_hui_fang_kan_pan,   // 直播回放
     live_zhi_bo_yu_gao,   // 直播预告
 }

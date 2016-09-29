@@ -19,14 +19,17 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
-import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.LiveItem;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
+import tv.kuainiu.utils.DensityUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
+
+import static tv.kuainiu.R.id.ivIamge;
 
 /**
  * @author nanck on 2016/7/29.
@@ -35,8 +38,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     private Activity mContext;
-    private List<Banner> mBannerList;
-    private List<Banner> mLiveList;
+    private List<LiveItem> mBannerList;
+    private List<LiveItem> mLiveList;
     private List<LiveItem> mLiveListList;
     int mBannerListSize = 0;
     int mLiveListSize = 0;
@@ -44,17 +47,17 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int BANNER = 2;
     private static final int LIVE = 3;
     private static final int LIVE_ITEM = 4;
-
+    List<Integer> types = new ArrayList<>();
     public ReadingTapeAdapter(Activity context) {
         mContext = context;
     }
 
 
-    public void setBannerList(List<Banner> mBannerList) {
+    public void setBannerList(List<LiveItem> mBannerList) {
         this.mBannerList = mBannerList;
     }
 
-    public void setLiveList(List<Banner> liveList) {
+    public void setLiveList(List<LiveItem> liveList) {
         this.mLiveList = liveList;
     }
 
@@ -64,20 +67,26 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        mBannerListSize = (mBannerList == null || mBannerList.size() < 1) ? 0 : 1;
-        mLiveListSize = (mLiveList == null || mLiveList.size() < 1) ? 0 : 1;
+        types.clear();
+        if (mBannerList!=null && mBannerList.size() > 0) {
+            types.add(BANNER);
+        }
+        if (mLiveList!=null && mLiveList.size() > 0) {
+            types.add(LIVE);
+        }
+
         mLiveListListSize = (mLiveListList == null || mLiveListList.size() < 1) ? 0 : mLiveListList.size();
-        return mBannerListSize + mLiveListSize + mLiveListListSize;
+        return types.size() + mLiveListListSize;
     }
 
     @Override public int getItemViewType(int position) {
-        if (mBannerListSize > 0 && position == 0) {
-            return BANNER;
+        int type = 0;
+        if (position < types.size()) {
+            type = types.get(position);
+        } else {
+            type = LIVE_ITEM;
         }
-        if (mBannerListSize > 0 && (position == 0 || position == 1)) {
-            return LIVE;
-        }
-        return LIVE_ITEM;
+        return type;
     }
 
     @Override
@@ -87,7 +96,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 onBindBannerViewHolder((BannerViewHolder) holder);
                 break;
             case LIVE:
-                onBindLiveViewHolder((BannerViewHolder) holder);
+                onBindLiveViewHolder((LiveViewHolder) holder);
                 break;
             default:
                 onBindLiveItemViewHolder((ViewHolder) holder, position);
@@ -95,19 +104,26 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    @BindView(R.id.ivIamge) ImageView mIvIamge;//直播间图片
-    @BindView(R.id.tvLiveing) TextView mTvLiveing;//直播状态
-    @BindView(R.id.tvLiveingNumber) TextView mTvLiveingNumber;//直播间人数
 
     //绑定Banner
     public void onBindBannerViewHolder(BannerViewHolder holder) {
         holder.mIndicator.setVisibility(View.VISIBLE);
         List<View> mList = new ArrayList<>();
+        //TODO 绑定banner
         for (int i = 0; i < mBannerList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item, null);
-            ButterKnife.bind(this, view);
-
-            //TODO 绑定banner
+            ImageView ivIamge = (ImageView) view.findViewById(R.id.ivIamge);
+            TextView tvBannarTitle = (TextView) view.findViewById(R.id.tvBannarTitle);
+            TextView tvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);
+           final LiveItem liveItem = mBannerList.get(i);
+            ImageDisplayUtil.displayImage(mContext, ivIamge, liveItem.getLive_thumb());
+            tvBannarTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_title()));
+            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+            ivIamge.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    clickPlayLive(liveItem);
+                }
+            });
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
@@ -115,22 +131,24 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mIndicator.setViewPager(holder.mVpReadingTap);
     }
 
-    @BindView(R.id.iv_left) ImageView mIvLeft;//左箭头
-    @BindView(R.id.iv_right) ImageView mIvRight;//右箭头
-    @BindView(R.id.tv_next_time) TextView mTvNextTime;//
-    @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;//头像
-    @BindView(R.id.tv_title) TextView mTvTitle;//直播状态
-    @BindView(R.id.tv_state) TextView mTvState;//直播间状态
-    @BindView(R.id.tv_time) TextView mTvTime;//时间
 
     //绑定Live
-    public void onBindLiveViewHolder(BannerViewHolder holder) {
+    public void onBindLiveViewHolder(LiveViewHolder holder) {
         holder.mIndicator.setVisibility(View.GONE);
         List<View> mList = new ArrayList<>();
-        for (int i = 0; i < mBannerList.size(); i++) {
+        for (int i = 0; i < mLiveList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_item_mid, null);
-            ButterKnife.bind(this, view);
+            CircleImageView civ_avatar= (CircleImageView) view.findViewById(R.id.civ_avatar);//头像
+            ImageView mIvLeft= (ImageView) view.findViewById(R.id.iv_left);//左箭头
+            ImageView mIvRight= (ImageView) view.findViewById(R.id.iv_right);//右箭头
+            TextView mTvTitle= (TextView) view.findViewById(R.id.tv_title);//直播标题
+            TextView mTvState= (TextView) view.findViewById(R.id.tv_state);//直播间状态
+            TextView mTvTime= (TextView) view.findViewById(R.id.tv_time);//时间
+            TextView mTvNextTime= (TextView) view.findViewById(R.id.tv_next_time);//下一时段
             //TODO 绑定中间直播信息
+            LiveItem liveItem = mLiveList.get(i);
+            ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getLive_thumb(),R.mipmap.default_avatar);
+            mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_title()));
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
@@ -138,8 +156,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     //绑定Live
-    public void onBindLiveItemViewHolder(ViewHolder holder, int position) {
-        int currentPosition = position - mBannerListSize - mLiveListSize;
+    public void onBindLiveItemViewHolder(ViewHolder holder, int position){
+        int currentPosition = position - types.size();
         final LiveItem liveItem = mLiveListList.get(currentPosition);
         //TODO 绑定直播Item
         ImageDisplayUtil.displayImage(mContext, holder.mIvIamge, liveItem.getThumb());
@@ -152,21 +170,40 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mIvIamge.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 //TODO 完善直播参数传递
-                LiveParameter liveParameter = new LiveParameter();
-                liveParameter.setFansNumber(0);
-                liveParameter.setIsFollow(0);
-                liveParameter.setIsSupport(0);
-                liveParameter.setLiveId(liveItem.getIns_id());
-                liveParameter.setLiveTitle(liveItem.getLive_title());
-                liveParameter.setOnLineNumber(liveItem.getOnline_num());
-                liveParameter.setTeacherAvatar("");
-                liveParameter.setRoomId(liveItem.getLive_roomid());
-                liveParameter.setSupportNumber(0);
-                liveParameter.setTeacherId(liveItem.getTeacher_id());
-
-                PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+                clickPlayLive(liveItem);
             }
         });
+    }
+
+    public void clickPlayLive(LiveItem liveItem) {
+        LiveParameter liveParameter = new LiveParameter();
+        liveParameter.setFansNumber(0);
+        liveParameter.setIsFollow(0);
+        liveParameter.setIsSupport(0);
+        liveParameter.setLiveId(liveItem.getIns_id());
+        liveParameter.setLiveTitle(liveItem.getLive_title());
+        liveParameter.setOnLineNumber(liveItem.getOnline_num());
+        liveParameter.setTeacherAvatar("");
+        liveParameter.setRoomId(liveItem.getLive_roomid());
+        liveParameter.setSupportNumber(0);
+        liveParameter.setTeacherId(liveItem.getTeacher_id());
+
+        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+    }
+    public void clickRePlayLive(LiveItem liveItem) {
+        LiveParameter liveParameter = new LiveParameter();
+        liveParameter.setFansNumber(0);
+        liveParameter.setIsFollow(0);
+        liveParameter.setIsSupport(0);
+        liveParameter.setLiveId(liveItem.getIns_id());
+        liveParameter.setLiveTitle(liveItem.getLive_title());
+        liveParameter.setOnLineNumber(liveItem.getOnline_num());
+        liveParameter.setTeacherAvatar("");
+        liveParameter.setRoomId(liveItem.getLive_roomid());
+        liveParameter.setSupportNumber(0);
+        liveParameter.setTeacherId(liveItem.getTeacher_id());
+
+        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
     }
 
     @Override
@@ -179,11 +216,19 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case BANNER:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
-                vh = new BannerViewHolder(view);
+                BannerViewHolder bannerViewHolder = new BannerViewHolder(view);
+                int width= ScreenUtils.getScreenWidth(mContext);
+                int height= (int) (width/1.67);
+                RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,height);
+                bannerViewHolder.mVpReadingTap.setLayoutParams(layoutParams);
+                vh=bannerViewHolder;
                 break;
             case LIVE:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
-                vh = new BannerViewHolder(view);
+                LiveViewHolder  liveViewHolder = new LiveViewHolder(view);
+                RelativeLayout.LayoutParams layoutParams2=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(mContext,100));
+                liveViewHolder.mVpReadingTap.setLayoutParams(layoutParams2);
+                vh=liveViewHolder;
                 break;
             default:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_item, parent, false);
@@ -202,9 +247,17 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
+    static class LiveViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.vpReadingTap) ViewPager mVpReadingTap;
+        @BindView(R.id.indicator) CircleIndicator mIndicator;
 
+        public LiveViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivIamge) ImageView mIvIamge;
+        @BindView(ivIamge) ImageView mIvIamge;
         @BindView(R.id.ivIsVip) ImageView ivIsVip;
         @BindView(R.id.tvLiveing) TextView mTvLiveing;
         @BindView(R.id.civ_avatar) CircleImageView civ_avatar;

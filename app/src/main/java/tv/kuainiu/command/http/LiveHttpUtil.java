@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.cons.Action;
@@ -23,7 +22,8 @@ public class LiveHttpUtil {
         Map<String, Object> map = new HashMap<>();
         map.put("type", type);
         map.put("page", String.valueOf(page));
-        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
+//        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action);
     }
 
 

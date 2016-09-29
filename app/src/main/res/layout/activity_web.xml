@@ -10,7 +10,7 @@
         android:id="@+id/tbv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:left_visibility="invisible"
+        app:left_visibility="visible"
         app:right_visibility="invisible"
         app:title="" />
 

@@ -1,12 +1,6 @@
 package tv.kuainiu.command.http.core;
 
 
-import tv.kuainiu.IGXApplication;
-import tv.kuainiu.modle.cons.Constant;
-import tv.kuainiu.utils.DebugUtils;
-import tv.kuainiu.utils.LogUtils;
-import tv.kuainiu.utils.StringUtils;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -15,6 +9,11 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import tv.kuainiu.IGXApplication;
+import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 
 
 /**
@@ -77,7 +76,7 @@ public abstract class OKHttpCallBackListener implements Callback {
                 onFailure(code, object.optString("msg"));
             }
         } catch (Exception e) {
-            LogUtils.e("onResponse", "data=" + data, e);
+            LogUtils.e("onResponse", "解析异常data=" + data, e);
             onFailure(Constant.ERROR, "数据解析异常");
         } finally {
             // TODO: 2016/5/5 Finally stub.

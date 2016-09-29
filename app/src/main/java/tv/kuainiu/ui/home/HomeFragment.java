@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ import tv.kuainiu.widget.DividerItemDecoration;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 import static tv.kuainiu.R.id.tv_follow_button;
+import static tv.kuainiu.modle.cons.Action.hot_point;
 
 /**
  * 咨询
@@ -129,20 +129,20 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void getBannerData() {
-        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar);
+        OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar, CacheConfig.getCacheConfig());
     }
 
     private void getHotPoint() {
         Map<String, Object> map = new HashMap<>();
         map.put("page", String.valueOf(HotPointPage));
         map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
-        OKHttpUtils.getInstance().syncGet(getContext(), Api.HOT_POINT + ParamUtil.getParamForGet(map), Action.hot_point, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(getContext(), Api.HOT_POINT + ParamUtil.getParamForGet(map), hot_point, CacheConfig.getCacheConfig());
     }
 
     private void getNews() {
         Map<String, Object> map = new HashMap<>();
         map.put("page", String.valueOf(NewsPage));
-        OKHttpUtils.getInstance().syncGet(getContext(), Api.FIND_NEWS_LIST + ParamUtil.getParamForGet(map), Action.find_news_list, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(getContext(), Api.FIND_NEWS_LIST + ParamUtil.getParamForGet(map), Action.find_home_news_list, CacheConfig.getCacheConfig());
     }
 
     private void initListener() {
@@ -251,14 +251,11 @@ public class HomeFragment extends BaseFragment {
                         }.getType());
 
                         mHomeAdapter.setBannerList(mBannerList);
-                        try {
 //                            mHomeAdapter.notifyItemChanged(0);
-                            mHomeAdapter.notifyDataSetChanged();
-                        } catch (IllegalStateException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (JSONException e) {
+                        mHomeAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        LogUtils.e("FindFragment", "解析banner数据失败:" + event.getMsg());
                     }
                 } else {
                     LogUtils.e("FindFragment", "获取banner数据失败:" + event.getMsg());
@@ -287,15 +284,16 @@ public class HomeFragment extends BaseFragment {
                                 e.printStackTrace();
                             }
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        LogUtils.e("FindFragment", "解析热门观点数据失败:" + event.getMsg());
                     }
 
                 } else {
                     LogUtils.e("FindFragment", "获取热门观点数据失败:" + event.getMsg());
                 }
                 break;
-            case find_news_list:
+            case find_home_news_list:
                 if (NewsPage == 1) {
                     srlRefresh.setRefreshing(false);
                 }
@@ -323,6 +321,7 @@ public class HomeFragment extends BaseFragment {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        LogUtils.e("FindFragment", "解析实时新闻数据失败:" + event.getMsg());
                     }
                 } else {
                     LogUtils.e("FindFragment", "获取实时新闻数据失败:" + event.getMsg());

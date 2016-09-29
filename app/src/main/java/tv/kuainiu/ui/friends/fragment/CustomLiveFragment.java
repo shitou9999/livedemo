@@ -66,10 +66,17 @@ public class CustomLiveFragment extends BaseFragment {
         return fragment;
     }
 
+    View view;
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -143,7 +150,7 @@ public class CustomLiveFragment extends BaseFragment {
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
-                            LogUtils.i("data",event.getData().toString());
+                            LogUtils.i("data", event.getData().toString());
                             List<LiveInfo> tempCustomLiveList = new DataConverter<LiveInfo>().JsonToListObject(jsonObject.getString("live_list"), new TypeToken<List<LiveInfo>>() {
                             }.getType());
                             if (page == 1) {

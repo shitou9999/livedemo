@@ -40,7 +40,8 @@
 -dontoptimize
 -dontobfuscate
 -dontpreverify
--keepattributes *Annotation*
+#-keepattributes *Annotation*
+-keepattributes EnclosingMetho
 
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 

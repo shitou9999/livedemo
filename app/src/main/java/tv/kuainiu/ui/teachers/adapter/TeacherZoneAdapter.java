@@ -30,6 +30,7 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
+import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
@@ -294,7 +295,11 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case TOP:
                 view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_top, parent, false);
-                vh = new TopViewHolder(view);
+                TopViewHolder topViewHolder = new TopViewHolder(view);
+                int screenWidth= ScreenUtils.getScreenWidth(mContext);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, (int) (screenWidth / 1.67));
+                topViewHolder.ivBanner.setLayoutParams(lp);
+                vh=topViewHolder;
                 break;
             case TAB:
                 view = LayoutInflater.from(mContext).inflate(R.layout.activity_teacher_zone_tab, parent, false);

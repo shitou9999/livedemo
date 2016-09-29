@@ -256,10 +256,10 @@
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/tv_live_teacher_zan2"
-                android:background="@drawable/selector_follow_button_bg"
+                android:background="@drawable/selector_home_follow_button_bg"
                 android:gravity="center"
                 android:text="+关注"
-                android:textColor="@drawable/selector_follow_button_text_color"
+                android:textColor="@drawable/selector_home_follow_text_color"
                 android:textSize="12sp"/>
 
             <TextView

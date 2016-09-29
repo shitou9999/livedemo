@@ -879,7 +879,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
     private void bindViewForFavour() {
         String tempFavour;
-        mTvFavour.setEnabled(!mIsFavour);
+        mTvFavour.setSelected(mIsFavour);
         if (mIsFavour) {
 //            mTvFavour.setTextColor(TextColorUtil.generateColor(R.color.def_DisableTextColor));
             tempFavour = StringUtils.getDecimal2(mCurFavourCount, Constant.TEN_THOUSAND,

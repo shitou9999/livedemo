@@ -142,7 +142,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.rl_clear_caech:
                 try {
-                    CacheManage.getInstance().clearAppCache(this);
+                    new CacheManage().clearAppCache(this);
                     setCacheSize();
                 } catch (Exception e) {
                     LogUtils.e("SettingActivity", "clearAppCache", e);
@@ -177,7 +177,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void setCacheSize() {
-        tv_caech_size.setText(StringUtils.replaceNullToEmpty(CacheManage.getInstance().CalculationCacheSize(this), ""));
+        tv_caech_size.setText(StringUtils.replaceNullToEmpty(new CacheManage().CalculationCacheSize(this), ""));
     }
 
     public static void CheckAppUpdate(final Context context) {
@@ -230,7 +230,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         int value = mSharedPreferences.getInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
         switch (value) {
             case Constant.VIDEO_SHARPNESS_STANDARD:
-                mTvSharpness.setText("流畅");
+                mTvSharpness.setText("清晰");
                 break;
             case Constant.VIDEO_SHARPNESS_HIGH:
                 mTvSharpness.setText("高清");
@@ -260,7 +260,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 // 流畅(标清)
                 case R.id.btn_standard:
                     mEditor.putInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
-                    mTvSharpness.setText("流畅");
+                    mTvSharpness.setText("清晰");
                     break;
                 // 高清
                 case R.id.btn_high:

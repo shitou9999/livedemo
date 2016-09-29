@@ -35,7 +35,6 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.me.activity.AboutActivity;
 import tv.kuainiu.ui.me.activity.CollectActivity;
 import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
@@ -159,7 +158,7 @@ public class MeFragment extends BaseFragment {
     }
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
-            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.rl_about})
+            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ci_avatar:
@@ -193,11 +192,6 @@ public class MeFragment extends BaseFragment {
                 startActivity(intentCollect);
                 break;
             case R.id.rlRecorder:
-                break;
-            case R.id.rl_about:
-                Intent intentAbout = new Intent();
-                intentAbout.setClass(getActivity(), AboutActivity.class);
-                startActivity(intentAbout);
                 break;
             case R.id.ivSetting:
                 Intent intentSettingActivity = new Intent();

@@ -6,7 +6,6 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -77,11 +76,11 @@ public class IGXApplication extends android.support.multidex.MultiDexApplication
             JPushInterface.setDebugMode(IsDegbug);
 
 
-            if (IsDegbug) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    LeakCanary.install(this);                       // 监控内存溢出
-                }
-            }
+//            if (IsDegbug) {
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//                    LeakCanary.install(this);                       // 监控内存溢出
+//                }
+//            }
 
             if (IsDegbug) {
                 String errorFilesSavePath = SDCardUtils.getSDCardPath() +

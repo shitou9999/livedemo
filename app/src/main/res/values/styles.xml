@@ -21,6 +21,7 @@
 
     <!-- 首页 Tab RadioButton 样式-->
     <style name="MainTabLinearLayoutStyle">
+        <item name="android:paddingTop">5dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">wrap_content</item>
@@ -29,7 +30,7 @@
     </style>
     <!-- 首页 Tab RadioButton 样式-->
     <style name="AppTheme.MainTabRadioButtonStyle">
-        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingTop">2dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
@@ -174,7 +175,7 @@
     <!-- Right Arrows Style -->
     <style name="MeOptionStyleForArrows">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">20dp</item>
         <item name="android:layout_marginRight">@dimen/fab_margin</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>

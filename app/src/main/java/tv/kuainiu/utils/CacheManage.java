@@ -41,8 +41,6 @@ public class CacheManage {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            LogUtils.i("CachManage", "saveStringObject_str:" + str);
-            LogUtils.i("CachManage", "saveStringObject_file:" + file);
             FileOutputStream fos = null;
             ObjectOutputStream oos = null;
             try {
@@ -55,7 +53,7 @@ public class CacheManage {
                 fos = context.openFileOutput(file, Context.MODE_PRIVATE);
                 oos = new ObjectOutputStream(fos);
                 oos.writeObject(str);
-                oos.flush();
+//                oos.flush();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,7 +91,7 @@ public class CacheManage {
             fos = context.openFileOutput(file, context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(ser);
-            oos.flush();
+//            oos.flush();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,8 +161,6 @@ public class CacheManage {
             fis = context.openFileInput(file);
             ois = new ObjectInputStream(fis);
             result = ois.readObject().toString();
-            LogUtils.i("CachManage", "readStringObject_str:" + result);
-            LogUtils.i("CachManage", "readStringObject_file:" + file);
         } catch (Exception e) {
             e.printStackTrace();
             // 反序列化失败 - 删除缓存文件

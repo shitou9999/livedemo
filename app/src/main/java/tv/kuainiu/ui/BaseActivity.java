@@ -1,7 +1,6 @@
 package tv.kuainiu.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,7 +23,7 @@ import static tv.kuainiu.modle.cons.Constant.SUCCEED;
  * 对具有输入文本功能的子类提供点击屏幕隐藏软键盘的接口 @see {@link #setTouchHideInput(boolean)}
  * Created by guxuan on 2016/3/2.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends tv.kuainiu.ui.activity.BaseActivity {
     public static final String CLIENT_INIT_TIME = "client_init_time";
     public static final int CLIENT_INIT_NUMBER = 5;
     public static final int CLIENT_INIT_MINUTE = 5;

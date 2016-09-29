@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ public class ReadingTapeFragment extends BaseFragment {
     private int page = 1;
     private boolean loading = false;
     public List<LiveItem> mLiveItemList = new ArrayList<>();
+    public List<LiveItem> mLiveHuiFangItemList = new ArrayList<>();
 
     public static ReadingTapeFragment newInstance(int parentPosition) {
         ReadingTapeFragment fragment = new ReadingTapeFragment();
@@ -71,15 +71,26 @@ public class ReadingTapeFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
+        return view;
+    }
+
+    @Override public void onStart() {
+        super.onStart();
         initView();
         initListener();
         initData();
-        return view;
     }
 
     private void initView() {
@@ -94,10 +105,14 @@ public class ReadingTapeFragment extends BaseFragment {
 
     private void initData() {
         getData();
+        getHuiFangData();
     }
 
     private void getData() {
-        LiveHttpUtil.liveIndex(getActivity(), "1", page, Action.live_zhi_bo_kan_pan);
+        LiveHttpUtil.liveIndex(getActivity(), "2", page, Action.live_zhi_bo_kan_pan);
+    }
+    private void getHuiFangData() {
+        LiveHttpUtil.liveIndex(getActivity(), "3", page, Action.live_hui_fang_kan_pan);
     }
 
     private void initListener() {
@@ -134,9 +149,20 @@ public class ReadingTapeFragment extends BaseFragment {
 
     private void dataLiveListBind(int size) {
         mReadingTapeAdapter.setLiveListList(mLiveItemList);
-        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+        mReadingTapeAdapter.notifyDataSetChanged();
     }
 
+    private void dataLiveBind() {
+        mReadingTapeAdapter.setLiveList(mLiveHuiFangItemList);
+//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+        mReadingTapeAdapter.notifyDataSetChanged();
+    }
+    private void dataBannerBind() {
+        mReadingTapeAdapter.setBannerList(mLiveItemList);
+//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
+        mReadingTapeAdapter.notifyDataSetChanged();
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
@@ -155,17 +181,48 @@ public class ReadingTapeFragment extends BaseFragment {
                             loading = false;
                             int size = mLiveItemList.size();
                             mLiveItemList.addAll(tempLiveItemList);
+                            dataBannerBind();
                             dataLiveListBind(size);
                         }
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         ToastUtils.showToast(getActivity(), "直播列表解析失败");
                     }
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());
                 }
-                srlRefresh.setRefreshing(false);
+                if (page == 1) {
+                    srlRefresh.setRefreshing(false);
+                }
+                break;
+            case live_hui_fang_kan_pan:
+
+                if (Constant.SUCCEED == event.getCode()) {
+                    String json = event.getData().optString("data");
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        List<LiveItem> tempLiveItemList = new DataConverter<LiveItem>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveItem>>() {
+                        }.getType());
+                        if (page == 1) {
+                            mLiveHuiFangItemList.clear();
+                        }
+                        if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
+                            int size = mLiveHuiFangItemList.size();
+                            mLiveHuiFangItemList.addAll(tempLiveItemList);
+                            dataLiveBind();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ToastUtils.showToast(getActivity(), "直播回放解析失败");
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), event.getMsg());
+                }
+                if (page == 1) {
+                    srlRefresh.setRefreshing(false);
+                }
                 break;
         }
     }

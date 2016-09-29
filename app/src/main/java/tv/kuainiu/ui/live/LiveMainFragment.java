@@ -54,7 +54,12 @@ public class LiveMainFragment extends BaseFragment {
         if (viewgroup != null) {
             viewgroup.removeView(view);
         }
+
         return view;
+    }
+
+    @Override public void onStart() {
+        super.onStart();
     }
 
     private void initView() {

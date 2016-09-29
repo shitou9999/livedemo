@@ -55,34 +55,37 @@ public class TabMajorFragment extends BaseFragment {
         }
     }
 
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab_major, container, false);
-        ButterKnife.bind(this, view);
-        initFragment();
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_tab_major, container, false);
+
+            ButterKnife.bind(this, view);
+            initFragment();
 
 
-        mNvpFragmentMajor.setAdapter(new SimpleViewPager(getChildFragmentManager(), mBaseFragments, titles[mParentPosition]));
+            mNvpFragmentMajor.setAdapter(new SimpleViewPager(getChildFragmentManager(), mBaseFragments, titles[mParentPosition]));
 //        mNvpFragmentMajor.setOffscreenPageLimit(mBaseFragments.size() - 1);
 
-        mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
-        mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
-        mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
-        mTabFragmentMajor.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                mNvpFragmentMajor.setCurrentItem(position);
-            }
+            mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
+            mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
+            mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
+            mTabFragmentMajor.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override public void onTabSelected(TabLayout.Tab tab) {
+                    int position = tab.getPosition();
+                    mNvpFragmentMajor.setCurrentItem(position);
+                }
 
-            @Override public void onTabUnselected(TabLayout.Tab tab) {
+                @Override public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
+                }
 
-            @Override public void onTabReselected(TabLayout.Tab tab) {
+                @Override public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
+                }
+            });
 
 //        int visibility = mParentPosition == 0 ? View.VISIBLE : View.GONE;
 //        mSwitchCompat.setVisibility(visibility);
@@ -90,7 +93,11 @@ public class TabMajorFragment extends BaseFragment {
 //        mSwitchCompat.setTextOff("");
 //
 //        mSwitchCompat.setTextColor(Color.RED);
-
+        }
+        ViewGroup viewgroup = (ViewGroup) view.getParent();
+        if (viewgroup != null) {
+            viewgroup.removeView(view);
+        }
         return view;
     }
 

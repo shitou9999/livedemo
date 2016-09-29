@@ -27,6 +27,7 @@ import java.util.List;
 
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
@@ -79,6 +80,12 @@ public class GuideActivity extends FragmentActivity implements
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(this);
         initView();// 本地展示
+        cacheData();
+    }
+
+    private void cacheData() {
+        //缓存首页bannar数据
+        OKHttpUtils.getInstance().post(this, Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar, CacheConfig.getCacheConfig());
     }
 
 
@@ -94,7 +101,7 @@ public class GuideActivity extends FragmentActivity implements
             views.add(view);
         }
         vpAdapter.notifyDataSetChanged();
-        if(views.size()<=1){
+        if (views.size() <= 1) {
             button.setVisibility(View.VISIBLE);
         }
     }

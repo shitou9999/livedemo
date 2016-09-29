@@ -178,13 +178,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //热门观点
     private void onBindHotPointViewHolder(HotPointHolder holder) {
-        CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(mContext);
-        mLayoutManager.setOrientation(CustomLinearLayoutManager.HORIZONTAL);
-        holder.rc_hot_point.setLayoutManager(mLayoutManager);
-        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
-        mDividerItemDecoration.setColor(Color.parseColor("#00000000"));
-        mDividerItemDecoration.setItemSize(mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
-        holder.rc_hot_point.addItemDecoration(mDividerItemDecoration);
         HotPointAdapter adp = new HotPointAdapter(mContext, mHotPointList, mOnItemClickListener);
         holder.rc_hot_point.setAdapter(adp);
     }
@@ -329,6 +322,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case HOT_POINT:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_hot_point, parent, false);
                 vh = new HotPointHolder(view);
+                CustomLinearLayoutManager mLayoutManager = new CustomLinearLayoutManager(mContext);
+                mLayoutManager.setOrientation(CustomLinearLayoutManager.HORIZONTAL);
+                ((HotPointHolder) vh).rc_hot_point.setLayoutManager(mLayoutManager);
+                DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL);
+                mDividerItemDecoration.setColor(Color.parseColor("#00000000"));
+                mDividerItemDecoration.setItemSize(mContext.getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
+                ((HotPointHolder) vh).rc_hot_point.addItemDecoration(mDividerItemDecoration);
                 break;
             case TEXT_HOT_POINT:
             case TEXT_HOT_NEW:

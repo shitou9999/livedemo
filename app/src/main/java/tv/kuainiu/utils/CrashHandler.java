@@ -151,7 +151,10 @@ public class CrashHandler implements UncaughtExceptionHandler {
             public void run() {
                 // Toast 显示需要出现在一个线程的消息队列中
                 Looper.prepare();
-                Toast.makeText(mContext, "程序出现未知错误", Toast.LENGTH_SHORT).show();
+                if (DEBUG) {
+                    Toast.makeText(mContext, "程序出现未知错误", Toast.LENGTH_SHORT).show();
+                    LogUtils.e(TAG, "程序出现未知错误");
+                }
                 Looper.loop();
             }
         }.start();
@@ -227,7 +230,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                FileOutputStream fos = new FileOutputStream(new File(FileSavePath,fileName));
+                FileOutputStream fos = new FileOutputStream(new File(FileSavePath, fileName));
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }

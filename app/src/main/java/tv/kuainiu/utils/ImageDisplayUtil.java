@@ -14,20 +14,32 @@ public class ImageDisplayUtil {
         if(context==null||imageView==null){
             return;
         }
+        try {
         Glide.with(context).load(imagePath).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        }catch (Exception e){
+            LogUtils.e("ImageDisplayUtil","line 20",e);
+        }
     }
 
     public static void displayImage(Context context, ImageView imageView, String imagePath, int imageId) {
         if(context==null||imageView==null){
             return;
         }
-        Glide.with(context).load(imagePath).placeholder(imageId).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        try {
+            Glide.with(context).load(imagePath).placeholder(imageId).dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        }catch (Exception e){
+            LogUtils.e("ImageDisplayUtil","line 31",e);
+        }
     }
 
     public static void displayImage(Context context, ImageView imageView, int imageId) {
         if(context==null||imageView==null){
             return;
         }
+        try {
         Glide.with(context).load(imageId).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        }catch (Exception e){
+            LogUtils.e("ImageDisplayUtil","line 42",e);
+        }
     }
 }
