@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:left_visibility="invisible"
+        app:right_visibility="invisible"
         app:title="名师"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
@@ -21,8 +22,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"/>
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
     <tv.kuainiu.widget.NetErrAddLoadView
         android:id="@+id/err_layout"

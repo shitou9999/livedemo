@@ -40,8 +40,8 @@
 -dontoptimize
 -dontobfuscate
 -dontpreverify
-#-keepattributes *Annotation*
--keepattributes EnclosingMetho
+-keepattributes *Annotation*
+#-keepattributes EnclosingMetho
 
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
@@ -185,10 +185,11 @@
 #rxjava************
 
 #cc-----------
--keep class io.vov.utils.** { *; }
--keep class io.vov.vitamio.** { *; }
--dontwarn som.bokecc.**
--keep class com.bokecc.sdk.mobile.play.** { *; }
+-dontwarn com.bokecc.**
+-keep public class com.bokecc.sdk.mobile.**{*;}
+-keep public class tv.**{*;}
+-keep public interface com.bokecc.sdk.mobile.**{*;}
+
 #cc
 
 -keepclasseswithmembernames class * {

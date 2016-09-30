@@ -158,9 +158,14 @@ public class MeFragment extends BaseFragment {
     }
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
-            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder})
+            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder,R.id.ivEdite,R.id.tv_me_name,
+            R.id.tv_me_phone,R.id.rlHomePage})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.rlHomePage:
+            case R.id.tv_me_phone:
+            case R.id.tv_me_name:
+            case R.id.ivEdite:
             case R.id.ci_avatar:
                 Intent personalIntent = new Intent();
                 personalIntent.setClass(getActivity(), PersonalActivity.class);

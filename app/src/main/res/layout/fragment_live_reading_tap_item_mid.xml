@@ -4,6 +4,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
+                android:background="@color/white_color"
                 android:layout_height="50dp">
 
     <ImageView
@@ -25,17 +26,18 @@
         android:id="@+id/tv_next_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/iv_right"
         android:textColor="@color/colorBlue400"
-        android:layout_centerVertical="true"
         android:textSize="12sp"
         tools:text="下一时段"/>
 
     <RelativeLayout
         android:id="@+id/rl_avatar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/iv_left">
 
@@ -51,49 +53,54 @@
             tools:src="@mipmap/net"/>
 
         <ImageView
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="2dp"
             android:layout_marginRight="2dp"
             android:scaleType="centerInside"
+            style="@style/view_invisibility"
             android:src="@mipmap/vip_ic"/>
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignTop="@+id/rl_avatar"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/tv_next_time"
-        android:layout_toRightOf="@+id/rl_avatar"
-        android:textColor="@color/colorGrey333333"
-        android:textSize="15sp"
-        tools:text="曹老师-今日趋势"/>
+        android:layout_toRightOf="@+id/rl_avatar">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/colorGrey333333"
+            android:textSize="15sp"
+            tools:text="曹老师-今日趋势"/>
 
-    <TextView
-        android:id="@+id/tv_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_title"
-        android:layout_below="@+id/tv_title"
-        android:textColor="@color/colorRed500"
-        android:textSize="12sp"
-        tools:text="直播中"
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_title"
+            android:layout_below="@+id/tv_title"
+            android:textColor="@color/colorRed500"
+            android:textSize="12sp"
+            tools:text="直播中"
         />
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_state"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/tv_state"
-        android:textColor="@color/colorGrey450"
-        android:textSize="12sp"
-        tools:text="9:00-10:00"/>
-
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_state"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tv_state"
+            android:textColor="@color/colorGrey450"
+            android:textSize="12sp"
+            tools:text="9:00-10:00"/>
+    </RelativeLayout>
 </RelativeLayout>

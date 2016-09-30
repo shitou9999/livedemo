@@ -193,7 +193,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
         mRvItems.setLayoutManager(mLayoutManager);
         int spaceProgram = getActivity().getResources().getDimensionPixelSize(R.dimen.def_divider);
 //        int space = getActivity().getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
-        mRvItems.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
+        mRvItems.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 //        mRvItems.addItemDecoration(new TeacherItemDecoration(mAdapter, space));
         mRvItems.addOnScrollListener(loadmoreListener);
         mRvItems.setAdapter(mAdapter);

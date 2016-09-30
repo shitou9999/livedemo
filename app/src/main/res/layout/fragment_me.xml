@@ -44,6 +44,7 @@
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:padding="5dp"
                     android:src="@drawable/selector_message"
+                    style="@style/view_invisibility"
                 />
 
                 <RelativeLayout
@@ -73,6 +74,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginRight="5dp"
                         android:scaleType="centerInside"
+                        style="@style/view_invisibility"
                         android:src="@mipmap/vip_ic"/>
                 </RelativeLayout>
 
@@ -89,6 +91,7 @@
                     tools:text="王丽"/>
 
                 <ImageView
+                    android:id="@+id/ivEdite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/tv_me_name"
@@ -124,6 +127,7 @@
                     android:gravity="center"
                     android:text="@string/null_value"
                     android:textColor="@color/colorAmber400"
+                    style="@style/view_invisibility"
                     tools:text="Lv9"/>
 
                 <RelativeLayout

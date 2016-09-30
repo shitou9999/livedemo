@@ -32,7 +32,6 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.ToastUtils;
 
-import static android.R.attr.type;
 import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.ZHI_BO;
 
 /**
@@ -111,14 +110,18 @@ public class ReadingTapeFragment extends BaseFragment {
     }
 
     private void initData() {
+        getBannerData();
         getData();
-        getHuiFangData();
+//        getHuiFangData();
+    }
+
+    private void getBannerData() {
+        LiveHttpUtil.liveIndex(getActivity(), "4", page, Action.live_zhi_bo_kauiniu_tv);
     }
 
     private void getData() {
         LiveHttpUtil.liveIndex(getActivity(), "1", page, Action.live_zhi_bo_kan_pan);
     }
-
     private void getHuiFangData() {
         LiveHttpUtil.liveIndex(getActivity(), "3", page, Action.live_hui_fang_kan_pan);
     }

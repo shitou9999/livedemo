@@ -44,6 +44,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     //    private final int CALL_PHONE_REQUEST_CODE = 0x1;
     @BindView(R.id.tv_version) TextView mTvVersion;
     @BindView(R.id.tv_content) TextView mTvContent;
+    @BindView(R.id.tvCompany) TextView tvCompany;
     @BindView(R.id.tv_wechat) TextView mTvWeChat;
     @BindView(R.id.tv_hotline) TextView mTvHotLine;
     @BindView(R.id.tv_website) TextView mTvWebsite;
@@ -218,7 +219,8 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                     DataConverter<Company> dc = new DataConverter<>();
                     Company mCompany = dc.JsonToObject(jsonObject.toString(), Company.class);
                     mTvWeChat.setText(StringUtils.replaceNullToEmpty(mCompany.getWeixin(), "kuainiu"));
-                    mTvWebsite.setText(StringUtils.replaceNullToEmpty(mCompany.getWeb_url(), "kuainiu"));
+                    mTvWebsite.setText(StringUtils.replaceNullToEmpty(mCompany.getWeb_url(), "http://www.kuainiu.tv"));
+                    tvCompany.setText(StringUtils.replaceNullToEmpty(mCompany.getCompany(), "kuainiu"));
 
                     String phone = StringUtils.replaceNullToEmpty(mCompany.getPhone(), "010-58295196");
                     SpannableString sp = new SpannableString(phone);

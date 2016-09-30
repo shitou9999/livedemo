@@ -157,8 +157,17 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             TextView mTvNextTime = (TextView) view.findViewById(R.id.tv_next_time);//下一时段
             //TODO 绑定中间直播信息
             LiveInfo liveItem = mLiveList.get(i);
-            ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getThumb(), R.mipmap.default_avatar);
+            ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
+            view.setTag(liveItem);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO 完善直播参数传递
+                    LiveInfo liveItem = (LiveInfo) view.getTag();
+                    clickRePlayLive(liveItem);
+                }
+            });
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
@@ -172,11 +181,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         //TODO 绑定直播Item
         ImageDisplayUtil.displayImage(mContext, holder.mIvIamge, liveItem.getThumb());
         ImageDisplayUtil.displayImage(mContext, holder.civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
-        if(type==ZHI_BO) {
+        if (type == ZHI_BO) {
             holder.ivLiveIng.setVisibility(View.VISIBLE);
             holder.mTvLiveing.setText("直播中");
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
-        }else{
+        } else {
             holder.ivLiveIng.setVisibility(View.GONE);
             holder.mTvLiveing.setText("开始时间");
             holder.mTvLiveingNumber.setText(DateUtil.formatDate(liveItem.getStart_date()));
@@ -208,10 +217,15 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             liveParameter.setTeacherId(liveItem.getTeacher_id());
             PlayLiveActivity.intoNewIntent(mContext, liveParameter);
         } else {
-            ToastUtils.showToast(mContext,liveItem.getLive_msg());
+            ToastUtils.showToast(mContext, liveItem.getLive_msg());
         }
     }
 
+    /**
+     * 回放
+     *
+     * @param liveItem
+     */
     public void clickRePlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
         liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());

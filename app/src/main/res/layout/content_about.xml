@@ -71,17 +71,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/small_margin"
-                android:text="iguxuan"
+                android:text="kuainiu"
                 />
 
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/def_DividerColor"
-            />
 
 
         <LinearLayout
@@ -114,11 +108,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/def_DividerColor"
-            />
 
         <LinearLayout
             android:id="@+id/ll_website"
@@ -152,18 +141,13 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/def_DividerColor"
-            />
-
 
         <TextView
+            android:id="@+id/tvCompany"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="150dp"
             android:text="@string/company"
             android:textSize="@dimen/text_size_micro"
             />
@@ -171,7 +155,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_marginTop="@dimen/micro_margin"
             android:text="@string/copyright_info"
             android:textSize="@dimen/text_size_micro"

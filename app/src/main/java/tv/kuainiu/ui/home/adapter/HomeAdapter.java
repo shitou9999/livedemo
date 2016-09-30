@@ -18,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
@@ -33,6 +34,7 @@ import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.DensityUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -265,21 +267,22 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_item_mid, null);
             ImageView mIvLeft = (ImageView) view.findViewById(R.id.iv_left);//左箭头
             ImageView mIvRight = (ImageView) view.findViewById(R.id.iv_right);//右箭头
+            CircleImageView civAvatar = (CircleImageView) view.findViewById(R.id.civ_avatar);//右箭头
             TextView mTvNextTime = (TextView) view.findViewById(R.id.tv_next_time);//
             RelativeLayout mRlAvatar = (RelativeLayout) view.findViewById(R.id.rl_avatar);//头像
             TextView mTvTitle = (TextView) view.findViewById(R.id.tv_title);//直播状态
             TextView mTvState = (TextView) view.findViewById(R.id.tv_state);//直播间状态
             TextView mTvTime = (TextView) view.findViewById(R.id.tv_time);
 
-            mIvLeft.setVisibility(View.INVISIBLE);
-            mIvRight.setVisibility(View.INVISIBLE);
+            mIvLeft.setVisibility(View.GONE);
+//            mIvRight.setVisibility(View.INVISIBLE);
 
-           final LiveInfo liveInfo=mLiveList.get(i);
+            final LiveInfo liveInfo = mLiveList.get(i);
+            ImageDisplayUtil.displayImage(mContext, civAvatar, liveInfo.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveInfo.getTitle()));
             mTvState.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg()));
-            mTvTime.setText(DateUtil.formatDate(liveInfo.getStart_date())+"-"+DateUtil.formatDate(liveInfo.getEnd_date()));
-            ;//时间
-            //TODO 绑定中间直播信息
+            mTvTime.setText(DateUtil.formatDate(liveInfo.getStart_date()) + "-" + DateUtil.formatDate(liveInfo.getEnd_date()));//时间
+            //绑定中间直播信息
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -312,7 +315,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 }
             });
-            //TODO 列表直播是否显示
+            //TODO 列表直播标签是否显示
             holder.tvType.setVisibility(View.INVISIBLE);
         }
 //
@@ -336,7 +339,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case STOCK_INDEX:
             case LIVE:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
-                vh = new BannerViewHolder(view);
+                BannerViewHolder bannerViewHolder = new BannerViewHolder(view);
+                RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(mContext, 80));
+                bannerViewHolder.mVpReadingTap.setLayoutParams(layoutParams2);
+                vh = bannerViewHolder;
                 break;
             case HOT_POINT:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_hot_point, parent, false);
@@ -415,6 +421,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
     }
+
     public void clickPlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
         liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());

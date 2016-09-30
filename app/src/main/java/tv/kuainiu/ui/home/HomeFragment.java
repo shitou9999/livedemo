@@ -367,6 +367,7 @@ public class HomeFragment extends BaseFragment {
                             int size = mLiveItemList.size();
                             mLiveItemList.addAll(tempLiveItemList);
                             mHomeAdapter.setLiveList(mLiveItemList);
+                            mHomeAdapter.notifyDataSetChanged();
                         }
 
                     } catch (Exception e) {
