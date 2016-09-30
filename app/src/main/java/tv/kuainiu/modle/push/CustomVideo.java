@@ -35,7 +35,8 @@ public class CustomVideo {
     private String description;
     private long inputtime;
     private String video_id;
-    private String support_num;
+    private int support_num;
+    private int is_support;
     private String comment_num;
     private String view_num;
     private String is_official;
@@ -123,12 +124,20 @@ public class CustomVideo {
         this.video_id = video_id;
     }
 
-    public String getSupport_num() {
+    public int getSupport_num() {
         return support_num;
     }
 
-    public void setSupport_num(String support_num) {
+    public void setSupport_num(int support_num) {
         this.support_num = support_num;
+    }
+
+    public int getIs_support() {
+        return is_support;
+    }
+
+    public void setIs_support(int is_support) {
+        this.is_support = is_support;
     }
 
     public String getComment_num() {

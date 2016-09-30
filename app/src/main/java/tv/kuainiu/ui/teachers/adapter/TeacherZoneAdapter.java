@@ -37,7 +37,7 @@ import tv.kuainiu.widget.PostParentLayout;
 /**
  * @author nanck on 2016/7/29.
  */
-public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private BaseActivity mContext;
@@ -174,7 +174,13 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.mTvFollowButton.setText("已关注");
         }
         holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
-        holder.mTvFollowButton.setOnClickListener(this);
+        holder.mTvFollowButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (null != mOnClickListener) {
+                    mOnClickListener.onClick(view);
+                }
+            }
+        });
         holder.mTvFollowButton.setTag(R.id.tv_follow_button, teacherInfo);
         holder.mTvFollowButton.setTag(R.id.tv_follow_number, holder.mTvFollowNumber);
     }
@@ -235,6 +241,24 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         // Hide bottom live
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
+
+        //TODO 解盘点赞
+        if (teacherZoneDynamics.getIs_support() == Constant.FAVOURED) {
+            holder.ivSupport.setVisibility(View.INVISIBLE);
+            holder.mTvFriendsPostLike.setSelected(true);
+        } else {
+            holder.ivSupport.setVisibility(View.VISIBLE);
+            holder.mTvFriendsPostLike.setSelected(false);
+        }
+        holder.ivSupport.setTag(teacherZoneDynamics);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
+        holder.ivSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     private void dataVideo(BodyViewHolder holder, int position) {
@@ -286,6 +310,23 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         // Hide bottom live
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
+//TODO 解盘点赞
+        if (teacherZoneDynamics.getIs_support() == Constant.FAVOURED) {
+            holder.ivSupport.setVisibility(View.INVISIBLE);
+            holder.mTvFriendsPostLike.setSelected(true);
+        } else {
+            holder.ivSupport.setVisibility(View.VISIBLE);
+            holder.mTvFriendsPostLike.setSelected(false);
+        }
+        holder.ivSupport.setTag(teacherZoneDynamics);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
+        holder.ivSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     @Override
@@ -361,6 +402,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.tv_friends_post_comment) TextView mTvFriendsPostComment;
         @BindView(R.id.tv_friends_post_like) TextView mTvFriendsPostLike;
         @BindView(R.id.view_friends_post_line_bottom) View mViewFriendsPostLineBottom;
+        @BindView(R.id.ivSupport)
+        ImageView ivSupport;
 
         public BodyViewHolder(View itemView) {
             super(itemView);
@@ -368,13 +411,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    @Override public void onClick(View view) {
-        if (null != mOnClickListener) {
-            mOnClickListener.onClick(view, view.getTag());
-        }
-    }
 
     public interface OnClickListener {
-        void onClick(View v, Object o);
+        void onClick(View v);
     }
 }

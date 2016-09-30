@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,9 +17,11 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
@@ -36,6 +39,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     private List<CustomVideo> customVideoList;
     private List<LiveInfo> customLiveList;
     private int type = CUSTOM_VIEW_POINT;
+    private OnItemClickListener onItemClickListener;
 
     public FriendsPostAdapter(Activity context) {
         mContext = context;
@@ -44,6 +48,10 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     public FriendsPostAdapter(Activity context, int type) {
         mContext = context;
         this.type = type;
+    }
+
+    public void setOnClick(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void setType(int type) {
@@ -96,7 +104,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataViewPoint(ViewHolder holder, int position) {
-        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
+       TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
@@ -104,7 +112,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss",info.getCreate_date()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         holder.mPostParentLayout.setPostType(info.getNews_info());
@@ -114,6 +122,22 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         // Hide bottom line
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
+        if(info.getIs_support()== Constant.FAVOURED){
+            holder.ivSupport.setVisibility(View.INVISIBLE);
+            holder.mTvFriendsPostLike.setSelected(true);
+        }else{
+            holder.ivSupport.setVisibility(View.VISIBLE);
+            holder.mTvFriendsPostLike.setSelected(false);
+        }
+        holder.ivSupport.setTag(info);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     private void dataVideo(ViewHolder holder, int position) {
@@ -124,7 +148,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss",info.getInputtime()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getInputtime()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
@@ -142,6 +166,22 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         // Hide bottom live
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
+        if(info.getIs_support()== Constant.FAVOURED){
+            holder.ivSupport.setVisibility(View.INVISIBLE);
+            holder.mTvFriendsPostLike.setSelected(true);
+        }else{
+            holder.ivSupport.setVisibility(View.VISIBLE);
+            holder.mTvFriendsPostLike.setSelected(false);
+        }
+        holder.ivSupport.setTag(info);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     private void dataLive(ViewHolder holder, int position) {
@@ -181,6 +221,23 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         // Hide bottom live
         int v = position == customLiveList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
+
+        if(info.getIs_supported()== Constant.FAVOURED){
+            holder.ivSupport.setVisibility(View.INVISIBLE);
+            holder.mTvFriendsPostLike.setSelected(true);
+        }else{
+            holder.ivSupport.setVisibility(View.VISIBLE);
+            holder.mTvFriendsPostLike.setSelected(false);
+        }
+        holder.ivSupport.setTag(info);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     @Override
@@ -213,10 +270,13 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         TextView mTvFriendsPostLike;
         @BindView(R.id.view_friends_post_line_bottom)
         View mViewFriendsPostLineBottom;
+        @BindView(R.id.ivSupport)
+        ImageView ivSupport;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

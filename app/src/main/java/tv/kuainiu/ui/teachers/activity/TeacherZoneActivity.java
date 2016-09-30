@@ -171,7 +171,7 @@ public class TeacherZoneActivity extends BaseActivity {
         initTab(0);
         mTeacherZoneAdapter = new TeacherZoneAdapter(this);
         mTeacherZoneAdapter.setOnClickListener(new TeacherZoneAdapter.OnClickListener() {
-            @Override public void onClick(View v, Object o) {
+            @Override public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tv_follow_button:
                         TeacherInfo teacherInfo = (TeacherInfo) v.getTag(R.id.tv_follow_button);
