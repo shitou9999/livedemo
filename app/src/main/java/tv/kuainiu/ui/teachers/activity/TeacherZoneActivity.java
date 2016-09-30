@@ -212,7 +212,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
                 if(selectedIndex==0) {
                     teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
-                    SupportHttpUtil.supportDynamics(this, String.valueOf(teacherZoneDynamics.getNews_id()),Action.SUPPORT_DYNAMICS);
+                    SupportHttpUtil.supportDynamics(this, String.valueOf(teacherZoneDynamics.getId()),Action.SUPPORT_DYNAMICS);
                 }else{
                     customVideo = (CustomVideo) v.getTag();
                     SupportHttpUtil.supportVideoDynamics(this,customVideo.getCat_id(),customVideo.getId() );

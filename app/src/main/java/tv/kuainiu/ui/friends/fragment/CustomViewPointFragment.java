@@ -137,7 +137,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
                 ivSupport=v;
                 teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
-                SupportHttpUtil.supportDynamics(getActivity(), String.valueOf(teacherZoneDynamics.getNews_id()), Action.SUPPORT_DYNAMICS);
+                SupportHttpUtil.supportDynamics(getActivity(), String.valueOf(teacherZoneDynamics.getId()), Action.SUPPORT_DYNAMICS);
                 break;
         }
     }
