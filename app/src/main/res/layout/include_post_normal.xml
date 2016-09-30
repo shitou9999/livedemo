@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="56dp"
-              android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/ivThumb"
         android:layout_width="56dp"
-        android:layout_height="56dp">
-
-        <ImageView
-            android:id="@+id/ivThumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"/>
-
-    </FrameLayout>
+        android:layout_height="56dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
 
     <FrameLayout
         android:layout_width="0dp"
@@ -35,15 +30,13 @@
             android:paddingRight="8dp"
             android:paddingStart="8dp"
             android:text="可见，Linux中Input子系统对输入设备信息的捕获可以说是Android事件来源的老祖宗"
-            android:textColor="@color/colorGrey800"
-            />
+            android:textColor="@color/colorGrey800" />
 
     </FrameLayout>
 
     <View
         android:layout_width="6dp"
         android:layout_height="match_parent"
-        android:background="@color/colorGrey600"
-        />
+        android:background="@color/colorGrey600" />
 
 </LinearLayout>

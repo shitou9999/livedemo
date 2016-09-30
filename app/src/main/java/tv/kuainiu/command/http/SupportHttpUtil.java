@@ -31,7 +31,7 @@ public class SupportHttpUtil {
     /**
      * 文字动态点赞
      */
-    public static void supportDynamics(Context context, String dynamics_id) {
+    public static void supportDynamics(Context context, String dynamics_id,Action action) {
 //        Map<String, String> map = new HashMap<>();
 //        map.put("is_all", is_all);
 //        map.put("is_official", is_official);
@@ -39,7 +39,7 @@ public class SupportHttpUtil {
 //        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.FOLLOW_LSIT, param, Action.follow_list);
         Map<String, Object> map = new HashMap<>();
         map.put("dynamics_id", dynamics_id);
-        OKHttpUtils.getInstance().syncGet(context, Api.SUPPORT_DYNAMICS + ParamUtil.getParamForGet(map), Action.SUPPORT_DYNAMICS);
+        OKHttpUtils.getInstance().syncGet(context, Api.SUPPORT_DYNAMICS + ParamUtil.getParamForGet(map),action);
     }
 
 }

@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
@@ -28,6 +29,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
 import tv.kuainiu.utils.ScreenUtils;
@@ -53,7 +55,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public static final int CUSTOM_VIDEO = 1;
     private int selectedIndex = 0;
     private TeacherInfo teacherInfo;
-    private OnClickListener mOnClickListener;
+    private OnItemClickListener mOnClickListener;
 
     public TeacherZoneAdapter(BaseActivity context) {
         mContext = context;
@@ -70,7 +72,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.teacherInfo = teacherInfo;
     }
 
-    public void setOnClickListener(OnClickListener onClickListener) {
+    public void setOnClickListener(OnItemClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 
@@ -96,7 +98,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case CUSTOM_VIEW_POINT:
                 count = teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
                 break;
-            case CUSTOM_VIDEO:
+           default:
                 count = customVideoList == null ? 0 : customVideoList.size();
                 break;
         }
@@ -192,7 +194,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case CUSTOM_VIEW_POINT:
                 dataViewPoint(holder, position);
                 break;
-            case CUSTOM_VIDEO:
+            default:
                 dataVideo(holder, position);
                 break;
         }
@@ -200,18 +202,18 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void dataViewPoint(BodyViewHolder holder, int position) {
-        TeacherZoneDynamics teacherZoneDynamics = teacherZoneDynamicsList.get(position - SIZE);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
-        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
-
-        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position - SIZE);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNews_info() != null ? teacherZoneDynamics.getNews_info().getNews_catname() : ""));
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(teacherZoneDynamics.getNews_info());
-        switch (teacherZoneDynamics.getType()) {
+        holder.mPostParentLayout.setPostType(info.getNews_info());
+        switch (info.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
@@ -230,27 +232,19 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
         }
 
-
-//        Log.d("ssfsdfsdfsdfsd", "height : " + holder.itemView.getHeight());
-//        int height = holder.itemView.getHeight();
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(2, height);
-//        holder.mViewFriendsPostLine.setLayoutParams(lp);
-//        holder.mViewFriendsPostLineBottom.setMinimumHeight(height);
-
-
         // Hide bottom live
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
 
         //TODO 解盘点赞
-        if (teacherZoneDynamics.getIs_support() == Constant.FAVOURED) {
+        if (info.getIs_support() == Constant.FAVOURED) {
             holder.ivSupport.setVisibility(View.INVISIBLE);
             holder.mTvFriendsPostLike.setSelected(true);
         } else {
             holder.ivSupport.setVisibility(View.VISIBLE);
             holder.mTvFriendsPostLike.setSelected(false);
         }
-        holder.ivSupport.setTag(teacherZoneDynamics);
+        holder.ivSupport.setTag(info);
         holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -262,25 +256,26 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void dataVideo(BodyViewHolder holder, int position) {
-        CustomVideo teacherZoneDynamics = customVideoList.get(position - SIZE);
-        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
-        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getNickname()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()));
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getCatname()));
-        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getComment_num(), "0"));
+        CustomVideo info = customVideoList.get(position - SIZE);
+        ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
+        holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
+        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getInputtime()));
+        String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
 
-        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(teacherZoneDynamics.getSupport_num(), "0"));
+        String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
-        news_info.setType(teacherZoneDynamics.getType());
-        news_info.setNews_video_id(teacherZoneDynamics.getId());
-        news_info.setNews_title(teacherZoneDynamics.getDescription());
-        news_info.setNews_catid(teacherZoneDynamics.getCat_id());
-        news_info.setNews_inputtime(teacherZoneDynamics.getInputtime());
-        news_info.setVideo_id(teacherZoneDynamics.getVideo_id());
+        news_info.setType(info.getType());
+        news_info.setNews_video_id(info.getId());
+        news_info.setNews_title(info.getTitle());
+        news_info.setNews_catid(info.getCat_id());
+        news_info.setNews_inputtime(info.getInputtime());
+        news_info.setVideo_id(info.getVideo_id());
         holder.mPostParentLayout.setPostType(news_info);
-        switch (Integer.parseInt(teacherZoneDynamics.getType())) {
+        switch (Integer.parseInt(info.getType())) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
@@ -311,14 +306,14 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
 //TODO 解盘点赞
-        if (teacherZoneDynamics.getIs_support() == Constant.FAVOURED) {
+        if (info.getIs_support() == Constant.FAVOURED) {
             holder.ivSupport.setVisibility(View.INVISIBLE);
             holder.mTvFriendsPostLike.setSelected(true);
         } else {
             holder.ivSupport.setVisibility(View.VISIBLE);
             holder.mTvFriendsPostLike.setSelected(false);
         }
-        holder.ivSupport.setTag(teacherZoneDynamics);
+        holder.ivSupport.setTag(info);
         holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -409,10 +404,5 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-    }
-
-
-    public interface OnClickListener {
-        void onClick(View v);
     }
 }

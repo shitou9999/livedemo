@@ -144,7 +144,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         CustomVideo info = customVideoList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
-        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getTitle()));
+        holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
@@ -154,7 +154,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
         news_info.setType(info.getType());
         news_info.setNews_video_id(info.getId());
-        news_info.setNews_title(info.getDescription());
+        news_info.setNews_title(info.getTitle());
         news_info.setNews_catid(info.getCat_id());
         news_info.setNews_inputtime(info.getInputtime());
         news_info.setVideo_id(info.getVideo_id());

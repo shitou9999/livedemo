@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -19,13 +20,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -37,13 +41,16 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+
+import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
 /**
  * 定制解盘视频
  */
-public class CustomVideoFragment extends BaseFragment {
+public class CustomVideoFragment extends BaseFragment  implements OnItemClickListener {
     private static final String TAG = "CustomVideoFragment";
 
     @BindView(R.id.rv_fragment_friends_tab) RecyclerView mRecyclerView;
@@ -79,6 +86,7 @@ public class CustomVideoFragment extends BaseFragment {
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
         adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO);
+        adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         getData();
         return view;
@@ -115,7 +123,20 @@ public class CustomVideoFragment extends BaseFragment {
             }
         };
     }
-
+    TextView mTvFriendsPostLike;
+    CustomVideo customVideo;
+    View ivSupport;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivSupport:
+                ivSupport=v;
+                customVideo = (CustomVideo) v.getTag();
+                mTvFriendsPostLike= (TextView) v.getTag(R.id.tv_friends_post_like);
+                SupportHttpUtil.supportVideoDynamics(getActivity(),customVideo.getCat_id(),customVideo.getId() );
+                break;
+        }
+    }
     /**
      * 动态
      */
@@ -133,6 +154,17 @@ public class CustomVideoFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case video_favour:
+                if (SUCCEED == event.getCode()) {
+                    ivSupport.setVisibility(View.INVISIBLE);
+                    DebugUtils.showToast(getActivity(), event.getMsg());
+                    mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num()+ 1));
+                } else if (-2 == event.getCode()) {
+                    DebugUtils.showToastResponse(getActivity(), "已支持过");
+                } else {
+                    DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+                }
+                break;
             case CUSTOM_VIDEO_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);

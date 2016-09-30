@@ -128,9 +128,9 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
 
     private void initAvatar(String imagePath) {
         if (TextUtils.isEmpty(imagePath) || "".equals(imagePath)) {
-            ImageDisplayUtil.displayImage(PersonalActivity.this, mPhoto, R.mipmap.head_nor);
+            ImageDisplayUtil.displayImage(PersonalActivity.this, mPhoto, R.mipmap.default_avatar);
         } else {
-            ImageDisplayUtil.displayImage(PersonalActivity.this, mPhoto, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.head_nor);
+            ImageDisplayUtil.displayImage(PersonalActivity.this, mPhoto, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.default_avatar);
         }
     }
 

@@ -292,9 +292,9 @@ public class MeFragment extends BaseFragment {
 
     private void displayAvatar(String imagePath) {
         if (TextUtils.isEmpty(imagePath) || "".equals(imagePath)) {
-            ImageDisplayUtil.displayImage(getActivity(), ci_avatar, R.mipmap.head_nor);
+            ImageDisplayUtil.displayImage(getActivity(), ci_avatar, R.mipmap.default_avatar);
         } else {
-            ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.head_nor);
+            ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.default_avatar);
         }
     }
 

@@ -110,7 +110,7 @@ public class ReadingTapeFragment extends BaseFragment {
     }
 
     private void initData() {
-        getBannerData();
+//        getBannerData();
         getData();
 //        getHuiFangData();
     }

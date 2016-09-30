@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -30,6 +31,7 @@ import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.LiveHttpUtil;
+import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -184,7 +186,8 @@ public class HomeFragment extends BaseFragment {
 
     TextView mTvFollowButton;
     TextView mTvHotPointSupport;
-
+    HotPonit mHotPoint2;
+    View vSupport;
     class itemClick implements OnItemClickListener {
 
         @Override public void onClick(View v) {
@@ -201,13 +204,19 @@ public class HomeFragment extends BaseFragment {
                     }
                     break;
                 case R.id.ll_hot_point_support:
-                    HotPonit mHotPoint2 = (HotPonit) v.getTag();
+                    vSupport=v;
+                    mHotPoint2 = (HotPonit) v.getTag();
                     mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
                     if (!IGXApplication.isLogin()) {
                         new LoginPromptDialog(getActivity()).show();
                         return;
                     } else {
-                        addFollow(mHotPoint2.getIs_follow(), mHotPoint2.getUser_id());
+                        if(mHotPoint2.getIs_support()== Constant.FAVOURED){
+                            vSupport.setSelected(true);
+                            ToastUtils.showToast(getActivity(),"已经点过赞了");
+                        }else{
+                            SupportHttpUtil.supportDynamics(getActivity(), mHotPoint2.getId(), Action.home_support_dynamics);
+                        }
                     }
                     break;
             }
@@ -246,6 +255,18 @@ public class HomeFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case home_support_dynamics:
+                if (Constant.SUCCEED == event.getCode()) {
+                    mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%d)", mHotPoint2.getSupport_num() + 1));
+                    vSupport.setSelected(true);
+                    ToastUtils.showToast(getActivity(), "点赞成功");
+                } else if (-2 == event.getCode()) {
+                    DebugUtils.showToastResponse(getActivity(), "已支持过");
+                } else {
+                    LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
+                }
+                break;
             case find_bannar:
                 if (Constant.SUCCEED == event.getCode()) {
                     DebugUtils.dd(event.getData().toString());

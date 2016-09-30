@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,10 +16,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <!--<include layout="@layout/content_main"/>-->
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
 
         <LinearLayout
@@ -29,8 +28,8 @@
             android:layout_height="?android:attr/actionBarSize"
             android:layout_alignParentBottom="true"
             android:background="#F5F5F5F5"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/ll_main_home"
                 style="@style/MainTabLinearLayoutStyle">
@@ -39,15 +38,15 @@
                     android:id="@+id/iv_main_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_home"/>
+                    android:src="@drawable/selector_main_home" />
 
                 <TextView
                     android:id="@+id/tv_main_home"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="首页"
-                    />
+                    android:text="首页" />
             </LinearLayout>
-          <LinearLayout
+
+            <LinearLayout
                 android:id="@+id/ll_main_live"
                 style="@style/MainTabLinearLayoutStyle">
 
@@ -55,13 +54,12 @@
                     android:id="@+id/iv_main_live"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_live"/>
+                    android:src="@drawable/selector_main_live" />
 
                 <TextView
                     android:id="@+id/tv_main_live"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="@string/tab_main_live"
-                    />
+                    android:text="@string/tab_main_live" />
             </LinearLayout>
 
 
@@ -73,13 +71,12 @@
                     android:id="@+id/iv_main_friends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_firends"/>
+                    android:src="@drawable/selector_main_firends" />
 
                 <TextView
                     android:id="@+id/tv_main_friends"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="@string/tab_main_friends"
-                    />
+                    android:text="@string/tab_main_friends" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,13 +87,12 @@
                     android:id="@+id/iv_main_teacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_teacher"/>
+                    android:src="@drawable/selector_main_teacher" />
 
                 <TextView
                     android:id="@+id/tv_main_teacher"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="@string/tab_main_teacher"
-                    />
+                    android:text="@string/tab_main_teacher" />
             </LinearLayout>
 
             <LinearLayout
@@ -106,13 +102,12 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_me"/>
+                    android:src="@drawable/selector_main_me" />
 
                 <TextView
                     android:id="@+id/tv_main_me"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="@string/tab_main_me"
-                    />
+                    android:text="@string/tab_main_me" />
             </LinearLayout>
         </LinearLayout>
 
@@ -120,6 +115,11 @@
             android:id="@+id/vp_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/ll_main" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorGrey200"
             android:layout_above="@+id/ll_main"/>
     </RelativeLayout>
 

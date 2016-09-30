@@ -23,7 +23,7 @@ public class TeacherZoneDynamics {
 
     private int id;
     private int user_id;
-    private String support_num;
+    private int support_num;
     private String comment_num;
     private String nickname;
     private String avatar;
@@ -53,11 +53,11 @@ public class TeacherZoneDynamics {
         this.user_id = user_id;
     }
 
-    public String getSupport_num() {
+    public int getSupport_num() {
         return support_num;
     }
 
-    public void setSupport_num(String support_num) {
+    public void setSupport_num(int support_num) {
         this.support_num = support_num;
     }
 

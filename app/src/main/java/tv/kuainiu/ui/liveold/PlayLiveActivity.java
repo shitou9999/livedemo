@@ -98,6 +98,7 @@ import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.TimeFormatUtil;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.utils.WeakHandler;
@@ -1615,36 +1616,36 @@ public class PlayLiveActivity extends BaseActivity implements
     public void onEventMainThread(HttpEvent event) {
         switch (event.getAction()) {
             case live_add_like:
-//                if (Constant.SUCCEED == event.getCode()) {
-//                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLivingInfo.getLiveing().getSupport() + 1));
-//                    tv_live_teacher_zan.setSelected(true);
-//                    ToastUtils.showToast(this, "点赞成功");
-//                } else {
-//                    LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
-//                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
-//                }
+                if (Constant.SUCCEED == event.getCode()) {
+                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLivingInfo.getSupportNumber() + 1));
+                    tv_live_teacher_zan.setSelected(true);
+                    ToastUtils.showToast(this, "点赞成功");
+                } else {
+                    LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
+                }
                 break;
             case teacher_fg_del_follow:
-//                if (Constant.SUCCEED == event.getCode()) {
-//                    mLivingInfo.getLiveing().setFans_count(mLivingInfo.getLiveing().getFans_count() - 1);
-//                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getLiveing().getFans_count()));
-//                    btn_teacher_follow.setSelected(false);
-//                    btn_teacher_follow.setText("＋关注");
-//                } else {
-//                    LogUtils.e("关注失败", StringUtils.replaceNullToEmpty(event.getMsg()));
-//                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
-//                }
+                if (Constant.SUCCEED == event.getCode()) {
+                    mLivingInfo.setFansNumber(mLivingInfo.getFansNumber() - 1);
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getFansNumber()));
+                    btn_teacher_follow.setSelected(false);
+                    btn_teacher_follow.setText("＋关注");
+                } else {
+                    LogUtils.e("关注失败", StringUtils.replaceNullToEmpty(event.getMsg()));
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
+                }
                 break;
             case teacher_fg_add_follow:
-//                if (Constant.SUCCEED == event.getCode()) {
-//                    mLivingInfo.getLiveing().setFans_count(mLivingInfo.getLiveing().getFans_count() + 1);
-//                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getLiveing().getFans_count()));
-//                    btn_teacher_follow.setSelected(true);
-//                    btn_teacher_follow.setText("已关注");
-//                } else {
-//                    LogUtils.e("取消关注失败", StringUtils.replaceNullToEmpty(event.getMsg()));
-//                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
-//                }
+                if (Constant.SUCCEED == event.getCode()) {
+                    mLivingInfo.setFansNumber(mLivingInfo.getFansNumber() + 1);
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getFansNumber()));
+                    btn_teacher_follow.setSelected(true);
+                    btn_teacher_follow.setText("已关注");
+                } else {
+                    LogUtils.e("取消关注失败", StringUtils.replaceNullToEmpty(event.getMsg()));
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
+                }
                 break;
             case off_line:
                 if (dwLive != null) {
@@ -1654,7 +1655,7 @@ public class PlayLiveActivity extends BaseActivity implements
                 loginLive();
                 getTeacherInfo();
                 break;
-            case live_fetch_living_info:
+//            case live_fetch_living_info:
 //                if (Constant.SUCCEED == event.getCode()) {
 //                    try {
 //                        DebugUtils.dd("Live paling info : " + event.getData().toString());
@@ -1667,7 +1668,7 @@ public class PlayLiveActivity extends BaseActivity implements
 //                        // mErrView.StopLoading(event.getCode(), event.getMsg());
 //                    }
 //                }
-                break;
+//                break;
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,6 +53,7 @@ public class GuideActivity extends BaseActivity implements
     private GuideAdapter vpAdapter;
     private List<View> views = new ArrayList<View>();
     private ViewPager vp;
+    private TextView tvSkip;
     private Button button;
 
     private CirclePageIndicator cpi_CirclePageIndicator;
@@ -69,15 +71,18 @@ public class GuideActivity extends BaseActivity implements
         setContentView(R.layout.activity_guidance);
         ExitUtil.getInstance().addActivity(this);
         cpi_CirclePageIndicator = (CirclePageIndicator) findViewById(R.id.cpi_circle_page_indicator);
+        tvSkip = (TextView) findViewById(R.id.tvSkip);
         vp = (ViewPager) findViewById(R.id.viewpager);
+        button = (Button) findViewById(R.id.button);
         // 初始化Adapter
         vpAdapter = new GuideAdapter(views, new String[views.size()]);
         vp.setAdapter(vpAdapter);
         cpi_CirclePageIndicator.setViewPager(vp);
         // 绑定回调
         cpi_CirclePageIndicator.setOnPageChangeListener(this);
-        button = (Button) findViewById(R.id.button);
+
         button.setOnClickListener(this);
+        tvSkip.setOnClickListener(this);
         initView();// 本地展示
         cacheData();
     }
@@ -89,7 +94,7 @@ public class GuideActivity extends BaseActivity implements
 
 
     public void initView() {
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 5; i++) {
             LayoutInflater inf = LayoutInflater.from(this);
             view = inf.inflate(R.layout.activity_guidance_item, null);
             guidencePic = (ImageView) view.findViewById(R.id.iv_guidance_pic);
@@ -156,6 +161,7 @@ public class GuideActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvSkip:
             case R.id.button:
                 if (!MainActivity.isOpened) {
                     Intent intent = new Intent();

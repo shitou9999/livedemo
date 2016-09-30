@@ -17,6 +17,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
+import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.friends.model.BasePost;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
@@ -76,7 +77,24 @@ public class PostParentLayout extends RelativeLayout {
         mContext = context;
 
     }
-
+    public void clickPlayLive(LiveInfo liveItem) {
+        if (liveItem.getLive_status() == Constans.LIVE_ING) {
+            LiveParameter liveParameter = new LiveParameter();
+            liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
+            liveParameter.setIsFollow(liveItem.getIs_follow());
+            liveParameter.setIsSupport(liveItem.getIs_supported());
+            liveParameter.setLiveId(liveItem.getId());
+            liveParameter.setLiveTitle(liveItem.getTitle());
+            liveParameter.setOnLineNumber(liveItem.getOnline_num());
+            liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
+            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+            liveParameter.setSupportNumber(liveItem.getSupport());
+            liveParameter.setTeacherId(liveItem.getTeacher_id());
+            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+        } else {
+            ToastUtils.showToast(mContext, liveItem.getLive_msg());
+        }
+    }
     private void loadPostView() {
         View view;
         switch (mPostType) {
@@ -111,18 +129,7 @@ public class PostParentLayout extends RelativeLayout {
                         switch (liveInfo.getLive_status()) {
                             case Constans.LIVE_ING:
                                 //TODO 完善直播参数传递
-                                LiveParameter liveParameter = new LiveParameter();
-                                liveParameter.setFansNumber(0);
-                                liveParameter.setIsFollow(liveInfo.getIs_follow());
-                                liveParameter.setIsSupport(liveInfo.getIs_supported());
-                                liveParameter.setLiveId(liveInfo.getIns_id());
-                                liveParameter.setLiveTitle(liveInfo.getTitle());
-                                liveParameter.setOnLineNumber(0);
-                                liveParameter.setTeacherAvatar(liveInfo.getTeacher_info().getAvatar());
-                                liveParameter.setRoomId(liveInfo.getTeacher_info().getLive_roomid());
-                                liveParameter.setSupportNumber(0);
-                                liveParameter.setTeacherId(liveInfo.getTeacher_info().getId());
-                                PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+                                clickPlayLive(liveInfo);
                                 break;
                             case Constans.LiVE_UN_START:
                                 ToastUtils.showToast(mContext, "直播未开始");
@@ -191,8 +198,20 @@ public class PostParentLayout extends RelativeLayout {
                 }
                 ImageView ivThumb = (ImageView) view.findViewById(R.id.ivThumb);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-                ImageDisplayUtil.displayImage(mContext, ivThumb, teacherZoneDynamicsInfo.getNews_thumb());
+                if(TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_thumb())){
+                    ivThumb.setVisibility(View.GONE);
+                }else{
+                    ivThumb.setVisibility(View.VISIBLE);
+                    ImageDisplayUtil.displayImage(mContext, ivThumb, teacherZoneDynamicsInfo.getNews_thumb(),R.mipmap.word_ic);
+                }
+
                 tvTitle.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PostZoneActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_video_id(),teacherZoneDynamicsInfo.getNews_catid(),teacherZoneDynamicsInfo.getNews_catname());
+                    }
+                });
                 addView(view);
                 break;
         }

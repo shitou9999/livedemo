@@ -19,9 +19,21 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:padding="5dp"
-        app:fillColor="@color/white_color"
-        app:pageColor="#33000000"
-        app:strokeColor="#33000000" />
+        app:fillColor="@color/colorRed500"
+        app:pageColor="@color/white_color"
+        app:strokeColor="@color/colorRed500" />
+
+    <TextView
+        android:id="@+id/tvSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:padding="10dp"
+        android:text="跳过"
+        android:textColor="@color/colorRed500"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/button"
@@ -30,7 +42,7 @@
         android:layout_above="@id/cpi_circle_page_indicator"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/bg_guide_btn"
+        android:background="@drawable/selector_home_follow_button_bg"
         android:text="立即体验"
         android:textColor="@color/white_color"
         android:textSize="20sp"

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -19,12 +20,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.CacheConfig;
@@ -36,8 +39,10 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
+import tv.kuainiu.ui.liveold.LiveHttpUtil;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
@@ -45,11 +50,13 @@ import tv.kuainiu.utils.ToastUtils;
 /**
  * 定制直播
  */
-public class CustomLiveFragment extends BaseFragment {
+public class CustomLiveFragment extends BaseFragment implements OnItemClickListener {
     private static final String TAG = "CustomVideoFragment";
 
-    @BindView(R.id.rv_fragment_friends_tab) RecyclerView mRecyclerView;
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
+    @BindView(R.id.rv_fragment_friends_tab)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout mSrlRefresh;
     private int page = 1;
     private List<LiveInfo> customLiveList = new ArrayList<>();
     private FriendsPostAdapter adapter;
@@ -68,7 +75,8 @@ public class CustomLiveFragment extends BaseFragment {
 
     View view;
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
@@ -88,14 +96,32 @@ public class CustomLiveFragment extends BaseFragment {
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
         adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_LIVE);
+        adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         getData();
         return view;
     }
 
+    TextView mTvFriendsPostLike;
+    LiveInfo liveInfo;
+    View ivSupport;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivSupport:
+                ivSupport = v;
+                liveInfo = (LiveInfo) v.getTag();
+                mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
+                LiveHttpUtil.executeAddLike(getActivity(), liveInfo.getId());
+                break;
+        }
+    }
+
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 page = 1;
                 getData();
             }
@@ -142,6 +168,20 @@ public class CustomLiveFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case live_add_like:
+                if (Constant.SUCCEED == event.getCode()) {
+
+                    ivSupport.setVisibility(View.INVISIBLE);
+                    mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", liveInfo.getSupport() + 1));
+                    mTvFriendsPostLike.setSelected(true);
+                    ToastUtils.showToast(getActivity(), "点赞成功");
+                } else if (-2 == event.getCode()) {
+                    DebugUtils.showToastResponse(getActivity(), "已支持过");
+                } else {
+                    LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
+                }
+                break;
             case CUSTOM_LIVE_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);
