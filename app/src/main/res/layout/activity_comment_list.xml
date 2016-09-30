@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="全部评论" />
+        app:mytitle="全部评论" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_comment_tag"

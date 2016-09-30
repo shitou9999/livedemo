@@ -72,7 +72,7 @@ public class TabMajorFragment extends BaseFragment {
             mTabFragmentMajor.setupWithViewPager(mNvpFragmentMajor);
             mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
             mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
-            mTabFragmentMajor.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            mTabFragmentMajor.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override public void onTabSelected(TabLayout.Tab tab) {
                     int position = tab.getPosition();
                     mNvpFragmentMajor.setCurrentItem(position);

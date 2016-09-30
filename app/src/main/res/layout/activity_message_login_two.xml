@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="@string/written_verification_code"/>
+        app:mytitle="@string/written_verification_code"/>
 
     <include layout="@layout/content_message_login_two"/>
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="关于"/>
+        app:mytitle="关于"/>
 
     <include layout="@layout/content_about"/>
 

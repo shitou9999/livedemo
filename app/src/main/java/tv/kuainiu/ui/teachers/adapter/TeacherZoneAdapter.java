@@ -152,7 +152,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            tab.setTag(tabNamesTags[i]);
                 holder.mTabFragmentMajor.addTab(tab);
             }
-            holder.mTabFragmentMajor.addOnTabSelectedListener(tabSelectedListener);
+            holder.mTabFragmentMajor.setOnTabSelectedListener(tabSelectedListener);
             holder.mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
             holder.mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
         }/* else {

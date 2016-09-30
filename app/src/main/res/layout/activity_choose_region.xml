@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="我的地址"/>
+        app:mytitle="我的地址"/>
 
     <ListView
         android:id="@+id/lv_region"

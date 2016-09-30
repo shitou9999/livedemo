@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="56dp"
-              android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
 
     <FrameLayout
         android:layout_width="56dp"
@@ -35,7 +36,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingStart="8dp"
-            android:text="山无常势，水无常形。天下武功，唯快不破。"
+            tools:text="山无常势，水无常形。天下武功，唯快不破。"
             android:textColor="@color/colorGrey800"
             />
 

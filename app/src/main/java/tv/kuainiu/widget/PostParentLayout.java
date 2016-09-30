@@ -168,7 +168,8 @@ public class PostParentLayout extends RelativeLayout {
                     removeAllViews();
                 }
                 ImageView ivPlayVoice = (ImageView) view.findViewById(R.id.ivPlay);
-
+                TextView tvVideoLength = (TextView) view.findViewById(R.id.tvVideoLength);
+                tvVideoLength.setText(teacherZoneDynamicsInfo.getNews_title());
                 ivPlayVoice.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {

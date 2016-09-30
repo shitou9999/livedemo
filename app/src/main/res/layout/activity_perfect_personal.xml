@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="完善资料"/>
+        app:mytitle="完善资料"/>
 
     <include layout="@layout/content_perfect_personal"/>
 

@@ -39,7 +39,7 @@
         </attr>
         <attr name="leftSrc" format="reference"/>
         <attr name="rightSrc" format="reference"/>
-        <attr name="title" format="string"/>
+        <attr name="mytitle" format="string"/>
         <attr name="rightText" format="string"/>
     </declare-styleable>
 </resources>

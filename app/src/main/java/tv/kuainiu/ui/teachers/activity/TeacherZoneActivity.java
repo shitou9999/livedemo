@@ -296,7 +296,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                 listStickTab.add(tabStick);
                 mTabFragmentMajor.addTab(tabStick);
             }
-            mTabFragmentMajor.addOnTabSelectedListener(getOnTabSelectedListener());
+            mTabFragmentMajor.setOnTabSelectedListener(getOnTabSelectedListener());
             mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
             mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
         } else {

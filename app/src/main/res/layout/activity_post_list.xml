@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:left_visibility="invisible"
         app:right_visibility="invisible"
-        app:title="文章列表"/>
+        app:mytitle="文章列表"/>
 
 
     <include layout="@layout/content_post_list"/>

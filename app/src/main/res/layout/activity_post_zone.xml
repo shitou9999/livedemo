@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="文章"/>
+        app:mytitle="文章"/>
 
     <include layout="@layout/content_post_zone"/>
 

@@ -57,7 +57,7 @@ public class TitleBarView extends RelativeLayout {
         setBackgroundColor(Color.parseColor(Theme.getCommonColor()));
         final TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.title_bar_view,
                 defStyleAttr, 0);
-        titleText = attributes.getString(R.styleable.title_bar_view_title);
+        titleText = attributes.getString(R.styleable.title_bar_view_mytitle);
         rightText = attributes.getString(R.styleable.title_bar_view_rightText);
         leftVisibility = attributes.getInt(R.styleable.title_bar_view_left_visibility, View.VISIBLE);
         rightVisibility = attributes.getInt(R.styleable.title_bar_view_right_visibility, View.VISIBLE);

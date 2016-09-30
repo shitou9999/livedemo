@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:right_visibility="invisible"
-        app:title="@string/register"/>
+        app:mytitle="@string/register"/>
 
     <include layout="@layout/content_register1"/>
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         app:left_visibility="visible"
         app:right_visibility="invisible"
-        app:title="" />
+        />
 
     <include layout="@layout/content_web" />
 
