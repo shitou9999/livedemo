@@ -402,6 +402,11 @@ public class CustomTeacherFragment extends BaseFragment implements TeacherListAd
                     initHttp();
                 }
                 break;
+            case off_line:
+            case login:
+                page = 1;
+               initHttp();
+                break;
         }
     }
 

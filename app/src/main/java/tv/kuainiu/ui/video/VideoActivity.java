@@ -477,7 +477,10 @@ public class VideoActivity extends BaseActivity implements
         videoIdText.setText(mVideoDetail.getTitle());
         tvCollection.setSelected(mVideoDetail.getCollected() == Constant.COLLECTED);
         tvSupport.setSelected(mVideoDetail.getIs_support() == Constant.FAVOURED);
-
+        if (TextUtils.isEmpty(videoId) && !TextUtils.isEmpty(mVideoDetail.getVideo_id())) {
+            videoId = mVideoDetail.getVideo_id();
+            initPlayInfo();
+        }
     }
 
     private void teacherDataBind(TeacherInfo teacherInfo) {
@@ -489,7 +492,7 @@ public class VideoActivity extends BaseActivity implements
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
         tvFollowNumber.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(teacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
         tvFollowButton.setSelected(teacherInfo.getIs_follow() == Constant.FOLLOWED);
-        if (teacherInfo.getIs_follow()!= Constant.FOLLOWED) {
+        if (teacherInfo.getIs_follow() != Constant.FOLLOWED) {
             tvFollowButton.setText("+关注");
 
         } else {

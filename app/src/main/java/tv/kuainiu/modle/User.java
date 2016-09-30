@@ -44,6 +44,7 @@ public class User implements Parcelable {
     private int subscibe_count;
     private int allow_push;
     private int msg_num;
+    private int fans_count;
     private String session_id;
 
 
@@ -60,6 +61,68 @@ public class User implements Parcelable {
         this.phone = phone;
         this.email = email;
     }
+
+    protected User(Parcel in) {
+        user_id = in.readString();
+        phone = in.readString();
+        email = in.readString();
+        realname = in.readString();
+        idno = in.readString();
+        area = in.readString();
+        nickname = in.readString();
+        province = in.readString();
+        city = in.readString();
+        qq = in.readString();
+        gender = in.readString();
+        birthday = in.readString();
+        avatar = in.readString();
+        follow_count = in.readInt();
+        subscibe_count = in.readInt();
+        allow_push = in.readInt();
+        msg_num = in.readInt();
+        fans_count = in.readInt();
+        session_id = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(user_id);
+        dest.writeString(phone);
+        dest.writeString(email);
+        dest.writeString(realname);
+        dest.writeString(idno);
+        dest.writeString(area);
+        dest.writeString(nickname);
+        dest.writeString(province);
+        dest.writeString(city);
+        dest.writeString(qq);
+        dest.writeString(gender);
+        dest.writeString(birthday);
+        dest.writeString(avatar);
+        dest.writeInt(follow_count);
+        dest.writeInt(subscibe_count);
+        dest.writeInt(allow_push);
+        dest.writeInt(msg_num);
+        dest.writeInt(fans_count);
+        dest.writeString(session_id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getArea() {
         return area;
@@ -205,82 +268,11 @@ public class User implements Parcelable {
         this.session_id = session_id;
     }
 
-    @Override public String toString() {
-        return "User{" +
-                "user_id='" + user_id + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", realname='" + realname + '\'' +
-                ", idno='" + idno + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", qq='" + qq + '\'' +
-                ", gender='" + gender + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", avatar=" + avatar +
-                ", follow_count=" + follow_count +
-                ", subscibe_count=" + subscibe_count +
-                ", allow_push='" + allow_push + '\'' +
-                ", session_id='" + session_id + '\'' +
-                '}';
+    public int getFans_count() {
+        return fans_count;
     }
 
-
-    @Override public int describeContents() {
-        return 0;
+    public void setFans_count(int fans_count) {
+        this.fans_count = fans_count;
     }
-
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.user_id);
-        dest.writeString(this.phone);
-        dest.writeString(this.email);
-        dest.writeString(this.realname);
-        dest.writeString(this.idno);
-        dest.writeString(this.area);
-        dest.writeString(this.nickname);
-        dest.writeString(this.province);
-        dest.writeString(this.city);
-        dest.writeString(this.qq);
-        dest.writeString(this.gender);
-        dest.writeString(this.birthday);
-        dest.writeString(this.avatar);
-        dest.writeInt(this.follow_count);
-        dest.writeInt(this.subscibe_count);
-        dest.writeInt(this.allow_push);
-        dest.writeInt(this.msg_num);
-        dest.writeString(this.session_id);
-    }
-
-
-    protected User(Parcel in) {
-        this.user_id = in.readString();
-        this.phone = in.readString();
-        this.email = in.readString();
-        this.realname = in.readString();
-        this.idno = in.readString();
-        this.area = in.readString();
-        this.nickname = in.readString();
-        this.province = in.readString();
-        this.city = in.readString();
-        this.qq = in.readString();
-        this.gender = in.readString();
-        this.birthday = in.readString();
-        this.avatar = in.readString();
-        this.follow_count = in.readInt();
-        this.subscibe_count = in.readInt();
-        this.allow_push = in.readInt();
-        this.msg_num = in.readInt();
-        this.session_id = in.readString();
-    }
-
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-        @Override public User createFromParcel(Parcel source) {
-            return new User(source);
-        }
-
-        @Override public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 }

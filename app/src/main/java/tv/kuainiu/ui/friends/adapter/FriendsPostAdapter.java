@@ -115,7 +115,11 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(info.getNews_info());
+        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo=info.getNews_info();
+        if(teacherZoneDynamicsInfo!=null) {
+            teacherZoneDynamicsInfo.setNews_video_id(String.valueOf(info.getNews_id()));
+        }
+        holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         //不是直播中就是黑色边框
         holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
         holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);

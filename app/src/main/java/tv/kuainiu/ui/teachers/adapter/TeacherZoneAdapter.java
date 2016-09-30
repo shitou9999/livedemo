@@ -212,7 +212,11 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        holder.mPostParentLayout.setPostType(info.getNews_info());
+        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo=info.getNews_info();
+        if(teacherZoneDynamicsInfo!=null) {
+            teacherZoneDynamicsInfo.setNews_video_id(String.valueOf(info.getNews_id()));
+        }
+        holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         switch (info.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);

@@ -380,6 +380,7 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
                 if (event.getCode() == Constant.SUCCEED) {
                     DebugUtils.showToast(PersonalActivity.this, "注销成功");
                     IGXApplication.setUser(null);
+                    EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
                     finish();
                 } else {
                     DebugUtils.showToast(PersonalActivity.this, event.getMsg());

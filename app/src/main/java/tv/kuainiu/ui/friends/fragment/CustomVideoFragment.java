@@ -154,6 +154,11 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case off_line:
+            case login:
+                page = 1;
+                getData();
+                break;
             case video_favour:
                 if (SUCCEED == event.getCode()) {
                     ivSupport.setVisibility(View.INVISIBLE);

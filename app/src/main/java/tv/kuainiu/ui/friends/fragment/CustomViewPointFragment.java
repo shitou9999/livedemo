@@ -160,6 +160,11 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case off_line:
+            case login:
+                page = 1;
+                fetchTeacherDynamicsList();
+                break;
             case SUPPORT_DYNAMICS:
                 if (Constant.SUCCEED == event.getCode()) {
                     ivSupport.setVisibility(View.INVISIBLE);

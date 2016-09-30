@@ -1,5 +1,7 @@
 package tv.kuainiu.ui.home;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +47,7 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.home.adapter.HomeAdapter;
+import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -77,6 +80,7 @@ public class HomeFragment extends BaseFragment {
     private boolean loading = false;
     RecyclerView.OnScrollListener loadMoreListener;
     CustomLinearLayoutManager mLayoutManager;
+    private boolean isShowLoginTip;
 
     public static HomeFragment newInstance(int parentPosition) {
         HomeFragment fragment = new HomeFragment();
@@ -191,6 +195,10 @@ public class HomeFragment extends BaseFragment {
     class itemClick implements OnItemClickListener {
 
         @Override public void onClick(View v) {
+            if(!IGXApplication.isLogin()){
+                showLoginTip();
+                return;
+            }
             switch (v.getId()) {
                 case tv_follow_button:
                     HotPonit mHotPoint = (HotPonit) v.getTag();
@@ -255,6 +263,10 @@ public class HomeFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case off_line:
+            case login:
+                getHotPoint();
+                break;
             case home_support_dynamics:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%d)", mHotPoint2.getSupport_num() + 1));
@@ -400,5 +412,30 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
         }
+    }
+    private void showLoginTip() {
+        if (isShowLoginTip) {
+            return;
+        }
+        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
+        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
+            @Override
+            public void onCancel(DialogInterface dialog, int which) {
+
+            }
+
+            @Override
+            public void onLogin(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                isShowLoginTip = true;
+            }
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowLoginTip = false;
+            }
+        });
+        loginPromptDialog.show();
     }
 }

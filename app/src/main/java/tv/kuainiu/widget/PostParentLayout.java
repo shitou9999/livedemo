@@ -57,6 +57,7 @@ public class PostParentLayout extends RelativeLayout {
         this.teacherZoneDynamicsInfo = teacherZoneDynamicsInfo;
         if (this.teacherZoneDynamicsInfo != null) {
             mPostType = Integer.parseInt(this.teacherZoneDynamicsInfo.getType());
+            setVisibility(View.VISIBLE);
             loadPostView();
         } else {
             setVisibility(View.GONE);
@@ -67,6 +68,7 @@ public class PostParentLayout extends RelativeLayout {
         this.liveInfo = liveInfo;
         if (this.liveInfo != null) {
             mPostType = Constans.TYPE_LIVE;
+            setVisibility(View.VISIBLE);
             loadPostView();
         } else {
             setVisibility(View.GONE);
@@ -100,9 +102,9 @@ public class PostParentLayout extends RelativeLayout {
         switch (mPostType) {
             case Constans.TYPE_LIVE:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_live, this, false);
-                if (getChildAt(0) != null) {
+//                if (getChildAt(0) != null) {
                     removeAllViews();
-                }
+//                }
                 TextView tvState2 = (TextView) view.findViewById(R.id.tvLiveState);
                 View vLine = view.findViewById(R.id.vLine);
                 TextView tvLiveDescription2 = (TextView) view.findViewById(R.id.tvLiveDescription);
@@ -147,9 +149,9 @@ public class PostParentLayout extends RelativeLayout {
             //视频
             case Constans.TYPE_VIDEO:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_video, this, false);
-                if (getChildAt(0) != null) {
+//                if (getChildAt(0) != null) {
                     removeAllViews();
-                }
+//                }
 //                ImageView ivivPlay = (ImageView) view.findViewById(R.id.ivPlay);
                 TextView tvTitle2 = (TextView) view.findViewById(R.id.tvTitle);
                 tvTitle2.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
@@ -194,9 +196,9 @@ public class PostParentLayout extends RelativeLayout {
             // 文章
             default:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_normal, this, false);
-                if (getChildAt(0) != null) {
+//                if (getChildAt(0) != null) {
                     removeAllViews();
-                }
+//                }
                 ImageView ivThumb = (ImageView) view.findViewById(R.id.ivThumb);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
                 if(TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_thumb())){

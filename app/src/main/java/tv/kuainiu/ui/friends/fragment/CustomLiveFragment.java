@@ -168,6 +168,11 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case off_line:
+            case login:
+                page = 1;
+                getData();
+                break;
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
 

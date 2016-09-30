@@ -1,6 +1,7 @@
 package tv.kuainiu.ui.me;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -64,6 +65,7 @@ public class MeFragment extends BaseFragment {
     @BindView(R.id.ci_avatar) CircleImageView ci_avatar;
     @BindView(R.id.tv_me_phone) TextView mTvMePhone;
     @BindView(R.id.tv_me_home) TextView tv_me_home;
+    @BindView(R.id.tvFans) TextView tvFans;
     @BindView(R.id.iv_text_vip) ImageView mIvTextVip;
     @BindView(R.id.iv_icon_vip) ImageView mIvIconVip;
     @BindView(R.id.iv_icon_play) ImageView mIvIconPlay;
@@ -95,6 +97,7 @@ public class MeFragment extends BaseFragment {
     @BindView(R.id.rlRecorder) RelativeLayout mRlRecorder;
 
     private Context context;
+    private boolean isShowLoginTip;
 
     public static MeFragment newInstance() {
         MeFragment fragment = new MeFragment();
@@ -161,6 +164,7 @@ public class MeFragment extends BaseFragment {
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder,R.id.ivEdite,R.id.tv_me_name,
             R.id.tv_me_phone,R.id.rlHomePage})
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.rlHomePage:
             case R.id.tv_me_phone:
@@ -183,6 +187,10 @@ public class MeFragment extends BaseFragment {
                 startActivity(loginIntent);
                 break;
             case R.id.rlFollow:
+                if(!IGXApplication.isLogin()){
+                    showLoginTip();
+                    return;
+                }
                 Intent intentFollow = new Intent();
                 intentFollow.setClass(getActivity(), FollowActivity.class);
                 startActivity(intentFollow);
@@ -192,6 +200,10 @@ public class MeFragment extends BaseFragment {
             case R.id.rlDown:
                 break;
             case R.id.rlCollect:
+                if(!IGXApplication.isLogin()){
+                    showLoginTip();
+                    return;
+                }
                 Intent intentCollect = new Intent();
                 intentCollect.setClass(getActivity(), CollectActivity.class);
                 startActivity(intentCollect);
@@ -270,12 +282,13 @@ public class MeFragment extends BaseFragment {
             mTvMePhone.setText(nullValue);
             mTvMeName.setText(nullValue);
             rlLogOut.setVisibility(View.VISIBLE);
-
+            tvFans.setText(nullValue);
         } else {
             displayAvatar(user.getAvatar());
             mTvMePhone.setText(StringUtils.getX(user.getPhone()));
             String nickName = TextUtils.isEmpty(user.getNickname()) ? "" : user.getNickname();
             mTvMeName.setText(nickName);
+            tvFans.setText(StringUtils.getDecimal(user.getFans_count(), Constant.TEN_THOUSAND, "万", ""));
             rlLogOut.setVisibility(View.GONE);
         }
         setFollowAndSubText(user);
@@ -283,7 +296,7 @@ public class MeFragment extends BaseFragment {
 
     private void setFollowAndSubText(User user) {
         if (user == null) {
-            mTvFollowCount.setText(getString(R.string.value_follow_count_default));
+            mTvFollowCount.setText("-");
         } else {
             mTvFollowCount.setText(StringUtils.getDecimal(user.getFollow_count(), Constant.TEN_THOUSAND, "万", ""));
         }
@@ -297,6 +310,30 @@ public class MeFragment extends BaseFragment {
             ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.default_avatar);
         }
     }
+    private void showLoginTip() {
+        if (isShowLoginTip) {
+            return;
+        }
+        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
+        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
+            @Override
+            public void onCancel(DialogInterface dialog, int which) {
 
+            }
+
+            @Override
+            public void onLogin(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                isShowLoginTip = true;
+            }
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowLoginTip = false;
+            }
+        });
+        loginPromptDialog.show();
+    }
 
 }
