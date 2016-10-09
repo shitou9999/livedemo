@@ -59,7 +59,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
-        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
+        this.teacherZoneDynamicsList=teacherZoneDynamicsList;
     }
 
     public void setCustomVideoList(List<CustomVideo> customVideoList) {

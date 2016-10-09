@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +31,9 @@ import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.SupportHttpUtil;
-import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
+import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
@@ -90,16 +91,18 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         adapter = new FriendsPostAdapter(context);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
-        fetchTeacherDynamicsList();
+        initData();
         return view;
     }
-
+    private void initData() {
+        page=1;
+        fetchTeacherDynamicsList();
+    }
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                fetchTeacherDynamicsList();
+                initData();
             }
         });
         loadMoreListener = new RecyclerView.OnScrollListener() {
@@ -148,22 +151,28 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     public void fetchTeacherDynamicsList() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        map.put("page", String.valueOf(page));
-        OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIST, ParamUtil.getParam(map), Action.CUSTOM_LIST, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIST, ParamUtil.getParam(map), Action.CUSTOM_LIST);
     }
 
     private void dataBind(int size) {
         adapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
-        adapter.notifyItemRangeInserted(size, teacherZoneDynamicsList.size());
+//        adapter.notifyItemRangeInserted(size, teacherZoneDynamicsList.size());
+        adapter.notifyDataSetChanged();
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHttpEvent(EmptyEvent event) {
+        switch (event.getAction()) {
+            case live_teacher_need_refresh:
+                initData();
+                break;
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case off_line:
             case login:
-                page = 1;
-                fetchTeacherDynamicsList();
+                initData();
                 break;
             case SUPPORT_DYNAMICS:
                 if (Constant.SUCCEED == event.getCode()) {
@@ -181,16 +190,15 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
             case CUSTOM_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);
+                    teacherZoneDynamicsList.clear();
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
+                            Log.e("jsonObject",jsonObject.toString());
                             List<TeacherZoneDynamics> tempTeacherZoneDynamicsList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
                             }.getType());
-                            if (page == 1) {
-                                teacherZoneDynamicsList.clear();
-                            }
                             if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {
                                 loading = false;
                                 int size = teacherZoneDynamicsList.size();

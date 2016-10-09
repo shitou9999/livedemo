@@ -325,6 +325,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
         if (Action.teacher_fg_fetch_follow_list == event.getAction()) {
             if (page == 1) {
                 mSrlRefresh.setRefreshing(false);
+                mTeacherLIst.clear();
             }
             if (Constant.SUCCEED == event.getCode()) {
                 mRvItems.setVisibility(View.VISIBLE);
@@ -334,9 +335,6 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                 JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
                 List<TeacherItem> tempTeacherList = new DataConverter<TeacherItem>().JsonToListObject(json.toString(), new TypeToken<List<TeacherItem>>() {
                 }.getType());
-                if (page == 1) {
-                    mTeacherLIst.clear();
-                }
                 if (tempTeacherList.size() > 0) {
                     loading = false;
                     int startIndex = mTeacherLIst.size();

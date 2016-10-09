@@ -181,16 +181,17 @@ public class ReadingTapeFragment extends BaseFragment {
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case live_zhi_bo_kan_pan:
-
+                if (page == 1) {
+                    mLiveItemList.clear();
+                    srlRefresh.setRefreshing(false);
+                }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
-                        if (page == 1) {
-                            mLiveItemList.clear();
-                        }
+
                         if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
                             loading = false;
                             int size = mLiveItemList.size();
@@ -206,21 +207,19 @@ public class ReadingTapeFragment extends BaseFragment {
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());
                 }
-                if (page == 1) {
-                    srlRefresh.setRefreshing(false);
-                }
                 break;
             case live_hui_fang_kan_pan:
-
+                if (page == 1) {
+                    mLiveHuiFangItemList.clear();
+                    srlRefresh.setRefreshing(false);
+                }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
-                        if (page == 1) {
-                            mLiveHuiFangItemList.clear();
-                        }
+
                         if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
                             int size = mLiveHuiFangItemList.size();
                             mLiveHuiFangItemList.addAll(tempLiveItemList);
@@ -233,9 +232,6 @@ public class ReadingTapeFragment extends BaseFragment {
                     }
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());
-                }
-                if (page == 1) {
-                    srlRefresh.setRefreshing(false);
                 }
                 break;
         }

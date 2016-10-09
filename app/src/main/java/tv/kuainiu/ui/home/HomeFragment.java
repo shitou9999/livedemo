@@ -245,18 +245,9 @@ public class HomeFragment extends BaseFragment {
     // 添加 or 取消关注
     private void addFollow(int is_follow, String teacherId) {
         if (Constant.FOLLOWED == is_follow) {
-            TeacherHttpUtil.delFollowForTeacherId(getActivity(), teacherId, Action.teacher_fg_del_follow);
+            TeacherHttpUtil.delFollowForTeacherId(getActivity(), teacherId, Action.home_teacher_fg_del_follow);
         } else {
-            TeacherHttpUtil.addFollowForTeacherID(getActivity(), teacherId, Action.teacher_fg_add_follow);
-        }
-    }
-
-    // 添加 or 取消 赞
-    private void addSupport(int is_support, String teacherId) {
-        if (Constant.FAVOURED == is_support) {
-            TeacherHttpUtil.delFollowForTeacherId(getActivity(), teacherId, Action.teacher_fg_del_follow);
-        } else {
-            TeacherHttpUtil.addFollowForTeacherID(getActivity(), teacherId, Action.teacher_fg_add_follow);
+            TeacherHttpUtil.addFollowForTeacherID(getActivity(), teacherId, Action.home_teacher_fg_add_follow);
         }
     }
 
@@ -300,17 +291,17 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
             case hot_point:
+                if (HotPointPage == 1) {
+                    mHotPonitList.clear();
+                }
                 if (Constant.SUCCEED == event.getCode()) {
                     DebugUtils.dd(event.getData().toString());
-
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
                         List<HotPonit> tempHotPonitList = new DataConverter<HotPonit>().JsonToListObject(object.optString("list"), new TypeToken<List<HotPonit>>() {
                         }.getType());
-                        if (HotPointPage == 1) {
-                            mHotPonitList.clear();
-                        }
+
                         if (tempHotPonitList.size() > 0) {
                             mHotPonitList.addAll(tempHotPonitList);
 
@@ -334,6 +325,7 @@ public class HomeFragment extends BaseFragment {
             case find_home_news_list:
                 if (NewsPage == 1) {
                     srlRefresh.setRefreshing(false);
+                    mNewsItemList.clear();
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
@@ -342,9 +334,6 @@ public class HomeFragment extends BaseFragment {
                         JSONArray jsonArray = object.optJSONArray("list");
                         List<NewsItem> tempNewsList = new DataConverter<NewsItem>().JsonToListObject(jsonArray.toString(), new TypeToken<List<NewsItem>>() {
                         }.getType());
-                        if (NewsPage == 1) {
-                            mNewsItemList.clear();
-                        }
                         if (tempNewsList.size() > 0) {
                             int startIndex = mNewsItemList.size() + 5;
                             mNewsItemList.addAll(tempNewsList);
@@ -365,7 +354,7 @@ public class HomeFragment extends BaseFragment {
                     LogUtils.e("FindFragment", "获取实时新闻数据失败:" + event.getMsg());
                 }
                 break;
-            case teacher_fg_del_follow:
+            case home_teacher_fg_del_follow :
                 if (Constant.SUCCEED == event.getCode()) {
                     mTvFollowButton.setText("+ 关注");
                     mTvFollowButton.setSelected(false);
@@ -376,7 +365,7 @@ public class HomeFragment extends BaseFragment {
                     DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));
                 }
                 break;
-            case teacher_fg_add_follow:
+            case home_teacher_fg_add_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTvFollowButton.setText("已关注");
                     mTvFollowButton.setSelected(true);
@@ -394,8 +383,9 @@ public class HomeFragment extends BaseFragment {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
-                        mLiveItemList.clear();
+
                         if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
+                            mLiveItemList.clear();
                             loading = false;
                             int size = mLiveItemList.size();
                             mLiveItemList.addAll(tempLiveItemList);

@@ -31,6 +31,7 @@ import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
+import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
@@ -241,6 +242,16 @@ public class MeFragment extends BaseFragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN,
+            priority = 100)
+    public void onHttpEvent(EmptyEvent event) {
+        switch (event.getAction()) {
+            case inform_me_fragment_sub_follow_count_refresh:
+                User user=IGXApplication.getUser();
+                setFollowAndSubText(user);
+               break;
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN,
             priority = 100)
     public void onHttpEvent(HttpEvent event) {

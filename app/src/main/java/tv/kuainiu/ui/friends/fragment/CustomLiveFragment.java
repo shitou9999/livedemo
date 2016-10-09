@@ -190,6 +190,7 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
             case CUSTOM_LIVE_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);
+                    customLiveList.clear();
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     if (event.getData() != null && event.getData().has("data")) {
@@ -198,9 +199,6 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
                             LogUtils.i("data", event.getData().toString());
                             List<LiveInfo> tempCustomLiveList = new DataConverter<LiveInfo>().JsonToListObject(jsonObject.getString("live_list"), new TypeToken<List<LiveInfo>>() {
                             }.getType());
-                            if (page == 1) {
-                                customLiveList.clear();
-                            }
                             if (tempCustomLiveList != null && tempCustomLiveList.size() > 0) {
                                 loading = false;
                                 int size = customLiveList.size();

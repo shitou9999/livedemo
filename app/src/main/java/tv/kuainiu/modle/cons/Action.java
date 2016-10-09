@@ -88,6 +88,8 @@ public enum Action {
     /* 名师 */
     teacher_fg_add_follow,
     teacher_fg_del_follow,
+    home_teacher_fg_add_follow,
+    home_teacher_fg_del_follow,
     teacher_fg_add_subscribe,
     teacher_fg_del_subscribe,
     teacher_fg_fetch_follow_list,

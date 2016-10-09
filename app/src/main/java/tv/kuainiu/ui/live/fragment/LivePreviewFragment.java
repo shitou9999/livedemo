@@ -157,16 +157,17 @@ public class LivePreviewFragment extends BaseFragment {
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case live_zhi_bo_yu_gao:
-
+                if (page == 1) {
+                    mLiveItemList.clear();
+                    srlRefresh.setRefreshing(false);
+                }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
-                        if (page == 1) {
-                            mLiveItemList.clear();
-                        }
+
                         if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
                             loading = false;
                             int size = mLiveItemList.size();
@@ -180,9 +181,6 @@ public class LivePreviewFragment extends BaseFragment {
                     }
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());
-                }
-                if (page == 1) {
-                    srlRefresh.setRefreshing(false);
                 }
                 break;
         }

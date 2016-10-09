@@ -33,6 +33,7 @@ import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
+import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -50,11 +51,13 @@ import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 /**
  * 定制解盘视频
  */
-public class CustomVideoFragment extends BaseFragment  implements OnItemClickListener {
+public class CustomVideoFragment extends BaseFragment implements OnItemClickListener {
     private static final String TAG = "CustomVideoFragment";
 
-    @BindView(R.id.rv_fragment_friends_tab) RecyclerView mRecyclerView;
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
+    @BindView(R.id.rv_fragment_friends_tab)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout mSrlRefresh;
     private int page = 1;
     private List<CustomVideo> customVideoList = new ArrayList<>();
     private FriendsPostAdapter adapter;
@@ -72,7 +75,8 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
     }
 
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -88,15 +92,20 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
         adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
-        getData();
+        initData();
         return view;
+    }
+
+    private void initData() {
+        page = 1;
+        getData();
     }
 
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
-                page = 1;
-                getData();
+            @Override
+            public void onRefresh() {
+                initData();
             }
         });
         loadMoreListener = new RecyclerView.OnScrollListener() {
@@ -123,20 +132,23 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
             }
         };
     }
+
     TextView mTvFriendsPostLike;
     CustomVideo customVideo;
     View ivSupport;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSupport:
-                ivSupport=v;
+                ivSupport = v;
                 customVideo = (CustomVideo) v.getTag();
-                mTvFriendsPostLike= (TextView) v.getTag(R.id.tv_friends_post_like);
-                SupportHttpUtil.supportVideoDynamics(getActivity(),customVideo.getCat_id(),customVideo.getId() );
+                mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
+                SupportHttpUtil.supportVideoDynamics(getActivity(), customVideo.getCat_id(), customVideo.getId());
                 break;
         }
     }
+
     /**
      * 动态
      */
@@ -152,18 +164,26 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHttpEvent(EmptyEvent event) {
+        switch (event.getAction()) {
+            case live_teacher_need_refresh:
+                initData();
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case off_line:
             case login:
-                page = 1;
-                getData();
+                initData();
                 break;
             case video_favour:
                 if (SUCCEED == event.getCode()) {
                     ivSupport.setVisibility(View.INVISIBLE);
                     DebugUtils.showToast(getActivity(), event.getMsg());
-                    mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num()+ 1));
+                    mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
                 } else if (-2 == event.getCode()) {
                     DebugUtils.showToastResponse(getActivity(), "已支持过");
                 } else {
@@ -173,6 +193,7 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
             case CUSTOM_VIDEO_LIST:
                 if (page == 1) {
                     mSrlRefresh.setRefreshing(false);
+                    customVideoList.clear();
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     if (event.getData() != null && event.getData().has("data")) {
@@ -180,9 +201,6 @@ public class CustomVideoFragment extends BaseFragment  implements OnItemClickLis
                             JSONObject jsonObject = event.getData().getJSONObject("data");
                             List<CustomVideo> tempCustomVideoList = new DataConverter<CustomVideo>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<CustomVideo>>() {
                             }.getType());
-                            if (page == 1) {
-                                customVideoList.clear();
-                            }
                             if (tempCustomVideoList != null && tempCustomVideoList.size() > 0) {
                                 loading = false;
                                 int size = customVideoList.size();
