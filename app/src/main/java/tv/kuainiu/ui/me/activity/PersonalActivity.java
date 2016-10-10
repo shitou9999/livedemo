@@ -307,13 +307,14 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         intent.putExtra("outputX", 300);
         intent.putExtra("outputY", 300);
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));
-            intent.putExtra("return-data", false);
-        } else {
-            intent.putExtra("return-data", true);
-        }
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));
+//            intent.putExtra("return-data", false);
+//        } else {
+//            intent.putExtra("return-data", true);
+//        }
+        intent.putExtra("return-data", true);
         startActivityForResult(intent, REQUEST_CUTTING);
     }
 
