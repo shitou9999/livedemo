@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.DataSet;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.event.HttpEvent;
@@ -114,6 +115,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
         mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
         switchFragment(0);
+        DataSet.init(this);
     }
 
     private void switchFragment(int position) {
@@ -215,5 +217,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+//        DataSet.saveData();
     }
 }

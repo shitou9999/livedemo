@@ -117,7 +117,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo=info.getNews_info();
         if(teacherZoneDynamicsInfo!=null) {
-            teacherZoneDynamicsInfo.setNews_video_id(String.valueOf(info.getNews_id()));
+            teacherZoneDynamicsInfo.setVideo_id(String.valueOf(info.getNews_id()));
         }
         holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         //不是直播中就是黑色边框

@@ -92,7 +92,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if (TextUtils.isEmpty(videoId)) {
             PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId(), newsItem.getCatname());
         } else {
-            VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(),newsItem.getCatId());
+            VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(),newsItem.getCatId(),newsItem.getTitle());
         }
     }
 

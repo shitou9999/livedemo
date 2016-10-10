@@ -311,7 +311,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (TextUtils.isEmpty(videoId)) {
                         PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId(), newsItem.getCatname());
                     } else {
-                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId());
+                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
                     }
                 }
             });

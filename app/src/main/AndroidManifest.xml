@@ -115,6 +115,8 @@
         <activity android:name=".ui.me.activity.AboutActivity"/>
         <activity android:name=".ui.me.activity.FollowActivity"/>
         <activity android:name=".ui.me.activity.SettingActivity"/>
+        <activity android:name=".ui.down.activity.DownloadActivity"/>
+        <activity android:name=".ui.down.activity.DownloadIngActivity"/>
         <activity android:name=".ui.liveold.PlayLiveActivity"
                   android:configChanges="orientation|screenSize"
                   android:screenOrientation="portrait"
@@ -146,6 +148,15 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".ui.down.DownloadService"
+            android:enabled="true" >
+        </service>
+   <!--     <service
+            android:name="com.bokecc.sdk.mobile.demo.upload.UploadService"
+            android:enabled="true" >
+        </service>-->
         <!--微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

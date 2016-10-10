@@ -1,10 +1,15 @@
 package tv.kuainiu.ui.video;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -18,9 +23,11 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -37,7 +44,11 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bokecc.sdk.mobile.download.Downloader;
+import com.bokecc.sdk.mobile.download.OnProcessDefinitionListener;
+import com.bokecc.sdk.mobile.exception.DreamwinException;
 import com.bokecc.sdk.mobile.exception.ErrorCode;
 import com.bokecc.sdk.mobile.play.DWMediaPlayer;
 import com.google.gson.reflect.TypeToken;
@@ -52,10 +63,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -77,6 +91,7 @@ import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.CommentItem;
+import tv.kuainiu.modle.DownloadInfo;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.VideoDetail;
 import tv.kuainiu.modle.cons.Action;
@@ -84,6 +99,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
+import tv.kuainiu.ui.down.DownloadService;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
 import tv.kuainiu.umeng.UMEventManager;
@@ -93,6 +109,7 @@ import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.MediaUtil;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.ParamsUtil;
 import tv.kuainiu.utils.ShareUtils;
@@ -117,6 +134,7 @@ public class VideoActivity extends BaseActivity implements
     public static final String ID = "id";
     public static final String VIDEO_ID = "video_id";
     public static final String CAT_ID = "cat_id";
+    public static final String VIDEO_NAME = "video_name";
     @BindView(R.id.tvTiltle)
     TextView tvTiltle;
     @BindView(R.id.tvDescripion)
@@ -162,9 +180,11 @@ public class VideoActivity extends BaseActivity implements
 
     private String video_id = "";
     private String cat_id = "";
+    private String video_name = "";
     private VideoDetail mVideoDetail = null;
     private List<CommentItem> listCommentItem = new ArrayList<>();
-
+    private BaseActivity activity;
+    private Context context;
     /*点播*/
     private boolean networkConnected = true;
     private DWMediaPlayer player;
@@ -233,25 +253,159 @@ public class VideoActivity extends BaseActivity implements
     private boolean isShowLoginTip;
     private boolean isCollect;
 
+    private String title;
+    private Downloader downloader;
+    private DownloadService.DownloadBinder binder;
+    private Intent service;
+    private DownloadedReceiver receiver;
+
+    int[] definitionMapKeys;
+    /**
+     * 视频清晰度
+     */
+    HashMap<Integer, String> hm;
     /**
      * @param context
      * @param video_id 视频文章id
      * @param cat_id   栏目id
      */
-    public static void intoNewIntent(Context context, String id, String video_id, String cat_id) {
+    public static void intoNewIntent(Context context, String id, String video_id, String cat_id,String video_name) {
         Intent intent = new Intent(context, VideoActivity.class);
         intent.putExtra(ID, id);
         intent.putExtra(VIDEO_ID, video_id);
         intent.putExtra(CAT_ID, cat_id);
+        intent.putExtra(VIDEO_NAME, video_name);
         context.startActivity(intent);
     }
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String message = (String) msg.obj;
+            if ( message.equals(POPUP_DIALOG_MESSAGE)) {
+                String[] definitionMapValues = new String[hm.size()];
+                definitionMapKeys = new int[hm.size()];
+                Set<Map.Entry<Integer, String>> set = hm.entrySet();
+                Iterator<Map.Entry<Integer, String>> iterator = set.iterator();
+                int i = 0;
+                while(iterator.hasNext()){
+                    Map.Entry<Integer, String> entry = iterator.next();
+                    definitionMapKeys[i] = entry.getKey();
+                    definitionMapValues[i] = entry.getValue();
+                    i++;
+                }
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("选择下载清晰度");
+                builder.setSingleChoiceItems(definitionMapValues, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                        int definition = definitionMapKeys[which];
+
+                        title = videoId + "-" + definition;
+                        if (DataSet.hasDownloadInfo(title)) {
+                            Toast.makeText(context, "文件已存在", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        File file = MediaUtil.createFile(title);
+                        if (file == null ){
+                            Toast.makeText(context, "创建文件失败", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (binder == null || binder.isStop()) {
+                            Intent service = new Intent(context, DownloadService.class);
+                            service.putExtra("title", title);
+                            service.putExtra("name", video_name);
+                           activity.startService(service);
+                        } else{
+                            Intent intent = new Intent(ConfigUtil.ACTION_DOWNLOADING);
+                            activity.sendBroadcast(intent);
+                        }
+
+                        downloader.setFile(file); //确定文件名后，把文件设置到downloader里
+                        downloader.setDownloadDefinition(definition);
+                        downloaderHashMap.put(title, downloader);
+                        //TODO 缩略图
+                        DataSet.addDownloadInfo(new DownloadInfo("",video_name,video_id,videoId,cat_id, title, 0, null, Downloader.WAIT, new Date(), definition));
+
+                        definitionDialog.dismiss();
+                        Toast.makeText(context, "文件已加入下载队列", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                definitionDialog = builder.create();
+                definitionDialog.show();
+            }
+
+            if ( message.equals(GET_DEFINITION_ERROR)) {
+                Toast.makeText(context, "网络异常，请重试", Toast.LENGTH_LONG).show();
+            }
+            super.handleMessage(msg);
+        }
+
+    };
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i("service disconnected", name + "");
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            binder = (DownloadService.DownloadBinder) service;
+        }
+    };
+    private OnProcessDefinitionListener onProcessDefinitionListener = new OnProcessDefinitionListener(){
+        @Override
+        public void onProcessDefinition(HashMap<Integer, String> definitionMap) {
+            hm = definitionMap;
+            if(hm != null){
+                Message msg = new Message();
+                msg.obj = POPUP_DIALOG_MESSAGE;
+                handler.sendMessage(msg);
+            } else {
+                Log.e(TAG ,"视频清晰度获取失败");
+            }
+        }
+
+        @Override
+        public void onProcessException(DreamwinException exception) {
+            Log.i(TAG, exception.getErrorCode().Value() + " : " + videoId);
+            Message msg = new Message();
+            msg.obj = GET_DEFINITION_ERROR;
+            handler.sendMessage(msg);
+        }
+    };
+
+    private class DownloadedReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 若下载出现异常，提示用户处理
+            int errorCode = intent.getIntExtra("errorCode", ParamsUtil.INVALID);
+            if (errorCode == ErrorCode.NETWORK_ERROR.Value()) {
+                Toast.makeText(context, "网络异常，请检查", Toast.LENGTH_SHORT).show();
+            } else if (errorCode == ErrorCode.PROCESS_FAIL.Value()) {
+                Toast.makeText(context, "下载失败，请重试", Toast.LENGTH_SHORT).show();
+            } else if (errorCode == ErrorCode.INVALID_REQUEST.Value()) {
+                Toast.makeText(context, "下载失败，请检查帐户信息", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
+        activity = this;
+        context = getApplicationContext();
+        receiver = new DownloadedReceiver();
+        activity.registerReceiver(receiver, new IntentFilter(ConfigUtil.ACTION_DOWNLOADING));
+        service = new Intent(context, DownloadService.class);
+        activity.bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -259,6 +413,7 @@ public class VideoActivity extends BaseActivity implements
         videoId = getIntent().getStringExtra(VIDEO_ID);
         video_id = getIntent().getStringExtra(ID);
         cat_id = getIntent().getStringExtra(CAT_ID);
+        video_name = getIntent().getStringExtra(VIDEO_NAME);
         if (TextUtils.isEmpty(video_id)) {
             ToastUtils.showToast(this, "未获取到视频信息");
             finish();
@@ -392,12 +547,24 @@ public class VideoActivity extends BaseActivity implements
         getNews();
         getHotCommentList();
     }
+    final String POPUP_DIALOG_MESSAGE = "dialogMessage";
+
+    final String GET_DEFINITION_ERROR  = "getDefinitionError";
+
+    //定义hashmap存储downloader信息
+    public static HashMap<String, Downloader> downloaderHashMap = new HashMap<String, Downloader>();
+
+    AlertDialog definitionDialog;
+
 
     @OnClick({R.id.tvDown, R.id.tvCollection, R.id.tvShare, R.id.tvSupport, R.id.rlComment, R.id.tv_follow_button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvDown:
                 //TODO 视频下载
+                downloader = new Downloader(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY);
+                downloader.setOnProcessDefinitionListener(onProcessDefinitionListener);
+                downloader.getDefinitionMap();
                 break;
             case R.id.tvCollection:
                 if (!IGXApplication.isLogin()) {
@@ -477,10 +644,7 @@ public class VideoActivity extends BaseActivity implements
         videoIdText.setText(mVideoDetail.getTitle());
         tvCollection.setSelected(mVideoDetail.getCollected() == Constant.COLLECTED);
         tvSupport.setSelected(mVideoDetail.getIs_support() == Constant.FAVOURED);
-        if (TextUtils.isEmpty(videoId) && !TextUtils.isEmpty(mVideoDetail.getVideo_id())) {
-            videoId = mVideoDetail.getVideo_id();
-            initPlayInfo();
-        }
+
     }
 
     private void teacherDataBind(TeacherInfo teacherInfo) {
@@ -664,7 +828,6 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void initPlayInfo() {
-        DataSet.init(this);
         timer.schedule(timerTask, 0, 1000);
         isPrepared = false;
         player = new DWMediaPlayer();
@@ -1393,7 +1556,9 @@ public class VideoActivity extends BaseActivity implements
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        timerTask.cancel();
+        if(timerTask!=null) {
+            timerTask.cancel();
+        }
 
         playerHandler.removeCallbacksAndMessages(null);
         playerHandler = null;
@@ -1420,6 +1585,12 @@ public class VideoActivity extends BaseActivity implements
         if (!isLocalPlay) {
             networkInfoTimerTask.cancel();
         }
+        if (serviceConnection != null) {
+            activity.unbindService(serviceConnection);
+        }
+
+        activity.unregisterReceiver(receiver);
+//        DataSet.saveData();
         super.onDestroy();
     }
 

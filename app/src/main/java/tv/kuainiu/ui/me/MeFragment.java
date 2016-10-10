@@ -36,6 +36,7 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.down.activity.DownloadActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.me.activity.CollectActivity;
 import tv.kuainiu.ui.me.activity.FollowActivity;
@@ -53,49 +54,90 @@ import tv.kuainiu.widget.dialog.LoginPromptDialog;
  */
 public class MeFragment extends BaseFragment {
 
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout srlRefresh;
 
-    @BindView(R.id.ivSetting) ImageView ivSetting;
-    @BindView(R.id.ivMessage) ImageView ivMessage;
+    @BindView(R.id.ivSetting)
+    ImageView ivSetting;
+    @BindView(R.id.ivMessage)
+    ImageView ivMessage;
 
-    @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;
-    @BindView(R.id.rlLogOut) RelativeLayout rlLogOut;
-    @BindView(R.id.rlHomePage) RelativeLayout rlHomePage;
-    @BindView(R.id.tv_me_name) TextView mTvMeName;
-    @BindView(R.id.mTvFollowCount) TextView mTvFollowCount;
-    @BindView(R.id.ci_avatar) CircleImageView ci_avatar;
-    @BindView(R.id.tv_me_phone) TextView mTvMePhone;
-    @BindView(R.id.tv_me_home) TextView tv_me_home;
-    @BindView(R.id.tvFans) TextView tvFans;
-    @BindView(R.id.iv_text_vip) ImageView mIvTextVip;
-    @BindView(R.id.iv_icon_vip) ImageView mIvIconVip;
-    @BindView(R.id.iv_icon_play) ImageView mIvIconPlay;
-    @BindView(R.id.iv_icon_video) ImageView mIvIconVideo;
-    @BindView(R.id.iv_icon_group) ImageView mIvIconGroup;
-    @BindView(R.id.iv_icon_lesson) ImageView mIvIconLesson;
-    @BindView(R.id.iv_icon_institution) ImageView mIvIconInstitution;
-    @BindView(R.id.iv_institution) ImageView mIvInstitution;
-    @BindView(R.id.tv_institution) TextView mTvInstitution;
-    @BindView(R.id.iv_institution_right) ImageView mIvInstitutionRight;
-    @BindView(R.id.tv_institution_tip) TextView mTvInstitutionTip;
-    @BindView(R.id.rl_institution) RelativeLayout mRlInstitution;
-    @BindView(R.id.iv_live) ImageView mIvLive;
-    @BindView(R.id.tv_live) TextView mTvLive;
-    @BindView(R.id.iv_live_right) ImageView mIvLiveRight;
-    @BindView(R.id.tv_live_tip) TextView mTvLiveTip;
-    @BindView(R.id.rl_live) RelativeLayout mRlLive;
-    @BindView(R.id.iv_appointment) ImageView mIvAppointment;
-    @BindView(R.id.iv_appointment_right) ImageView mIvAppointmentRight;
-    @BindView(R.id.tv_appointment_tip) TextView mTvAppointmentTip;
-    @BindView(R.id.rl_appointment) RelativeLayout mRlAppointment;
-    @BindView(R.id.fl_tab_frag) LinearLayout mFlTabFrag;
-    @BindView(R.id.llJurisdiction) LinearLayout mLlJurisdiction;
-    @BindView(R.id.btnPublish) Button mBtnPublish;
-    @BindView(R.id.rlFollow) RelativeLayout mRlFollow;
-    @BindView(R.id.rlSub) RelativeLayout mRlSub;
-    @BindView(R.id.rlDown) RelativeLayout mRlDown;
-    @BindView(R.id.rlCollect) RelativeLayout mRlCollect;
-    @BindView(R.id.rlRecorder) RelativeLayout mRlRecorder;
+    @BindView(R.id.rl_avatar)
+    RelativeLayout mRlAvatar;
+    @BindView(R.id.rlLogOut)
+    RelativeLayout rlLogOut;
+    @BindView(R.id.rlHomePage)
+    RelativeLayout rlHomePage;
+    @BindView(R.id.tv_me_name)
+    TextView mTvMeName;
+    @BindView(R.id.mTvFollowCount)
+    TextView mTvFollowCount;
+    @BindView(R.id.ci_avatar)
+    CircleImageView ci_avatar;
+    @BindView(R.id.tv_me_phone)
+    TextView mTvMePhone;
+    @BindView(R.id.tv_me_home)
+    TextView tv_me_home;
+    @BindView(R.id.tvFans)
+    TextView tvFans;
+    @BindView(R.id.iv_text_vip)
+    ImageView mIvTextVip;
+    @BindView(R.id.iv_icon_vip)
+    ImageView mIvIconVip;
+    @BindView(R.id.iv_icon_play)
+    ImageView mIvIconPlay;
+    @BindView(R.id.iv_icon_video)
+    ImageView mIvIconVideo;
+    @BindView(R.id.iv_icon_group)
+    ImageView mIvIconGroup;
+    @BindView(R.id.iv_icon_lesson)
+    ImageView mIvIconLesson;
+    @BindView(R.id.iv_icon_institution)
+    ImageView mIvIconInstitution;
+    @BindView(R.id.iv_institution)
+    ImageView mIvInstitution;
+    @BindView(R.id.tv_institution)
+    TextView mTvInstitution;
+    @BindView(R.id.iv_institution_right)
+    ImageView mIvInstitutionRight;
+    @BindView(R.id.tv_institution_tip)
+    TextView mTvInstitutionTip;
+    @BindView(R.id.rl_institution)
+    RelativeLayout mRlInstitution;
+    @BindView(R.id.iv_live)
+    ImageView mIvLive;
+    @BindView(R.id.tv_live)
+    TextView mTvLive;
+    @BindView(R.id.iv_live_right)
+    ImageView mIvLiveRight;
+    @BindView(R.id.tv_live_tip)
+    TextView mTvLiveTip;
+    @BindView(R.id.rl_live)
+    RelativeLayout mRlLive;
+    @BindView(R.id.iv_appointment)
+    ImageView mIvAppointment;
+    @BindView(R.id.iv_appointment_right)
+    ImageView mIvAppointmentRight;
+    @BindView(R.id.tv_appointment_tip)
+    TextView mTvAppointmentTip;
+    @BindView(R.id.rl_appointment)
+    RelativeLayout mRlAppointment;
+    @BindView(R.id.fl_tab_frag)
+    LinearLayout mFlTabFrag;
+    @BindView(R.id.llJurisdiction)
+    LinearLayout mLlJurisdiction;
+    @BindView(R.id.btnPublish)
+    Button mBtnPublish;
+    @BindView(R.id.rlFollow)
+    RelativeLayout mRlFollow;
+    @BindView(R.id.rlSub)
+    RelativeLayout mRlSub;
+    @BindView(R.id.rlDown)
+    RelativeLayout mRlDown;
+    @BindView(R.id.rlCollect)
+    RelativeLayout mRlCollect;
+    @BindView(R.id.rlRecorder)
+    RelativeLayout mRlRecorder;
 
     private Context context;
     private boolean isShowLoginTip;
@@ -155,15 +197,16 @@ public class MeFragment extends BaseFragment {
     private void initView() {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 uploadUserInfo();
             }
         });
     }
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
-            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder,R.id.ivEdite,R.id.tv_me_name,
-            R.id.tv_me_phone,R.id.rlHomePage})
+            R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
+            R.id.tv_me_phone, R.id.rlHomePage})
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -188,7 +231,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(loginIntent);
                 break;
             case R.id.rlFollow:
-                if(!IGXApplication.isLogin()){
+                if (!IGXApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -199,9 +242,14 @@ public class MeFragment extends BaseFragment {
             case R.id.rlSub:
                 break;
             case R.id.rlDown:
+                if (!IGXApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
+                DownloadActivity.intoNewActivity(getActivity());
                 break;
             case R.id.rlCollect:
-                if(!IGXApplication.isLogin()){
+                if (!IGXApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -247,11 +295,12 @@ public class MeFragment extends BaseFragment {
     public void onHttpEvent(EmptyEvent event) {
         switch (event.getAction()) {
             case inform_me_fragment_sub_follow_count_refresh:
-                User user=IGXApplication.getUser();
+                User user = IGXApplication.getUser();
                 setFollowAndSubText(user);
-               break;
+                break;
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN,
             priority = 100)
     public void onHttpEvent(HttpEvent event) {
@@ -321,6 +370,7 @@ public class MeFragment extends BaseFragment {
             ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.default_avatar);
         }
     }
+
     private void showLoginTip() {
         if (isShowLoginTip) {
             return;

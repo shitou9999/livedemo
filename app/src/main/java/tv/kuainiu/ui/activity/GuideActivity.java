@@ -85,6 +85,7 @@ public class GuideActivity extends BaseActivity implements
         tvSkip.setOnClickListener(this);
         initView();// 本地展示
         cacheData();
+
     }
 
     private void cacheData() {

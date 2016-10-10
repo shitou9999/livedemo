@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_download_ing">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_top"/>
+
+    <FrameLayout
+        android:id="@+id/fl_sdcard_size_group"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white_color">
+
+        <ProgressBar
+            android:id="@+id/progressBar_sdcard_size"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:progressDrawable="@android:drawable/progress_horizontal"/>
+
+        <TextView
+            android:id="@+id/tv_sdcard_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:height="24dp"
+            android:gravity="center"
+            tools:text="@string/value_sdcard_capacity"/>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_selected_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_selected_all_button"
+            android:gravity="center"
+            android:text="全选"/>
+
+        <TextView
+            android:id="@+id/tv_delete_selected"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_delete_selected_button"
+            android:gravity="center"
+            android:text="删除&#160;(0)"
+            android:textColor="@color/white_color"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

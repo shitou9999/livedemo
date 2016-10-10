@@ -158,7 +158,7 @@ public class PostParentLayout extends RelativeLayout {
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VideoActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_video_id(), teacherZoneDynamicsInfo.getVideo_id(), teacherZoneDynamicsInfo.getNews_catid());
+                        VideoActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getVideo_id(),teacherZoneDynamicsInfo.getNews_video_id(), teacherZoneDynamicsInfo.getNews_catid(),StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
                     }
                 });
                 addView(view);

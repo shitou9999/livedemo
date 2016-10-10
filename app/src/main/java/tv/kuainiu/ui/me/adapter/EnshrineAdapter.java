@@ -175,7 +175,7 @@ public class EnshrineAdapter extends BaseSwipeAdapter {
             i.putExtra(Constant.KEY_CATID, newsItem.getCatId());
             i.putExtra(Constant.KEY_CATNAME, newsItem.getCatname());
         } else {
-            VideoActivity.intoNewIntent(context,newsItem.getId(),newsItem.getUpVideoId(),newsItem.getCatId());
+            VideoActivity.intoNewIntent(context,newsItem.getId(),newsItem.getUpVideoId(),newsItem.getCatId(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
 //            i.setClass(context, VideoActivity.class);
 //            i.putExtra(Constant.KEY_ID, newsItem.getId());
 //            i.putExtra(Constant.KEY_CATID, newsItem.getCatId());

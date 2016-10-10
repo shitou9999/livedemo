@@ -29,7 +29,7 @@ import tv.kuainiu.utils.StringUtils;
 public class IGXApplication extends android.support.multidex.MultiDexApplication {
     private static final String TAG = "IGXApplication";
     private static User user;
-    public static final boolean IsDegbug = false;
+    public static final boolean IsDegbug = true;
     public static final String KEY_DEVICEID = "deviceid_key";
     /**
      * <p>
