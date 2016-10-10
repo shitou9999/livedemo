@@ -103,7 +103,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         }
     }
 
-    private void dataViewPoint(ViewHolder holder, int position) {
+        private void dataViewPoint(ViewHolder holder, int position) {
        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
@@ -157,11 +157,11 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
         news_info.setType(info.getType());
-        news_info.setNews_video_id(info.getId());
+        news_info.setNews_video_id(info.getVideo_id());
         news_info.setNews_title(info.getTitle());
         news_info.setNews_catid(info.getCat_id());
         news_info.setNews_inputtime(info.getInputtime());
-        news_info.setVideo_id(info.getVideo_id());
+        news_info.setVideo_id(info.getId());
         holder.mPostParentLayout.setPostType(news_info);
         //不是直播中就是黑色边框
         holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
