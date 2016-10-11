@@ -53,14 +53,21 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    @Override protected void onResume() {
-        super.onResume();
+    @Override
+    protected void onStart() {
+        super.onStart();
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         MobclickAgent.onResume(this);
     }
-//    @Subscribe(threadMode = ThreadMode.MAIN)
+    //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onRequestError(HttpEvent event) {
 //        initClientPost(event.getCode(), this);
 //    }
@@ -70,8 +77,9 @@ public class BaseActivity extends AppCompatActivity {
         initClientPost(event.getCode(), this);
     }
 
-    @Override protected void onStop() {
-       super.onStop();
+    @Override
+    protected void onStop() {
+        super.onStop();
         if (!(this instanceof MainActivity) && EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }

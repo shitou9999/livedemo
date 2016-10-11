@@ -182,6 +182,12 @@
             android:name=".ui.video.VideoActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="sensor" />
+
+        <!--发布-->
+        <!--发布动态-->
+        <activity
+            android:name=".ui.publishing.dynamic.DynamicActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

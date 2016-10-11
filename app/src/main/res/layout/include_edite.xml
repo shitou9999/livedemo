@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_edit_bg"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:maxLines="500"
+        android:minLines="3"
+        android:background="@color/translate"
+        android:gravity="start"
+        android:text=""
+        android:hint="请输入内容"
+        android:textSize="14sp"
+        android:textColorHint="@color/colorGrey400"
+        android:inputType="textMultiLine"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginRight="1px"
+        android:layout_marginBottom="1px"
+        android:layout_marginLeft="1px"
+        android:background="@color/colorGreyPublish"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:id="@+id/tvInputWordLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="还可以输入10个字" />
+
+        <TextView
+            android:id="@+id/btnFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="标签"
+            android:textColor="@color/colorBlue500"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/btnFlag"
+            android:text="插入："
+            android:textColor="@color/colorGreyPublishText" />
+    </RelativeLayout>
+</LinearLayout>

@@ -42,6 +42,8 @@
     <color name="colorGrey800">#424242</color>
     <color name="colorGrey900">#212121</color>
     <color name="colorGrey000">#000000</color>
+    <color name="colorGreyPublish">@color/colorGrey050</color>
+    <color name="colorGreyPublishText">@color/colorGrey400</color>
 
     <!-- Blue 蓝色-->
     <color name="colorBlue500">#2196F3</color>

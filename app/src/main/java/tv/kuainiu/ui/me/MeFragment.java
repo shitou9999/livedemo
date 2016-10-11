@@ -43,6 +43,7 @@ import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.ui.me.activity.SettingActivity;
+import tv.kuainiu.ui.publishing.dynamic.DynamicActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -206,7 +207,7 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage})
+            R.id.tv_me_phone, R.id.rlHomePage,R.id.btnPublish})
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -263,6 +264,11 @@ public class MeFragment extends BaseFragment {
                 Intent intentSettingActivity = new Intent();
                 intentSettingActivity.setClass(getActivity(), SettingActivity.class);
                 startActivity(intentSettingActivity);
+                break;
+            case R.id.btnPublish:
+                Intent intentDynamicActivity = new Intent();
+                intentDynamicActivity.setClass(getActivity(), DynamicActivity.class);
+                startActivity(intentDynamicActivity);
                 break;
         }
     }
