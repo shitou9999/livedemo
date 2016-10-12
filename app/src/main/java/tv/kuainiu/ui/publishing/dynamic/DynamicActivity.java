@@ -1,5 +1,6 @@
 package tv.kuainiu.ui.publishing.dynamic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -12,18 +13,23 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tv.kuainiu.R;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.publishing.PickTagsActivity;
 import tv.kuainiu.widget.PostParentLayout;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
+import static tv.kuainiu.ui.publishing.PickTagsActivity.NEW_LIST;
+import static tv.kuainiu.ui.publishing.PickTagsActivity.SELECTED_LIST;
+
 public class DynamicActivity extends BaseActivity {
 
-
+    public static final int REQUSET_TAG_CODE = 0;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     @BindView(R.id.tvInputWordLimit)
@@ -34,12 +40,13 @@ public class DynamicActivity extends BaseActivity {
     TagListView tagListView;
     @BindView(R.id.pl_friends_post_group)
     PostParentLayout plFriendsPostGroup;
-    private final List<Tag> mTags = new ArrayList<Tag>();
-    private final String[] titles = { "基本面", "K线" };
+    private List<Tag> mTags = new ArrayList<Tag>();
+    private List<Tag> mNewTagList = new ArrayList<Tag>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dynamic);
+        setContentView(R.layout.activity_publish_dynamic);
         ButterKnife.bind(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -55,33 +62,47 @@ public class DynamicActivity extends BaseActivity {
     }
 
     private void initView() {
-    }
-
-
-    private void initData() {
-
-        for (int i = 0; i < 2; i++) {
-            Tag tag = new Tag();
-            tag.setId(i);
-            tag.setChecked(true);
-            tag.setTitle(titles[i]);
-            mTags.add(tag);
-        }
         tagListView.setDeleteMode(true);
-        tagListView.setTags(mTags);
-
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
+                mTags.remove(tag);
                 tagListView.removeTag(tag);
             }
         });
     }
 
 
+    private void initData() {
+    }
+
+    private void dataBind() {
+        tagListView.setTags(mTags);
+    }
+
+
+    @OnClick(R.id.btnFlag)
+    public void onClick() {
+        PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUSET_TAG_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
+                mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
+                dataBind();
+            }
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
         }
     }
+
+
 }

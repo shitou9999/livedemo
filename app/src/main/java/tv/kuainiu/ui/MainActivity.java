@@ -31,6 +31,7 @@ import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.InitInfo;
+import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
@@ -198,6 +199,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     LogUtils.i(TAG, "privateKey : " + privateKey);
                     if (!TextUtils.isEmpty(privateKey)) {
                         IGXApplication.setKey(privateKey);
+                    }
+                    if(IGXApplication.isLogin()){
+                        User user=IGXApplication.getUser();
+                        user.setIs_teacher(initInfo.getIs_teacher());
+                        IGXApplication.setUser(user);
                     }
 //                    showCustomRedPoint(initInfo.getCustom_num() > 0);//显示红点
                     PreferencesUtils.putInt(this, Constant.MSG_NUM, initInfo.getMsg_num());

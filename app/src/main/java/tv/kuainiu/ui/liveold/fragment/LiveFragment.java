@@ -220,7 +220,7 @@ public class LiveFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
         // FIXME: 2016/7/21  Temp change info title text
-        // info.getLiveing().setTitle("李厚霖夺顶554、圆顶地。。、顶替？ ？。杉矶之战、，‘、，【】霜压顶李昌奎爆棚李昌奎瓠果涯杨万里瓢泼大雨地34234u283r782");
+        // info.getLiveing().setName("李厚霖夺顶554、圆顶地。。、顶替？ ？。杉矶之战、，‘、，【】霜压顶李昌奎爆棚李昌奎瓠果涯杨万里瓢泼大雨地34234u283r782");
         //////
 
         ImageDisplayUtil.displayImage(getActivity(), mIvBanner, info.getImg());

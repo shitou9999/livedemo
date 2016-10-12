@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivShareSina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:src="@drawable/selector_share_sina_small" />
+
+    <ImageView
+        android:id="@+id/ivShareWeChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ivShareSina"
+        android:padding="10dp"
+        android:src="@drawable/selector_share_wechat_small" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/ivShareQQ"
+        android:text="分享到：" />
+
+    <ImageView
+        android:id="@+id/ivShareQQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@drawable/selector_share_qq_small"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/ivShareWeChat"
+        android:layout_toStartOf="@+id/ivShareWeChat" />
+</RelativeLayout>

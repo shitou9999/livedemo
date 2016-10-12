@@ -69,9 +69,11 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -249,11 +251,12 @@ public class PlayLiveActivity extends BaseActivity implements
      */
     private int dvr;
 
-    public static void intoNewIntent(Context context,LiveParameter liveParameter){
+    public static void intoNewIntent(Context context, LiveParameter liveParameter) {
         Intent intent = new Intent(context, PlayLiveActivity.class);
         intent.putExtra(ARG_LIVING, liveParameter);
         context.startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -444,10 +447,13 @@ public class PlayLiveActivity extends BaseActivity implements
 
     private void loginLive() {
         viewerName = PreferencesUtils.getString(this, IGXApplication.KEY_DEVICEID, "");
-        password = ParamUtil.getParam(null);
+        Map<String, String> map = new HashMap<>();
+        map.put("teacher_id", teacherId);
+        password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (password == null || "".equals(password)) {
                     dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName);
@@ -483,10 +489,14 @@ public class PlayLiveActivity extends BaseActivity implements
             showLive();
         }
 
-        @Override public void onException(DWLiveException e) {
+        @Override
+        public void onException(DWLiveException e) {
             LogUtils.e("login", "登陆回调返回异常", e);
             isLoginSuccess = false;
-            handler.sendEmptyMessage(HIDE_PALY);
+            Message msg = handler.obtainMessage();
+            msg.obj = e;
+            msg.what = HIDE_PALY;
+            handler.sendMessage(msg);
         }
     }
 
@@ -525,11 +535,13 @@ public class PlayLiveActivity extends BaseActivity implements
 
             }
 
-            @Override public void onPageSelected(int position) {
+            @Override
+            public void onPageSelected(int position) {
                 mTabLayout.getTabAt(position).select();
             }
 
-            @Override public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -1038,11 +1050,13 @@ public class PlayLiveActivity extends BaseActivity implements
      * @param iMediaPlayer
      * @param i
      */
-    @Override public void onBufferingUpdate(IMediaPlayer iMediaPlayer, int i) {
+    @Override
+    public void onBufferingUpdate(IMediaPlayer iMediaPlayer, int i) {
 
     }
 
-    @Override public boolean onError(IMediaPlayer mp, int what, int extra) {
+    @Override
+    public boolean onError(IMediaPlayer mp, int what, int extra) {
         LogUtils.e("demo", "=============================>onError:" + what);
         Toast.makeText(this, "播放异常，回到直播", Toast.LENGTH_LONG).show();
         if (dwLive != null && !isStop) {
@@ -1090,7 +1104,8 @@ public class PlayLiveActivity extends BaseActivity implements
         }
     }
 
-    @Override public void onPrepared(IMediaPlayer iMediaPlayer) {
+    @Override
+    public void onPrepared(IMediaPlayer iMediaPlayer) {
         LogUtils.i("demo", "onPrepared");
         isPrepared = true;
 
@@ -1286,7 +1301,8 @@ public class PlayLiveActivity extends BaseActivity implements
             LogUtils.e("demo", exception.getMessage() + "");
         }
 
-        @Override public void onIntervalException(Exception e) {
+        @Override
+        public void onIntervalException(Exception e) {
             //TODO 间隙播放请求异常
 
         }
@@ -1312,7 +1328,8 @@ public class PlayLiveActivity extends BaseActivity implements
             handler.sendMessage(kickOutMsg);
         }
 
-        @Override public void onLivePlayedTime(int playedTime) {
+        @Override
+        public void onLivePlayedTime(int playedTime) {
             if (playedTime >= 0 && dvr > 0) {
 
                 stopLiveTimerTask();
@@ -1321,11 +1338,13 @@ public class PlayLiveActivity extends BaseActivity implements
             }
         }
 
-        @Override public void onLivePlayedTimeException(Exception e) {
+        @Override
+        public void onLivePlayedTimeException(Exception e) {
             dwLive.getLivePlayedTime();
         }
 
-        @Override public void isPlayedBack(boolean isPlayedBack) {
+        @Override
+        public void isPlayedBack(boolean isPlayedBack) {
             if (!isPlayedBack) {
                 // 收到这条信息相当于是重新加载，所以把界面初始化到直播状态
                 stopPlaybackTimerTask();
@@ -1345,7 +1364,8 @@ public class PlayLiveActivity extends BaseActivity implements
 
     };
 
-    @Override public void surfaceCreated(SurfaceHolder surfaceHolder) {
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
         if (dwLive != null && isLoginSuccess) {
             dwLive.start(holder.getSurface());
         }
@@ -1361,7 +1381,8 @@ public class PlayLiveActivity extends BaseActivity implements
 
     boolean isSurfaceDestroyed = false;
 
-    @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
         isSurfaceDestroyed = true;
         Log.i("demo", "surfaceDestroyed");
     }
@@ -1379,7 +1400,8 @@ public class PlayLiveActivity extends BaseActivity implements
 //        tvPlayMsg.setText(text);
     }
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         switch (v.getId()) {
             //返回按钮
             case R.id.iv_back2:
@@ -1515,7 +1537,8 @@ public class PlayLiveActivity extends BaseActivity implements
             super(owner);
         }
 
-        @Override public void handleMessage(Message msg) {
+        @Override
+        public void handleMessage(Message msg) {
             PlayLiveActivity playLiveActivity = getOwner();
             switch (msg.what) {
                 case SHOW_CONTROL:
@@ -1525,11 +1548,19 @@ public class PlayLiveActivity extends BaseActivity implements
                     playLiveActivity.setPlayControllerVisible(false);
                     break;
                 case HIDE_PALY:
+
                     if (playLiveActivity.loginTime < 3) {
                         playLiveActivity.loginLive();
                         playLiveActivity.loginTime++;
                     } else {
-                        ToastUtils.showToast(playLiveActivity, "进入直播间失败，请重试！");
+                        String errorMessage = "进入直播间失败，请重试！";
+                        if (msg.obj != null) {
+                            DWLiveException mDWLiveException = (DWLiveException) msg.obj;
+                            if (mDWLiveException != null) {
+                                errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
+                            }
+                        }
+                        ToastUtils.showToast(playLiveActivity, errorMessage);
                         playLiveActivity.finish();
                     }
                     break;

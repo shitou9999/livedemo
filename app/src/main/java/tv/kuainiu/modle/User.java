@@ -46,6 +46,7 @@ public class User implements Parcelable {
     private int msg_num;
     private int fans_count;
     private String session_id;
+    private int is_teacher;
 
 
     public User() {
@@ -61,6 +62,7 @@ public class User implements Parcelable {
         this.phone = phone;
         this.email = email;
     }
+
 
     protected User(Parcel in) {
         user_id = in.readString();
@@ -82,6 +84,7 @@ public class User implements Parcelable {
         msg_num = in.readInt();
         fans_count = in.readInt();
         session_id = in.readString();
+        is_teacher = in.readInt();
     }
 
     @Override
@@ -105,6 +108,7 @@ public class User implements Parcelable {
         dest.writeInt(msg_num);
         dest.writeInt(fans_count);
         dest.writeString(session_id);
+        dest.writeInt(is_teacher);
     }
 
     @Override
@@ -274,5 +278,13 @@ public class User implements Parcelable {
 
     public void setFans_count(int fans_count) {
         this.fans_count = fans_count;
+    }
+
+    public int getIs_teacher() {
+        return is_teacher;
+    }
+
+    public void setIs_teacher(int is_teacher) {
+        this.is_teacher = is_teacher;
     }
 }

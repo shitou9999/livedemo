@@ -38,7 +38,25 @@
         <item name="android:textColor">@drawable/selector_tab_main_text</item>
         <item name="android:textSize">16sp</item>
     </style>
-
+    <!-- PublishPanel 样式-->
+    <style name="PublishPanelLinearLayoutStyle">
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="PublishPanelButtonStyle">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/colorGrey333333</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <!-- 程序版本更新 -->
     <style name="system_update_dialog" parent="android:Theme.Dialog">
         <item name="android:windowFrame">@null</item>

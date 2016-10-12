@@ -130,7 +130,7 @@ public class WebActivity extends BaseActivity {
         // 这段js函数的功能就是，遍历所有的a标签，并添加onclick函数，在还是执行的时候调用本地接口传递url过去
 //        mWebView.loadUrl("javascript:(function(){" +
 //                "var objs =  document.getElementsByTagName(\"title\")[0];" +
-//                "window.jslistner.setTitle(objs.innerHTML)" +
+//                "window.jslistner.setName(objs.innerHTML)" +
 //                " })()");
     }
 
@@ -144,7 +144,7 @@ public class WebActivity extends BaseActivity {
         }
 
 //        @android.webkit.JavascriptInterface
-//        public void setTitle(final String title) {
+//        public void setName(final String title) {
 //            LogUtils.i("course", "title=" + title);
 //            runOnUiThread(new Runnable() {
 //                @Override

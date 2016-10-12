@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:rightText="发布"
-        app:title="动态直播" />
+        app:mytitle="动态直播" />
 
     <include
         layout="@layout/include_edite"

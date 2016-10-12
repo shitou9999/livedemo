@@ -4,23 +4,23 @@ package tv.kuainiu.command.http;
  * @author nanck on 2016/3/21.
  */
 public class Api {
-    public static final String DNS_HOST = "http://client.api.iguxuan.com";
-    public static final String DNS_API_HOST = "http://client.api.iguxuan.com/v1/";
+    public static final String DNS_HOST = "http://client.api.kuainiu.tv";
+    public static final String DNS_API_HOST = "http://client.api.kuainiu.tv/v1/";
     /*****************************
      * 正式库
      *************************/
-    public static final String TEST_DNS_API_HOST = "http://139.224.1.41/v1/";
-    public static final String TEST_DNS_API_HOST_V2 = "http://139.224.1.41/v1/";
-    public static final String TEST_DNS_API_HOST_V21 = "http://139.224.1.41/v1/";
+    public static final String TEST_DNS_API_HOST = "http://client.api.kuainiu.tv/v1/";
+    public static final String TEST_DNS_API_HOST_V2 = "http://client.api.kuainiu.tv/v1/";
+    public static final String TEST_DNS_API_HOST_V21 = "http://client.api.kuainiu.tv/v1/";
     public static final String PUBLIC_KEY = "kntv!$@)";
     public static final String SALT = "kn&!$@)";
 
     /*****************************
      * 测试库
      *************************/
-//    public static final String TEST_DNS_API_HOST = "http://139.224.1.41/v1/";
-//    public static final String TEST_DNS_API_HOST_V2 = "http://139.224.1.41/v1/";
-//    public static final String TEST_DNS_API_HOST_V21 = "http://139.224.1.41/v1/";
+//    public static final String TEST_DNS_API_HOST = "http://client.api.kuainiu.tv/v1/";
+//    public static final String TEST_DNS_API_HOST_V2 = "http://client.api.kuainiu.tv/v1/";
+//    public static final String TEST_DNS_API_HOST_V21 = "http://client.api.kuainiu.tv/v1/";
 //    public static final String PUBLIC_KEY = "kntv!$@)_test";
 //    public static final String SALT = "kn&*(_test";
     /*****************************
@@ -129,6 +129,21 @@ public class Api {
     public static final String CUSTOM_LIVE_LIST = "live/live_list"; //3.2 直播列表  live/live_list（v1）
     public static final String LIVE_INDEX = "live/live_index"; //3.4 直播界面首页  live/live_index（v1）     用于底栏"直播"的界面
 
+   /*发布*/
+     /**
+     * 1.17 老师标签列表   v1/news/teacher_news_tags
+     * 通信方式：无
+     * 参数列表：
+     * teacher_id     必传     老师ID
+     * 备注：参与加密
+     */
+    public static final String teacher_news_tags = "news/teacher_news_tags";
+
+//    1.15 发布动态时引用的文章列表   news/quote_list
+    public static final String quote_list = "news/quote_list";
+
+//    1.16 文章分类列表   news/get_cats
+    public static final String get_cats = "news/get_cats";
 
 
 }

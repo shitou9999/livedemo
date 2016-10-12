@@ -181,4 +181,7 @@ public enum Action {
     live_zhi_bo_home,   // 直播看盘
     live_hui_fang_kan_pan,   // 直播回放
     live_zhi_bo_yu_gao,   // 直播预告
+    teacher_news_tags,   // 1.17 老师标签列表   v1/news/teacher_news_tags
+    quote_list,   // 1.15 发布动态时引用的文章列表   news/quote_list
+    get_cats,   //  1.16 文章分类列表   news/get_cats
 }

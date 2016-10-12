@@ -81,7 +81,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
         Intent intent = new Intent(mContext, ReplayLiveActivity.class);
 //        LivingInfo.LiveingEntity entity = new LivingInfo.LiveingEntity();
-//        entity.setTitle(history.getTitle());
+//        entity.setName(history.getName());
 //        entity.setAnchor(history.getAnchor());
         intent.putExtra(LiveFragment.ARG_LIVING, history);
         mContext.startActivity(intent);

@@ -162,7 +162,7 @@ public class DataSet {
 //				VideoInfo videoInfo = uploadInfo.getVideoInfo();
 //				//video
 //				values.put("videoId", videoInfo.getVideoId());
-//				values.put("title", videoInfo.getTitle());
+//				values.put("title", videoInfo.getName());
 //				values.put("tags", videoInfo.getDescription());
 //				values.put("description", videoInfo.getDescription());
 //				values.put("filePath", videoInfo.getFilePath());
@@ -220,7 +220,7 @@ public class DataSet {
 //
 //		VideoInfo videoInfo = new VideoInfo();
 //		videoInfo.setVideoId(cursor.getString(cursor.getColumnIndex("videoId")));
-//		videoInfo.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+//		videoInfo.setName(cursor.getString(cursor.getColumnIndex("title")));
 //		videoInfo.setTags(cursor.getString(cursor.getColumnIndex("tags")));
 //		videoInfo.setDescription(cursor.getString(cursor.getColumnIndex("description")));
 //		videoInfo.setFilePath(cursor.getString(cursor.getColumnIndex("filePath")));

@@ -9,12 +9,12 @@ public class Tag implements Serializable {
 	 */
 	private static final long serialVersionUID = 2684657309332033242L;
 	
-	private int backgroundResId;
-	private int id;
+	private int backgroundResId=0;
+	private int id=0;
 	private boolean isChecked;
 	private int leftDrawableResId;
 	private int rightDrawableResId;
-	private String title;
+	private String name;
 
 	public Tag() {
 		
@@ -22,7 +22,7 @@ public class Tag implements Serializable {
 
 	public Tag(int paramInt, String paramString) {
 		this.id = paramInt;
-		this.title = paramString;
+		this.name = paramString;
 	}
 
 	public int getBackgroundResId() {
@@ -41,8 +41,8 @@ public class Tag implements Serializable {
 		return this.rightDrawableResId;
 	}
 
-	public String getTitle() {
-		return this.title;
+	public String getName() {
+		return this.name;
 	}
 
 	public boolean isChecked() {
@@ -69,7 +69,7 @@ public class Tag implements Serializable {
 		this.rightDrawableResId = paramInt;
 	}
 
-	public void setTitle(String paramString) {
-		this.title = paramString;
+	public void setName(String paramString) {
+		this.name = paramString;
 	}
 }

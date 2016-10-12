@@ -187,7 +187,17 @@
         <!--发布动态-->
         <activity
             android:name=".ui.publishing.dynamic.DynamicActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
+        <!--发布文章-->
+        <activity
+            android:name=".ui.publishing.article.PublishArticleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.publishing.PickTagsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

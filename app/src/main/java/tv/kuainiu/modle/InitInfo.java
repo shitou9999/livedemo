@@ -29,6 +29,7 @@ public class InitInfo implements Serializable {
     private int subscibe_count;
     private String ke_url;
     private int download_see_login;
+    private int is_teacher;
 
     public String getUser_id() {
         return user_id;
@@ -92,6 +93,14 @@ public class InitInfo implements Serializable {
 
     public void setDownload_see_login(int download_see_login) {
         this.download_see_login = download_see_login;
+    }
+
+    public int getIs_teacher() {
+        return is_teacher;
+    }
+
+    public void setIs_teacher(int is_teacher) {
+        this.is_teacher = is_teacher;
     }
 
     @Override public String toString() {

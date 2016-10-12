@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -43,7 +44,6 @@ import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.ui.me.activity.SettingActivity;
-import tv.kuainiu.ui.publishing.dynamic.DynamicActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -207,7 +207,7 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage,R.id.btnPublish})
+            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish})
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -266,10 +266,24 @@ public class MeFragment extends BaseFragment {
                 startActivity(intentSettingActivity);
                 break;
             case R.id.btnPublish:
-                Intent intentDynamicActivity = new Intent();
-                intentDynamicActivity.setClass(getActivity(), DynamicActivity.class);
-                startActivity(intentDynamicActivity);
+//                Intent intentDynamicActivity = new Intent();
+//                intentDynamicActivity.setClass(getActivity(), DynamicActivity.class);
+//                startActivity(intentDynamicActivity);
+                intro();
+
                 break;
+        }
+    }
+
+    /**
+     * 控制发布面板的显示与隐藏
+     */
+    public void intro() {
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(view.findViewById(R.id.ppl_publish_panel));
+        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
@@ -349,6 +363,7 @@ public class MeFragment extends BaseFragment {
             mTvMeName.setText(nullValue);
             rlLogOut.setVisibility(View.VISIBLE);
             tvFans.setText(nullValue);
+            mBtnPublish.setVisibility(View.INVISIBLE);
         } else {
             displayAvatar(user.getAvatar());
             mTvMePhone.setText(StringUtils.getX(user.getPhone()));
@@ -356,6 +371,11 @@ public class MeFragment extends BaseFragment {
             mTvMeName.setText(nickName);
             tvFans.setText(StringUtils.getDecimal(user.getFans_count(), Constant.TEN_THOUSAND, "万", ""));
             rlLogOut.setVisibility(View.GONE);
+            if(user.getIs_teacher()==0){
+                mBtnPublish.setVisibility(View.INVISIBLE);
+            }else{
+                mBtnPublish.setVisibility(View.VISIBLE);
+            }
         }
         setFollowAndSubText(user);
     }

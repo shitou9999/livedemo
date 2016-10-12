@@ -473,7 +473,7 @@ public class UpdateManager {
                         }
                     }
                 });
-        // builder.setTitle("正在下载");
+        // builder.setName("正在下载");
         // 给下载对话框增加进度条
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(

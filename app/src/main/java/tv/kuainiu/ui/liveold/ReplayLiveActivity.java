@@ -64,8 +64,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
@@ -458,7 +460,9 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private void loginLive() {
         viewerName = PreferencesUtils.getString(this, IGXApplication.KEY_DEVICEID, "");
-        password = ParamUtil.getParam(null);
+        Map<String, String> map=new HashMap<>();
+        map.put("teacher_id",teacherId);
+        password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
             @Override public void run() {
@@ -490,7 +494,10 @@ public class ReplayLiveActivity extends BaseActivity implements
         @Override public void onException(DWLiveException e) {
             LogUtils.e("login", "回放登陆回调返回异常", e);
             isLoginSuccess = false;
-            handler.sendEmptyMessage(HIDE_PALY);
+            Message msg = handler.obtainMessage();
+            msg.obj = e;
+            msg.what = HIDE_PALY;
+            handler.sendMessage(msg);
         }
 
         @Override public void onLogin(TemplateInfo _templateInfo) {
@@ -1191,7 +1198,14 @@ public class ReplayLiveActivity extends BaseActivity implements
                         playLiveActivity.loginTime++;
                         playLiveActivity.loginLive();
                     } else {
-                        ToastUtils.showToast(playLiveActivity, "进入直播间失败，请重试！");
+                        String errorMessage = "进入直播间失败，请重试！";
+                        if (msg.obj != null) {
+                            DWLiveException mDWLiveException = (DWLiveException) msg.obj;
+                            if (mDWLiveException != null) {
+                                errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
+                            }
+                        }
+                        ToastUtils.showToast(playLiveActivity, errorMessage);
                         playLiveActivity.finish();
                     }
                     break;
