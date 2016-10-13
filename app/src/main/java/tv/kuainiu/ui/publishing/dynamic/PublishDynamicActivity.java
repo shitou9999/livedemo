@@ -72,7 +72,8 @@ public class PublishDynamicActivity extends BaseActivity {
     private String description = "";//必传     文字内容
     private String thumb = "";//缩略图     多个以英文逗号隔开
     private String synchro_wb = "1";//是否同步微博     1是 0否
-    private String tag = "";//是否同步微博     1是 0否
+    private String tag = "";//
+    private String tag_new = "";//
     private boolean isSubmiting = false;
 
     @Override
@@ -127,6 +128,7 @@ public class PublishDynamicActivity extends BaseActivity {
         thumb = "";//缩略图     多个以英文逗号隔开
         synchro_wb = "1";//是否同步微博     1是 0否
         tag = "";
+        tag_new = "";
         if (listTeacherZoneDynamicsInfo.size() > 0) {
             news_id = listTeacherZoneDynamicsInfo.get(0).getNews_id();
         }
@@ -141,24 +143,17 @@ public class PublishDynamicActivity extends BaseActivity {
             for (int i = 0; i < mTags.size(); i++) {
                 Tag mTag = mTags.get(i);
                 if (mTag.getId() == 0) {
-                    tag += mTag.getName();
+                    tag_new += mTag.getName();
                 } else {
                     tag += mTag.getId();
                 }
-                if (i <= mTags.size() - 2) {
-                    tag += ",";
-                }
-
+                tag += ",";
+                tag_new += ",";
             }
         }
         return flag;
     }
 
-    //    private String news_id = "";//可选     引用的文章ID
-//    private String description = "";//必传     文字内容
-//    private String thumb = "";//缩略图     多个以英文逗号隔开
-//    private String synchro_wb = "1";//是否同步微博     1是 0否
-//    private String tag = "";//是否同步微博     1是 0否
     private void submitData() {
 
         Map<String, String> map = new HashMap<>();
@@ -167,6 +162,7 @@ public class PublishDynamicActivity extends BaseActivity {
         map.put("thumb", thumb);
         map.put("synchro_wb", synchro_wb);
         map.put("tag", tag);
+        map.put("tag_new", tag_new);
         if (!isSubmiting) {
             isSubmiting = true;
             OKHttpUtils.getInstance().post(this, Api.add_dynamics, ParamUtil.getParam(map), Action.teacher_news_tags.add_dynamics);

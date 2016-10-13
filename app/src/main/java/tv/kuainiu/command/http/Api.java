@@ -146,19 +146,41 @@ public class Api {
     public static final String get_cats = "news/get_cats";
     /**
      * 1.2 发布文字动态   v1/publish/add_dynamics
-
-     通信方式：加密方式
-     参数列表：
-     news_id     可选     引用的文章ID
-     user_id     必传     用户ID
-     description     必传     文字内容
-     thumb     缩略图     多个以英文逗号隔开
-     synchro_wb     可选      是否同步微博     1是 0否
-
-     备注：参与加密
-     {"status"="0","data"="json"}
+     * <p>
+     * 通信方式：加密方式
+     * 参数列表：
+     * news_id     可选     引用的文章ID
+     * user_id     必传     用户ID
+     * description     必传     文字内容
+     * thumb     缩略图     多个以英文逗号隔开
+     * synchro_wb     可选      是否同步微博     1是 0否
+     * <p>
+     * 备注：参与加密
+     * {"status"="0","data"="json"}
      */
     public static final String add_dynamics = "publish/add_dynamics";
+
+    /**
+     * 通信方式：加密方式
+     * 参数列表：
+     * type     必传     发布类型 1文章 2视频 3声音
+     * cat_id     必传     栏目ID
+     * title     必传     标题
+     * thumb      必传     缩略图
+     * description     可选      描述
+     * tag     可选      标签     选择已有标签(标签ID)     eg:1,2,3,6
+     * tag_new     可选      新自定义标签（标签字符串）  eg:基本面,涨停,大涨
+     * user_id     必传     用户ID
+     * video_id     视频必传     视频ID
+     * voice     声音必传     声音文件
+     * content     必传     内容体
+     * permission     可选      权限 1,公开开放   2,粉丝可见
+     * allow_comment     可选      是否允许评论     1允许 0否
+     * synchro_wb     可选      是否同步微博     1是 0否
+     * synchro_dynamics     可选     是否同步动态     1是0否
+     * dynamics_desc     同步动态时必传     动态描述文字
+     */
+    public static final String add_news = "publish/add_news";
 
 
 }

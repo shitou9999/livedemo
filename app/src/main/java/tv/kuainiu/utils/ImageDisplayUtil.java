@@ -1,6 +1,7 @@
 package tv.kuainiu.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,17 @@ public class ImageDisplayUtil {
         Glide.with(context).load(imageId).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
         }catch (Exception e){
             LogUtils.e("ImageDisplayUtil","line 42",e);
+        }
+    }
+
+    public static void displayImage(Context context, ImageView imageView, Bitmap mDrawable, int error) {
+        if(context==null||imageView==null){
+            return;
+        }
+        try {
+            Glide.with(context).load(mDrawable).placeholder(error).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        }catch (Exception e){
+            LogUtils.e("ImageDisplayUtil","line 52",e);
         }
     }
 }

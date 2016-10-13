@@ -185,4 +185,7 @@ public enum Action {
     quote_list,   // 1.15 发布动态时引用的文章列表   news/quote_list
     get_cats,   //  1.16 文章分类列表   news/get_cats
     add_dynamics,   // 1.2 发布文字动态   v1/publish/add_dynamics
+    add_news_article,   // 发布文章
+    add_news_video,   // 发布视频
+    add_news_vioce,   // 发布声音
 }

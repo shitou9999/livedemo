@@ -2,15 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="156dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorGreyPublish"
-    android:minHeight="156dp"
-    >
+    android:minHeight="156dp">
     <!--添加封面-->
     <ImageView
         android:id="@+id/ivAddCover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
         android:layout_centerInParent="true"
+        android:scaleType="fitXY"
         android:src="@mipmap/add_cover_btn" />
 
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_below="@+id/ivAddCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorRed500"
+        android:layout_alignLeft="@+id/ivAddCover"
+        tools:text="错误提示"
+        />
 </RelativeLayout>

@@ -78,19 +78,31 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
      */
     private static final int REQUEST_CUTTING = 2;
 
-    @BindView(R.id.rl_personalPerfect) RelativeLayout mRlPerfect;
-    @BindView(R.id.rl_personalLogout) RelativeLayout mRlLogout;
-    @BindView(R.id.rl_personalAccount) RelativeLayout mRlAccount;
-    @BindView(R.id.rl_personalEmail) RelativeLayout mRlBindEmail;
-    @BindView(R.id.rl_personalIdentity) RelativeLayout mRlIdentity;
-    @BindView(R.id.rl_personalPassword) RelativeLayout mRlPassword;
-    @BindView(R.id.tv_personalPhoneNumberTop) TextView mTvPhoneNumberTop;
-    @BindView(R.id.tv_personalPhoneNumber2) TextView mTvPhoneNumber2;
-    @BindView(R.id.tv_personal_idno_status) TextView mTvIdentityStatus;
-    @BindView(R.id.tv_personalEmail) TextView mTvEmail;
-    @BindView(R.id.tv_personal_identity_Card) TextView mTvIdentityCard;
-    @BindView(R.id.cimg_photo) CircleImageView mPhoto;
-
+    @BindView(R.id.rl_personalPerfect)
+    RelativeLayout mRlPerfect;
+    @BindView(R.id.rl_personalLogout)
+    RelativeLayout mRlLogout;
+    @BindView(R.id.rl_personalAccount)
+    RelativeLayout mRlAccount;
+    @BindView(R.id.rl_personalEmail)
+    RelativeLayout mRlBindEmail;
+    @BindView(R.id.rl_personalIdentity)
+    RelativeLayout mRlIdentity;
+    @BindView(R.id.rl_personalPassword)
+    RelativeLayout mRlPassword;
+    @BindView(R.id.tv_personalPhoneNumberTop)
+    TextView mTvPhoneNumberTop;
+    @BindView(R.id.tv_personalPhoneNumber2)
+    TextView mTvPhoneNumber2;
+    @BindView(R.id.tv_personal_idno_status)
+    TextView mTvIdentityStatus;
+    @BindView(R.id.tv_personalEmail)
+    TextView mTvEmail;
+    @BindView(R.id.tv_personal_identity_Card)
+    TextView mTvIdentityCard;
+    @BindView(R.id.cimg_photo)
+    CircleImageView mPhoto;
+    Bitmap bitmap;
     private static ProgressDialog pd;             // 等待进度圈
     private SelectPicPopupWindow menuWindow;      // 头像弹出框
     private AlertDialog logoutDialog;
@@ -145,7 +157,8 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_personalPerfect:
                 Intent perfect = new Intent(PersonalActivity.this, PerfectPersonalActivity.class);
@@ -318,6 +331,8 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         startActivityForResult(intent, REQUEST_CUTTING);
     }
 
+
+
     /**
      * 保存裁剪之后的图片数据
      *
@@ -328,7 +343,7 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         Bundle extras = picdata.getExtras();
         if (extras != null) {
             // 取得SDCard图片路径做显示
-            Bitmap bitmap = extras.getParcelable("data");
+            bitmap = extras.getParcelable("data");
             if (null == bitmap) return;
             Drawable drawable = new BitmapDrawable(null, bitmap);
             mPhoto.setImageDrawable(drawable);
@@ -357,13 +372,14 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
         photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
         byte[] bytes = baos.toByteArray();
-        photo.recycle();
+//        photo.recycle();
         return bytes;
     }
 
     private void uploadImage(final Bitmap photo) {
         new Thread() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Map<String, String> map = new HashMap<>();
                 map.put("avatar", Base64.encodeToString(toImageForBin(photo), Base64.DEFAULT));
                 OKHttpUtils.getInstance().post(PersonalActivity.this, Api.UPDATE_AVATAR, ParamUtil.getParam(map), Action.update_avatar);
@@ -404,10 +420,14 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
         }
     }
 }

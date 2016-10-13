@@ -40,8 +40,8 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:hint="请输入标题"
                 android:background="@null"
+                android:hint="请输入标题"
                 android:text="" />
 
             <View
@@ -72,23 +72,27 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/colorGreyPublish"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
                 <TextView
+                    android:id="@+id/tvCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="同步动态观点" />
+                    android:text="文章栏目"
+                    android:textColor="@color/colorRed500" />
 
-                <TextView
+                <Spinner
+                    android:id="@+id/spCategory"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="+"
+                    android:gravity="end"
                     android:textColor="@color/colorGreyPublishText" />
             </RelativeLayout>
 
@@ -106,26 +110,33 @@
                     android:layout_height="40dp"
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
-                    android:text="同步动态直播" />
+                    android:text="同步动态直播"
+                    android:textColor="@color/colorRed500" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/sw_dynamic"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="+"
-                    android:textColor="@color/colorGreyPublishText" />
+                    android:background="@null"
+                    android:checked="true"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textColor="@color/colorRed500"
+                    app:showText="true" />
 
                 <LinearLayout
+                    android:id="@+id/llDynamicContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_below="@+id/tvLive"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/selector_edit_bg"
                     android:orientation="vertical">
 
                     <EditText
+                        android:id="@+id/etDynamics_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
