@@ -1,9 +1,11 @@
 package tv.kuainiu.modle;
 
+import java.io.Serializable;
+
 /**
  * Created by jack on 2016/9/21.
  */
-public class TeacherZoneDynamicsInfo {
+public class TeacherZoneDynamicsInfo implements Serializable {
 
 
     /**
@@ -15,6 +17,8 @@ public class TeacherZoneDynamicsInfo {
      * news_title : 9-20时时分析
      */
 
+    private String id;
+    private String news_id;
     private String news_catid;
     private String news_catname;
     private String news_thumb;
@@ -23,7 +27,22 @@ public class TeacherZoneDynamicsInfo {
     private String news_title;
     private String news_video_id;
     private String news_voice_url;
-    private String video_id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNews_id() {
+        return news_id;
+    }
+
+    public void setNews_id(String news_id) {
+        this.news_id = news_id;
+    }
 
     public String getNews_catid() {
         return news_catid;
@@ -87,13 +106,5 @@ public class TeacherZoneDynamicsInfo {
 
     public void setNews_voice_url(String news_voice_url) {
         this.news_voice_url = news_voice_url;
-    }
-
-    public String getVideo_id() {
-        return video_id;
-    }
-
-    public void setVideo_id(String video_id) {
-        this.video_id = video_id;
     }
 }

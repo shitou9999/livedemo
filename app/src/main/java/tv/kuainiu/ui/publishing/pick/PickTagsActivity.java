@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.publishing;
+package tv.kuainiu.ui.publishing.pick;
 
 import android.content.Intent;
 import android.os.Bundle;

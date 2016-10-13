@@ -1,7 +1,8 @@
-package tv.kuainiu.ui.publishing.article;
+package tv.kuainiu.ui.publishing.video;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,9 +28,10 @@ import tv.kuainiu.widget.tagview.TagView;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
-public class PublishArticleActivity extends BaseActivity {
+public class PublishVideoActivity extends BaseActivity {
 
 
+    public static final int REQUSET_TAG_CODE = 0;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     @BindView(R.id.ivShareSina)
@@ -40,18 +42,14 @@ public class PublishArticleActivity extends BaseActivity {
     ImageView ivShareQQ;
     @BindView(R.id.ivAddCover)
     ImageView ivAddCover;
+    @BindView(R.id.etTitle)
+    EditText etTitle;
     @BindView(R.id.tvInputWordLimit)
     TextView tvInputWordLimit;
     @BindView(R.id.btnFlag)
     TextView btnFlag;
     @BindView(R.id.tagListView)
     TagListView tagListView;
-    @BindView(R.id.tvLive)
-    TextView tvLive;
-    @BindView(R.id.tvInputWordLimit2)
-    TextView tvInputWordLimit2;
-
-    public static final int REQUSET_TAG_CODE = 0;
 
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
@@ -59,7 +57,7 @@ public class PublishArticleActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish_article);
+        setContentView(R.layout.activity_publish_video);
         ButterKnife.bind(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -73,6 +71,7 @@ public class PublishArticleActivity extends BaseActivity {
     public void onClick() {
         PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
     }
+
     private void initView() {
         tagListView.setDeleteMode(true);
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
@@ -88,9 +87,11 @@ public class PublishArticleActivity extends BaseActivity {
     private void initData() {
 
     }
+
     private void dataBind() {
         tagListView.setTags(mTags);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

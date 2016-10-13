@@ -18,7 +18,7 @@
                 android:id="@+id/iv_publish_dynamic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/selector_share_qq" />
+                android:src="@drawable/selector_publish_word" />
 
             <TextView
                 android:id="@+id/tv_publish_dynamic"
@@ -34,7 +34,7 @@
                 android:id="@+id/iv_publish_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/selector_share_qq" />
+                android:src="@drawable/selector_publish_voice" />
 
             <TextView
                 android:id="@+id/tv_publish_voice"
@@ -51,7 +51,7 @@
                 android:id="@+id/iv_publish_article"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/selector_share_qq" />
+                android:src="@drawable/selector_publish_bolg" />
 
             <TextView
                 android:id="@+id/tv_publish_article"
@@ -67,7 +67,7 @@
                 android:id="@+id/iv_publish_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/selector_share_qq" />
+                android:src="@drawable/selector_publish_movie" />
 
             <TextView
                 android:id="@+id/tv_publish_video"

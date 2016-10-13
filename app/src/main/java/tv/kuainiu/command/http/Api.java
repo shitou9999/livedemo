@@ -130,7 +130,7 @@ public class Api {
     public static final String LIVE_INDEX = "live/live_index"; //3.4 直播界面首页  live/live_index（v1）     用于底栏"直播"的界面
 
    /*发布*/
-     /**
+    /**
      * 1.17 老师标签列表   v1/news/teacher_news_tags
      * 通信方式：无
      * 参数列表：
@@ -139,11 +139,26 @@ public class Api {
      */
     public static final String teacher_news_tags = "news/teacher_news_tags";
 
-//    1.15 发布动态时引用的文章列表   news/quote_list
+    //    1.15 发布动态时引用的文章列表   news/quote_list
     public static final String quote_list = "news/quote_list";
 
-//    1.16 文章分类列表   news/get_cats
+    //    1.16 文章分类列表   news/get_cats
     public static final String get_cats = "news/get_cats";
+    /**
+     * 1.2 发布文字动态   v1/publish/add_dynamics
+
+     通信方式：加密方式
+     参数列表：
+     news_id     可选     引用的文章ID
+     user_id     必传     用户ID
+     description     必传     文字内容
+     thumb     缩略图     多个以英文逗号隔开
+     synchro_wb     可选      是否同步微博     1是 0否
+
+     备注：参与加密
+     {"status"="0","data"="json"}
+     */
+    public static final String add_dynamics = "publish/add_dynamics";
 
 
 }

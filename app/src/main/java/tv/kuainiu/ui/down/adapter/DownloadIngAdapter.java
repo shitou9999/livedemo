@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.DownloadInfo;
+import tv.kuainiu.utils.ImageDisplayUtil;
 
 /**
  *
@@ -154,7 +155,7 @@ public class DownloadIngAdapter extends RecyclerView.Adapter<DownloadIngAdapter.
     @Override
     public void onBindViewHolder(final DownloadIngAdapter.ViewHolder holder, final int position) {
         DownloadInfo info = mDownloadInfo2s.get(position);
-//        ImageDisplayUtil.displayImage(mContext, holder.imageCover, info.getFirstImage());
+        ImageDisplayUtil.displayImage(mContext, holder.imageCover, info.getFirstImage());
         holder.textTitle.setText(info.getName());
         holder.textSpeed.setText(info.getProgressText());
         if(info.getStatus()!= Downloader.FINISH) {

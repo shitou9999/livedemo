@@ -131,7 +131,7 @@ public class VideoActivity extends BaseActivity implements
         DWMediaPlayer.OnInfoListener,
         DWMediaPlayer.OnPreparedListener, DWMediaPlayer.OnErrorListener,
         MediaPlayer.OnVideoSizeChangedListener, SurfaceHolder.Callback, SensorEventListener {
-    public static final String ID = "id";
+    public static final String NEWS_ID = "news_id";
     public static final String VIDEO_ID = "video_id";
     public static final String CAT_ID = "cat_id";
     public static final String VIDEO_NAME = "video_name";
@@ -178,7 +178,7 @@ public class VideoActivity extends BaseActivity implements
     @BindView(R.id.rl_comment_btn)
     RelativeLayout rlCommentBtn;
 
-    private String video_id = "";
+    private String news_id = "";
     private String cat_id = "";
     private String video_name = "";
     private VideoDetail mVideoDetail = null;
@@ -264,31 +264,33 @@ public class VideoActivity extends BaseActivity implements
      * 视频清晰度
      */
     HashMap<Integer, String> hm;
+
     /**
      * @param context
      * @param video_id 视频文章id
      * @param cat_id   栏目id
      */
-    public static void intoNewIntent(Context context, String id, String video_id, String cat_id,String video_name) {
+    public static void intoNewIntent(Context context, String news_id, String video_id, String cat_id, String video_name) {
         Intent intent = new Intent(context, VideoActivity.class);
-        intent.putExtra(ID, id);
+        intent.putExtra(NEWS_ID,news_id);
         intent.putExtra(VIDEO_ID, video_id);
         intent.putExtra(CAT_ID, cat_id);
         intent.putExtra(VIDEO_NAME, video_name);
         context.startActivity(intent);
     }
+
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             String message = (String) msg.obj;
-            if ( message.equals(POPUP_DIALOG_MESSAGE)) {
+            if (message.equals(POPUP_DIALOG_MESSAGE)) {
                 String[] definitionMapValues = new String[hm.size()];
                 definitionMapKeys = new int[hm.size()];
                 Set<Map.Entry<Integer, String>> set = hm.entrySet();
                 Iterator<Map.Entry<Integer, String>> iterator = set.iterator();
                 int i = 0;
-                while(iterator.hasNext()){
+                while (iterator.hasNext()) {
                     Map.Entry<Integer, String> entry = iterator.next();
                     definitionMapKeys[i] = entry.getKey();
                     definitionMapValues[i] = entry.getValue();
@@ -310,7 +312,7 @@ public class VideoActivity extends BaseActivity implements
                         }
 
                         File file = MediaUtil.createFile(title);
-                        if (file == null ){
+                        if (file == null) {
                             Toast.makeText(context, "创建文件失败", Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -319,8 +321,8 @@ public class VideoActivity extends BaseActivity implements
                             Intent service = new Intent(context, DownloadService.class);
                             service.putExtra("title", title);
                             service.putExtra("name", video_name);
-                           activity.startService(service);
-                        } else{
+                            activity.startService(service);
+                        } else {
                             Intent intent = new Intent(ConfigUtil.ACTION_DOWNLOADING);
                             activity.sendBroadcast(intent);
                         }
@@ -328,8 +330,9 @@ public class VideoActivity extends BaseActivity implements
                         downloader.setFile(file); //确定文件名后，把文件设置到downloader里
                         downloader.setDownloadDefinition(definition);
                         downloaderHashMap.put(title, downloader);
-                        //TODO 缩略图
-                        DataSet.addDownloadInfo(new DownloadInfo("",video_name,video_id,videoId,cat_id, title, 0, null, Downloader.WAIT, new Date(), definition));
+                        //缩略图
+                        String thumb = mVideoDetail == null ? "" : mVideoDetail.getThumb();
+                        DataSet.addDownloadInfo(new DownloadInfo(thumb, video_name, news_id, videoId, cat_id, title, 0, null, Downloader.WAIT, new Date(), definition));
 
                         definitionDialog.dismiss();
                         Toast.makeText(context, "文件已加入下载队列", Toast.LENGTH_SHORT).show();
@@ -339,7 +342,7 @@ public class VideoActivity extends BaseActivity implements
                 definitionDialog.show();
             }
 
-            if ( message.equals(GET_DEFINITION_ERROR)) {
+            if (message.equals(GET_DEFINITION_ERROR)) {
                 Toast.makeText(context, "网络异常，请重试", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(msg);
@@ -358,16 +361,16 @@ public class VideoActivity extends BaseActivity implements
             binder = (DownloadService.DownloadBinder) service;
         }
     };
-    private OnProcessDefinitionListener onProcessDefinitionListener = new OnProcessDefinitionListener(){
+    private OnProcessDefinitionListener onProcessDefinitionListener = new OnProcessDefinitionListener() {
         @Override
         public void onProcessDefinition(HashMap<Integer, String> definitionMap) {
             hm = definitionMap;
-            if(hm != null){
+            if (hm != null) {
                 Message msg = new Message();
                 msg.obj = POPUP_DIALOG_MESSAGE;
                 handler.sendMessage(msg);
             } else {
-                Log.e(TAG ,"视频清晰度获取失败");
+                Log.e(TAG, "视频清晰度获取失败");
             }
         }
 
@@ -395,6 +398,7 @@ public class VideoActivity extends BaseActivity implements
             }
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -411,10 +415,10 @@ public class VideoActivity extends BaseActivity implements
         }
         // videoId="144640A8D6A51BCB9C33DC5901307461";
         videoId = getIntent().getStringExtra(VIDEO_ID);
-        video_id = getIntent().getStringExtra(ID);
+        news_id = getIntent().getStringExtra(NEWS_ID);
         cat_id = getIntent().getStringExtra(CAT_ID);
         video_name = getIntent().getStringExtra(VIDEO_NAME);
-        if (TextUtils.isEmpty(video_id)) {
+        if (TextUtils.isEmpty(news_id)) {
             ToastUtils.showToast(this, "未获取到视频信息");
             finish();
             return;
@@ -547,9 +551,10 @@ public class VideoActivity extends BaseActivity implements
         getNews();
         getHotCommentList();
     }
+
     final String POPUP_DIALOG_MESSAGE = "dialogMessage";
 
-    final String GET_DEFINITION_ERROR  = "getDefinitionError";
+    final String GET_DEFINITION_ERROR = "getDefinitionError";
 
     //定义hashmap存储downloader信息
     public static HashMap<String, Downloader> downloaderHashMap = new HashMap<String, Downloader>();
@@ -594,10 +599,10 @@ public class VideoActivity extends BaseActivity implements
                     DebugUtils.showToast(this, getString(R.string.toast_not_network));
                     return;
                 }
-                SupportHttpUtil.supportVideoDynamics(this, cat_id, video_id);
+                SupportHttpUtil.supportVideoDynamics(this, cat_id, news_id);
                 break;
             case R.id.rlComment:
-                CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_ARTICLE, video_id, cat_id);
+                CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_ARTICLE, news_id, cat_id);
                 break;
             case R.id.tv_follow_button:
                 addFollow(mVideoDetail.getTeacher_info().getIs_follow(), mVideoDetail.getTeacher_info().getId());
@@ -606,11 +611,11 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void addCollect() {
-        CollectionMessageHttpUtil.addCollect(this, video_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
+        CollectionMessageHttpUtil.addCollect(this, news_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
     }
 
     private void delCollect() {
-        CollectionMessageHttpUtil.delCollect(this, video_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
+        CollectionMessageHttpUtil.delCollect(this, news_id, String.valueOf(Constant.NEWS_TYPE_VIDEO));
     }
 
     // 添加 or 取消关注
@@ -667,13 +672,13 @@ public class VideoActivity extends BaseActivity implements
 
     private void getNews() {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", video_id);
+        map.put("id", news_id);
         map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
         OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_DETAILS + ParamUtil.getParamForGet(map), Action.video_details, CacheConfig.getCacheConfig());
     }
 
     private void getHotCommentList() {
-        CommentHttpUtil.hotComment(this, "1", cat_id, video_id, "", 1);
+        CommentHttpUtil.hotComment(this, "1", cat_id, news_id, "", 1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1556,15 +1561,17 @@ public class VideoActivity extends BaseActivity implements
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        if(timerTask!=null) {
+        if (timerTask != null) {
             timerTask.cancel();
         }
-
-        playerHandler.removeCallbacksAndMessages(null);
-        playerHandler = null;
-
-        alertHandler.removeCallbacksAndMessages(null);
-        alertHandler = null;
+        if (playerHandler != null) {
+            playerHandler.removeCallbacksAndMessages(null);
+            playerHandler = null;
+        }
+        if (alertHandler != null) {
+            alertHandler.removeCallbacksAndMessages(null);
+            alertHandler = null;
+        }
 
         if (currentPlayPosition > 0) {
             if (lastPlayPosition > 0) {
@@ -1582,15 +1589,15 @@ public class VideoActivity extends BaseActivity implements
         if (dialog != null) {
             dialog.dismiss();
         }
-        if (!isLocalPlay) {
+        if (!isLocalPlay && networkInfoTimerTask != null) {
             networkInfoTimerTask.cancel();
         }
         if (serviceConnection != null) {
             activity.unbindService(serviceConnection);
         }
-
-        activity.unregisterReceiver(receiver);
-//        DataSet.saveData();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
         super.onDestroy();
     }
 

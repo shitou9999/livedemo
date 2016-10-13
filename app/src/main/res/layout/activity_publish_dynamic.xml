@@ -10,54 +10,65 @@
         android:id="@+id/tbv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightText="发布"
-        app:mytitle="动态直播" />
+        app:mytitle="动态直播"
+        app:rightText="发布" />
 
-    <include
-        layout="@layout/include_edite"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <tv.kuainiu.widget.tagview.TagListView
-        android:id="@+id/tagListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/common_margin"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin"
-        android:paddingTop="16.0dip"
-        app:horizontalSpacing="@dimen/tag_horizontal_spacing"
-        app:orientation="horizontal"
-        app:verticalSpacing="@dimen/tag_vertical_spacing" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/colorGreyPublish"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="引用博文观点" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="+"
-            android:textColor="@color/colorGreyPublishText" />
-    </RelativeLayout>
+            <include
+                layout="@layout/include_edite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp" />
 
-    <tv.kuainiu.widget.PostParentLayout
-        android:id="@+id/pl_friends_post_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+            <tv.kuainiu.widget.tagview.TagListView
+                android:id="@+id/tagListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/common_margin"
+                android:paddingLeft="@dimen/common_margin"
+                android:paddingRight="@dimen/common_margin"
+                android:paddingTop="16.0dip"
+                app:horizontalSpacing="@dimen/tag_horizontal_spacing"
+                app:orientation="horizontal"
+                app:verticalSpacing="@dimen/tag_vertical_spacing" />
+
+            <RelativeLayout
+                android:id="@+id/rlRelatedArticles"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorGreyPublish"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="引用博文观点" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text="+"
+                    android:textColor="@color/colorGreyPublishText" />
+            </RelativeLayout>
+
+            <tv.kuainiu.widget.ExpandListView
+                android:id="@+id/elv_friends_post_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

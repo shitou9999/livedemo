@@ -1,7 +1,9 @@
-package tv.kuainiu.ui.publishing.dynamic;
+package tv.kuainiu.ui.publishing.voice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,36 +19,43 @@ import butterknife.OnClick;
 import tv.kuainiu.R;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.ui.publishing.PickTagsActivity;
-import tv.kuainiu.widget.PostParentLayout;
+import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
-import static tv.kuainiu.ui.publishing.PickTagsActivity.NEW_LIST;
-import static tv.kuainiu.ui.publishing.PickTagsActivity.SELECTED_LIST;
+import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
+import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
-public class DynamicActivity extends BaseActivity {
+public class PublishVoiceActivity extends BaseActivity {
+
 
     public static final int REQUSET_TAG_CODE = 0;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
-    @BindView(R.id.tvInputWordLimit)
-    TextView tvInputWordLimit;
+    @BindView(R.id.ivShareSina)
+    ImageView ivShareSina;
+    @BindView(R.id.ivShareWeChat)
+    ImageView ivShareWeChat;
+    @BindView(R.id.ivShareQQ)
+    ImageView ivShareQQ;
+    @BindView(R.id.ivAddCover)
+    ImageView ivAddCover;
+    @BindView(R.id.etTitle)
+    EditText etTitle;
     @BindView(R.id.btnFlag)
     TextView btnFlag;
     @BindView(R.id.tagListView)
     TagListView tagListView;
-    @BindView(R.id.pl_friends_post_group)
-    PostParentLayout plFriendsPostGroup;
+
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish_dynamic);
+        setContentView(R.layout.activity_publish_voice);
         ButterKnife.bind(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -56,9 +65,9 @@ public class DynamicActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    @OnClick(R.id.btnFlag)
+    public void onClick() {
+        PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
     }
 
     private void initView() {
@@ -74,16 +83,11 @@ public class DynamicActivity extends BaseActivity {
 
 
     private void initData() {
+
     }
 
     private void dataBind() {
         tagListView.setTags(mTags);
-    }
-
-
-    @OnClick(R.id.btnFlag)
-    public void onClick() {
-        PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
     }
 
     @Override
@@ -98,11 +102,10 @@ public class DynamicActivity extends BaseActivity {
         }
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
         }
     }
-
-
 }

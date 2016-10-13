@@ -15,7 +15,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tv.kuainiu.R;
 import tv.kuainiu.ui.publishing.article.PublishArticleActivity;
-import tv.kuainiu.ui.publishing.dynamic.DynamicActivity;
+import tv.kuainiu.ui.publishing.dynamic.PublishDynamicActivity;
+import tv.kuainiu.ui.publishing.video.PublishVideoActivity;
+import tv.kuainiu.ui.publishing.voice.PublishVoiceActivity;
 
 /**
  * 弹幕布局类
@@ -63,18 +65,20 @@ public class PublishPanelLayout extends RelativeLayout {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_publish_dynamic:
-                Intent dynamicIntent = new Intent(context, DynamicActivity.class);
+                Intent dynamicIntent = new Intent(context, PublishDynamicActivity.class);
                 context.startActivity(dynamicIntent);
                 break;
             case R.id.ll_publish_voice:
-//                Intent dynamicIntent = new Intent(context, DynamicActivity.class);
-//                context.startActivity(dynamicIntent);
+                Intent publishVoiceActivityIntent = new Intent(context, PublishVoiceActivity.class);
+                context.startActivity(publishVoiceActivityIntent);
                 break;
             case R.id.ll_publish_article:
                 Intent articleIntent = new Intent(context, PublishArticleActivity.class);
                 context.startActivity(articleIntent);
                 break;
             case R.id.ll_publish_video:
+                Intent publishVideoActivityIntent = new Intent(context, PublishVideoActivity.class);
+                context.startActivity(publishVideoActivityIntent);
                 break;
             case R.id.ivClose:
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(this);

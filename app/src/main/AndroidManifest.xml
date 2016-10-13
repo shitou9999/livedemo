@@ -186,7 +186,7 @@
         <!--发布-->
         <!--发布动态-->
         <activity
-            android:name=".ui.publishing.dynamic.DynamicActivity"
+            android:name=".ui.publishing.dynamic.PublishDynamicActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
         <!--发布文章-->
@@ -194,8 +194,22 @@
             android:name=".ui.publishing.article.PublishArticleActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--发布声音-->
         <activity
-            android:name=".ui.publishing.PickTagsActivity"
+            android:name=".ui.publishing.voice.PublishVoiceActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--发布文章-->
+        <activity
+            android:name=".ui.publishing.video.PublishVideoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.publishing.pick.PickTagsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.publishing.pick.PickArticleActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity

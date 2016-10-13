@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <LinearLayout
+        android:id="@+id/ll_delete"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:background="#66ddff00"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorRed500"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_option_normal"
+        android:paddingRight="@dimen/small_margin"
+        android:paddingLeft="@dimen/small_margin"
+        >
+
+        <tv.kuainiu.widget.PostParentLayout
+            android:id="@+id/pplPublishDynamic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</com.daimajia.swipe.SwipeLayout>

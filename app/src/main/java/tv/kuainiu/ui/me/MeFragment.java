@@ -267,7 +267,7 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.btnPublish:
 //                Intent intentDynamicActivity = new Intent();
-//                intentDynamicActivity.setClass(getActivity(), DynamicActivity.class);
+//                intentDynamicActivity.setClass(getActivity(), PublishDynamicActivity.class);
 //                startActivity(intentDynamicActivity);
                 intro();
 
