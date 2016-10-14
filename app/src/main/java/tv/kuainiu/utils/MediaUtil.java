@@ -58,12 +58,13 @@ public class MediaUtil {
             file = new File(path);
 
             File nomedia = new File(sdDir + "/" + ConfigUtil.DOWNLOAD_DIR + "/.nomedia");
-            if (!nomedia.exists())
+            if (!nomedia.exists()) {
                 try {
                     nomedia.createNewFile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
         }
 
         return file;

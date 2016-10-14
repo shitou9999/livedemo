@@ -1,9 +1,17 @@
 package tv.kuainiu.utils;
 
 
+import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Base64;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by guxuan on 2016/2/29.
@@ -187,6 +195,53 @@ public class StringUtils {
         } else {
             return format2;
         }
+    }
+    /**
+     * 将文件转成base64字符串(用于发送语音文件)
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public static String encodeBase64File(String path) throws Exception {
+        File file = new File(path);
+        FileInputStream inputFile = new FileInputStream(file);
+        byte[] buffer = new byte[(int)file.length()];
+        inputFile.read(buffer);
+        inputFile.close();
+        return Base64.encodeToString(buffer, Base64.DEFAULT);
+    }
+
+    /**
+     * 将base64编码后的字符串转成文件
+     * @param base64Code
+     * @throws Exception
+     */
+    public static String decoderBase64File(String base64Code)  {
+        String savePath = "";
+        String saveDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Yun/Sounds/";
+        File dir = new File(saveDir);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        savePath = saveDir+getRandomFileName();
+        byte[] buffer = Base64.decode(base64Code, Base64.DEFAULT);
+        try {
+            FileOutputStream out = new FileOutputStream(savePath);
+            out.write(buffer);
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  savePath;
+    }
+
+    public static String getRandomFileName() {
+        String rel="";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date curDate = new Date(System.currentTimeMillis());
+        rel = formatter.format(curDate);
+        rel = rel + new Random().nextInt(1000);
+        return rel+".amr";
     }
 
 }

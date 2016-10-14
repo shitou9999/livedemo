@@ -10,7 +10,6 @@
         android:resizeable="true"
         android:smallScreens="true" />
 
-
     <!-- permission list -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,25 +17,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <!-- android:maxSdkVersion="18"/> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/> -->
-
-
     <!-- ShareSDK start -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- TODO 管理设备账号 是否可取消？ -->
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <!-- TODO 通讯录权限 是否可取消？ -->
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS"/>-->
-
-    <!-- PolyvSDK start -->
-    <!-- TODO Run time -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- TODO Run time -->
-    <!--<uses-permission android:name="android.permission.RECORD_AUDIO"/>-->
-    <!-- PolyvSDK end -->
-
-
     <!-- JPUSH start -->
     <permission
         android:name="tv.kuainiu.permission.JPUSH_MESSAGE"

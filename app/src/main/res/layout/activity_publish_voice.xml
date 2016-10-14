@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_color"
@@ -50,6 +51,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/colorGrey400" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -76,7 +78,8 @@
                     android:gravity="end"
                     android:textColor="@color/colorGreyPublishText" />
             </RelativeLayout>
-            <TextView
+
+<!--            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -89,7 +92,7 @@
                 android:gravity="center"
                 android:text="您还可以继续录音5次"
                 android:textColor="@color/colorGrey400"
-                android:textSize="12sp" />
+                android:textSize="12sp" />-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -131,4 +134,45 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/colorBlue50">
+
+        <RelativeLayout
+            android:id="@+id/recording_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/recording_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:padding="2dp"
+                android:text="按住说话"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recording_hint"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                tools:text="60s" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/ivVoiceBtn"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_below="@+id/recording_container"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/selector_publish_voice_icon" />
+    </RelativeLayout>
 </LinearLayout>

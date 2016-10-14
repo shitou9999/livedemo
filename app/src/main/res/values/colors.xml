@@ -52,6 +52,7 @@
     <!-- Not Google design color palette -->
     <color name="colorBlue350">#569AFF</color>
     <color name="colorBlue150">#9FCDFF</color>
+    <color name="colorBlue50">#F0F7FF</color>
 
     <!-- Yellow 黄色 -->
     <!-- Orange 橙色 -->

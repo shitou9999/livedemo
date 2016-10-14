@@ -320,11 +320,17 @@ public class PublishVideoActivity extends BaseActivity {
                 Tag mTag = mTags.get(i);
                 if (mTag.getId() == 0) {
                     tag_new += mTag.getName();
+                    tag_new += ",";
                 } else {
                     tag += mTag.getId();
+                    tag += ",";
                 }
-                tag += ",";
-                tag_new += ",";
+            }
+            if (tag_new.length() > 0) {
+                tag_new = tag_new.substring(0, tag_new.length() - 1);
+            }
+            if (tag.length() > 0) {
+                tag = tag.substring(0, tag.length() - 1);
             }
         }
 
@@ -345,7 +351,7 @@ public class PublishVideoActivity extends BaseActivity {
         //TODO 时间
         if (!isSubmiting) {
             isSubmiting = true;
-            OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_article);
+            OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_video);
         }
 
     }
@@ -377,13 +383,13 @@ public class PublishVideoActivity extends BaseActivity {
                     ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
                 }
                 break;
-            case add_news_article:
+            case add_news_video:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {
-                    ToastUtils.showToast(this, "发布文章成功");
+                    ToastUtils.showToast(this, "发布视频直播成功");
                     finish();
                 } else {
-                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "发布文章失败"));
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "发布视频直播失败"));
                 }
                 break;
         }

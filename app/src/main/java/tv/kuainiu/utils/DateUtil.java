@@ -43,7 +43,7 @@ public class DateUtil {
      * @return
      */
     public static String formatDate(String dateString) {
-        return formatDate(dateString, "yyyy-MM-dd HH:mm:ss", "HH:mm");
+        return formatDate(dateString, "yyyy-MM-dd HH:mm", "HH:mm");
     }
 
     /**

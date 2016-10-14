@@ -337,11 +337,17 @@ public class PublishArticleActivity extends BaseActivity {
                 Tag mTag = mTags.get(i);
                 if (mTag.getId() == 0) {
                     tag_new += mTag.getName();
+                    tag_new += ",";
                 } else {
                     tag += mTag.getId();
+                    tag += ",";
                 }
-                tag += ",";
-                tag_new += ",";
+            }
+            if (tag_new.length() > 0) {
+                tag_new = tag_new.substring(0, tag_new.length() - 1);
+            }
+            if (tag.length() > 0) {
+                tag = tag.substring(0, tag.length() - 1);
             }
         }
         return flag;
