@@ -32,7 +32,7 @@
             <include
                 layout="@layout/include_pick_picture"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="@dimen/ivAddCover_height" />
 
             <EditText
                 android:id="@+id/etTitle"
@@ -41,6 +41,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:hint="请输入标题"
+                android:background="@null"
                 android:text="" />
 
             <View

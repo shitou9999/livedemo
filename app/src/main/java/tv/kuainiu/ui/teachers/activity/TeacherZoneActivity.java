@@ -212,7 +212,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
                 if(selectedIndex==0) {
                     teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
-                    SupportHttpUtil.supportDynamics(this, String.valueOf(teacherZoneDynamics.getId()),Action.SUPPORT_DYNAMICS);
+                    SupportHttpUtil.supportDynamics(this, String.valueOf(teacherZoneDynamics.getId()),Action.SUPPORT_DYNAMICS2);
                 }else{
                     customVideo = (CustomVideo) v.getTag();
                     SupportHttpUtil.supportVideoDynamics(this,customVideo.getCat_id(),customVideo.getId() );
@@ -381,7 +381,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
-            case SUPPORT_DYNAMICS:
+            case SUPPORT_DYNAMICS2:
                 if (Constant.SUCCEED == event.getCode()) {
                     ivSupport.setVisibility(View.INVISIBLE);
                     mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", teacherZoneDynamics.getSupport_num() + 1));

@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,14 +53,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.Categroy;
+import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.publishing.dynamic.PublicDynamicAdapter;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
@@ -68,6 +72,7 @@ import tv.kuainiu.utils.PermissionManager;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.ExpandListView;
 import tv.kuainiu.widget.PermissionDialog;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.dialog.SelectPicPopupWindow;
@@ -75,6 +80,7 @@ import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
+import static tv.kuainiu.R.id.elv_friends_post_group;
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
@@ -132,6 +138,8 @@ public class PublishVoiceActivity extends BaseActivity {
     TextView recordingHint;
     @BindView(R.id.tvTime)
     TextView tvTime;
+    @BindView(elv_friends_post_group)
+    ExpandListView elvFriendsPostGroup;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private List<Categroy> mCategroyList = new ArrayList<>();
@@ -169,7 +177,8 @@ public class PublishVoiceActivity extends BaseActivity {
     private long mEndTime;
     private int mTime;
     private PowerManager.WakeLock wakeLock;
-
+    private PublicDynamicAdapter mPublicVoiceAdapter;
+    List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -293,7 +302,23 @@ public class PublishVoiceActivity extends BaseActivity {
         //绑定 Adapter到控件
         spCategory.setAdapter(adapter);
     }
-
+    private void dataBindVoice() {
+        if (mPublicVoiceAdapter == null) {
+            mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
+            elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
+            mPublicVoiceAdapter.setIDeleteItemClickListener(new PublicDynamicAdapter.IDeleteItemClickListener() {
+                @Override
+                public void delete(SwipeLayout swipeLayout, int position, TeacherZoneDynamicsInfo newsItem) {
+                    listTeacherZoneDynamicsInfo.remove(newsItem);
+                    deleteSoundFileUnSend();
+                    voice="";
+                    mPublicVoiceAdapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            mPublicVoiceAdapter.notifyDataSetChanged();
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -733,7 +758,13 @@ public class PublishVoiceActivity extends BaseActivity {
             //成功就显示
             tvTime.setText(String.valueOf(mTime) + '"');
             Log.i("record_test", "录音成功");
-
+            TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo=new TeacherZoneDynamicsInfo();
+            mTeacherZoneDynamicsInfo.setType(String.valueOf(Constans.TYPE_AUDIO));
+            mTeacherZoneDynamicsInfo.setNews_voice_url(mSoundDataFilePath);
+            mTeacherZoneDynamicsInfo.setNews_title(String.valueOf(mTime) + '"');
+            listTeacherZoneDynamicsInfo.clear();
+            listTeacherZoneDynamicsInfo.add(mTeacherZoneDynamicsInfo);
+            dataBindVoice();
         }
         //mRecorder.setOnErrorListener(null);
         try {

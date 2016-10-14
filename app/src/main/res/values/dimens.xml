@@ -104,8 +104,9 @@
     <dimen name="dip2pix">1.0dip</dimen>
     <dimen name="default_circle_indicator_radius">3dp</dimen>
     <dimen name="tag_corner_radius">20.0dp</dimen>
-    <dimen name="tag_horizontal_spacing">8.0dp</dimen>
-    <dimen name="tag_vertical_spacing">6.0dp</dimen>
-    <dimen name="common_margin">12.0dp</dimen>
-    <dimen name="common_margin_10">10.0dp</dimen>
+    <dimen name="tag_horizontal_spacing">5dp</dimen>
+    <dimen name="tag_vertical_spacing">5dp</dimen>
+    <dimen name="common_margin">10dp</dimen>
+    <dimen name="common_margin_10">10dp</dimen>
+    <dimen name="ivAddCover_height">130dp</dimen>
 </resources>

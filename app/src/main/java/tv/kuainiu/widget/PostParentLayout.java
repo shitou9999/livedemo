@@ -2,7 +2,6 @@ package tv.kuainiu.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
 
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
@@ -24,6 +21,7 @@ import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
@@ -176,12 +174,17 @@ public class PostParentLayout extends RelativeLayout {
                     @Override
                     public void onClick(View view) {
                         if (!TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_voice_url())) {
-                            MediaPlayer mp = new MediaPlayer();
                             try {
-                                mp.setDataSource(teacherZoneDynamicsInfo.getNews_voice_url());
-                                mp.prepare();
-                                mp.start();
-                            } catch (IOException e) {
+                                MediaPlayUtil   mMediaPlayUtil = MediaPlayUtil.getInstance();
+                                if(mMediaPlayUtil.isPlaying()){
+                                    mMediaPlayUtil.stop();
+                                    //停止动画
+                                }else {
+                                    mMediaPlayUtil.play(teacherZoneDynamicsInfo.getNews_voice_url());
+                                    //开始动画
+                                }
+
+                            } catch (Exception e) {
                                 ToastUtils.showToast(mContext, "该音频无法播放");
                                 e.printStackTrace();
                             }
