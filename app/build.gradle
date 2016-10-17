@@ -46,7 +46,7 @@ android {
 //            storePassword 'kuaiNIU20160927tv'
         }
         release {
-            storeFile file('D:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
+            storeFile file('E:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
             keyAlias 'kuainiuKeyStore'
             keyPassword 'kuainiuKey'
             storePassword 'kuaiNIU20160927tv'

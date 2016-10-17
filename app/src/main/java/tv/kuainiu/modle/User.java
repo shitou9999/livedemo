@@ -45,6 +45,7 @@ public class User implements Parcelable {
     private int allow_push;
     private int msg_num;
     private int fans_count;
+    private int live_count;
     private String session_id;
     private int is_teacher;
 
@@ -83,6 +84,7 @@ public class User implements Parcelable {
         allow_push = in.readInt();
         msg_num = in.readInt();
         fans_count = in.readInt();
+        live_count = in.readInt();
         session_id = in.readString();
         is_teacher = in.readInt();
     }
@@ -107,6 +109,7 @@ public class User implements Parcelable {
         dest.writeInt(allow_push);
         dest.writeInt(msg_num);
         dest.writeInt(fans_count);
+        dest.writeInt(live_count);
         dest.writeString(session_id);
         dest.writeInt(is_teacher);
     }
@@ -127,6 +130,14 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public int getLive_count() {
+        return live_count;
+    }
+
+    public void setLive_count(int live_count) {
+        this.live_count = live_count;
+    }
 
     public String getArea() {
         return area;

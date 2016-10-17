@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,6 +45,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tv.kuainiu.IGXApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -56,16 +59,19 @@ import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
+import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.PermissionDialog;
+import tv.kuainiu.widget.PublishPickTimeLayout;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.dialog.SelectPicPopupWindow;
 import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
+import static tv.kuainiu.R.id.etDynamics_desc;
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
@@ -89,10 +95,10 @@ public class PublishVideoActivity extends BaseActivity {
      * 图片裁切标记
      */
     private static final int REQUEST_CUTTING = 2;
+
+    Bitmap bitmap;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
-    @BindView(R.id.tvError)
-    TextView tvError;
     @BindView(R.id.ivShareSina)
     ImageView ivShareSina;
     @BindView(R.id.ivShareWeChat)
@@ -101,8 +107,18 @@ public class PublishVideoActivity extends BaseActivity {
     ImageView ivShareQQ;
     @BindView(R.id.ivAddCover)
     ImageView ivAddCover;
+    @BindView(R.id.tvError)
+    TextView tvError;
     @BindView(R.id.etTitle)
     EditText etTitle;
+    @BindView(R.id.tvCategory)
+    TextView tvCategory;
+    @BindView(R.id.spCategory)
+    Spinner spCategory;
+    @BindView(R.id.tvLiveTime)
+    TextView tvLiveTime;
+    @BindView(R.id.sw_permission)
+    SwitchCompat swPermission;
     @BindView(R.id.et_content)
     EditText etContent;
     @BindView(R.id.tvInputWordLimit)
@@ -111,12 +127,16 @@ public class PublishVideoActivity extends BaseActivity {
     TextView btnFlag;
     @BindView(R.id.tagListView)
     TagListView tagListView;
-    @BindView(R.id.spCategory)
-    Spinner spCategory;
     @BindView(R.id.sw_dynamic)
     SwitchCompat swDynamic;
-
-    Bitmap bitmap;
+    @BindView(etDynamics_desc)
+    EditText etDynamicsDesc;
+    @BindView(R.id.tvInputWordLimit2)
+    TextView tvInputWordLimit2;
+    @BindView(R.id.llDynamicContent)
+    LinearLayout llDynamicContent;
+    @BindView(R.id.pptTime)
+    PublishPickTimeLayout pptTime;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private List<Categroy> mCategroyList = new ArrayList<>();
@@ -137,6 +157,13 @@ public class PublishVideoActivity extends BaseActivity {
     private boolean isSubmiting = false;
 
     private SelectPicPopupWindow menuWindow;      // 头像弹出框
+    private String teacher_id;
+    private String anchor;
+    private String date = "2016-10-18";
+    private String start_date = "2016-10-18 08:00:00";
+    private String end_date = "2016-10-18 09:00:00";
+    private String synchro_dynamics = "1";
+    private String dynamics_desc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +178,7 @@ public class PublishVideoActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover})
+    @OnClick({R.id.btnFlag, R.id.ivAddCover,R.id.rlPick})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
@@ -162,6 +189,22 @@ public class PublishVideoActivity extends BaseActivity {
                 menuWindow.showAtLocation(PublishVideoActivity.this.getWindow().getDecorView(),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
+            case R.id.rlPick:
+//                intro();
+//                Intent i=new Intent(PublishVideoActivity.this, TimePickActivity.class);
+//                startActivity(i);
+                break;
+        }
+    }
+    /**
+     * 控制发布面板的显示与隐藏
+     */
+    public void intro() {
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.pptTime));
+        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
@@ -185,10 +228,17 @@ public class PublishVideoActivity extends BaseActivity {
 
             }
         });
-        swDynamic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swPermission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 permission = isChecked ? "1" : "2";
+            }
+        });
+        swDynamic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                synchro_dynamics = isChecked ? "1" : "0";
+                llDynamicContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
         tagListView.setDeleteMode(true);
@@ -215,6 +265,9 @@ public class PublishVideoActivity extends BaseActivity {
 
 
     private void initData() {
+        anchor = IGXApplication.getUser().getNickname();
+        teacher_id = IGXApplication.getUser().getUser_id();
+
         OKHttpUtils.getInstance().syncGet(this, Api.get_cats, Action.get_cats);
     }
 
@@ -295,8 +348,10 @@ public class PublishVideoActivity extends BaseActivity {
         tag = "";//   可选      标签     选择已有标签(标签ID)     eg:1,2,3,6
         tag_new = "";//      可选      新自定义标签（标签字符串）  eg:基本面,涨停,大涨
         content = "";    // 必传     内容体
+        dynamics_desc = "";    // 必传     内容体
         title = etTitle.getText().toString();
         content = etContent.getText().toString();
+        dynamics_desc = etDynamicsDesc.getText().toString();
 
         if (TextUtils.isEmpty(thumb)) {
             flag = false;
@@ -314,6 +369,14 @@ public class PublishVideoActivity extends BaseActivity {
             etContent.setError("文章内容不能为空");
         } else {
             etContent.setError(null);
+        }
+        if (!"0".equals(synchro_dynamics)) {
+            if (TextUtils.isEmpty(dynamics_desc)) {
+                flag = false;
+                etDynamicsDesc.setError("动态内容不能为空");
+            } else {
+                etDynamicsDesc.setError(null);
+            }
         }
         if (mTags.size() > 0) {
             for (int i = 0; i < mTags.size(); i++) {
@@ -348,10 +411,18 @@ public class PublishVideoActivity extends BaseActivity {
         map.put("tag_new", tag_new);//      可选      新自定义标签（标签字符串）  eg:基本面,涨停,大涨
         map.put("content", content);// 必传     内容体
         map.put("permission", permission);  //  可选      权限 1,公开开放   2,粉丝可见
-        //TODO 时间
+        map.put("ins_id", "0");  // 机构老师可传     机构ID
+        map.put("allow_comment", "1");  //可选      是否允许评论     1允许 0否
+        map.put("teacher_id", teacher_id);  //  必传    主播老师ID
+        map.put("anchor", anchor);  //必传     主播名称
+        map.put("date", date);  // 必传     直播日期  YYYY-mm-dd
+        map.put("start_date", start_date);  //必传     开始直播时间     YYYY-mm-dd H:i:s
+        map.put("end_date", end_date);  //必传     结束直播时间     YYYY-mm-dd H:i:s
+        map.put("synchro_dynamics", String.valueOf(synchro_dynamics));  // 可选     是否同步动态     1是0否
+        map.put("dynamics_desc", dynamics_desc);  // 同步动态时必传     动态描述文字
         if (!isSubmiting) {
             isSubmiting = true;
-            OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_video);
+            OKHttpUtils.getInstance().post(this, Api.add_live, ParamUtil.getParam(map), Action.add_news_live);
         }
 
     }
@@ -383,10 +454,64 @@ public class PublishVideoActivity extends BaseActivity {
                     ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
                 }
                 break;
-            case add_news_video:
+            case add_news_live:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {
+                    LogUtils.i(TAG, event.getData().toString());
                     ToastUtils.showToast(this, "发布视频直播成功");
+                /*    {
+                        "data" : {
+                        "info" : {
+                            "tag_new" : "",
+                                    "status" : 1,
+                                    "tag" : "41",
+                                    "ins_id" : "0",
+                                    "permission" : 1,
+                                    "date" : "2016-10-17",
+                                    "url" : "http:\/\/www.kuainiu.tv\/user\/live?teacher_id=1",
+                                    "anchor" : "快牛官方",
+                                    "id" : 20,
+                                    "end_date" : "09:00:00",
+                                    "title" : "我们",
+                                    "create_date" : "2016-10-17 16:31:35",
+                                    "description" : false,
+                                    "allow_comment" : 1,
+                                    "user_id" : "1",
+                                    "teacher_id" : "1",
+                                    "synchro_dynamics" : 1,
+                                    "start_date" : "08:00:00",
+                                    "thumb" : "http:\/\/img.kuainiu.tv\/uploadfile\/thumb\/201610\/1_dynamics_1476693095_89353.jpg",
+                                    "synchro_wb" : 1
+                        }
+                    },
+                        "msg" : "成功",
+                            "status" : 0
+                    }*/
+                    try {
+                        JsonParser parser = new JsonParser();
+                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
+                        JsonObject json = tempJson.getAsJsonObject("data").getAsJsonObject("info");
+                        String url = "";
+                        String thumb = "";
+                        String title = "";
+                        String description = "";
+                        if (json != null && json.has("url")) {
+                            url = json.get("url").getAsString();
+                        }
+                        if (json != null && json.has("thumb")) {
+                            thumb = json.get("thumb").getAsString();
+                        }
+                        if (json != null && json.has("title")) {
+                            title = json.get("title").getAsString();
+                        }
+                        if (json != null && json.has("description")) {
+                            description = json.get("description").getAsString();
+                        }
+                        ShareUtils.showShare(ShareUtils.ARTICLE, PublishVideoActivity.this, title, description, thumb, url, null);
+                    } catch (Exception e) {
+                        LogUtils.e(TAG, "Exception", e);
+
+                    }
                     finish();
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "发布视频直播失败"));
@@ -455,7 +580,8 @@ public class PublishVideoActivity extends BaseActivity {
         // aspectX aspectY 是宽高的比例
         intent.putExtra("aspectX", 16);
         intent.putExtra("aspectY", 9);
-
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 180);
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            intent.putExtra(MediaStore.EXTRA_OUTPUT,
 //                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));

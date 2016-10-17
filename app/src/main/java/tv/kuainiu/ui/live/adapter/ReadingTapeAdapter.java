@@ -200,6 +200,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 clickPlayLive(liveItem);
             }
         });
+
     }
 
     public void clickPlayLive(LiveInfo liveItem) {

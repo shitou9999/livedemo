@@ -538,7 +538,8 @@ public class PublishVoiceActivity extends BaseActivity {
         // aspectX aspectY 是宽高的比例
         intent.putExtra("aspectX", 16);
         intent.putExtra("aspectY", 9);
-
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 180);
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            intent.putExtra(MediaStore.EXTRA_OUTPUT,
 //                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));

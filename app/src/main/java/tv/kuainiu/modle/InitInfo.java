@@ -26,10 +26,28 @@ public class InitInfo implements Serializable {
     private int custom_num;
     private int msg_num=0;
     private int follow_count;
+    private int live_count;
+    private int fans_count;
     private int subscibe_count;
     private String ke_url;
     private int download_see_login;
     private int is_teacher;
+
+    public int getLive_count() {
+        return live_count;
+    }
+
+    public void setLive_count(int live_count) {
+        this.live_count = live_count;
+    }
+
+    public int getFans_count() {
+        return fans_count;
+    }
+
+    public void setFans_count(int fans_count) {
+        this.fans_count = fans_count;
+    }
 
     public String getUser_id() {
         return user_id;

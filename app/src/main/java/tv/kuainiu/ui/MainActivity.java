@@ -203,6 +203,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if(IGXApplication.isLogin()){
                         User user=IGXApplication.getUser();
                         user.setIs_teacher(initInfo.getIs_teacher());
+                        user.setLive_count(initInfo.getLive_count());
+                        user.setFans_count(initInfo.getFans_count());
+                        user.setFollow_count(initInfo.getFollow_count());
                         IGXApplication.setUser(user);
                     }
 //                    showCustomRedPoint(initInfo.getCustom_num() > 0);//显示红点

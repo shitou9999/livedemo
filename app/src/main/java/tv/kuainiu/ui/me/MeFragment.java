@@ -109,6 +109,8 @@ public class MeFragment extends BaseFragment {
     ImageView mIvLive;
     @BindView(R.id.tv_live)
     TextView mTvLive;
+    @BindView(R.id.tvLiveNumber)
+    TextView tvLiveNumber;
     @BindView(R.id.iv_live_right)
     ImageView mIvLiveRight;
     @BindView(R.id.tv_live_tip)
@@ -363,6 +365,8 @@ public class MeFragment extends BaseFragment {
             mTvMeName.setText(nullValue);
             rlLogOut.setVisibility(View.VISIBLE);
             tvFans.setText(nullValue);
+            tvLiveNumber.setText(nullValue);
+            mTvFollowCount.setText(nullValue);
             mBtnPublish.setVisibility(View.INVISIBLE);
         } else {
             displayAvatar(user.getAvatar());
@@ -370,10 +374,12 @@ public class MeFragment extends BaseFragment {
             String nickName = TextUtils.isEmpty(user.getNickname()) ? "" : user.getNickname();
             mTvMeName.setText(nickName);
             tvFans.setText(StringUtils.getDecimal(user.getFans_count(), Constant.TEN_THOUSAND, "万", ""));
+            tvLiveNumber.setText(StringUtils.getDecimal(user.getLive_count(), Constant.TEN_THOUSAND, "万", ""));
+            mTvFollowCount.setText(StringUtils.getDecimal(user.getFollow_count(), Constant.TEN_THOUSAND, "万", ""));
             rlLogOut.setVisibility(View.GONE);
-            if(user.getIs_teacher()==0){
+            if (user.getIs_teacher() == 0) {
                 mBtnPublish.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 mBtnPublish.setVisibility(View.VISIBLE);
             }
         }

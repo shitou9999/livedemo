@@ -57,6 +57,7 @@ import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
+import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.utils.ToastUtils;
@@ -403,7 +404,62 @@ public class PublishArticleActivity extends BaseActivity {
             case add_news_article:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {
+                    LogUtils.i(TAG, event.getData().toString());
                     ToastUtils.showToast(this, "发布文章成功");
+                   /* {
+                        "data" : {
+                        "info" : {
+                            "tag_new" : "",
+                                    "updatetime" : 1476689578,
+                                    "voice" : false,
+                                    "status" : 99,
+                                    "tag" : "",
+                                    "permission" : 0,
+                                    "voice_time" : false,
+                                    "type" : 1,
+                                    "url" : "http:\/\/www.kuainiu.tv\/news\/show?id=85",
+                                    "inputtime" : 1476689578,
+                                    "id" : 85,
+                                    "content" : "看看",
+                                    "cat_id" : "1",
+                                    "title" : "进来了",
+                                    "description" : "看看",
+                                    "allow_comment" : 0,
+                                    "video_id" : false,
+                                    "user_id" : "1",
+                                    "synchro_dynamics" : 1,
+                                    "thumb" : "http:\/\/img.kuainiu.tv\/uploadfile\/thumb\/201610\/1_dynamics_1476689578_34107.jpg",
+                                    "synchro_wb" : 1
+                        }
+                    },
+                        "msg" : "成功",
+                            "status" : 0
+                    }*/
+                    try {
+                        JsonParser parser = new JsonParser();
+                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
+                        JsonObject json = tempJson.getAsJsonObject("data").getAsJsonObject("info");
+                        String url = "";
+                        String thumb = "";
+                        String title = "";
+                        String description = "";
+                        if (json != null && json.has("url")) {
+                            url = json.get("url").getAsString();
+                        }
+                        if (json != null && json.has("thumb")) {
+                            thumb = json.get("thumb").getAsString();
+                        }
+                        if (json != null && json.has("title")) {
+                            title = json.get("title").getAsString();
+                        }
+                        if (json != null && json.has("description")) {
+                            description = json.get("description").getAsString();
+                        }
+                        ShareUtils.showShare(ShareUtils.ARTICLE, PublishArticleActivity.this, title, description, thumb, url, null);
+                    } catch (Exception e) {
+                        LogUtils.e(TAG, "Exception", e);
+
+                    }
                     finish();
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "发布文章失败"));
@@ -472,7 +528,9 @@ public class PublishArticleActivity extends BaseActivity {
         // aspectX aspectY 是宽高的比例
         intent.putExtra("aspectX", 16);
         intent.putExtra("aspectY", 9);
-
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 180);
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            intent.putExtra(MediaStore.EXTRA_OUTPUT,
 //                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));

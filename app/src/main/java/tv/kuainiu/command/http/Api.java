@@ -181,6 +181,7 @@ public class Api {
      * dynamics_desc     同步动态时必传     动态描述文字
      */
     public static final String add_news = "publish/add_news";
+    public static final String add_live = "publish/add_live";
 
 
 }

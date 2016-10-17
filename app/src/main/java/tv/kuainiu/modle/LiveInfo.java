@@ -54,6 +54,7 @@ public class LiveInfo {
     private String status;
     private String permission;
     private String avatar;
+
     /**
      * avatar : http://kuainiu.oss-cn-shanghai.aliyuncs.com/uploadfile/avatar/zengguoliang.jpg
      * id : 6
@@ -68,7 +69,9 @@ public class LiveInfo {
     private String start_date;
     private String thumb;
     private String synchro_wb;
-    private int online_num;
+    private int online_num;//在线人数
+    private int is_appointment;//是否已预约
+    private int appointment_count;//预约总数
 
     public String getLive_msg() {
         return live_msg;
@@ -284,5 +287,21 @@ public class LiveInfo {
 
     public void setOnline_num(int online_num) {
         this.online_num = online_num;
+    }
+
+    public int getIs_appointment() {
+        return is_appointment;
+    }
+
+    public void setIs_appointment(int is_appointment) {
+        this.is_appointment = is_appointment;
+    }
+
+    public int getAppointment_count() {
+        return appointment_count;
+    }
+
+    public void setAppointment_count(int appointment_count) {
+        this.appointment_count = appointment_count;
     }
 }

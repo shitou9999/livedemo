@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- android:maxSdkVersion="18"/> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/> -->
     <!-- ShareSDK start -->
@@ -175,8 +175,8 @@
         <!--发布动态-->
         <activity
             android:name=".ui.publishing.dynamic.PublishDynamicActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <!--发布文章-->
         <activity
             android:name=".ui.publishing.article.PublishArticleActivity"
@@ -192,12 +192,19 @@
             android:name=".ui.publishing.video.PublishVideoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--选择标签-->
         <activity
             android:name=".ui.publishing.pick.PickTagsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--选择文章-->
         <activity
             android:name=".ui.publishing.pick.PickArticleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--选择时间-->
+        <activity
+            android:name=".ui.publishing.TimePickActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
