@@ -137,10 +137,6 @@
     <string name="tab_me">我的</string>
 
 
-
-
-
-
     <!-- teacher -->
     <string name="lable_programs_subscription">节目订阅</string>
     <string name="lable_teacher_recommended">名师推荐</string>
@@ -180,7 +176,7 @@
     <string name="hint_select_city">请选择城市</string>
 
     <string name="lable_fetch_check_code">获取验证码</string>
-    <string name="lable_wechat">公&#160;&#160;众&#160;&#160;号:</string>
+    <string name="lable_wechat">微信公众号:</string>
     <string name="lable_hotline">客服热线:</string>
     <string name="lable_website">官&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;网:</string>
 
@@ -249,11 +245,8 @@
     <string-array name="video_sharpness">
         <item>清晰</item>
         <item>高清</item>
-<!--        <item>超清</item>-->
+        <!--        <item>超清</item>-->
     </string-array>
-
-
-
 
 
     <!-- hint -->
@@ -288,10 +281,8 @@
     <string name="value_live_item_time">%1$s&#160;&#160;%2$s</string>
 
 
-
     <!-- remind -->
     <string name="remind_add_follow">关注老师获得推送</string>
-
 
 
     <!-- zxing -->
@@ -306,7 +297,7 @@
     <string-array name="live_home_tab_titles">
         <item>今日直播</item>
         <item>历史回放</item>
-       <!-- <item>名师团队</item>-->
+        <!-- <item>名师团队</item>-->
     </string-array>
 
     <string name="live_into_label">进入&#160;></string>

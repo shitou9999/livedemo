@@ -24,7 +24,7 @@ import tv.kuainiu.widget.MyHeader;
 /**
  * 直播模块：
  * 1.直播看盘（ReadingTapeFragment）；
- * 2.直播预告（ReadingTapeFragment）；
+ * 2.直播预告（LivePreviewFragment）；
  */
 public class LiveMainFragment extends BaseFragment {
     private static final String TAG = "FriendsMainFragment";

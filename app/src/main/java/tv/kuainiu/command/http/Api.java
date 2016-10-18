@@ -13,7 +13,7 @@ public class Api {
     public static final String TEST_DNS_API_HOST_V2 = "http://client.api.kuainiu.tv/v1/";
     public static final String TEST_DNS_API_HOST_V21 = "http://client.api.kuainiu.tv/v1/";
     public static final String PUBLIC_KEY = "kntv!$@)";
-    public static final String SALT = "kn&!$@)";
+    public static final String SALT = "kn*()";
 
     /*****************************
      * 测试库
@@ -182,6 +182,46 @@ public class Api {
      */
     public static final String add_news = "publish/add_news";
     public static final String add_live = "publish/add_live";
+    /**
+     * 3.5 添加直播预约  live/add_live_appointment（v1）
+     * <p>
+     * 固定参数  user_id, time ,sign
+     * 业务参数：
+     * user_id    必传     用户ID
+     * teacher_id     必传     老师ID
+     * live_id     必传      直播记录ID
+     * room_id     必传     直播间ID
+     * 备注：需要签名跟加密
+     */
+    public static final String add_live_appointment = "live/add_live_appointment";
+
+
+    /**
+     * 3.6
+     * 取消直播预约 live/del_live_appointment（v1）
+     * <p>
+     * 固定参数 user_id, time, sign
+     * 业务参数：
+     * user_id 必传
+     * 用户ID
+     * live_id 必传
+     * 直播记录ID
+     * <p>
+     * 备注：需要签名跟加密
+     */
+    public static final String del_live_appointment = "live/del_live_appointment";
+    /**
+     * 3.7 直播预约列表  live/live_appointment_list（v1）
+     * <p>
+     * 固定参数  user_id, time ,sign
+     * 业务参数：
+     * user_id    必传     用户ID
+     * type     必传     预约列表 1即将直播 2历史回放
+     * page     必传     页数   默认1
+     * size     必传     每页条数     默认10
+     */
+    public static final String live_appointment_list = "live/live_appointment_list";
+    public static final String my_live_list = "live/my_live_list";
 
 
 }

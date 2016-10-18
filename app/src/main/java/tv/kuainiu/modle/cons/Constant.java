@@ -213,6 +213,7 @@ public class Constant {
      */
     public static final int SUCCEED = 0;
     public static final int ERROR = -1;
+    public static final int HAS_SUCCEED = -2;
     public static final int NETWORK_ERROR = -20016;
     public static final int NULL_FOR_DATA = -10086;
     public static final int NULL_FOR_LIST = -10010;

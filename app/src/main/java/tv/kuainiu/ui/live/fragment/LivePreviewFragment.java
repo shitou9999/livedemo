@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -20,7 +21,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
+import tv.kuainiu.command.http.AppointmentRequestUtil;
 import tv.kuainiu.command.http.LiveHttpUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.LiveInfo;
@@ -31,15 +34,18 @@ import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 /**
- * 咨询
+ * 直播预告
  */
 public class LivePreviewFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
-    @BindView(R.id.rvReadingTap) RecyclerView rvReadingTap;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout srlRefresh;
+    @BindView(R.id.rvReadingTap)
+    RecyclerView rvReadingTap;
     CustomLinearLayoutManager mLayoutManager;
     private int mParentPosition;
     private ReadingTapeAdapter mReadingTapeAdapter;
@@ -83,7 +89,8 @@ public class LivePreviewFragment extends BaseFragment {
         return view;
     }
 
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
         super.onStart();
         initView();
         initListener();
@@ -91,17 +98,42 @@ public class LivePreviewFragment extends BaseFragment {
         LogUtils.e("LogUtils", "onStart");
     }
 
-    @Override public void onStop() {
+    @Override
+    public void onStop() {
         super.onStop();
         LogUtils.e("LogUtils", "onStop");
     }
+
+    TextView tvAppointment;
+    int position = -1;
+    LiveInfo liveInfo;
 
     private void initView() {
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
 
-        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(),ReadingTapeAdapter.YU_YUE);
+        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), ReadingTapeAdapter.YU_YUE);
+        mReadingTapeAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.tvAppointment:
+                        tvAppointment = (TextView) v;
+                        liveInfo = (LiveInfo) v.getTag();
+                        position = (int) v.getTag(R.id.tvAppointment);
+                        if (liveInfo != null) {
+                            if (liveInfo.getIs_appointment() == 0) {
+                                AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getTeacher_info().getLive_roomid(), Action.add_live_appointment);
+                            } else {
+                                AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
+                            }
+                        }
+                        break;
+                }
+
+            }
+        });
         rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }
@@ -116,7 +148,8 @@ public class LivePreviewFragment extends BaseFragment {
 
     private void initListener() {
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 page = 1;
                 getData();
             }
@@ -156,6 +189,37 @@ public class LivePreviewFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case add_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (tvAppointment != null) {
+                        tvAppointment.setSelected(true);
+                        tvAppointment.setText("取消预约提醒");
+                        liveInfo.setIs_appointment(1);
+                        if (position > -1 && position < mLiveItemList.size()) {
+                            mLiveItemList.get(position).setIs_appointment(1);
+                        }
+
+                        tvAppointment.setTag(liveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "预约失败"));
+                }
+                break;
+            case del_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (tvAppointment != null) {
+                        tvAppointment.setSelected(false);
+                        tvAppointment.setText("加入预约提醒");
+                        liveInfo.setIs_appointment(0);
+                        if (position > -1 && position < mLiveItemList.size()) {
+                            mLiveItemList.get(position).setIs_appointment(0);
+                        }
+                        tvAppointment.setTag(liveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消预约失败"));
+                }
+                break;
             case live_zhi_bo_yu_gao:
                 if (page == 1) {
                     mLiveItemList.clear();

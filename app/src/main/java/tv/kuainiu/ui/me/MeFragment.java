@@ -44,6 +44,8 @@ import tv.kuainiu.ui.me.activity.FollowActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.ui.me.activity.SettingActivity;
+import tv.kuainiu.ui.me.appointment.AppointmentActivity;
+import tv.kuainiu.ui.me.appointment.MyLiveActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -225,8 +227,12 @@ public class MeFragment extends BaseFragment {
             case R.id.rl_institution:
                 break;
             case R.id.rl_live:
+                Intent intentMyLiveActivity = new Intent(getActivity(), MyLiveActivity.class);
+                startActivity(intentMyLiveActivity);
                 break;
             case R.id.rl_appointment:
+                Intent intentAppointmentActivity = new Intent(getActivity(), AppointmentActivity.class);
+                startActivity(intentAppointmentActivity);
                 break;
             case R.id.rlLogOut:
                 Intent loginIntent = new Intent();

@@ -20,6 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
@@ -54,6 +55,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public static final int ZHI_BO = 1;
     public static final int YU_YUE = 2;
     List<Integer> types = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
 
     public ReadingTapeAdapter(Activity context, int type) {
         mContext = context;
@@ -71,6 +73,10 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setLiveListList(List<LiveInfo> liveListList) {
         this.mLiveListList = liveListList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -185,7 +191,21 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.ivLiveIng.setVisibility(View.VISIBLE);
             holder.mTvLiveing.setText("直播中");
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+            holder.tvAppointment.setVisibility(View.GONE);
         } else {
+            holder.tvAppointment.setVisibility(View.VISIBLE);
+            holder.tvAppointment.setTag(liveItem);
+            holder.tvAppointment.setTag(R.id.tvAppointment,position);
+            holder.tvAppointment.setSelected(liveItem.getIs_appointment() != 0);
+            holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? "加入预约提醒" : "取消预约提醒");
+            holder.tvAppointment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onClick(v);
+                    }
+                }
+            });
             holder.ivLiveIng.setVisibility(View.GONE);
             holder.mTvLiveing.setText("开始时间");
             holder.mTvLiveingNumber.setText(DateUtil.formatDate(liveItem.getStart_date()));
@@ -318,6 +338,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView mTvTeacherIntroduce;
         @BindView(R.id.tv_teacher_theme)
         TextView mTvTeacherTheme;
+        @BindView(R.id.tvAppointment)
+        TextView tvAppointment;
 
         public ViewHolder(View itemView) {
             super(itemView);

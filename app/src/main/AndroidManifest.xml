@@ -37,13 +37,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- JPUSH end -->
+
 
     <!-- 二维码相机权限 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -52,7 +52,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
-        android:name="tv.kuainiu.IGXApplication"
+        android:name=".IGXApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -62,8 +62,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.activity.GuideActivity"
-            android:label="@string/app_name"
+            android:name=".ui.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,6 +70,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait" />
@@ -83,7 +86,7 @@
         <activity
             android:name=".ui.region.RegionSelectionActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.SplashActivity" />
+
         <activity
             android:name=".ui.me.activity.ForgetPassword1Activity"
             android:screenOrientation="portrait" />
@@ -123,6 +126,15 @@
         <activity
             android:name=".ui.me.activity.ChooseRegionActivity"
             android:screenOrientation="portrait" />
+        <!--我的预约-->
+        <activity
+            android:name=".ui.me.appointment.AppointmentActivity"
+            android:screenOrientation="portrait" />
+        <!--我的直播-->
+        <activity
+            android:name=".ui.me.appointment.MyLiveActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".utils.TakePhotoActivity" />
         <activity
             android:name=".ui.teachers.activity.TeacherZoneActivity"
@@ -171,38 +183,38 @@
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="sensor" />
 
-        <!--发布-->
-        <!--发布动态-->
+        <!-- 发布 -->
+        <!-- 发布动态 -->
         <activity
             android:name=".ui.publishing.dynamic.PublishDynamicActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--发布文章-->
+        <!-- 发布文章 -->
         <activity
             android:name=".ui.publishing.article.PublishArticleActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--发布声音-->
+        <!-- 发布声音 -->
         <activity
             android:name=".ui.publishing.voice.PublishVoiceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--发布文章-->
+        <!-- 发布文章 -->
         <activity
             android:name=".ui.publishing.video.PublishVideoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--选择标签-->
+        <!-- 选择标签 -->
         <activity
             android:name=".ui.publishing.pick.PickTagsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--选择文章-->
+        <!-- 选择文章 -->
         <activity
             android:name=".ui.publishing.pick.PickArticleActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--选择时间-->
+        <!-- 选择时间 -->
         <activity
             android:name=".ui.publishing.TimePickActivity"
             android:screenOrientation="portrait"
@@ -213,9 +225,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
-
             <intent-filter>
                 <data android:scheme="tencent100371282" />
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -225,18 +237,21 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service
             android:name=".ui.down.DownloadService"
-            android:enabled="true"></service>
-        <!--     <service
+            android:enabled="true" />
+        <!--
+                 <service
                  android:name="com.bokecc.sdk.mobile.demo.upload.UploadService"
                  android:enabled="true" >
-             </service>-->
-        <!--微信分享回调 -->
+             </service>
+        -->
+        <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -319,7 +334,7 @@
 
         <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
-            android:name="tv.kuainiu.receiver.MyReceiver"
+            android:name=".receiver.MyReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
@@ -338,6 +353,7 @@
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="${JPUSH_CHANNEL}" />
@@ -351,7 +367,8 @@
             android:value="${UMENG_CHANNEL_VALUE}" />
         <!-- UMENG end -->
 
-        <!--百度统计-->
+
+        <!-- 百度统计 -->
         <!-- 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 -->
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
@@ -387,7 +404,7 @@
         <meta-data
             android:name="BaiduMobAd_WIFI_LOCATION"
             android:value="true" />
-        <!--百度统计结束-->
+        <!-- 百度统计结束 -->
     </application>
 
 </manifest>

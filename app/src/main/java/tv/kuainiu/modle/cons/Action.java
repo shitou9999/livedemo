@@ -189,4 +189,10 @@ public enum Action {
     add_news_article,   // 发布文章
     add_news_live,   // 发布视频
     add_news_vioce,   // 发布声音
+    add_live_appointment,   // 添加预约
+    del_live_appointment_history,   // 删除预约
+    del_live_appointment,   // 删除预约
+    live_appointment_list,   // 预约
+    live_appointment_list_history,   // 预约历史
+    my_live_list_history,   // 我的直播历史
 }

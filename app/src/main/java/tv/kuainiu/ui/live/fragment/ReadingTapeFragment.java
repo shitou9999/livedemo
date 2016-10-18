@@ -35,7 +35,7 @@ import tv.kuainiu.utils.ToastUtils;
 import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.ZHI_BO;
 
 /**
- * 咨询
+ * 直播看盘
  */
 public class ReadingTapeFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
