@@ -87,7 +87,7 @@
                 <RelativeLayout
                     android:id="@+id/rlPick"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="80dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorGreyPublish"
                     android:paddingLeft="10dp"
@@ -100,13 +100,52 @@
                         android:text="直播时间"
                         android:textColor="@color/colorRed500" />
 
-                    <TextView
-                        android:id="@+id/tvLiveTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp" />
+                    <LinearLayout
+                        android:id="@+id/llStartTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvLiveStartTime"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|right"
+                            android:hint="开始时间"
+                            tools:text="2016-10-12 09:06:18" />
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:padding="10dp"
+                            android:src="@drawable/selector_right" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llEndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/llStartTime"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvLiveEndTime"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|right"
+                            android:hint="结束时间"
+                            tools:text="2016-10-12 10:06:18" />
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:padding="10dp"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/selector_right" />
+                    </LinearLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -238,6 +277,6 @@
     <tv.kuainiu.widget.PublishPickTimeLayout
         android:id="@+id/pptTime"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior" />
 </android.support.design.widget.CoordinatorLayout>

@@ -56,6 +56,7 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
@@ -115,8 +116,11 @@ public class PublishVideoActivity extends BaseActivity {
     TextView tvCategory;
     @BindView(R.id.spCategory)
     Spinner spCategory;
-    @BindView(R.id.tvLiveTime)
-    TextView tvLiveTime;
+
+    @BindView(R.id.tvLiveStartTime)
+    TextView tvLiveStartTime;
+    @BindView(R.id.tvLiveEndTime)
+    TextView tvLiveEndTime;
     @BindView(R.id.sw_permission)
     SwitchCompat swPermission;
     @BindView(R.id.et_content)
@@ -160,8 +164,8 @@ public class PublishVideoActivity extends BaseActivity {
     private String teacher_id;
     private String anchor;
     private String date = "2016-10-18";
-    private String start_date = "2016-10-18 08:00:00";
-    private String end_date = "2016-10-18 09:00:00";
+    private String start_date = "";
+    private String end_date = "";
     private String synchro_dynamics = "1";
     private String dynamics_desc;
 
@@ -178,7 +182,7 @@ public class PublishVideoActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover,R.id.rlPick})
+    @OnClick({R.id.btnFlag, R.id.ivAddCover, R.id.rlPick, R.id.llStartTime, R.id.llEndTime})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
@@ -189,13 +193,18 @@ public class PublishVideoActivity extends BaseActivity {
                 menuWindow.showAtLocation(PublishVideoActivity.this.getWindow().getDecorView(),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
-            case R.id.rlPick:
-//                intro();
-//                Intent i=new Intent(PublishVideoActivity.this, TimePickActivity.class);
-//                startActivity(i);
+            case R.id.llStartTime:
+                pptTime.setTextView(tvLiveStartTime);
+                intro();
+                break;
+            case R.id.llEndTime:
+                pptTime.setTextView(tvLiveEndTime);
+                intro();
+
                 break;
         }
     }
+
     /**
      * 控制发布面板的显示与隐藏
      */
@@ -349,6 +358,9 @@ public class PublishVideoActivity extends BaseActivity {
         tag_new = "";//      可选      新自定义标签（标签字符串）  eg:基本面,涨停,大涨
         content = "";    // 必传     内容体
         dynamics_desc = "";    // 必传     内容体
+        date = "";
+        start_date = "";
+        end_date = "";
         title = etTitle.getText().toString();
         content = etContent.getText().toString();
         dynamics_desc = etDynamicsDesc.getText().toString();
@@ -370,6 +382,24 @@ public class PublishVideoActivity extends BaseActivity {
         } else {
             etContent.setError(null);
         }
+        start_date = tvLiveStartTime.getText().toString();
+        date = tvLiveStartTime.getTag() == null ? "" : tvLiveStartTime.getTag().toString();
+        end_date = tvLiveEndTime.getText().toString();
+        if (TextUtils.isEmpty(end_date) && TextUtils.isEmpty(start_date)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择开始和结束时间");
+        } else if (TextUtils.isEmpty(start_date)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择开始时间");
+        } else if (TextUtils.isEmpty(end_date)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择结束时间");
+        }
+        if (DateUtil.minutesBetweenTwoDate(start_date, end_date) <= 0) {
+            flag = false;
+            ToastUtils.showToast(this, "结束时间要大于开始时间");
+        }
+
         if (!"0".equals(synchro_dynamics)) {
             if (TextUtils.isEmpty(dynamics_desc)) {
                 flag = false;
