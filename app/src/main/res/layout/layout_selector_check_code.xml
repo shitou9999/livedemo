@@ -29,7 +29,7 @@
     </LinearLayout>
 
 
-    <View style="@style/IGXDefault_Divider"/>
+    <View style="@style/default_divider"/>
 
     <LinearLayout
         android:id="@+id/ll_call"

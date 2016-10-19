@@ -20,9 +20,9 @@
 
             <include layout="@layout/layout_region_top"/>
 
-            <View style="@style/IGXDefault_Divider"/>
+            <View style="@style/default_divider"/>
 
-            <LinearLayout style="@style/IGXEdit_ForViewGroup_style">
+            <LinearLayout style="@style/edit_for_viewgroup_style">
 
 
                 <LinearLayout
@@ -60,7 +60,7 @@
 
                 <EditText
                     android:id="@+id/et_account"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
@@ -71,13 +71,13 @@
                     android:nextFocusDown="@id/et_password"/>
 
             </LinearLayout>
-            <View style="@style/IGXDefault_Divider"/>
+            <View style="@style/default_divider"/>
 
         </LinearLayout>
 
     <Button
         android:id="@+id/button_submit"
-        style="@style/IGXLong_Button_style"
+        style="@style/long_button_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_top"

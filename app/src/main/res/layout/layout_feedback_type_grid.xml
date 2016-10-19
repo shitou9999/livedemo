@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:tag="1"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="首页加载失败"
+                    />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback1"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/small_margin"
+                    android:background="@drawable/draw_check_default"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="1"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:tag="3"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="无法缓存视频"
+                    />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback3"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/small_margin"
+                    android:background="@drawable/draw_check_default"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="3"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:tag="5"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="评论问题"
+                    />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback5"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/small_margin"
+                    android:background="@drawable/draw_check_default"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="5"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginRight="@dimen/small_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/small_margin"
+                android:tag="2"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="不能播放视频"
+                    />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback2"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/draw_check_default"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="2"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginRight="@dimen/small_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/small_margin"
+                android:tag="4"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="闪退"
+                    />
+
+                <!--android:background="@drawable/draw_check_default"-->
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback4"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="4"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginRight="@dimen/small_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/small_margin"
+                android:tag="6"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="其它"
+                    />
+
+                <!--android:button="@drawable/abc_btn_check_material"-->
+                <!--android:buttonTint="@color/colorGrey500"-->
+                <!--android:background="@drawable/draw_check_default"-->
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/check_feedback6"
+                    style="@style/CheckBox_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:tag="6"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</merge>

@@ -132,7 +132,7 @@
     <!-- oo bottom nav oo -->
     <View
         android:id="@+id/line_bottom"
-        style="@style/IGXDefault_Divider"
+        style="@style/default_divider"
         android:layout_height="1dp"
         android:layout_above="@+id/ll_bottom_bar"/>
 

@@ -75,7 +75,7 @@
     <color name="bg_translucent">#88000000</color>
 
     <color name="def_EditTextColor">@color/colorGrey333333</color>
-    <color name="def_EditBgColor">@color/colorGrey300</color>
+    <color name="def_EditBgColor">@color/colorGrey230</color>
     <color name="def_HintTextColor">@color/colorGrey400</color>
     <color name="def_EditCursorTintColor">@color/colorGrey300</color>
 

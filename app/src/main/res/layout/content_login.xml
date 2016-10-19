@@ -19,10 +19,10 @@
 
         <include layout="@layout/layout_region_top"/>
 
-        <View style="@style/IGXDefault_Divider"/>
+        <View style="@style/default_divider"/>
 
         <LinearLayout
-            style="@style/IGXEdit_ForViewGroup_style"
+            style="@style/edit_for_viewgroup_style"
             android:focusable="true"
             android:focusableInTouchMode="true"
             >
@@ -62,7 +62,7 @@
 
             <EditText
                 android:id="@+id/et_account"
-                style="@style/IGXBase_Edit_Style"
+                style="@style/base_edit_style"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -75,11 +75,11 @@
 
         </LinearLayout>
 
-        <View style="@style/IGXDefault_Divider"/>
+        <View style="@style/default_divider"/>
 
         <LinearLayout
             android:id="@+id/ll_password"
-            style="@style/IGXEdit_ForViewGroup_style">
+            style="@style/edit_for_viewgroup_style">
 
             <TextView
                 android:layout_width="0dp"
@@ -93,7 +93,7 @@
 
             <EditText
                 android:id="@+id/et_password"
-                style="@style/IGXBase_Edit_Style"
+                style="@style/base_edit_style"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
@@ -101,7 +101,7 @@
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"/>
         </LinearLayout>
-        <View style="@style/IGXDefault_Divider"/>
+        <View style="@style/default_divider"/>
     </LinearLayout>
 
     <TextView
@@ -123,7 +123,7 @@
 
     <Button
         android:id="@+id/btn_login"
-        style="@style/IGXLong_Button_style"
+        style="@style/long_button_style"
         android:layout_below="@+id/tv_forget_password"
         android:layout_centerHorizontal="true"
         android:text="@string/login"/>

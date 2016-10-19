@@ -18,10 +18,10 @@
 
             <include layout="@layout/layout_region_top"/>
 
-            <View style="@style/IGXDefault_Divider"/>
+            <View style="@style/default_divider"/>
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
 
                 <EditText
                     android:id="@+id/et_account"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:digits="0123456789"
                     android:hint="@string/hint_input_phoneNumber"
                     android:inputType="phone"
@@ -60,15 +60,15 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"/>
+                style="@style/default_divider"/>
 
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <EditText
                     android:id="@+id/et_check_code"
-                    style="@style/IGXShortCheckCode_style"
+                    style="@style/short_checkcode_style"
                     android:layout_width="0dp"
                     android:layout_marginLeft="@dimen/min_margin"
                     android:layout_weight="1"
@@ -89,11 +89,11 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,18 +104,18 @@
 
                 <EditText
                     android:id="@+id/et_password1"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:singleLine="true"/>
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,19 +126,19 @@
 
                 <EditText
                     android:id="@+id/et_password2"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:hint="@string/hint_password_affirm"
                     android:inputType="textPassword"/>
             </LinearLayout>
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
         </LinearLayout>
 
     <Button
         android:id="@+id/btn_register"
-        style="@style/IGXLong_Button_style"
+        style="@style/long_button_style"
         android:layout_below="@id/ll_input"
         android:layout_marginTop="@dimen/activity_vertical_margin2x"
         android:text="@string/register"

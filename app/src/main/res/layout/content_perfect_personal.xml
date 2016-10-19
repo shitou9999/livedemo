@@ -32,7 +32,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="0dp"
@@ -44,7 +44,7 @@
 
                 <EditText
                     android:id="@+id/et_nickname"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -56,11 +56,11 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"/>
+                style="@style/default_divider"/>
 
             <LinearLayout
                 android:id="@+id/ll_select_gender"
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="0dp"
@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/tv_gender"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -84,11 +84,11 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"/>
+                style="@style/default_divider"/>
 
             <LinearLayout
                 android:id="@+id/ll_date_of_birth"
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="0dp"
@@ -100,7 +100,7 @@
 
                 <TextView
                     android:id="@+id/tv_date_of_birth"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -112,12 +112,12 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <LinearLayout
                 android:id="@+id/ll_address"
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="0dp"
@@ -130,7 +130,7 @@
 
                 <TextView
                     android:id="@+id/tv_addres"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
@@ -147,11 +147,11 @@
             </LinearLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <LinearLayout
-                style="@style/IGXEdit_ForViewGroup_style">
+                style="@style/edit_for_viewgroup_style">
 
                 <TextView
                     android:layout_width="0dp"
@@ -163,7 +163,7 @@
 
                 <EditText
                     android:id="@+id/et_qq"
-                    style="@style/IGXBase_Edit_Style"
+                    style="@style/base_edit_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -181,7 +181,7 @@
 
     <Button
         android:id="@+id/btn_submit"
-        style="@style/IGXLong_Button_style"
+        style="@style/long_button_style"
         android:layout_below="@id/cv_top"
         android:layout_marginTop="@dimen/activity_vertical_margin2x"
         android:text="@string/save"

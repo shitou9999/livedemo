@@ -51,7 +51,7 @@
 
         <LinearLayout
             android:id="@+id/ll_wechat"
-            style="@style/IGXDefault_Option_ViewGroup"
+            style="@style/default_option_viewgroup"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:clickable="true"
             android:gravity="center_vertical"
@@ -80,7 +80,7 @@
 
         <LinearLayout
             android:id="@+id/ll_hotline"
-            style="@style/IGXDefault_Option_ViewGroup"
+            style="@style/default_option_viewgroup"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -111,7 +111,7 @@
 
         <LinearLayout
             android:id="@+id/ll_website"
-            style="@style/IGXDefault_Option_ViewGroup"
+            style="@style/default_option_viewgroup"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/activity_horizontal_margin"

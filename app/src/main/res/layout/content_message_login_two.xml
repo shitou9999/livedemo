@@ -93,7 +93,7 @@
 
     <View
         android:id="@+id/view_divider"
-        style="@style/IGXDefault_Divider"
+        style="@style/default_divider"
         android:layout_below="@id/ll_code_group"
         android:background="#99EE66"
         />
@@ -112,7 +112,7 @@
 
     <Button
         android:id="@+id/button_submit"
-        style="@style/IGXLong_Button_style"
+        style="@style/long_button_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_countdown"

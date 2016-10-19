@@ -117,8 +117,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 startActivity(guideActivityIntent);
                 break;
             case R.id.rl_settingFeedback:
-//                Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
-//                startActivity(feedback);
+                Intent feedback = new Intent(SettingActivity.this, FeedbackActivity.class);
+                startActivity(feedback);
                 break;
             case R.id.rl_settingScore:
                 try {

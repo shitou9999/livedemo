@@ -139,7 +139,7 @@
             </RelativeLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <RelativeLayout
@@ -181,7 +181,7 @@
             </RelativeLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <RelativeLayout
@@ -224,7 +224,7 @@
             </RelativeLayout>
 
             <View
-                style="@style/IGXDefault_Divider"
+                style="@style/default_divider"
                 />
 
             <RelativeLayout

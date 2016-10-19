@@ -112,13 +112,13 @@
         </item>
     </style>
 
-    <style name="IGXDefault_Divider">
+    <style name="default_divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/def_divider</item>
         <item name="android:background">@color/def_DividerColor</item>
     </style>
 
-    <style name="IGXDefault_EditText_style">
+    <style name="default_edittext_style">
         <item name="android:background">@null</item>
         <item name="android:textSize">@dimen/edit_text_size_samll</item>
         <item name="android:textColor">@color/def_EditTextColor</item>
@@ -127,7 +127,7 @@
         <item name="android:textCursorDrawable">@null</item>
     </style>
 
-    <style name="IGXBase_Edit_Style" parent="IGXDefault_EditText_style">
+    <style name="base_edit_style" parent="default_edittext_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@null</item>
@@ -138,7 +138,7 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="IGXShortCheckCode_style" parent="IGXBase_Edit_Style">
+    <style name="short_checkcode_style" parent="base_edit_style">
         <item name="android:inputType">numberDecimal</item>
         <!--<item name="android:digits">0123456789</item>-->
         <item name="android:imeOptions">actionDone</item>
@@ -156,7 +156,7 @@
 
 
     <!-- 包含单行编辑框的ViewGroup样式 -->
-    <style name="IGXEdit_ForViewGroup_style">
+    <style name="edit_for_viewgroup_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/def_option_height</item>
         <!--<item name="android:layout_gravity">center_vertical</item>-->
@@ -166,7 +166,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingLeft">@dimen/small_margin</item>
     </style>
-    <style name="IGXLong_Button_style">
+    <style name="long_button_style">
         <item name="android:background">@drawable/selector_long_button</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -201,13 +201,13 @@
         <item name="android:src">@drawable/selector_right</item>
     </style>
 
-    <style name="IGXButtonStyle_v21">
+    <style name="button_style_v21">
         <item name="android:buttonStyle">@android:style/Widget.Button</item>
         <item name="android:textAppearance">
             @android:style/TextAppearance.DeviceDefault.Widget.TextView
         </item>
     </style>
-    <style name="IGXDefault_Option_ViewGroup">
+    <style name="default_option_viewgroup">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:background">@drawable/selector_option_normal</item>
@@ -217,5 +217,9 @@
     </style>
     <style name="view_invisibility">
         <item name="android:visibility">invisible</item>
+    </style>
+    <style name="CheckBox_style">
+        <item name="android:background">@drawable/draw_check_default</item>
+        <item name="android:button">@null</item>
     </style>
 </resources>

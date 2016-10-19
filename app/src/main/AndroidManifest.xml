@@ -216,9 +216,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- 选择时间 -->
         <activity
-            android:name=".ui.publishing.TimePickActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:name=".ui.me.activity.FeedbackActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
