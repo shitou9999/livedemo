@@ -9,7 +9,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
@@ -64,7 +64,7 @@ public abstract class OKHttpCallBackListener implements Callback {
         String data = new String(bytes);
         int code;
         try {
-            if (IGXApplication.IsDegbug) {
+            if (MyApplication.IsDegbug) {
                 DebugUtils.dd("data : " + data);
             }
             JSONObject object = (JSONObject) new JSONTokener(data).nextValue();

@@ -28,7 +28,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -158,7 +158,7 @@ public class MessageLoginTwoActivity extends BaseActivity implements View.OnClic
                     User user = new Gson().fromJson(event.getData().optString("data"), User.class);
                     DebugUtils.dd("user string : " + user.toString());
 
-                    IGXApplication.setUser(user);
+                    MyApplication.setUser(user);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constant.INTENT_ACTION_GET_CUSTOM));
 
                     PreferencesUtils.putString(this, Constant.KEY_PHONE, SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));

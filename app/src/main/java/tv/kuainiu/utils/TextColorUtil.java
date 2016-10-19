@@ -6,7 +6,7 @@ import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.widget.TextView;
 
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 
 
@@ -31,7 +31,7 @@ public class TextColorUtil {
 
 
     public static int generateColor(@ColorRes int id) {
-        Resources res = IGXApplication.getInstance().getResources();
+        Resources res = MyApplication.getInstance().getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return res.getColor(id, null);
         } else {

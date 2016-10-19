@@ -16,7 +16,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -52,10 +52,10 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        if (IGXApplication.getInstance().getUser() != null) {
-            if (!TextUtils.isEmpty(IGXApplication.getInstance().getUser().getEmail())) {
+        if (MyApplication.getInstance().getUser() != null) {
+            if (!TextUtils.isEmpty(MyApplication.getInstance().getUser().getEmail())) {
                 isBind = true;
-                mEtEmail.setText(IGXApplication.getInstance().getUser().getEmail());
+                mEtEmail.setText(MyApplication.getInstance().getUser().getEmail());
                 mBtnSubmit.setText("解除绑定");
             } else {
                 isBind = false;
@@ -205,9 +205,9 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
             DebugUtils.showToast(this, msg);
             if (Constant.SUCCEED == event.getCode()) {
                 if (!isBind) { // 已绑定则清空
-                    IGXApplication.getInstance().getUser().setEmail(emailConfirm);
+                    MyApplication.getInstance().getUser().setEmail(emailConfirm);
                 } else {
-                    IGXApplication.getInstance().getUser().setEmail("");
+                    MyApplication.getInstance().getUser().setEmail("");
                 }
                 finish();
             } else {

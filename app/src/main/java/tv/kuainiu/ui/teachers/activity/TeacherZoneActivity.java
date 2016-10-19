@@ -29,7 +29,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
@@ -104,7 +104,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
             EventBus.getDefault().register(this);
         }
         teacherid = getIntent().getStringExtra(ID);
-        user_id = IGXApplication.getUser() == null ? "" : IGXApplication.getUser().getUser_id();
+        user_id = MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id();
         if (TextUtils.isEmpty(teacherid)) {
             ToastUtils.showToast(this, "未获取到老师");
             finish();

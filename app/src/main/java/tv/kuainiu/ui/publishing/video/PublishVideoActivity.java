@@ -45,7 +45,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -274,8 +274,8 @@ public class PublishVideoActivity extends BaseActivity {
 
 
     private void initData() {
-        anchor = IGXApplication.getUser().getNickname();
-        teacher_id = IGXApplication.getUser().getUser_id();
+        anchor = MyApplication.getUser().getNickname();
+        teacher_id = MyApplication.getUser().getUser_id();
 
         OKHttpUtils.getInstance().syncGet(this, Api.get_cats, Action.get_cats);
     }

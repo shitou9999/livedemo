@@ -6,7 +6,7 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.cons.Action;
@@ -105,7 +105,7 @@ public class CommentHttpUtil {
      */
     public static void commentList(Context context, String comment_id) {
         Map<String, String> map = new HashMap<>();
-        map.put("device", IGXApplication.getInstance().getDeviceId());
+        map.put("device", MyApplication.getInstance().getDeviceId());
         map.put("comment_id", comment_id);
         String param = ParamUtil.getParam(map);
         OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.FAVOUR_COMMENT, param, Action.favour_comment);

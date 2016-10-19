@@ -22,7 +22,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -110,7 +110,7 @@ public class PerfectPersonalActivity extends BaseActivity implements View.OnClic
 
     private void initDataAndBindView() {
         try {
-            User user = IGXApplication.getUser();
+            User user = MyApplication.getUser();
             bindToInitialValue(mEtNickname, "未填写", user.getNickname());
             bindToInitialValue(mEtQQ, "未填写", user.getQq());
             bindToInitialValue(mTvAddress, "未填写", user.getProvince() + "-" + user.getCity());
@@ -172,7 +172,7 @@ public class PerfectPersonalActivity extends BaseActivity implements View.OnClic
                 wheelDatePicker.setTextSize(textSize);
                 wheelDatePicker.setItemSpace(itemSpace);
 
-                String birthday = IGXApplication.getUser().getBirthday();
+                String birthday = MyApplication.getUser().getBirthday();
                 if (TextUtils.isEmpty(birthday) || "0000-00-00".equals(birthday)) {
                     wheelDatePicker.setCurrentDate(1990, 1, 1);
                 } else {
@@ -219,7 +219,7 @@ public class PerfectPersonalActivity extends BaseActivity implements View.OnClic
 
     // 判断用户是否作出修改
     private boolean isModification() {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         String address = user.getProvince() + "-" + user.getCity();
         try {
             if (!user.getNickname().equals(nickName) || !user.getGender().equals(gender) || !user.getQq().equals(qq)
@@ -252,14 +252,14 @@ public class PerfectPersonalActivity extends BaseActivity implements View.OnClic
             case update_userinfo:
                 if (event.getCode() == Constant.SUCCEED) {
                     DebugUtils.showToastResponse(PerfectPersonalActivity.this, "修改成功");
-                    User user = IGXApplication.getUser();
+                    User user = MyApplication.getUser();
                     user.setNickname(nickName);
                     user.setGender(gender);
                     user.setQq(qq);
                     user.setBirthday(birth);
                     user.setProvince(prov);
                     user.setCity(city);
-                    IGXApplication.setUser(user);
+                    MyApplication.setUser(user);
                     finish();
                 } else {
                     DebugUtils.showToastResponse(PerfectPersonalActivity.this, event.getMsg());

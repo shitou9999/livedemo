@@ -24,7 +24,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -367,7 +367,7 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
                         user.setPhone(object.optString("phone"));
                     }
 //                    user.setNickname("");
-                    IGXApplication.setUser(user);
+                    MyApplication.setUser(user);
                     ToastUtils.showToast(this, "注册成功");
                     finish();
                 } catch (Exception e) {

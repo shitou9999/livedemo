@@ -22,7 +22,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -78,7 +78,7 @@ public class PickArticleActivity extends BaseActivity {
     }
     private void initData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("teacher_id", IGXApplication.getUser().getUser_id());
+        map.put("teacher_id", MyApplication.getUser().getUser_id());
         OKHttpUtils.getInstance().syncGet(this, Api.quote_list + ParamUtil.getParamForGet(map), Action.quote_list);
     }
 

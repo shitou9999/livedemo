@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Constant;
@@ -116,7 +116,7 @@ public final class ParamUtil {
      * @return key
      */
     public static String getKey() {
-        String key = IGXApplication.getKey();
+        String key = MyApplication.getKey();
         DebugUtils.dd("private key 1 : " + key);
         if (TextUtils.isEmpty(key)) {
             key = Api.PUBLIC_KEY;
@@ -136,7 +136,7 @@ public final class ParamUtil {
      * @return
      */
     private static String getUid() {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         String uid = (null == user || TextUtils.isEmpty(user.getUser_id())) ? "0" : user.getUser_id();
         DebugUtils.dd(uid);
         return uid;

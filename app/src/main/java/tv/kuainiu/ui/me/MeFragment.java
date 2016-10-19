@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
@@ -240,7 +240,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(loginIntent);
                 break;
             case R.id.rlFollow:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -251,14 +251,14 @@ public class MeFragment extends BaseFragment {
             case R.id.rlSub:
                 break;
             case R.id.rlDown:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
                 DownloadActivity.intoNewActivity(getActivity());
                 break;
             case R.id.rlCollect:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -301,7 +301,7 @@ public class MeFragment extends BaseFragment {
      * @param clazz Class type
      */
     private void forward(Class clazz) {
-        if (IGXApplication.isLogin()) {
+        if (MyApplication.isLogin()) {
             Intent intent = new Intent(getActivity(), clazz);
             startActivity(intent);
         } else {
@@ -310,10 +310,10 @@ public class MeFragment extends BaseFragment {
     }
 
     private void uploadUserInfo() {
-        if (IGXApplication.isLogin()) {
+        if (MyApplication.isLogin()) {
             OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST_V2, Api.FETCH_USERINFO, ParamUtil.getParam(null), Action.fetch_userinfo);
         } else {
-            User user = IGXApplication.getUser();
+            User user = MyApplication.getUser();
             bindDataForView(user);
         }
     }
@@ -323,7 +323,7 @@ public class MeFragment extends BaseFragment {
     public void onHttpEvent(EmptyEvent event) {
         switch (event.getAction()) {
             case inform_me_fragment_sub_follow_count_refresh:
-                User user = IGXApplication.getUser();
+                User user = MyApplication.getUser();
                 setFollowAndSubText(user);
                 break;
         }
@@ -335,7 +335,7 @@ public class MeFragment extends BaseFragment {
         switch (event.getAction()) {
             case login:
                 if (Constant.SUCCEED == event.getCode()) {
-                    User user = IGXApplication.getUser();
+                    User user = MyApplication.getUser();
                     if (user != null) {
                         bindDataForView(user);
                     } else {
@@ -344,7 +344,7 @@ public class MeFragment extends BaseFragment {
                 }
                 break;
             case off_line:
-                bindDataForView(IGXApplication.getUser());
+                bindDataForView(MyApplication.getUser());
                 break;
             case fetch_userinfo:
                 if (Constant.SUCCEED == event.getCode()) {
@@ -354,11 +354,11 @@ public class MeFragment extends BaseFragment {
                     DebugUtils.dd(user.toString());
                     displayAvatar(user.getAvatar());
                     setFollowAndSubText(user);
-                    IGXApplication.setUser(user);
+                    MyApplication.setUser(user);
                     PreferencesUtils.putInt(context, Constant.MSG_NUM, user.getMsg_num());
 //                    localBroadcastManager.sendBroadcast(new Intent(Constant.INTENT_ACTION_ACTIVITY_MSG_NUM));
                 }
-                bindDataForView(IGXApplication.getUser());
+                bindDataForView(MyApplication.getUser());
                 break;
         }
     }

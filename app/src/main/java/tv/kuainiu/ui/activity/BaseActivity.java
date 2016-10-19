@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -105,7 +105,7 @@ public class BaseActivity extends AppCompatActivity {
 
             if (-1001 == code) {
                 LogUtils.d("重新初始化", "BaseActivity 重新初始化：" + code);
-                IGXApplication.getInstance().clearLocalData();
+                MyApplication.getInstance().clearLocalData();
                 if (initClientNumbers == 0) {
                     PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
                 }
@@ -115,12 +115,12 @@ public class BaseActivity extends AppCompatActivity {
                 if (initClientNumbers == 0) {
                     PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
                 }
-                IGXApplication.getInstance().setDeviceId("");
-                IGXApplication.getInstance().clearLocalData();
+                MyApplication.getInstance().setDeviceId("");
+                MyApplication.getInstance().clearLocalData();
                 initClientNumbers++;
             } else if (-1004 == code) {
                 LogUtils.d("系统错误", "-1004");
-                if (IGXApplication.IsDegbug) {
+                if (MyApplication.IsDegbug) {
 //                    ToastUtils.showToast(context, "-1004");
 
                 }
@@ -141,7 +141,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public static void initApp(final Context context) {
-        IGXApplication.setUser(null);
+        MyApplication.setUser(null);
         EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
         DialogUtils.TipInitApp(context, "请点击按钮，初始化APP", new DialogUtils.IDialogButtonOnClickListener() {
             @Override
@@ -151,15 +151,15 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             public void sure() {
-                IGXApplication.getInstance().setDeviceId("");
-                IGXApplication.getInstance().clearLocalData();
+                MyApplication.getInstance().setDeviceId("");
+                MyApplication.getInstance().clearLocalData();
                 OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
             }
         });
     }
 
     public static void offLine(final Context context) {
-        IGXApplication.setUser(null);
+        MyApplication.setUser(null);
         EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
         DialogUtils.TipAccountConflict(context, "您的账号在其他设备上登陆.当前设备已下线", new DialogUtils.IDialogButtonOnClickListener() {
             @Override
@@ -201,7 +201,7 @@ public class BaseActivity extends AppCompatActivity {
                     DebugUtils.dd("init info obj : " + initInfo.toString());
                     String privateKey = initInfo.getPrivate_key();
                     if (!TextUtils.isEmpty(privateKey)) {
-                        IGXApplication.setKey(privateKey);
+                        MyApplication.setKey(privateKey);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

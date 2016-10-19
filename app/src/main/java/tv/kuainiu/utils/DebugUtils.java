@@ -4,12 +4,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 
 
 public class DebugUtils {
 
-    public static boolean DEBUG_MODE = IGXApplication.IsDegbug;
+    public static boolean DEBUG_MODE = MyApplication.IsDegbug;
 
     public static void v(String tag, String msg) {
         if (DEBUG_MODE) {

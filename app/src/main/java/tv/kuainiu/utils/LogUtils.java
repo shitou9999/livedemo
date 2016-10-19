@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 
 /**
 * @ClassName LogUtils
 * @Description 日志记录
 */
 public class LogUtils {
-    public static boolean DEBUG = IGXApplication.IsDegbug;
+    public static boolean DEBUG = MyApplication.IsDegbug;
 
     public static void i(String TAG, String msg) {
         if (DEBUG) {

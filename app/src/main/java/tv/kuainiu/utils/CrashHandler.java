@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 
 /**
  * @ClassName CrashHandler
@@ -41,7 +41,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     /**
      * 是否开启日志输出, 在Debug状态下开启, 在Release状态下关闭以提升程序性能
      */
-    public static final boolean DEBUG = IGXApplication.IsDegbug;
+    public static final boolean DEBUG = MyApplication.IsDegbug;
     public static final boolean IsUpUpload = true;
     /**
      * CrashHandler实例

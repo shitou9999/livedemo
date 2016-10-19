@@ -24,7 +24,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -161,7 +161,7 @@ public class PickTagsActivity extends BaseActivity {
 
     private void initData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("teacher_id", IGXApplication.getUser().getUser_id());
+        map.put("teacher_id", MyApplication.getUser().getUser_id());
         OKHttpUtils.getInstance().syncGet(this, Api.teacher_news_tags + ParamUtil.getParamForGet(map), Action.teacher_news_tags);
     }
 

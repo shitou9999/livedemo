@@ -77,7 +77,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
 import tv.kuainiu.app.DataSet;
@@ -572,7 +572,7 @@ public class VideoActivity extends BaseActivity implements
                 downloader.getDefinitionMap();
                 break;
             case R.id.tvCollection:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -586,7 +586,7 @@ public class VideoActivity extends BaseActivity implements
                 ShareUtils.showShare(ShareUtils.VIDEO, this, "", mVideoDetail.getTitle(), mVideoDetail.getThumb(), StringUtils.replaceNullToEmpty(mVideoDetail.getUrl(), "http://www.kuainiu.tv"), null);
                 break;
             case R.id.tvSupport:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -645,7 +645,7 @@ public class VideoActivity extends BaseActivity implements
         //评论次数
         tvCommentNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(Integer.parseInt(StringUtils.replaceNullToEmpty(mVideoDetail.getComment_num(), "0")), Constant.TEN_THOUSAND, "万", "")));
         teacherDataBind(mVideoDetail.getTeacher_info());
-        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(IGXApplication.isLogin() ? IGXApplication.getUser().getAvatar() : ""), R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(this, ciCommentAavatar, StringUtils.replaceNullToEmpty(MyApplication.isLogin() ? MyApplication.getUser().getAvatar() : ""), R.mipmap.default_avatar);
         videoIdText.setText(mVideoDetail.getTitle());
         tvCollection.setSelected(mVideoDetail.getCollected() == Constant.COLLECTED);
         tvSupport.setSelected(mVideoDetail.getIs_support() == Constant.FAVOURED);
@@ -673,7 +673,7 @@ public class VideoActivity extends BaseActivity implements
     private void getNews() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", news_id);
-        map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
+        map.put("user_id", MyApplication.isLogin() ? MyApplication.getUser().getUser_id() : "");
         OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_DETAILS + ParamUtil.getParamForGet(map), Action.video_details, CacheConfig.getCacheConfig());
     }
 

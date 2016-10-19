@@ -21,7 +21,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Action;
@@ -264,7 +264,7 @@ public class OKHttpUtils {
         sb.append(Utils.getLanguageAndLocal());
         sb.append(";");
         sb.append("device ");
-        sb.append(IGXApplication.getInstance().getDeviceId());
+        sb.append(MyApplication.getInstance().getDeviceId());
         sb.append(")");
         DebugUtils.d(TAG, "testUserAgent device : " + sb.toString());
         return sb.toString();

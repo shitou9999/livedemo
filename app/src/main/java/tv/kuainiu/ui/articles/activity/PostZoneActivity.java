@@ -44,7 +44,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
@@ -325,7 +325,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
 
 
     private void autoLogin() {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         if (user != null) {
             UserHttpRequest.authLogin(this, user.getUser_id(), user.getPhone(), Action.AUTO_LOGIN);
         } else {//提示去登录
@@ -456,7 +456,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
             btn_publish.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!IGXApplication.isLogin()) {
+                    if (!MyApplication.isLogin()) {
                         LoginPromptDialog loginPromptDialog = new LoginPromptDialog(PostZoneActivity.this);
                         loginPromptDialog.show();
                         return;
@@ -465,7 +465,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                     if (TextUtils.isEmpty(comment)) {
                         ToastUtils.showToast(PostZoneActivity.this, "评论不能为空");
                     } else {
-//                        CommentHttpUtil.addComment(PostZoneActivity.this, mId, mCatId, comment, commentid, StringUtils.replaceNullToEmpty(IGXApplication.getUser().getNickname()), is_reply);
+//                        CommentHttpUtil.addComment(PostZoneActivity.this, mId, mCatId, comment, commentid, StringUtils.replaceNullToEmpty(MyApplication.getUser().getNickname()), is_reply);
                     }
                 }
             });
@@ -550,7 +550,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_favour:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     new LoginPromptDialog(this).show();
                     return;
                 }
@@ -570,7 +570,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.tv_collect:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     new LoginPromptDialog(this).show();
                     return;
                 }
@@ -582,7 +582,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.tv_follow_button:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     new LoginPromptDialog(PostZoneActivity.this).show();
                 } else {
                     if (mDetailsEntity == null) {
@@ -614,10 +614,10 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     }
 
     private String prepareParamFetchContent() {
-        if (!IGXApplication.isLogin()) {
+        if (!MyApplication.isLogin()) {
             return "?id=" + mId + "&has_content=no";
         } else {
-            return "?id=" + mId + "&user_id=" + IGXApplication.getUser().getUser_id() + "&has_content=no";
+            return "?id=" + mId + "&user_id=" + MyApplication.getUser().getUser_id() + "&has_content=no";
         }
     }
 
@@ -627,7 +627,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
         sb.append("&news_id=");
         sb.append(mId);
         sb.append("&device=");
-        sb.append(IGXApplication.getInstance().getDeviceId());
+        sb.append(MyApplication.getInstance().getDeviceId());
         return sb.toString();
     }
 
@@ -912,7 +912,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
      * @param commentId 评论ID
      */
     private void favourForCommentId(String commentId) {
-        if (IGXApplication.isLogin()) {
+        if (MyApplication.isLogin()) {
             Map<String, String> map = new HashMap<>();
             map.put(Constant.KEY_ID, commentId);
             map.put(Constant.KEY_CATID, mCatId);

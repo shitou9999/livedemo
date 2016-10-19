@@ -81,7 +81,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -446,7 +446,7 @@ public class PlayLiveActivity extends BaseActivity implements
     }
 
     private void loginLive() {
-        viewerName = PreferencesUtils.getString(this, IGXApplication.KEY_DEVICEID, "");
+        viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
         map.put("teacher_id", teacherId);
         password = ParamUtil.getParam(map);
@@ -1751,7 +1751,7 @@ public class PlayLiveActivity extends BaseActivity implements
     }
 
     public boolean isLogin(final Context context) {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         if (user == null) {
             LoginPromptDialog loginPromptDialog = new LoginPromptDialog(context);
             loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {

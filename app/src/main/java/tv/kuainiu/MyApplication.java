@@ -26,8 +26,8 @@ import tv.kuainiu.utils.SecurityUtils;
 import tv.kuainiu.utils.StringUtils;
 
 
-public class IGXApplication extends android.support.multidex.MultiDexApplication {
-    private static final String TAG = "IGXApplication";
+public class MyApplication extends android.support.multidex.MultiDexApplication {
+    private static final String TAG = "MyApplication";
     private static User user;
     public static final boolean IsDegbug = true;
     public static final String KEY_DEVICEID = "deviceid_key";
@@ -38,14 +38,14 @@ public class IGXApplication extends android.support.multidex.MultiDexApplication
      */
     public static String followTeaCherIds = "";
 
-    private static IGXApplication mApplication;
+    private static MyApplication mApplication;
 
     private String device;
     private static String key;
 
 
     // MyApplication初始化
-    public static synchronized IGXApplication getInstance() {
+    public static synchronized MyApplication getInstance() {
         return mApplication;
     }
 
@@ -128,7 +128,7 @@ public class IGXApplication extends android.support.multidex.MultiDexApplication
     }
 
     public static void setUser(User user) {
-        IGXApplication.user = user;
+        MyApplication.user = user;
         FileUtils.saveUser(mApplication, user);
 //        PreferencesUtils.putString(mApplication, CustomFragment.CATCH_TIME, "");
         UserPreferencesManager.putUserExtraInfo(user);
@@ -152,7 +152,7 @@ public class IGXApplication extends android.support.multidex.MultiDexApplication
 
 
     public static void setKey(String key) {
-        IGXApplication.key = key;
+        MyApplication.key = key;
         PreferencesUtils.putString(getInstance(), Constant.PRIVATE_KEY, StringUtils.replaceNullToEmpty(key));
     }
 

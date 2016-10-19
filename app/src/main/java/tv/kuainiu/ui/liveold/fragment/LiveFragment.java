@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Constant;
@@ -171,7 +171,7 @@ public class LiveFragment extends BaseFragment implements View.OnClickListener, 
                 startPlayingActivity();
                 break;
             case R.id.ib_live_like:
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     new LoginPromptDialog(getActivity()).show();
                     return;
                 }

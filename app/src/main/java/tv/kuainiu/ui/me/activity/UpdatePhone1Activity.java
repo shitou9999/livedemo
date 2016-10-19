@@ -20,7 +20,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -71,7 +71,7 @@ public class UpdatePhone1Activity extends AbsSMSPermissionActivity implements Vi
     }
 
     private void bindDataForView() {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         if (user != null) {
             mEtPhone.setText(user.getPhone());
         }

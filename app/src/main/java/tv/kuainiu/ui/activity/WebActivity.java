@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.event.HttpEvent;
@@ -242,7 +242,7 @@ public class WebActivity extends BaseActivity {
     }
 
     private void autoLogin() {
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         if (user != null) {
             UserHttpRequest.authLogin(this, user.getUser_id(), user.getPhone(), Action.AUTO_LOGIN);
         } else {// //提示去登录

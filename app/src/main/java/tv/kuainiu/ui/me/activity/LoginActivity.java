@@ -30,7 +30,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.UserHttpRequest;
@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             KeyBoardUtil.hideSoftInput(LoginActivity.this, mEtPassword);
             Snackbar snackbar = Snackbar.make(mBtnLogin, "正在登录......", Snackbar.LENGTH_LONG);
             User user = event.getUser();
-            IGXApplication.setUser(user);
+            MyApplication.setUser(user);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constant.INTENT_ACTION_GET_CUSTOM));
             EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
             PreferencesUtils.putString(this, "phone", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));

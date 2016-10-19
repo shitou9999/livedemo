@@ -190,7 +190,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return;
         }
         textSubscribeCount.setText(StringUtils.getDecimal(item.subscibe_count, Constant.TEN_THOUSAND, "万人订阅", "人订阅"));
-        if (Constant.SUBSCRIBEED == item.is_subscibe && IGXApplication.isLogin()) {
+        if (Constant.SUBSCRIBEED == item.is_subscibe && MyApplication.isLogin()) {
             textSubscribe.setText(STRING_SUBSCRIPTION_ED);
             textSubscribe.setTextColor(Color.parseColor("#9E9E9E"));
             textSubscribe.setBackgroundResource(R.drawable.bg_button_subscribeed);

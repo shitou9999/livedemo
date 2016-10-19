@@ -15,7 +15,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -58,7 +58,7 @@ public class IdentityActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void bindDataForView() {
-        User user = IGXApplication.getInstance().getUser();
+        User user = MyApplication.getInstance().getUser();
         if (user != null) {
             mEtRealName.setText(user.getRealname());
             mEtIdentityCard.setText(user.getIdno());
@@ -119,7 +119,7 @@ public class IdentityActivity extends BaseActivity implements View.OnClickListen
             isButtonEnable = true;
             if (event.getCode() == Constant.SUCCEED) {
                 DebugUtils.showToast(IdentityActivity.this, "身份认证成功");
-                IGXApplication.getInstance().getUser().setIdno(identityCard);
+                MyApplication.getInstance().getUser().setIdno(identityCard);
                 finish();
             } else {
                 DebugUtils.showToastResponse(IdentityActivity.this, event.getMsg());

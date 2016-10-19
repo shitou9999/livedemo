@@ -64,11 +64,11 @@ public class LiveTeacherTeamFragment extends BaseFragment implements SimpleAdapt
     @Override
     public void onStart() {
         super.onStart();
-        mIsLogin = IGXApplication.isLogin();
+        mIsLogin = MyApplication.isLogin();
 
-        if (mIsFirstIntoLogin != IGXApplication.isLogin()) {
+        if (mIsFirstIntoLogin != MyApplication.isLogin()) {
             initHttp();
-            mIsFirstIntoLogin = IGXApplication.isLogin();
+            mIsFirstIntoLogin = MyApplication.isLogin();
         }
     }
 
@@ -87,7 +87,7 @@ public class LiveTeacherTeamFragment extends BaseFragment implements SimpleAdapt
      *//*
 
     private void initVariate() {
-        mIsFirstIntoLogin = IGXApplication.isLogin();
+        mIsFirstIntoLogin = MyApplication.isLogin();
         mAdapter = new SimpleAdapter(getActivity());
         mAdapter.setLiveChild(true);
         mLayoutManager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false);
@@ -238,12 +238,12 @@ public class LiveTeacherTeamFragment extends BaseFragment implements SimpleAdapt
     private static final int DEL = 0;
 
     private void updateUserFollowCount(int action) {
-        if (IGXApplication.isLogin()) {
-            int count = IGXApplication.getUser().getFollow_count();
+        if (MyApplication.isLogin()) {
+            int count = MyApplication.getUser().getFollow_count();
             if (ADD == action) {
-                IGXApplication.getUser().setFollow_count(count + 1);
+                MyApplication.getUser().setFollow_count(count + 1);
             } else {
-                IGXApplication.getUser().setFollow_count(count - 1);
+                MyApplication.getUser().setFollow_count(count - 1);
             }
             EventBus.getDefault().post(new EmptyEvent(Action.inform_me_fragment_sub_follow_count_refresh));
         }

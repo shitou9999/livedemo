@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.DataSet;
 import tv.kuainiu.app.Theme;
@@ -232,15 +232,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     String privateKey = initInfo.getPrivate_key();
                     LogUtils.i(TAG, "privateKey : " + privateKey);
                     if (!TextUtils.isEmpty(privateKey)) {
-                        IGXApplication.setKey(privateKey);
+                        MyApplication.setKey(privateKey);
                     }
-                    if (IGXApplication.isLogin()) {
-                        User user = IGXApplication.getUser();
+                    if (MyApplication.isLogin()) {
+                        User user = MyApplication.getUser();
                         user.setIs_teacher(initInfo.getIs_teacher());
                         user.setLive_count(initInfo.getLive_count());
                         user.setFans_count(initInfo.getFans_count());
                         user.setFollow_count(initInfo.getFollow_count());
-                        IGXApplication.setUser(user);
+                        MyApplication.setUser(user);
                     }
 //                    showCustomRedPoint(initInfo.getCustom_num() > 0);//显示红点
                     PreferencesUtils.putInt(this, Constant.MSG_NUM, initInfo.getMsg_num());

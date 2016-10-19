@@ -27,7 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
@@ -146,7 +146,7 @@ public class HomeFragment extends BaseFragment {
     private void getHotPoint() {
         Map<String, Object> map = new HashMap<>();
         map.put("page", String.valueOf(HotPointPage));
-        map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
+        map.put("user_id", MyApplication.isLogin() ? MyApplication.getUser().getUser_id() : "");
         OKHttpUtils.getInstance().syncGet(getContext(), Api.HOT_POINT + ParamUtil.getParamForGet(map), hot_point, CacheConfig.getCacheConfig());
     }
 
@@ -195,7 +195,7 @@ public class HomeFragment extends BaseFragment {
     class itemClick implements OnItemClickListener {
 
         @Override public void onClick(View v) {
-            if(!IGXApplication.isLogin()){
+            if(!MyApplication.isLogin()){
                 showLoginTip();
                 return;
             }
@@ -204,7 +204,7 @@ public class HomeFragment extends BaseFragment {
                     HotPonit mHotPoint = (HotPonit) v.getTag();
                     mTvFollowButton = (TextView) v;
                     //关注
-                    if (!IGXApplication.isLogin()) {
+                    if (!MyApplication.isLogin()) {
                         new LoginPromptDialog(getActivity()).show();
                         return;
                     } else {
@@ -215,7 +215,7 @@ public class HomeFragment extends BaseFragment {
                     vSupport=v;
                     mHotPoint2 = (HotPonit) v.getTag();
                     mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
-                    if (!IGXApplication.isLogin()) {
+                    if (!MyApplication.isLogin()) {
                         new LoginPromptDialog(getActivity()).show();
                         return;
                     } else {

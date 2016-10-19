@@ -25,7 +25,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
@@ -156,7 +156,7 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
      */
     public void getData() {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", IGXApplication.isLogin() ? IGXApplication.getUser().getUser_id() : "");
+        map.put("user_id", MyApplication.isLogin() ? MyApplication.getUser().getUser_id() : "");
         OKHttpUtils.getInstance().post(context, Api.CUSTOM_LIVE_LIST, ParamUtil.getParam(map), Action.CUSTOM_LIVE_LIST, CacheConfig.getCacheConfig());
     }
 

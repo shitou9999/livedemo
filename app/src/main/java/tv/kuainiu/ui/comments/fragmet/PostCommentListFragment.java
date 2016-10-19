@@ -41,7 +41,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
@@ -255,7 +255,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         mPostCommentListAdapter.setOnRecyclerItemClickListener(new CommentListAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view) {
-//                if (!IGXApplication.isLogin()) {
+//                if (!MyApplication.isLogin()) {
 //                    new LoginPromptDialog(getActivity()).show();
 //                    return;
 //                }
@@ -277,7 +277,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         mPostCommentListAdapter.setOnStart(new CommentListAdapter.OnStart() {
             @Override
             public void onStart(View view) {
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -298,7 +298,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         mTeacherCommentAdapter.setOnRecyclerItemClickListener(new SimpleCommentAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View v) {
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -317,7 +317,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         mTeacherCommentAdapter.setOnStart(new SimpleCommentAdapter.OnStart() {
             @Override
             public void onStart(View v) {
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -368,7 +368,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         switch (v.getId()) {
             case R.id.tv_content:
             case R.id.btn_publish:
-//                if (!IGXApplication.isLogin()) {
+//                if (!MyApplication.isLogin()) {
 //                    new LoginPromptDialog(activity).show();
 //                    return;
 //                }
@@ -381,7 +381,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
 //                    return;
 //                }
 //                LoadingProgressDialog.startProgressDialog(activity);
-//                CommentHttpUtil.addComment(activity, mPostId, mCatId, content, mTempCommentID, IGXApplication.getUser().getNickname(), "0");
+//                CommentHttpUtil.addComment(activity, mPostId, mCatId, content, mTempCommentID, MyApplication.getUser().getNickname(), "0");
                 showCommentPopupWindows(HINT);
                 break;
             default:
@@ -424,7 +424,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!IGXApplication.isLogin()) {
+                if (!MyApplication.isLogin()) {
                     showLoginTip();
                     return;
                 }
@@ -435,7 +435,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                     return;
                 }
                 KeyBoardUtil.hideSoftInput(getActivity(), editComment);
-                String nickname = IGXApplication.getUser().getNickname();
+                String nickname = MyApplication.getUser().getNickname();
                 LoadingProgressDialog.startProgressDialog(getActivity());
 //                TODO: 添加评论
 //                  type          评论类型     必传      1是对文章的评论 2是对动态的评论
@@ -542,7 +542,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
      * @param commentId 评论ID
      */
     private void favourForCommentId(String commentId) {
-        if (IGXApplication.isLogin()) {
+        if (MyApplication.isLogin()) {
             Map<String, String> map = new HashMap<>();
             map.put("id", commentId);
             String param = ParamUtil.getParam(map);

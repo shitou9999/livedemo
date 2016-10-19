@@ -27,7 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
@@ -131,7 +131,7 @@ public class MyLiveHistoryFragment extends BaseFragment {
      */
     public void fetchList() {
         Map<String, String> map = new HashMap<>();
-        map.put("teacher_id", IGXApplication.getUser().getUser_id());
+        map.put("teacher_id", MyApplication.getUser().getUser_id());
         map.put("live_type", "2");
         map.put("page", String.valueOf(page));
         OKHttpUtils.getInstance().post(context, Api.my_live_list, ParamUtil.getParam(map), Action.my_live_list_history);

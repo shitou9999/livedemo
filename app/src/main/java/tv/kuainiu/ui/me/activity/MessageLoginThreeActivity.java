@@ -17,7 +17,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -134,7 +134,7 @@ public class MessageLoginThreeActivity extends BaseActivity implements View.OnCl
                     PreferencesUtils.putString(this, Constant.KEY_PHONE, SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));
                     PreferencesUtils.putString(this, Constant.KEY_AREA, SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getArea()));
 //                    user.setNickname("");
-                    IGXApplication.setUser(user);
+                    MyApplication.setUser(user);
 
                     ToastUtils.showToast(this, "注册成功");
                     startActivity(new Intent(this, MainActivity.class));

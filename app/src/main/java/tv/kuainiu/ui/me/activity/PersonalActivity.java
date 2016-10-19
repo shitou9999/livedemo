@@ -36,7 +36,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -121,10 +121,10 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
 
 
     private void bindDataForView() {
-        if (!IGXApplication.isLogin()) {
+        if (!MyApplication.isLogin()) {
             return;
         }
-        User user = IGXApplication.getUser();
+        User user = MyApplication.getUser();
         initAvatar(user.getAvatar());
         mTvPhoneNumberTop.setText(StringUtils.getX(user.getPhone()));
         mTvPhoneNumber2.setText(StringUtils.getX(user.getPhone()));
@@ -396,7 +396,7 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
             case logout:
                 if (event.getCode() == Constant.SUCCEED) {
                     DebugUtils.showToast(PersonalActivity.this, "注销成功");
-                    IGXApplication.setUser(null);
+                    MyApplication.setUser(null);
                     EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
                     finish();
                 } else {

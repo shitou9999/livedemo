@@ -32,7 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.IGXApplication;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.TeacherHttpUtil;
@@ -136,7 +136,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
             public void onReceive(Context context, Intent intent) {
                 if (Constant.INTENT_ACTION_ACTIVITY_MSG_NUM.equals(intent.getAction())) {
                     int msgNum = PreferencesUtils.getInt(context, Constant.MSG_NUM, 0);
-//                    if (IGXApplication.isLogin() && msgNum > 0 && mTvMessage != null) {
+//                    if (MyApplication.isLogin() && msgNum > 0 && mTvMessage != null) {
 //                        mTvMessage.setVisibility(View.VISIBLE);
 //                        mTvMessage.setText(String.valueOf(msgNum));
 //                    } else if (mTvMessage != null) {
@@ -154,11 +154,11 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     @Override
     public void onStart() {
         super.onStart();
-        mIsLogin = IGXApplication.isLogin();
+        mIsLogin = MyApplication.isLogin();
 
-        if (mIsFirstIntoLogin != IGXApplication.isLogin()) {
+        if (mIsFirstIntoLogin != MyApplication.isLogin()) {
             initHttp();
-            mIsFirstIntoLogin = IGXApplication.isLogin();
+            mIsFirstIntoLogin = MyApplication.isLogin();
         }
     }
 
@@ -178,7 +178,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
      * 初始化参数
      */
     private void initVariate() {
-        mIsFirstIntoLogin = IGXApplication.isLogin();
+        mIsFirstIntoLogin = MyApplication.isLogin();
         mAdapter = new TeacherListAdapter(getActivity());
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
 //        mLayoutManager.setSpanSizeLookup(new MySpanSizeLookup(mLayoutManager, mAdapter));
@@ -242,7 +242,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 //        mFlMessage.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                if (IGXApplication.isLogin()) {
+//                if (MyApplication.isLogin()) {
 //                    Intent intent = new Intent(getActivity(), MessageHomeActivity.class);
 //                    startActivity(intent);
 //                } else {
@@ -273,7 +273,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
      * 获取老师列表
      */
     private void fetchTeacherList() {
-        TeacherHttpUtil.fetchTeacherList(getActivity(), page, IGXApplication.getUser() != null ? IGXApplication.getUser().getUser_id() : "", 10, Action.teacher_fg_fetch_follow_list);
+        TeacherHttpUtil.fetchTeacherList(getActivity(), page, MyApplication.getUser() != null ? MyApplication.getUser().getUser_id() : "", 10, Action.teacher_fg_fetch_follow_list);
     }
 
     // 添加 or 取消关注
@@ -438,24 +438,24 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     private static final int DEL = 0;
 
     private void updateUserSubCount(int action) {
-        if (IGXApplication.isLogin()) {
-            int count = IGXApplication.getUser().getSubscibe_count();
+        if (MyApplication.isLogin()) {
+            int count = MyApplication.getUser().getSubscibe_count();
             if (ADD == action) {
-                IGXApplication.getUser().setSubscibe_count(count + 1);
+                MyApplication.getUser().setSubscibe_count(count + 1);
             } else {
-                IGXApplication.getUser().setSubscibe_count(count - 1);
+                MyApplication.getUser().setSubscibe_count(count - 1);
             }
             EventBus.getDefault().post(new EmptyEvent(Action.inform_me_fragment_sub_follow_count_refresh));
         }
     }
 
     private void updateUserFollowCount(int action) {
-        if (IGXApplication.isLogin()) {
-            int count = IGXApplication.getUser().getFollow_count();
+        if (MyApplication.isLogin()) {
+            int count = MyApplication.getUser().getFollow_count();
             if (ADD == action) {
-                IGXApplication.getUser().setFollow_count(count + 1);
+                MyApplication.getUser().setFollow_count(count + 1);
             } else {
-                IGXApplication.getUser().setFollow_count(count - 1);
+                MyApplication.getUser().setFollow_count(count - 1);
             }
             EventBus.getDefault().post(new EmptyEvent(Action.inform_me_fragment_sub_follow_count_refresh));
         }
