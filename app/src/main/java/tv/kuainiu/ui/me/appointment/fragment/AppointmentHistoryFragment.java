@@ -39,7 +39,7 @@ import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 /**
- * 定制观点
+ * 历史回放
  */
 public class AppointmentHistoryFragment extends BaseFragment {
     private static final String TAG = "AppointmentHistoryFragment";

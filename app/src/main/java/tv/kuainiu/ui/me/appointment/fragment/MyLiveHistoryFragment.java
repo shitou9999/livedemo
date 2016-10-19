@@ -34,7 +34,6 @@ import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.Appointment;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -45,7 +44,7 @@ import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 /**
- * 定制观点
+ * 我的直播回放
  */
 public class MyLiveHistoryFragment extends BaseFragment {
     private static final String TAG = "MyLiveHistoryFragment";
@@ -68,7 +67,6 @@ public class MyLiveHistoryFragment extends BaseFragment {
         return fragment;
     }
 
-    private Appointment mAppointment;
 
     @Nullable
     @Override

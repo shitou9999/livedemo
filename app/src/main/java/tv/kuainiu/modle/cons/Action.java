@@ -195,4 +195,5 @@ public enum Action {
     live_appointment_list,   // 预约
     live_appointment_list_history,   // 预约历史
     my_live_list_history,   // 我的直播历史
+    my_live_list,   // 我的直播
 }

@@ -65,7 +65,7 @@ public class MyLiveActivity extends BaseActivity {
 
     private void initFragment() {
         mBaseFragments.clear();
-        mBaseFragments.add(MyLiveFragment.newInstance());
+        mBaseFragments.add(MyLiveFragment.newInstance(0));
         mBaseFragments.add(MyLiveHistoryFragment.newInstance());
     }
 }
