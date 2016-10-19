@@ -447,8 +447,12 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
 //                content      评论内容    必传
 //                key_id          评论消息列表的key_id
 //                reply_teacher         是否为回复老师的评论
+                String reply_teacher="0";
+                if(MyApplication.isLogin() && MyApplication.getUser().getIs_teacher()!=0){
+                    reply_teacher="1";
+                }
                 CommentHttpUtil.addComment(getActivity(), String.valueOf(mMode), nickname,
-                        mPostId, dynamics_id, isReply ? "1" : "0",mTempCommentID, content, mTempCommentID, "0");
+                        mPostId, dynamics_id, isReply ? "1" : "0",mTempCommentID, content, mTempCommentID, reply_teacher);
 
                 editComment.setHint(HINT);
                 editComment.setText("");

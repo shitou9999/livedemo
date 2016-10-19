@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
-import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
@@ -31,7 +30,6 @@ import tv.kuainiu.utils.DensityUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
-import tv.kuainiu.utils.ToastUtils;
 
 import static tv.kuainiu.R.id.ivIamge;
 
@@ -53,6 +51,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int LIVE = 3;
     private static final int LIVE_ITEM = 4;
     public static final int ZHI_BO = 1;
+    public static final int MY_LIVE = 3;
     public static final int YU_YUE = 2;
     List<Integer> types = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
@@ -193,7 +192,13 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             holder.tvAppointment.setVisibility(View.GONE);
         } else {
-            holder.tvAppointment.setVisibility(View.VISIBLE);
+            if(type==MY_LIVE){
+                holder.tvAppointment.setVisibility(View.GONE);
+                holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
+            }else {
+                holder.tvAppointment.setVisibility(View.VISIBLE);
+                holder.mTvLiveing.setText("开始时间");
+            }
             holder.tvAppointment.setTag(liveItem);
             holder.tvAppointment.setTag(R.id.tvAppointment,position);
             holder.tvAppointment.setSelected(liveItem.getIs_appointment() != 0);
@@ -207,8 +212,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             });
             holder.ivLiveIng.setVisibility(View.GONE);
-            holder.mTvLiveing.setText("开始时间");
-            holder.mTvLiveingNumber.setText(DateUtil.formatDate(liveItem.getStart_date()));
+
+            holder.mTvLiveingNumber.setText(DateUtil.formatDate(liveItem.getStart_date(), "yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm"));
         }
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(liveItem.getAnchor()));
         holder.mTvTeacherIntroduce.setText(StringUtils.replaceNullToEmpty(liveItem.getTeacher_info().getSlogan()));
@@ -224,22 +229,34 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void clickPlayLive(LiveInfo liveItem) {
-        if (liveItem.getLive_status() == Constans.LIVE_ING) {
-            LiveParameter liveParameter = new LiveParameter();
-            liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-            liveParameter.setIsFollow(liveItem.getIs_follow());
-            liveParameter.setIsSupport(liveItem.getIs_supported());
-            liveParameter.setLiveId(liveItem.getId());
-            liveParameter.setLiveTitle(liveItem.getTitle());
-            liveParameter.setOnLineNumber(liveItem.getOnline_num());
-            liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
-            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-            liveParameter.setSupportNumber(liveItem.getSupport());
-            liveParameter.setTeacherId(liveItem.getTeacher_id());
-            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
-        } else {
-            ToastUtils.showToast(mContext, liveItem.getLive_msg());
-        }
+        LiveParameter liveParameter = new LiveParameter();
+        liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
+        liveParameter.setIsFollow(liveItem.getIs_follow());
+        liveParameter.setIsSupport(liveItem.getIs_supported());
+        liveParameter.setLiveId(liveItem.getId());
+        liveParameter.setLiveTitle(liveItem.getTitle());
+        liveParameter.setOnLineNumber(liveItem.getOnline_num());
+        liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
+        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+        liveParameter.setSupportNumber(liveItem.getSupport());
+        liveParameter.setTeacherId(liveItem.getTeacher_id());
+        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+//        if (liveItem.getLive_status() == Constans.LIVE_ING) {
+//            LiveParameter liveParameter = new LiveParameter();
+//            liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
+//            liveParameter.setIsFollow(liveItem.getIs_follow());
+//            liveParameter.setIsSupport(liveItem.getIs_supported());
+//            liveParameter.setLiveId(liveItem.getId());
+//            liveParameter.setLiveTitle(liveItem.getTitle());
+//            liveParameter.setOnLineNumber(liveItem.getOnline_num());
+//            liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
+//            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+//            liveParameter.setSupportNumber(liveItem.getSupport());
+//            liveParameter.setTeacherId(liveItem.getTeacher_id());
+//            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+//        } else {
+//            ToastUtils.showToast(mContext, liveItem.getLive_msg());
+//        }
     }
 
     /**

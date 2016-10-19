@@ -1,9 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--直播布局-->
+<?xml version="1.0" encoding="utf-8"?><!--直播布局-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rlCountdown"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorGrey333333"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="直播倒计时："
+                android:textColor="@color/white_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorRed500"
+                android:textSize="18sp"
+                tools:text="00:09:58" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
@@ -15,7 +49,6 @@
             android:id="@+id/rvReadingTap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#f5f5f5"
-        />
+            android:background="#f5f5f5" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

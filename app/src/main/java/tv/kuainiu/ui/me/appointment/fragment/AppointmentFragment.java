@@ -80,6 +80,7 @@ public class AppointmentFragment extends BaseFragment {
             @Override
             public void delete(SwipeLayout swipeLayout, int position, Appointment mAppointment2) {
                 mAppointment = mAppointment2;
+                swipeLayout.close(true);
                 AppointmentRequestUtil.deleteAppointment(context, mAppointment.getLive_id(), Action.del_live_appointment);
             }
         });

@@ -272,7 +272,7 @@ public class CollectActivity extends BaseActivity {
                     deleteListCollect.clear();
                     deleteListCollect.add(newsItem);
                     delCollect(deleteListCollect);
-                    swipeLayout.close(true, true);
+                    swipeLayout.close(true);
                 }
 
                 @Override

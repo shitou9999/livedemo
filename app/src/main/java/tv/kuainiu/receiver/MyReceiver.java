@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import tv.kuainiu.event.MessageEvent;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -18,6 +18,17 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
+import tv.kuainiu.event.MessageEvent;
+import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.cons.MessageType;
+import tv.kuainiu.modle.push.ActivityMessage;
+import tv.kuainiu.modle.push.NewsMessage;
+import tv.kuainiu.modle.push.SystemMessage;
+import tv.kuainiu.modle.push.VideoMessage;
+import tv.kuainiu.ui.MainActivity;
+import tv.kuainiu.ui.articles.activity.PostZoneActivity;
+import tv.kuainiu.ui.message.activity.MessageHomeActivity;
+import tv.kuainiu.ui.video.VideoActivity;
 
 /**
  * 自定义接收器
@@ -116,43 +127,43 @@ public class MyReceiver extends BroadcastReceiver {
                 EventBus.getDefault().post(new MessageEvent(alert, extras));
             }
         } else {
-//            try {
-//                Intent i = new Intent();
-//                JSONObject jsonObject = new JSONObject(extras);
-//                if (jsonObject.has("type")) {
-//                    if (MessageType.OffLineType.type().equals(jsonObject.getString("type"))) {//离线消息
-//                        if (!isRunningForeground(context)) {
-//                            i.setClass(context, MainTabActivity.class);
-//                        } else {
-//                            return;
-//                        }
-//                    } else if (MessageType.ActivityType.type().equals(jsonObject.getString("type"))) {//活动消息
-//                        ActivityMessage systemMessage = new Gson().fromJson(extras, ActivityMessage.class);
-//                        Log.d(TAG, "活动消息=" + extras);
-//                        return;
-//                    } else if (MessageType.SystemType.type().equals(jsonObject.getString("type"))) {//系统消息
-//                        SystemMessage systemMessage = new Gson().fromJson(extras, SystemMessage.class);
-//                        i.setClass(context, MessageHomeActivity.class);
-//                    } else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
-//                        VideoMessage videoMessage = new Gson().fromJson(extras, VideoMessage.class);
-//                        i.setClass(context, PlayActivity.class);
-//                        i.putExtra(Constant.KEY_ID, String.valueOf(videoMessage.getId()));
-//                        i.putExtra(Constant.KEY_DAOSHI, String.valueOf(videoMessage.getDaoshi()));
-//                        i.putExtra(Constant.KEY_CATID, videoMessage.getCatid());
-//                        i.putExtra(Constant.KEY_VIDEO_ID, videoMessage.getUpvideoid());
-//                    } else if (MessageType.NewsType.type().equals(jsonObject.getString("type"))) {//文章消息
-//                        NewsMessage newsMessage = new Gson().fromJson(extras, NewsMessage.class);
-//                        i.setClass(context, PostZoneActivity.class);
-//                        i.putExtra(Constant.KEY_ID, String.valueOf(newsMessage.getDaoshi()));
-//                    }
-//                }
-//                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                context.startActivity(i);
+            try {
+                Intent i = new Intent();
+                JSONObject jsonObject = new JSONObject(extras);
+                if (jsonObject.has("type")) {
+                    if (MessageType.OffLineType.type().equals(jsonObject.getString("type"))) {//离线消息
+                        if (!isRunningForeground(context)) {
+                            i.setClass(context, MainActivity.class);
+                        } else {
+                            return;
+                        }
+                    } else if (MessageType.ActivityType.type().equals(jsonObject.getString("type"))) {//活动消息
+                        ActivityMessage systemMessage = new Gson().fromJson(extras, ActivityMessage.class);
+                        Log.d(TAG, "活动消息=" + extras);
+                        return;
+                    } else if (MessageType.SystemType.type().equals(jsonObject.getString("type"))) {//系统消息
+                        SystemMessage systemMessage = new Gson().fromJson(extras, SystemMessage.class);
+                        i.setClass(context, MessageHomeActivity.class);
+                    } else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
+                        VideoMessage videoMessage = new Gson().fromJson(extras, VideoMessage.class);
+                        i.setClass(context, VideoActivity.class);
+                        i.putExtra(VideoActivity.NEWS_ID, String.valueOf(videoMessage.getId()));
+                        i.putExtra(VideoActivity.VIDEO_NAME, "");
+                        i.putExtra(VideoActivity.CAT_ID, videoMessage.getCatid());
+                        i.putExtra(VideoActivity.VIDEO_ID, videoMessage.getUpvideoid());
+                    } else if (MessageType.NewsType.type().equals(jsonObject.getString("type"))) {//文章消息
+                        NewsMessage newsMessage = new Gson().fromJson(extras, NewsMessage.class);
+                        i.setClass(context, PostZoneActivity.class);
+                        i.putExtra(Constant.KEY_ID, String.valueOf(newsMessage.getDaoshi()));
+                    }
+                }
+                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(i);
 
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }

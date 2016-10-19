@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <LinearLayout
         android:id="@+id/ll_delete"
@@ -119,9 +119,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_below="@+id/rl_avatar"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/rl_avatar"
             android:background="@color/colorGrey200"
             android:orientation="horizontal">
 
@@ -132,8 +132,8 @@
                 android:layout_gravity="center"
                 android:background="@color/colorRed500"
                 android:gravity="center"
-                tools:text="直播中"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"
+                tools:text="直播中" />
 
             <TextView
                 android:id="@+id/tvLiveDescription"
@@ -170,18 +170,18 @@
                     android:id="@+id/tvNumber"
                     android:layout_width="70dp"
                     android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal"
                     tools:text="155225万" />
 
                 <TextView
                     android:id="@+id/tvState"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal"
                     android:text="已预约" />
             </LinearLayout>
         </LinearLayout>

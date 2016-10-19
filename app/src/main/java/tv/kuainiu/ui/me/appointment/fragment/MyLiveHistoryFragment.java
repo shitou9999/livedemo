@@ -130,11 +130,12 @@ public class MyLiveHistoryFragment extends BaseFragment {
      * 预约
      */
     public void fetchList() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", MyApplication.getUser().getUser_id());
         map.put("teacher_id", MyApplication.getUser().getUser_id());
         map.put("live_type", "2");
         map.put("page", String.valueOf(page));
-        OKHttpUtils.getInstance().post(context, Api.my_live_list, ParamUtil.getParam(map), Action.my_live_list_history);
+        OKHttpUtils.getInstance().syncGet(context, Api.my_live_list+ParamUtil.getParamForGet(map), Action.my_live_list_history);
     }
 
 

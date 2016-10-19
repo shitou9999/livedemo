@@ -9,12 +9,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import tv.kuainiu.R;
 import tv.kuainiu.command.dao.LiveSubscribeDao;
-import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.ui.MainActivity;
 
 /**
@@ -62,6 +58,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             new LiveSubscribeDao(context).delete(id);
         }
 
-        EventBus.getDefault().post(new HttpEvent(Action.switch_live_fragment, 0));
+//        EventBus.getDefault().post(new HttpEvent(Action.switch_live_fragment, 0));
     }
 }

@@ -28,8 +28,10 @@ import tv.kuainiu.widget.MyHeader;
  */
 public class LiveMainFragment extends BaseFragment {
     private static final String TAG = "FriendsMainFragment";
-    @BindView(R.id.rl_fragment_live_main_top_actionBar) HeaderTabView mHeaderTabView;
-    @BindView(R.id.vp_fragment_live_main) ViewPager mViewPager;
+    @BindView(R.id.rl_fragment_live_main_top_actionBar)
+    HeaderTabView mHeaderTabView;
+    @BindView(R.id.vp_fragment_live_main)
+    ViewPager mViewPager;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
     List<MyHeader> list = new ArrayList<>();
@@ -41,24 +43,30 @@ public class LiveMainFragment extends BaseFragment {
         return fragment;
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_live_main, container, false);
-            ButterKnife.bind(this, view);
-            initView();
-            initData();
-            initListener();
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
-        }
-
+//        if (view == null) {
+        view = inflater.inflate(R.layout.fragment_live_main, container, false);
+        ButterKnife.bind(this, view);
+        initView();
+        initData();
+        initListener();
+//        }
+//        ViewGroup viewgroup = (ViewGroup) view.getParent();
+//        if (viewgroup != null) {
+//            viewgroup.removeView(view);
+//        }
+//        view = inflater.inflate(R.layout.fragment_live_main, container, false);
+//        ButterKnife.bind(this, view);
+//        initView();
+//        initData();
+//        initListener();
         return view;
     }
 
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
         super.onStart();
     }
 
@@ -87,11 +95,13 @@ public class LiveMainFragment extends BaseFragment {
                 Log.d(TAG, "onPageScrolled position : " + position);
             }
 
-            @Override public void onPageSelected(int position) {
+            @Override
+            public void onPageSelected(int position) {
                 mHeaderTabView.setChecked(position);
             }
 
-            @Override public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -99,7 +109,8 @@ public class LiveMainFragment extends BaseFragment {
 
     private void initListener() {
         mHeaderTabView.setCheckListen(new HeaderTabView.ICheckListen() {
-            @Override public void checked(int index) {
+            @Override
+            public void checked(int index) {
                 switchFragment(index);
             }
         });

@@ -3,7 +3,6 @@ package tv.kuainiu.ui.me.appointment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +15,13 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.fragment.TabMajorFragment;
 import tv.kuainiu.ui.me.appointment.fragment.AppointmentFragment;
 import tv.kuainiu.ui.me.appointment.fragment.AppointmentHistoryFragment;
+import tv.kuainiu.widget.NoSlideViewPager;
 
 public class AppointmentActivity extends BaseActivity {
     private static final String[] titles = {"即将直播", "历史回放"};
 
     TabLayout mTabFragmentMajor;
-    ViewPager mNvpFragmentMajor;
+    NoSlideViewPager mNvpFragmentMajor;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class AppointmentActivity extends BaseActivity {
         setContentView(R.layout.activity_appointment);
         ButterKnife.bind(this);
         mTabFragmentMajor= (TabLayout) findViewById(R.id.tab_fragment_major);
-        mNvpFragmentMajor= (ViewPager) findViewById(R.id.nvp_fragment_major);
+        mNvpFragmentMajor= (NoSlideViewPager) findViewById(R.id.nvp_fragment_major);
         initFragment();
 
         mNvpFragmentMajor.setAdapter(new TabMajorFragment.SimpleViewPager(getSupportFragmentManager(), mBaseFragments, titles));

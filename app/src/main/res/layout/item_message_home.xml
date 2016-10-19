@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_custom_tab"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:id="@+id/iv_program_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_program_image"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_toRightOf="@id/iv_program_image"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:textColor="@color/colorGrey900"
+        android:layout_marginRight="10dp"
+        android:text="message title" />
+
+    <TextView
+        android:id="@+id/tv_dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/tv_title"
+        android:layout_below="@id/tv_title"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:textColor="@color/colorGrey600"
+        android:text="2016-03-07 15:09:22" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_dateTime"
+        android:layout_alignLeft="@+id/tv_title"
+        android:layout_toLeftOf="@id/tv_dateTime"
+        android:textSize="12sp"
+        android:textColor="@color/colorGrey600"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="message title" />
+    <TextView
+        android:id="@+id/tv_message_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignBaseline="@id/tv_title"
+        android:textColor="@color/white_color"
+        android:textSize="9dp"
+        android:background="@drawable/bg_yellow_circle"/>
+</RelativeLayout>

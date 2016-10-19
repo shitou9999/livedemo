@@ -1,10 +1,15 @@
 package tv.kuainiu.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 
@@ -16,21 +21,33 @@ import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
 import tv.kuainiu.MyApplication;
+import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.event.MessageEvent;
 import tv.kuainiu.event.UserEvent;
 import tv.kuainiu.modle.InitInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.cons.MessageType;
+import tv.kuainiu.modle.push.ActivityMessage;
+import tv.kuainiu.modle.push.NewsMessage;
+import tv.kuainiu.modle.push.SystemMessage;
+import tv.kuainiu.modle.push.VideoMessage;
 import tv.kuainiu.ui.MainActivity;
+import tv.kuainiu.ui.articles.activity.PostZoneActivity;
+import tv.kuainiu.ui.message.activity.MessageHomeActivity;
+import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.DialogUtils;
+import tv.kuainiu.utils.ExampleUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
+import tv.kuainiu.utils.StringUtils;
 
 /**
  * Created by jack on 2016/9/7.
@@ -211,4 +228,77 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MessageEvent event) {
+        String alert = event.getAlert();
+        String extras = event.getExtras();
+        Log.i("JPush", "onEventMainThread——base");
+        if (ExampleUtil.isEmpty(extras)) {
+            return;
+        }
+        boolean isNeedAlert = false;
+        try {
+            final Intent i = new Intent();
+            JSONObject jsonObject = new JSONObject(extras);
+            if (MessageType.DynamicMessageType.type().equals(jsonObject.getString("type"))) {//动态消息消息
+                LogUtils.i("JPush", "动态baseActivity=");
+                EventBus.getDefault().post(new HttpEvent(Action.DynamicMessage, Constant.SUCCEED));
+            } else if (MessageType.OffLineType.type().equals(jsonObject.getString("type"))) {//离线消息
+                offLine(this);
+                LogUtils.i("JPush", "离线baseActivity=");
+            } else if (MessageType.ActivityType.type().equals(jsonObject.getString("type"))) {//活动消息
+                ActivityMessage systemMessage = new Gson().fromJson(extras, ActivityMessage.class);
+                LogUtils.i("JPush", "活动消息baseActivity=" + systemMessage.getTitle());
+            } else if (jsonObject.has("type")) {
+                if (MessageType.SystemType.type().equals(jsonObject.getString("type"))) {//系统消息
+                    SystemMessage systemMessage = new Gson().fromJson(extras, SystemMessage.class);
+                    isNeedAlert = systemMessage.isNeedAlert();
+                    i.setClass(this, MessageHomeActivity.class);
+                } else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
+                    VideoMessage videoMessage = new Gson().fromJson(extras, VideoMessage.class);
+                    isNeedAlert = videoMessage.isNeedAlert();
+                    i.setClass(this, VideoActivity.class);
+                    i.putExtra(VideoActivity.NEWS_ID, String.valueOf(videoMessage.getId()));
+                    i.putExtra(VideoActivity.VIDEO_NAME, "");
+                    i.putExtra(VideoActivity.CAT_ID, videoMessage.getCatid());
+                    i.putExtra(VideoActivity.VIDEO_ID, videoMessage.getUpvideoid());
+                } else if (MessageType.NewsType.type().equals(jsonObject.getString("type"))) {//文章消息
+                    NewsMessage newsMessage = new Gson().fromJson(extras, NewsMessage.class);
+                    isNeedAlert = newsMessage.isNeedAlert();
+                    i.setClass(this, PostZoneActivity.class);
+                    i.putExtra(Constant.KEY_ID, String.valueOf(newsMessage.getDaoshi()));
+                }
+            }
+            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            if (isNeedAlert && !TextUtils.isEmpty(alert)) {
+                final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
+                dialogBuilder.withTitle(null).withMessage(null).withDialogColor(getResources().getColor(R.color.white_color)).isCancelableOnTouchOutside(false);
+                dialogBuilder.setCustomView(R.layout.dialog_push_message, this);
+                TextView pushMessageContent = (TextView) dialogBuilder.findViewById(R.id.tv_push_message_content);
+                TextView pushMessageCancel = (TextView) dialogBuilder.findViewById(R.id.tv_pushMessageCancel);
+                TextView pushMessageRead = (TextView) dialogBuilder.findViewById(R.id.tv_pushMessageRead);
+                pushMessageContent.setText(StringUtils.replaceNullToEmpty(alert));
+                pushMessageCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                });
+                pushMessageRead.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        JPushInterface.clearAllNotifications(BaseActivity.this);
+                        dialogBuilder.dismiss();
+                        startActivity(i);
+                    }
+                });
+                dialogBuilder.show();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

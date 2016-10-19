@@ -227,10 +227,18 @@ public class MeFragment extends BaseFragment {
             case R.id.rl_institution:
                 break;
             case R.id.rl_live:
+                if (!MyApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
                 Intent intentMyLiveActivity = new Intent(getActivity(), MyLiveActivity.class);
                 startActivity(intentMyLiveActivity);
                 break;
             case R.id.rl_appointment:
+                if (!MyApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
                 Intent intentAppointmentActivity = new Intent(getActivity(), AppointmentActivity.class);
                 startActivity(intentAppointmentActivity);
                 break;
@@ -385,8 +393,10 @@ public class MeFragment extends BaseFragment {
             rlLogOut.setVisibility(View.GONE);
             if (user.getIs_teacher() == 0) {
                 mBtnPublish.setVisibility(View.INVISIBLE);
+                mRlLive.setVisibility(View.GONE);
             } else {
                 mBtnPublish.setVisibility(View.VISIBLE);
+                mRlLive.setVisibility(View.VISIBLE);
             }
         }
         setFollowAndSubText(user);

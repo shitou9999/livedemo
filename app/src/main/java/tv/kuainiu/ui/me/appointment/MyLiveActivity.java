@@ -3,7 +3,6 @@ package tv.kuainiu.ui.me.appointment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +15,14 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.fragment.TabMajorFragment;
 import tv.kuainiu.ui.me.appointment.fragment.MyLiveFragment;
 import tv.kuainiu.ui.me.appointment.fragment.MyLiveHistoryFragment;
+import tv.kuainiu.widget.NoSlideViewPager;
 import tv.kuainiu.widget.TitleBarView;
 
 public class MyLiveActivity extends BaseActivity {
     private static final String[] titles = {"直播计划", "历史回放"};
 
     TabLayout mTabFragmentMajor;
-    ViewPager mNvpFragmentMajor;
+    NoSlideViewPager mNvpFragmentMajor;
     TitleBarView tbvTitle;
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
@@ -35,7 +35,7 @@ public class MyLiveActivity extends BaseActivity {
         tbvTitle= (TitleBarView) findViewById(R.id.tbv_title);
         tbvTitle.setText("我的直播");
         mTabFragmentMajor= (TabLayout) findViewById(R.id.tab_fragment_major);
-        mNvpFragmentMajor= (ViewPager) findViewById(R.id.nvp_fragment_major);
+        mNvpFragmentMajor= (NoSlideViewPager) findViewById(R.id.nvp_fragment_major);
         initFragment();
 
         mNvpFragmentMajor.setAdapter(new TabMajorFragment.SimpleViewPager(getSupportFragmentManager(), mBaseFragments, titles));

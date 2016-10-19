@@ -277,7 +277,7 @@ public class PublishVideoActivity extends BaseActivity {
         anchor = MyApplication.getUser().getNickname();
         teacher_id = MyApplication.getUser().getUser_id();
 
-        OKHttpUtils.getInstance().syncGet(this, Api.get_cats, Action.get_cats);
+        OKHttpUtils.getInstance().syncGet(this, Api.get_cats+ParamUtil.getParamForGet("class","live"), Action.get_cats);
     }
 
     private void dataBind() {

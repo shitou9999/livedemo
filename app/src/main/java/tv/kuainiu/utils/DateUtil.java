@@ -208,7 +208,28 @@ public class DateUtil {
         try {
             firstDate = df.parse(firstString);
             secondDate = df.parse(secondString);
-            minute = (int) ((secondDate.getTime() - firstDate.getTime()) / (60 * 1000));
+            minute = (int) ((secondDate.getTime() - firstDate.getTime()) / 6000);
+        } catch (Exception e) {
+            minute = 0;
+        }
+        return minute;
+    }
+    /**
+     * 计算两个日期相隔的秒数
+     *
+     * @param firstString  第一个时间
+     * @param secondString 第二个时间
+     * @return
+     */
+    public static int secondBetweenTwoDate(String firstString, String secondString) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Date firstDate = null;
+        Date secondDate = null;
+        int minute = 0;
+        try {
+            firstDate = df.parse(firstString);
+            secondDate = df.parse(secondString);
+            minute = (int) ((secondDate.getTime() - firstDate.getTime()) / 1000);
         } catch (Exception e) {
             minute = 0;
         }

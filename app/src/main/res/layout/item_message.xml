@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_custom_tab"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="message title"/>
+
+    <TextView
+        android:id="@+id/tv_dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_title"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:text="2016-03-07 15:09:22"
+        />
+
+</RelativeLayout>

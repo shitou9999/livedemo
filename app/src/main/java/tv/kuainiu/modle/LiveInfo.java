@@ -54,7 +54,8 @@ public class LiveInfo {
     private String status;
     private String permission;
     private String avatar;
-
+    private long start_datetime;
+    private long end_datetime;
     /**
      * avatar : http://kuainiu.oss-cn-shanghai.aliyuncs.com/uploadfile/avatar/zengguoliang.jpg
      * id : 6
@@ -303,5 +304,21 @@ public class LiveInfo {
 
     public void setAppointment_count(int appointment_count) {
         this.appointment_count = appointment_count;
+    }
+
+    public long getStart_datetime() {
+        return start_datetime;
+    }
+
+    public void setStart_datetime(long start_datetime) {
+        this.start_datetime = start_datetime;
+    }
+
+    public long getEnd_datetime() {
+        return end_datetime;
+    }
+
+    public void setEnd_datetime(long end_datetime) {
+        this.end_datetime = end_datetime;
     }
 }

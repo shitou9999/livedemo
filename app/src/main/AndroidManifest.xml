@@ -214,9 +214,30 @@
             android:name=".ui.publishing.pick.PickArticleActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!-- 选择时间 -->
+        <!-- 反馈 -->
         <activity
             android:name=".ui.me.activity.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <!-- 反馈 -->
+        <activity
+            android:name=".ui.message.activity.MessageActivityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.message.activity.MessageActivityCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.message.activity.MessageCommentActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.message.activity.MessageDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.message.activity.MessageHomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.message.activity.MessageSystemActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.mob.tools.MobUIShell"

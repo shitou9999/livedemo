@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.Appointment;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.utils.ImageDisplayUtil;
@@ -65,13 +66,27 @@ public class AppointmentHistoryFragmentAdapter extends BaseSwipeAdapter {
         TextView tvState = (TextView) convertView.findViewById(R.id.tvState);
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-
         final Appointment itemData = getItem(position);
         ImageDisplayUtil.displayImage(context, ci_avatar, StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getAvatar()), R.mipmap.default_avatar);
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getNickname()));
         tvTheme.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getSlogan()));
 //        tv_live_time.setText(StringUtils.replaceNullToEmpty(itemData.getStart_date()));
         tvLiveState.setText(StringUtils.replaceNullToEmpty(itemData.getLive_msg()));
+        switch (itemData.getLive_status()) {
+            case Constans.LIVE_END://直播结束
+                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey900));
+                break;
+
+            case Constans.LIVE_ING://直播中
+                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorRed500));
+                break;
+            case Constans.LiVE_UN_START://直播未开始
+                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey450));
+                break;
+            default:
+                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey900));
+                break;
+        }
         tvLiveDescription.setText(StringUtils.replaceNullToEmpty(itemData.getTitle()));
         tvNumber.setText(String.format(Locale.CHINA, "%s人", StringUtils.getDecimal(itemData.getSubscribe_num(), Constant.TEN_THOUSAND, "万", "")));
         tvState.setText("已观看");

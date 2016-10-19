@@ -312,6 +312,7 @@ public class PublishVoiceActivity extends BaseActivity {
                     listTeacherZoneDynamicsInfo.remove(newsItem);
                     deleteSoundFileUnSend();
                     voice="";
+                    swipeLayout.close(true);
                     mPublicVoiceAdapter.notifyDataSetChanged();
                 }
             });
