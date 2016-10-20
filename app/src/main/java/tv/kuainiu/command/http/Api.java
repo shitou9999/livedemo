@@ -144,6 +144,7 @@ public class Api {
 
     //    1.16 文章分类列表   news/get_cats
     public static final String get_cats = "news/get_cats";
+    public static final String live_permissions = "news/live_permission_list";
     /**
      * 1.2 发布文字动态   v1/publish/add_dynamics
      * <p>

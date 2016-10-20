@@ -88,7 +88,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"/>
-
+            <tv.kuainiu.widget.ExpandGridView
+                android:id="@+id/exgv_appraisal_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnWidth="100dp"
+                android:horizontalSpacing="5dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="6"/>
             <!-- Nil -->
 
             <!--<ImageView-->

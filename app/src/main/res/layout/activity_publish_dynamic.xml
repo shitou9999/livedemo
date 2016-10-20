@@ -40,7 +40,16 @@
                 app:horizontalSpacing="@dimen/tag_horizontal_spacing"
                 app:orientation="horizontal"
                 app:verticalSpacing="@dimen/tag_vertical_spacing" />
-
+            <tv.kuainiu.widget.ExpandGridView
+                android:id="@+id/exgv_appraisal_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnWidth="100dp"
+                android:horizontalSpacing="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="6"/>
             <RelativeLayout
                 android:id="@+id/rlRelatedArticles"
                 android:layout_width="match_parent"

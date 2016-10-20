@@ -3,6 +3,7 @@ package tv.kuainiu.ui.publishing.dynamic;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -31,10 +35,16 @@ import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.activity.SelectPictureActivity;
+import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.ui.publishing.pick.PickArticleActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
+import tv.kuainiu.utils.FileUtils;
+import tv.kuainiu.utils.LoadingProgressDialog;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.ExpandListView;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.tagview.Tag;
@@ -58,13 +68,15 @@ public class PublishDynamicActivity extends BaseActivity {
     TagListView tagListView;
     @BindView(R.id.elv_friends_post_group)
     ExpandListView elv_friends_post_group;
+    @BindView(R.id.exgv_appraisal_pic)
+    ExpandGridView exgv_appraisal_pic;
     @BindView(R.id.rlRelatedArticles)
     RelativeLayout rlRelatedArticles;
     @BindView(R.id.et_content)
     EditText etContent;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
-
+    private ArrayList<String> stList;// 用户上传图片的URL集合
     PublicDynamicAdapter mPublicDynamicAdapter;
     List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
 
@@ -75,6 +87,7 @@ public class PublishDynamicActivity extends BaseActivity {
     private String tag = "";//
     private String tag_new = "";//
     private boolean isSubmiting = false;
+    private UpLoadImageAdapter mUpLoadImageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +98,14 @@ public class PublishDynamicActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         initView();
+
+        getImageList(null);// 占位符
+        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1);
+        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
     }
+
+    int j = 0;
+    int i = 0;
 
     private void initView() {
         tagListView.setDeleteMode(true);
@@ -105,10 +125,25 @@ public class PublishDynamicActivity extends BaseActivity {
 
             @Override
             public void rightClick() {
+                LoadingProgressDialog.startProgressDialog("正在发布", PublishDynamicActivity.this);
                 if (!dataVerify()) {
+                    LoadingProgressDialog.stopProgressDialog();
                     return;
                 }
-                submitData();
+
+                j = stList == null ? 0 : stList.size();
+                LogUtils.e(TAG, "j0=" + j);
+                if (j > 1) {
+
+                    if (stList.contains(Constant.UPLOADIMAGE)) {
+                        j--;
+                        LogUtils.e(TAG, "j1=" + j);
+                    }
+                    i = 0;
+                    press();
+                } else {
+                    submitData();
+                }
             }
 
             @Override
@@ -116,6 +151,49 @@ public class PublishDynamicActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void press() {
+        String path = stList.get(i).replace("file://", "");
+        LogUtils.e(TAG, "path=" + path);
+        Luban.get(PublishDynamicActivity.this)
+                .load(new File(path))                     //传人要压缩的图片
+                .putGear(1)      //设定压缩档次，默认三挡
+                .setCompressListener(new OnCompressListener() { //设置回调
+
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        LogUtils.e(TAG, "file=" + file.getPath());
+                        byte[] mByte = FileUtils.fileToBytes(file);
+                        if (mByte != null) {
+                            thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
+                        } else {
+                            LogUtils.e(TAG, "图片压转码异常");
+                        }
+                        i++;
+                        if (i == j) {
+                            submitData();
+                        } else {
+                            press();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 当压缩过去出现问题时调用
+                        LogUtils.e(TAG, "图片压缩错误", e);
+                        i++;
+                        if (i == j) {
+                            submitData();
+                        } else {
+                            press();
+                        }
+                    }
+                }).launch();    //启动压缩
     }
 
     /**
@@ -161,7 +239,11 @@ public class PublishDynamicActivity extends BaseActivity {
     }
 
     private void submitData() {
-
+        if (!TextUtils.isEmpty(thumb)) {
+            thumb = thumb.substring(0, thumb.length() - 4);
+            LogUtils.e(TAG, "thumb=" + thumb);
+            LogUtils.e(TAG, "thumb.length=" + thumb.length());
+        }
         Map<String, String> map = new HashMap<>();
         map.put("news_id", news_id);
         map.put("description", description);
@@ -171,7 +253,7 @@ public class PublishDynamicActivity extends BaseActivity {
         map.put("tag_new", tag_new);
         if (!isSubmiting) {
             isSubmiting = true;
-            OKHttpUtils.getInstance().post(this, Api.add_dynamics, ParamUtil.getParam(map), Action.teacher_news_tags.add_dynamics);
+            OKHttpUtils.getInstance().post(this, Api.add_dynamics, ParamUtil.getParam(map), Action.add_dynamics);
         }
 
     }
@@ -194,22 +276,66 @@ public class PublishDynamicActivity extends BaseActivity {
 
     }
 
+    /**
+     * 获取上传图片数据
+     *
+     * @param list
+     * @return
+     */
+    private ArrayList<String> getImageList(List<String> list) {
+        stList = new ArrayList<String>();
+        if (list != null && list.size() > 0) {
+            stList.addAll(list);
+        }
+        // 占位符
+        if (Constant.UPLOAD_IMAGE_MAX_NUMBER > stList.size()) {
+            stList.add(Constant.UPLOADIMAGE);
+        }
+
+        return stList;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUSET_TAG_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
-                mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
-                dataBind();
-            }
-        } else if (requestCode == REQUSET_ARTICLE_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                TeacherZoneDynamicsInfo newsItem = (TeacherZoneDynamicsInfo) data.getSerializableExtra(PickArticleActivity.NEWS_ITEM);
-                listTeacherZoneDynamicsInfo.clear();
-                listTeacherZoneDynamicsInfo.add(newsItem);
-                dataArticleBind();
-            }
+        switch (requestCode) {
+            case REQUSET_TAG_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
+                        mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
+                        dataBind();
+                    }
+                }
+                break;
+            case REQUSET_ARTICLE_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        TeacherZoneDynamicsInfo newsItem = (TeacherZoneDynamicsInfo) data.getSerializableExtra(PickArticleActivity.NEWS_ITEM);
+                        listTeacherZoneDynamicsInfo.clear();
+                        listTeacherZoneDynamicsInfo.add(newsItem);
+                        dataArticleBind();
+                    }
+                }
+                break;
+            case Constant.SELECT_PICTURE:
+                if (resultCode == RESULT_OK && data != null) {
+                    if (data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE) != null) {
+                        stList = getImageList(data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE));
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1);
+                        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                    }
+                }
+                break;
+            case Constant.PICTURE_PREVIEW:// 图片预览
+                if (resultCode == RESULT_OK && data != null) {
+                    if (data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY) != null) {
+                        stList = getImageList(data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY));
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1);
+                        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                    }
+                }
+                break;
         }
     }
 
@@ -233,6 +359,7 @@ public class PublishDynamicActivity extends BaseActivity {
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case add_dynamics:
+                LoadingProgressDialog.stopProgressDialog();
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {
                     ToastUtils.showToast(this, "发布动态成功");

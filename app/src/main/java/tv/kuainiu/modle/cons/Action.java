@@ -185,6 +185,7 @@ public enum Action {
     teacher_news_tags,   // 1.17 老师标签列表   v1/news/teacher_news_tags
     quote_list,   // 1.15 发布动态时引用的文章列表   news/quote_list
     get_cats,   //  1.16 文章分类列表   news/get_cats
+    live_permissions,   // 1.2.3 直播权限列表
     add_dynamics,   // 1.2 发布文字动态   v1/publish/add_dynamics
     add_news_article,   // 发布文章
     add_news_live,   // 发布视频

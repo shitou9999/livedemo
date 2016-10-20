@@ -8,6 +8,8 @@ public enum MessageType {
     NewsType("2"),//文章信息
     SystemType("3"),//系统信息
     ActivityType("4"),// 活动消息
+    AppointmentLiveType("5"),// 预约直播消息
+    Live("6"),// 直播消息
     DynamicMessageType("8"),// 动态消息
     OffLineType("9");//离线信息
 

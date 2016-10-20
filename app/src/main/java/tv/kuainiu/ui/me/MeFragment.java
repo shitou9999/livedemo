@@ -46,6 +46,7 @@ import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.ui.me.activity.SettingActivity;
 import tv.kuainiu.ui.me.appointment.AppointmentActivity;
 import tv.kuainiu.ui.me.appointment.MyLiveActivity;
+import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -211,10 +212,15 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish})
+            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish,R.id.ivMessage})
     public void onClick(View view) {
 
         switch (view.getId()) {
+            case R.id.ivMessage:
+                Intent messageIntent = new Intent();
+                messageIntent.setClass(getActivity(), MessageSystemActivity.class);
+                startActivity(messageIntent);
+                break;
             case R.id.rlHomePage:
             case R.id.tv_me_phone:
             case R.id.tv_me_name:

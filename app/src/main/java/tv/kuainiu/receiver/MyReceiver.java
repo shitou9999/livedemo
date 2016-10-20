@@ -149,12 +149,17 @@ public class MyReceiver extends BroadcastReceiver {
                         i.setClass(context, VideoActivity.class);
                         i.putExtra(VideoActivity.NEWS_ID, String.valueOf(videoMessage.getId()));
                         i.putExtra(VideoActivity.VIDEO_NAME, "");
+                        //                        TODO 缺少视频名称
                         i.putExtra(VideoActivity.CAT_ID, videoMessage.getCatid());
                         i.putExtra(VideoActivity.VIDEO_ID, videoMessage.getUpvideoid());
                     } else if (MessageType.NewsType.type().equals(jsonObject.getString("type"))) {//文章消息
                         NewsMessage newsMessage = new Gson().fromJson(extras, NewsMessage.class);
                         i.setClass(context, PostZoneActivity.class);
                         i.putExtra(Constant.KEY_ID, String.valueOf(newsMessage.getDaoshi()));
+//                        i.putExtra(Constant.KEY_ID, id);
+//                        i.putExtra(Constant.KEY_CATID, catId);
+//                        i.putExtra(Constant.KEY_CATNAME, catName);
+//                        TODO 文章传参不对
                     }
                 }
                 //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

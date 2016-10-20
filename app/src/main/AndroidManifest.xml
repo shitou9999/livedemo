@@ -240,6 +240,11 @@
             android:name=".ui.message.activity.MessageSystemActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.SelectPictureActivity"
+            android:screenOrientation="portrait" />  <activity
+            android:name=".ui.activity.PicturePreviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"

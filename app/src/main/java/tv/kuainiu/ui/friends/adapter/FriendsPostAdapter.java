@@ -3,6 +3,7 @@ package tv.kuainiu.ui.friends.adapter;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,9 +25,11 @@ import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
+import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**
@@ -59,7 +63,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     public void setTeacherZoneDynamicsList(List<TeacherZoneDynamics> teacherZoneDynamicsList) {
-        this.teacherZoneDynamicsList=teacherZoneDynamicsList;
+        this.teacherZoneDynamicsList = teacherZoneDynamicsList;
     }
 
     public void setCustomVideoList(List<CustomVideo> customVideoList) {
@@ -103,8 +107,8 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         }
     }
 
-        private void dataViewPoint(ViewHolder holder, int position) {
-       TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
+    private void dataViewPoint(ViewHolder holder, int position) {
+        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
@@ -115,7 +119,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo=info.getNews_info();
+        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
         holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         //不是直播中就是黑色边框
         holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
@@ -123,22 +127,37 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         // Hide bottom line
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
-        if(info.getIs_support()== Constant.FAVOURED){
+        if (info.getIs_support() == Constant.FAVOURED) {
             holder.ivSupport.setVisibility(View.INVISIBLE);
             holder.mTvFriendsPostLike.setSelected(true);
-        }else{
+        } else {
             holder.ivSupport.setVisibility(View.VISIBLE);
             holder.mTvFriendsPostLike.setSelected(false);
         }
         holder.ivSupport.setTag(info);
-        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(view);
                 }
             }
         });
+
+        if (!TextUtils.isEmpty(info.getThumb())) {
+            String[] array = info.getThumb().split(",");
+            if (array != null) {
+                ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < array.length; i++) {
+                    if (!TextUtils.isEmpty(array[i])) {
+                        list.add(array[i]);
+                    }
+                }
+                UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
+                holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+            }
+        }
     }
 
     private void dataVideo(ViewHolder holder, int position) {
@@ -167,17 +186,18 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         // Hide bottom live
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
-        if(info.getIs_support()== Constant.FAVOURED){
+        if (info.getIs_support() == Constant.FAVOURED) {
             holder.ivSupport.setVisibility(View.INVISIBLE);
             holder.mTvFriendsPostLike.setSelected(true);
-        }else{
+        } else {
             holder.ivSupport.setVisibility(View.VISIBLE);
             holder.mTvFriendsPostLike.setSelected(false);
         }
         holder.ivSupport.setTag(info);
-        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(view);
                 }
@@ -223,17 +243,18 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         int v = position == customLiveList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
 
-        if(info.getIs_supported()== Constant.FAVOURED){
+        if (info.getIs_supported() == Constant.FAVOURED) {
             holder.ivSupport.setVisibility(View.INVISIBLE);
             holder.mTvFriendsPostLike.setSelected(true);
-        }else{
+        } else {
             holder.ivSupport.setVisibility(View.VISIBLE);
             holder.mTvFriendsPostLike.setSelected(false);
         }
         holder.ivSupport.setTag(info);
-        holder.ivSupport.setTag(R.id.tv_friends_post_like,holder.mTvFriendsPostLike);
+        holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(view);
                 }
@@ -273,6 +294,8 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         View mViewFriendsPostLineBottom;
         @BindView(R.id.ivSupport)
         ImageView ivSupport;
+        @BindView(R.id.exgv_appraisal_pic)
+        ExpandGridView exgv_appraisal_pic;
 
         public ViewHolder(View itemView) {
             super(itemView);

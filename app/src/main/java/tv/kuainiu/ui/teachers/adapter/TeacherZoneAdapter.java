@@ -3,6 +3,7 @@ package tv.kuainiu.ui.teachers.adapter;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,14 @@ import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.PostParentLayout;
 
 /**
@@ -254,6 +257,19 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         });
+        if (!TextUtils.isEmpty(info.getThumb())) {
+            String[] array = info.getThumb().split(",");
+            if (array != null) {
+                ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < array.length; i++) {
+                    if (!TextUtils.isEmpty(array[i])) {
+                        list.add(array[i]);
+                    }
+                }
+                UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
+                holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+            }
+        }
     }
 
     private void dataVideo(BodyViewHolder holder, int position) {
@@ -400,6 +416,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.view_friends_post_line_bottom) View mViewFriendsPostLineBottom;
         @BindView(R.id.ivSupport)
         ImageView ivSupport;
+        @BindView(R.id.exgv_appraisal_pic)
+        ExpandGridView exgv_appraisal_pic;
 
         public BodyViewHolder(View itemView) {
             super(itemView);

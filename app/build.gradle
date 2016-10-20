@@ -155,5 +155,6 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Moments-2.7.7.jar')
     compile 'com.baidu.mobstat:mtj-sdk:latest.integration'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'top.zibin:Luban:1.0.9'
 
 }

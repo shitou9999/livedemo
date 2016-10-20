@@ -52,6 +52,7 @@ import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.Categroy;
+import tv.kuainiu.modle.Permissions;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
@@ -116,13 +117,13 @@ public class PublishVideoActivity extends BaseActivity {
     TextView tvCategory;
     @BindView(R.id.spCategory)
     Spinner spCategory;
+    @BindView(R.id.spPermissions)
+    Spinner spPermissions;
 
     @BindView(R.id.tvLiveStartTime)
     TextView tvLiveStartTime;
     @BindView(R.id.tvLiveEndTime)
     TextView tvLiveEndTime;
-    @BindView(R.id.sw_permission)
-    SwitchCompat swPermission;
     @BindView(R.id.et_content)
     EditText etContent;
     @BindView(R.id.tvInputWordLimit)
@@ -144,7 +145,9 @@ public class PublishVideoActivity extends BaseActivity {
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private List<Categroy> mCategroyList = new ArrayList<>();
+    private List<Permissions> mPermissionsList = new ArrayList<>();
     private String[] arryCategroy;
+    private String[] arryPermissions;
 
     private String type = "2";//     必传     发布类型 1文章 2视频 3声音
     private String synchro_wb = "1";    //可选      是否同步微博     1是 0否
@@ -237,12 +240,6 @@ public class PublishVideoActivity extends BaseActivity {
 
             }
         });
-        swPermission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                permission = isChecked ? "1" : "2";
-            }
-        });
         swDynamic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -270,6 +267,18 @@ public class PublishVideoActivity extends BaseActivity {
                 cat_id = mCategroyList.get(0).getId();
             }
         });
+        spPermissions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                permission = String.valueOf(mPermissionsList.get(pos).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                permission = String.valueOf(mPermissionsList.get(0).getId());
+            }
+        });
     }
 
 
@@ -277,7 +286,8 @@ public class PublishVideoActivity extends BaseActivity {
         anchor = MyApplication.getUser().getNickname();
         teacher_id = MyApplication.getUser().getUser_id();
 
-        OKHttpUtils.getInstance().syncGet(this, Api.get_cats+ParamUtil.getParamForGet("class","live"), Action.get_cats);
+        OKHttpUtils.getInstance().syncGet(this, Api.get_cats + ParamUtil.getParamForGet("class", "live"), Action.get_cats);
+        OKHttpUtils.getInstance().syncGet(this, Api.live_permissions, Action.live_permissions);
     }
 
     private void dataBind() {
@@ -296,6 +306,20 @@ public class PublishVideoActivity extends BaseActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //绑定 Adapter到控件
         spCategory.setAdapter(adapter);
+    }
+
+    private void dataBindPermission() {
+        if (mPermissionsList.size() > 0) {
+            permission = String.valueOf(mPermissionsList.get(0).getId());
+            arryPermissions = new String[mPermissionsList.size()];
+        }
+        for (int i = 0; i < mPermissionsList.size(); i++) {
+            arryPermissions[i] = mPermissionsList.get(i).getName();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arryPermissions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //绑定 Adapter到控件
+        spPermissions.setAdapter(adapter);
     }
 
     @Override
@@ -461,6 +485,30 @@ public class PublishVideoActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case live_permissions:
+                if (SUCCEED == event.getCode()) {
+                    try {
+                        JsonParser parser = new JsonParser();
+                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
+                        JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
+                        List<Permissions> listTemp = new Gson().fromJson(json, new TypeToken<List<Permissions>>() {
+                        }.getType());
+
+                        if (listTemp != null && listTemp.size() > 0) {
+                            mPermissionsList.clear();
+                            mPermissionsList.addAll(listTemp);
+                            dataBindPermission();
+                        } else {
+                            ToastUtils.showToast(PublishVideoActivity.this, "未获取到权限信息");
+                        }
+                    } catch (Exception e) {
+                        LogUtils.e(TAG, "获取到权限信息解析异常", e);
+                        ToastUtils.showToast(PublishVideoActivity.this, "获取到权限信息解析异常");
+                    }
+                } else {
+                    ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到权限信息失败"));
+                }
+                break;
             case get_cats:
                 if (SUCCEED == event.getCode()) {
                     try {
@@ -471,6 +519,7 @@ public class PublishVideoActivity extends BaseActivity {
                         }.getType());
 
                         if (listTemp != null && listTemp.size() > 0) {
+                            mCategroyList.clear();
                             mCategroyList.addAll(listTemp);
                             dataBindView();
                         } else {

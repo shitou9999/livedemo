@@ -6,16 +6,19 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import tv.kuainiu.command.http.core.ParamUtil;
-import tv.kuainiu.modle.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import tv.kuainiu.command.http.core.ParamUtil;
+import tv.kuainiu.modle.User;
 
 /**
  * Created by guxuan on 2016/2/29.
@@ -24,7 +27,6 @@ public class FileUtils {
     public static final String FILE_USER = "ugg";
 
     /**
-     *
      * @param context
      * @param user
      * @return
@@ -78,8 +80,32 @@ public class FileUtils {
 
     public static byte[] bitmapToBytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 90, baos);
         return baos.toByteArray();
+    }
+
+    public static byte[] fileToBytes(File file) {
+        byte[] buffer = null;
+        if (file != null && file.exists()) {
+            try {
+
+                FileInputStream fis = new FileInputStream(file);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+                byte[] b = new byte[1000];
+                int n;
+                while ((n = fis.read(b)) != -1) {
+                    bos.write(b, 0, n);
+                }
+                fis.close();
+                bos.close();
+                buffer = bos.toByteArray();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return buffer;
     }
 
     public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {
