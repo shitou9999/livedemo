@@ -46,7 +46,7 @@ public class OKHttpUtils {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(10000, TimeUnit.MILLISECONDS);
         builder.connectTimeout(10000, TimeUnit.MILLISECONDS);
-        builder.writeTimeout(20000, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(50000, TimeUnit.MILLISECONDS);
         mClient = builder.build();
     }
 
