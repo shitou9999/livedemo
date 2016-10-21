@@ -6,6 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,6 +26,7 @@ import cn.finalteam.loadingviewfinal.OnLoadMoreListener;
 import cn.finalteam.loadingviewfinal.PtrClassicFrameLayout;
 import cn.finalteam.loadingviewfinal.PtrFrameLayout;
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.command.http.SystemMessageHttpUtil;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.SystemMessage;
@@ -34,6 +36,8 @@ import tv.kuainiu.ui.BaseActivity;
 import tv.kuainiu.ui.message.adapter.MessageAdapter;
 import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
@@ -41,7 +45,7 @@ import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 /**
  * 系统消息
  */
-public class MessageSystemActivity extends BaseActivity {
+public class MessageSystemActivity extends BaseActivity implements ISwipeDeleteItemClickListening {
     @BindView(R.id.ptr_rv_layout)
     PtrClassicFrameLayout ptr_rv_layout;
     @BindView(R.id.lv_message_list)
@@ -86,7 +90,7 @@ public class MessageSystemActivity extends BaseActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (messageListList.size() > 0 && messageListList.size() > (position - lv_message_list.getHeaderViewsCount())) {
-                            if( messageListList.get(position).getIs_read()==0) {
+                            if (messageListList.get(position).getIs_read() == 0) {
                                 Intent intent = new Intent();
                                 intent.setAction(Constant.INTENT_ACTION_MESSAGE_HOME_ACTIVITY_MSG_NUM);
                                 intent.putExtra(MessageHomeActivity.CHANGE_NUMBER, 1);
@@ -123,7 +127,7 @@ public class MessageSystemActivity extends BaseActivity {
 
     private void dataBindView() {
         if (mMessageAdapter == null) {
-            mMessageAdapter = new MessageAdapter(this, messageListList);
+            mMessageAdapter = new MessageAdapter(this, messageListList, this);
             lv_message_list.setAdapter(mMessageAdapter);
         } else {
             mMessageAdapter.notifyDataSetChanged();
@@ -133,6 +137,16 @@ public class MessageSystemActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case del_system_msg:
+                if (SUCCEED == event.getCode()) {
+                    if (mDeleteSystemMessage != null) {
+                        messageListList.remove(mDeleteSystemMessage);
+                        dataBindView();
+                    }
+                } else {
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "删除消息失败"));
+                }
+                break;
             case fetcherSystemMessageList:
                 LoadingProgressDialog.stopProgressDialog();
                 LogUtils.i("fetcherSystemMessageList", "data===" + event.getData());
@@ -169,5 +183,16 @@ public class MessageSystemActivity extends BaseActivity {
                 break;
         }
 
+    }
+
+    SystemMessage mDeleteSystemMessage;
+
+    @Override
+    public void delete(SwipeLayout swipeLayout, int position, Object object) {
+        if (object != null) {
+            mDeleteSystemMessage = (SystemMessage) object;
+            SystemMessageHttpUtil.deleteSystemMessage(this, mDeleteSystemMessage.getId(), Action.del_system_msg);
+            swipeLayout.close(true);
+        }
     }
 }

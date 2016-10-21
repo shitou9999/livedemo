@@ -47,7 +47,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
                 * context.getResources().getDimensionPixelSize(
                 R.dimen.expgv_setting_service_image_margin) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / 6;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -62,7 +62,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / 6;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -79,7 +79,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / 6;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -94,7 +94,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / 6;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }

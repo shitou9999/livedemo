@@ -19,6 +19,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.fragment.LiveFragment;
 import tv.kuainiu.ui.liveold.model.History;
+import tv.kuainiu.ui.liveold.model.LivingInfo;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
@@ -73,9 +74,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
 
-    private void startPlayingActivity(History history) {
+    private void startPlayingActivity(LivingInfo mLivingInfo) {
         if (mContext == null) return;
-        if (history == null) {
+        if (mLivingInfo == null) {
             DebugUtils.showToast(mContext, R.string.live_toast_not_started);
             return;
         }
@@ -83,14 +84,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 //        LivingInfo.LiveingEntity entity = new LivingInfo.LiveingEntity();
 //        entity.setName(history.getName());
 //        entity.setAnchor(history.getAnchor());
-        intent.putExtra(LiveFragment.ARG_LIVING, history);
+        intent.putExtra(LiveFragment.ARG_LIVING, mLivingInfo);
         mContext.startActivity(intent);
     }
 
     @Override public void onClick(View v) {
-        History history = (History) v.getTag();
+        LivingInfo mLivingInfo = (LivingInfo) v.getTag();
 //        LiveHttpUtil.historyCountPlusOne(mContext, history.getId());
-        startPlayingActivity(history);
+        startPlayingActivity(mLivingInfo);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

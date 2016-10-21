@@ -25,6 +25,7 @@ public class TeacherInfo {
     private String live_roomid;
     private int fans_count;
     private int is_follow;
+    private LiveingInfo live_info;
 
 
     public String getId() {
@@ -97,5 +98,23 @@ public class TeacherInfo {
 
     public void setLive_roomid(String live_roomid) {
         this.live_roomid = live_roomid;
+    }
+
+    /**
+     * 仅直播使用
+     *
+     * @return
+     */
+    public LiveingInfo getLive_info() {
+        return live_info;
+    }
+
+    /**
+     * 仅直播使用
+     *
+     * @return
+     */
+    public void setLive_info(LiveingInfo live_info) {
+        this.live_info = live_info;
     }
 }

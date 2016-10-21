@@ -154,9 +154,18 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                         list.add(array[i]);
                     }
                 }
-                UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
-                holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                if(list.size()>0) {
+                    UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
+                    holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                    holder.exgv_appraisal_pic.setVisibility(View.VISIBLE);
+                }else{
+                    holder.exgv_appraisal_pic.setVisibility(View.GONE);
+                }
+            }else{
+                holder.exgv_appraisal_pic.setVisibility(View.GONE);
             }
+        }else{
+            holder.exgv_appraisal_pic.setVisibility(View.GONE);
         }
     }
 
@@ -203,6 +212,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                 }
             }
         });
+        holder.exgv_appraisal_pic.setVisibility(View.GONE);
     }
 
     private void dataLive(ViewHolder holder, int position) {
@@ -260,6 +270,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                 }
             }
         });
+        holder.exgv_appraisal_pic.setVisibility(View.GONE);
     }
 
     @Override

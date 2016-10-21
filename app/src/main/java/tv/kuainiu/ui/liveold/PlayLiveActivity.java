@@ -19,6 +19,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -66,6 +67,7 @@ import com.bokecc.sdk.mobile.live.widget.DocView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -97,6 +100,8 @@ import tv.kuainiu.ui.liveold.adapter.MyQAListViewAdapter;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.liveold.model.QAMsg;
 import tv.kuainiu.ui.me.activity.LoginActivity;
+import tv.kuainiu.utils.DataConverter;
+import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -146,7 +151,6 @@ public class PlayLiveActivity extends BaseActivity implements
     TextView mInfo;
     RelativeLayout rl_mInfo;
     ImageView iv_mInfo;
-    public static final String ARG_LIVING = "living";
     private List<TabLayout.Tab> listTab;
 
     private final String LIVE = "聊天室";
@@ -156,6 +160,7 @@ public class PlayLiveActivity extends BaseActivity implements
     private String[] tabNames = new String[]{LIVE, PUT_QUESTION, ABOUT};
     private int[] tabNamesTags = new int[]{0, 1, 2};
     private LiveParameter mLivingInfo;
+    private TeacherInfo mTeacherInfo;
     private String liveId = "";
     private String teacherId = "";
 
@@ -253,7 +258,7 @@ public class PlayLiveActivity extends BaseActivity implements
 
     public static void intoNewIntent(Context context, LiveParameter liveParameter) {
         Intent intent = new Intent(context, PlayLiveActivity.class);
-        intent.putExtra(ARG_LIVING, liveParameter);
+        intent.putExtra(Constant.ARG_LIVING, liveParameter);
         context.startActivity(intent);
     }
 
@@ -321,7 +326,7 @@ public class PlayLiveActivity extends BaseActivity implements
 
 
         handler = new MyHandle(this);
-        mLivingInfo = getIntent().getExtras().getParcelable(ARG_LIVING);
+        mLivingInfo = getIntent().getExtras().getParcelable(Constant.ARG_LIVING);
         if (mLivingInfo == null) {
             ToastUtils.showToast(this, "未获取到直播信息");
             finish();
@@ -333,7 +338,7 @@ public class PlayLiveActivity extends BaseActivity implements
         roomId = mLivingInfo.getRoomId();
         dwLive = DWLive.getInstance();
         loginLive();
-
+        getTeacherInfo();
 
     }
 
@@ -343,18 +348,18 @@ public class PlayLiveActivity extends BaseActivity implements
         handler.sendEmptyMessage(HIDE_CONTROL);
     }
 
-    private void bindDataToView(LiveParameter mLivingInfo) {
-        ImageDisplayUtil.displayImage(this, civ_avatar, mLivingInfo.getTeacherAvatar(), R.mipmap.default_avatar);
+    private void bindDataToView() {
+        ImageDisplayUtil.displayImage(this, civ_avatar, mTeacherInfo.getAvatar(), R.mipmap.default_avatar);
         tv_live_title.setText(mLivingInfo.getLiveTitle());
-        tv_live_teacher.setText(mLivingInfo.getNickName());
-        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLivingInfo.getSupportNumber()));
-        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", mLivingInfo.getOnLineNumber()));
-        if (mLivingInfo.getIsFollow() == 0) {
+        tv_live_teacher.setText(mTeacherInfo.getNickname());
+        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num()));
+//        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", mTeacherInfo.getOnLineNumber()));
+        if (mTeacherInfo.getIs_follow() == 0) {
             btn_teacher_follow.setSelected(false);
         } else {
             btn_teacher_follow.setSelected(true);
         }
-        if (mLivingInfo.getIsSupport() == 0) {
+        if (mTeacherInfo.getLive_info().getIs_support() == 0) {
             tv_live_teacher_zan.setSelected(false);
         } else {
             tv_live_teacher_zan.setSelected(true);
@@ -608,6 +613,7 @@ public class PlayLiveActivity extends BaseActivity implements
     private void initPicLayout(View view) {
 //        docView = (DocView) view.findViewById(R.id.live_docView);
         web_live_about = (WebView) view.findViewById(R.id.web_live_about);
+
     }
 
     private Switch swi;
@@ -802,9 +808,12 @@ public class PlayLiveActivity extends BaseActivity implements
     private void initAbout() {
 //        String hhh = "毛鹏皓老师具有30年以上操作经历。<br/>毛鹏皓老师不仅是&ldquo;孔明线&rdquo;的创始人，也是飙股工作室总监。<br/>&nbsp;<a href=\"http://wwww.baidu.com\">ssssssss</a><br/>毛鹏皓老师曾任多家证券投资顾问公司副总经理与总经理，在各家投资顾问公司的操作绩效极优，三位数绩效股多达十余档以上。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122307630.png\"style=\"height: 186px; width: 369px\"/><br/>毛鹏皓老师曾担任非凡电视台、台湾电视台、TVBS电视台、学者电视台等电视台专属讲师，中国广播公司、正声广播电台、快乐广播电台特聘讲师。<br/>&nbsp;<br/>毛鹏皓老师也曾担任财讯日报、产经日报、鑫报之特聘主笔。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122335409.png\"style=\"height: 394px; width: 554px\"/><br/><div style=\"text-align: center\">TVBS&ldquo;热线一路发&rdquo;投资组合成绩报告</div>&nbsp;<br/>毛鹏皓老师曾三次参加台湾电视台投资组合竞赛，皆获冠军并获得&ldquo;股市不败神话&rdquo;之雅号。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122410329.png\"style=\"height: 369px; width: 441px\"/><br/>毛鹏皓老师他的&ldquo;天机操盘术&rdquo;帮助投资者选择飙股；他的&ldquo;孔明线战法&rdquo;是帮助操盘者掌握高低档的买卖点，绝对能帮助投资者们超越指数、战胜大盘。<br/>&nbsp;<br/>这一次，毛鹏皓老师将把他多年来的操盘心法分享给大家，并将他&ldquo;孔明线战法&rdquo;的精华融入他的课堂内容中。这一期的课程会从简单的价、量、指标与波浪等技术分析一一切入。除了技术分析领域以外，毛鹏皓老师将配合基本面、筹码面、心理面的掌控，让具有多年股龄和熟悉技术分析的学员们都能从课程中吸收到毛鹏皓老师独特的操盘技巧与心法。<br/>&nbsp;<br/>毛鹏皓老师的课程能帮助学员们走向成功之路，他不仅要帮助你改变你的脑袋，还要改造你的态度，因为，脑袋会改变你的口袋，正确的态度会决定你的命运！<br/>&nbsp;<br/>毛鹏皓老师会与学员们分享德国股神、日本股神、美国股神、债券天王、新兴市场教父等投资大师的操盘心得。例如，毛鹏皓老师会提供给你巴菲特的六大选股法则，教你怎样选择长期投资的优良标的。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;将教你如何选股，你会掌握短线、中线和长线如何切入、如何加码、如何观察成交量，并且指导你如何运用K线、把握布局时机以及各种指标处于不同的多空时点该如何运用与操盘。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;的操盘课程会教你&ldquo;天机操盘术&rdquo;的72项绝技，让新手知道如何辨识头部与底部现象，让老手能准确地掌握底部买进的切入点和顶部如何避开风险的法则与退场卖点。<br/>&nbsp;<br/>毛鹏皓老师的股市操盘18招更是广大股民前所未见的投资秘笈。<br/>&nbsp;<br/>毛鹏皓老师作为理周集团证券分析师教育训练总督导已经培养出不计其数的优秀分析师，其中有5位达到千万元绩效，有一位达到上亿绩效！<br/>&nbsp;<br/>欢迎各路高手一起来探索&ldquo;孔明线&rdquo;与&ldquo;天机战法&rdquo;的奥妙之处！<br/>";
 //        LogUtils.i("web_live_about", StringUtils.replaceNullToEmpty(mLivingInfo.getLiveing().getAnchor_about(), "45555"));
-//        web_live_about.setWebViewClient(new MyWebViewClient());
+        if (web_live_about!=null && mTeacherInfo != null) {
+            web_live_about.setWebViewClient(new MyWebViewClient());
+            web_live_about.loadDataWithBaseURL(null, mTeacherInfo.getIntroduce(), "text/html", "utf-8", null);
+        }
 //        web_live_about.loadDataWithBaseURL(null, StringUtils.replaceNullToEmpty(mLivingInfo.getLiveing().getAnchor_about()), "text/html", "utf-8", null);
-//        web_live_about.loadDataWithBaseURL(null, hhh, "text/html", "utf-8", null);
+
     }
 
     private TextView tvLiveDuration, total_time;
@@ -1482,14 +1491,16 @@ public class PlayLiveActivity extends BaseActivity implements
                 break;
             //点赞
             case R.id.tv_live_teacher_zan2:
-                if (isLogin(this)) {
+                if (mTeacherInfo != null && isLogin(this)) {
                     LiveHttpUtil.executeAddLike(this, liveId);
                 }
                 break;
             //关注
             case R.id.btn_teacher_follow2:
-                if (isLogin(this)) {
+                if (mTeacherInfo != null && isLogin(this)) {
                     addFollow(teacherId, btn_teacher_follow.isSelected());
+                } else {
+
                 }
                 break;
 
@@ -1539,7 +1550,7 @@ public class PlayLiveActivity extends BaseActivity implements
 
         @Override
         public void handleMessage(Message msg) {
-            PlayLiveActivity playLiveActivity = getOwner();
+            final PlayLiveActivity playLiveActivity = getOwner();
             switch (msg.what) {
                 case SHOW_CONTROL:
                     playLiveActivity.setPlayControllerVisible(true);
@@ -1560,13 +1571,13 @@ public class PlayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
-                        ToastUtils.showToast(playLiveActivity, errorMessage);
-                        playLiveActivity.finish();
+                        playLiveActivity.tip(errorMessage);
                     }
                     break;
                 case SHOW_PALY:
                     playLiveActivity.iv_control.setSelected(true);
-                    playLiveActivity.bindDataToView(playLiveActivity.mLivingInfo);
+
+//                    playLiveActivity.bindDataToView(playLiveActivity.mTeacherInfo);
                     break;
                 case INIT_LVCHAT:
                     playLiveActivity.initTab(0);
@@ -1619,22 +1630,23 @@ public class PlayLiveActivity extends BaseActivity implements
                 case USER_COUNT:
                     if (playLiveActivity.tvCount != null && msg.obj != null) {
                         playLiveActivity.tvCount.setText((Integer) msg.obj + "人");
+                        playLiveActivity.tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", (Integer) msg.obj));
                     }
                     break;
                 case FINISH:
                     if (playLiveActivity.isFinish) {
                         return;
                     }
+                    playLiveActivity.tip("直播结束");
                     playLiveActivity.setHolderBlack("直播结束");
                     break;
                 case KICK_OUT:
                     playLiveActivity.isKickOut = true;
-                    Toast.makeText(playLiveActivity.getApplicationContext(), "已被踢出", Toast.LENGTH_SHORT).show();
-                    playLiveActivity.finish();
+                    playLiveActivity.tip("已被踢出");
                     break;
                 case NOT_START:
-                    ToastUtils.showToast(playLiveActivity, "直播未开始！");
-                    playLiveActivity.finish();
+
+                    playLiveActivity.tip("直播未开始");
                     break;
                 case FADE_OUT_INFO:
                     playLiveActivity.fadeOutInfo();
@@ -1643,12 +1655,32 @@ public class PlayLiveActivity extends BaseActivity implements
         }
     }
 
+    public void tip(String content) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+                .setTitle(this.getString(R.string.prompt))
+                .setMessage(content)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+        mBuilder.create().show();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(HttpEvent event) {
         switch (event.getAction()) {
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
-                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLivingInfo.getSupportNumber() + 1));
+                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));
                     tv_live_teacher_zan.setSelected(true);
                     ToastUtils.showToast(this, "点赞成功");
                 } else {
@@ -1658,8 +1690,8 @@ public class PlayLiveActivity extends BaseActivity implements
                 break;
             case teacher_fg_del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
-                    mLivingInfo.setFansNumber(mLivingInfo.getFansNumber() - 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getFansNumber()));
+                    mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() - 1);
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(false);
                     btn_teacher_follow.setText("＋关注");
                 } else {
@@ -1669,8 +1701,8 @@ public class PlayLiveActivity extends BaseActivity implements
                 break;
             case teacher_fg_add_follow:
                 if (Constant.SUCCEED == event.getCode()) {
-                    mLivingInfo.setFansNumber(mLivingInfo.getFansNumber() + 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mLivingInfo.getFansNumber()));
+                    mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() + 1);
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(true);
                     btn_teacher_follow.setText("已关注");
                 } else {
@@ -1686,25 +1718,29 @@ public class PlayLiveActivity extends BaseActivity implements
                 loginLive();
                 getTeacherInfo();
                 break;
-//            case live_fetch_living_info:
-//                if (Constant.SUCCEED == event.getCode()) {
-//                    try {
-//                        DebugUtils.dd("Live paling info : " + event.getData().toString());
-//                        JsonParser parser = new JsonParser();
-//                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
-//                        JsonObject json = tempJson.getAsJsonObject("data");
-//                        mLivingInfo = new DataConverter<LivingInfo>().JsonToObject(json.toString(), LivingInfo.class);
-//                        bindDataToView(mLivingInfo);
-//                    } catch (Exception e) {
-//                        // mErrView.StopLoading(event.getCode(), event.getMsg());
-//                    }
-//                }
-//                break;
+            case live_teacher_info:
+                if (Constant.SUCCEED == event.getCode()) {
+                    try {
+                        DebugUtils.dd("Live paling info : " + event.getData().toString());
+                        JSONObject tempJson = new JSONObject(event.getData().toString());
+                        JSONObject data = tempJson.getJSONObject("data");
+                        String info = data.getString("info");
+                        mTeacherInfo = new DataConverter<TeacherInfo>().JsonToObject(info, TeacherInfo.class);
+                        bindDataToView();
+                        initAbout();
+                    } catch (Exception e) {
+                        // mErrView.StopLoading(event.getCode(), event.getMsg());
+                        LogUtils.e(TAG, "解析老师信息异常", e);
+                    }
+                } else {
+                    LogUtils.e(TAG, "获取老师信息失败：" + event.getMsg());
+                }
+                break;
         }
     }
 
     private void getTeacherInfo() {
-        LiveHttpUtil.fetchLiveNowTopInfo(this);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
     }
 
     @Override

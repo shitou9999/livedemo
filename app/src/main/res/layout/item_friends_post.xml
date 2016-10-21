@@ -95,7 +95,7 @@
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="6"/>
+                android:numColumns="3"/>
             <!-- Nil -->
 
             <!--<ImageView-->

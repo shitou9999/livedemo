@@ -192,11 +192,10 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private MyCountDownTimer mDownTimer;
     private boolean isReaded = false;
 
-    public static void intoNewIntent(Context context, String id, String catId, String catName) {
+    public static void intoNewIntent(Context context, String id, String catId) {
         Intent intent = new Intent(context, PostZoneActivity.class);
         intent.putExtra(Constant.KEY_ID, id);
         intent.putExtra(Constant.KEY_CATID, catId);
-        intent.putExtra(Constant.KEY_CATNAME, catName);
         context.startActivity(intent);
     }
 

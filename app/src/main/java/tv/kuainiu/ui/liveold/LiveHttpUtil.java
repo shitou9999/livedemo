@@ -47,7 +47,7 @@ public class LiveHttpUtil {
     public static void fetchLiveNowTopInfo(Context context) {
         CacheConfig cacheConfig = new CacheConfig();
         OKHttpUtils.getInstance()
-                .syncGet(context, Api.TEST_DNS_API_HOST_V21, Api.LIVE_LIVEING, Action.live_fetch_living_info, cacheConfig);
+                .syncGet(context, Api.TEST_DNS_API_HOST, Api.LIVE_LIVEING, Action.live_fetch_living_info, cacheConfig);
     }
 
     /**

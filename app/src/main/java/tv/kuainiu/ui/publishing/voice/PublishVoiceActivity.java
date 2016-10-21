@@ -54,6 +54,7 @@ import butterknife.OnClick;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
 import tv.kuainiu.app.Constans;
+import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -179,6 +180,7 @@ public class PublishVoiceActivity extends BaseActivity {
     private PowerManager.WakeLock wakeLock;
     private PublicDynamicAdapter mPublicVoiceAdapter;
     List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -302,16 +304,17 @@ public class PublishVoiceActivity extends BaseActivity {
         //绑定 Adapter到控件
         spCategory.setAdapter(adapter);
     }
+
     private void dataBindVoice() {
         if (mPublicVoiceAdapter == null) {
             mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
             elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
-            mPublicVoiceAdapter.setIDeleteItemClickListener(new PublicDynamicAdapter.IDeleteItemClickListener() {
+            mPublicVoiceAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
                 @Override
-                public void delete(SwipeLayout swipeLayout, int position, TeacherZoneDynamicsInfo newsItem) {
+                public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
                     listTeacherZoneDynamicsInfo.remove(newsItem);
                     deleteSoundFileUnSend();
-                    voice="";
+                    voice = "";
                     swipeLayout.close(true);
                     mPublicVoiceAdapter.notifyDataSetChanged();
                 }
@@ -320,6 +323,7 @@ public class PublishVoiceActivity extends BaseActivity {
             mPublicVoiceAdapter.notifyDataSetChanged();
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -760,7 +764,7 @@ public class PublishVoiceActivity extends BaseActivity {
             //成功就显示
             tvTime.setText(String.valueOf(mTime) + '"');
             Log.i("record_test", "录音成功");
-            TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo=new TeacherZoneDynamicsInfo();
+            TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo = new TeacherZoneDynamicsInfo();
             mTeacherZoneDynamicsInfo.setType(String.valueOf(Constans.TYPE_AUDIO));
             mTeacherZoneDynamicsInfo.setNews_voice_url(mSoundDataFilePath);
             mTeacherZoneDynamicsInfo.setNews_title(String.valueOf(mTime) + '"');

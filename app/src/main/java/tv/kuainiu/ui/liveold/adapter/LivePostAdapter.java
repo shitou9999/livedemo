@@ -160,7 +160,7 @@ public class LivePostAdapter extends RecyclerView.Adapter<LivePostAdapter.ViewHo
             if (!isRemind) {
                 boolean flag = mSubscribeDao.insert(entry.getId(), 1);
                 if (flag) {
-                    alarmManager.set(AlarmManager.RTC, (DateUtil.toJava(entry.getStart_date_time()) - ADV_FIVE_MINUTES), pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, (DateUtil.toJava(entry.getStart_date_time()) - ADV_FIVE_MINUTES), pendingIntent);
                     entry.setRemindFlag(RemindUtils.REMIND);
                 } else {
                     DebugUtils.showToast(mContext, "添加预约提醒失败，请稍后再试");

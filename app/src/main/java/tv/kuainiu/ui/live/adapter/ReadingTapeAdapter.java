@@ -192,15 +192,15 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             holder.tvAppointment.setVisibility(View.GONE);
         } else {
-            if(type==MY_LIVE){
+            if (type == MY_LIVE) {
                 holder.tvAppointment.setVisibility(View.GONE);
                 holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
-            }else {
+            } else {
                 holder.tvAppointment.setVisibility(View.VISIBLE);
                 holder.mTvLiveing.setText("开始时间");
             }
             holder.tvAppointment.setTag(liveItem);
-            holder.tvAppointment.setTag(R.id.tvAppointment,position);
+            holder.tvAppointment.setTag(R.id.tvAppointment, position);
             holder.tvAppointment.setSelected(liveItem.getIs_appointment() != 0);
             holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? "加入预约提醒" : "取消预约提醒");
             holder.tvAppointment.setOnClickListener(new View.OnClickListener() {
@@ -230,30 +230,18 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void clickPlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
-        liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-        liveParameter.setIsFollow(liveItem.getIs_follow());
-        liveParameter.setIsSupport(liveItem.getIs_supported());
         liveParameter.setLiveId(liveItem.getId());
         liveParameter.setLiveTitle(liveItem.getTitle());
-        liveParameter.setOnLineNumber(liveItem.getOnline_num());
-        liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
         liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-        liveParameter.setSupportNumber(liveItem.getSupport());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
         PlayLiveActivity.intoNewIntent(mContext, liveParameter);
 //        if (liveItem.getLive_status() == Constans.LIVE_ING) {
-//            LiveParameter liveParameter = new LiveParameter();
-//            liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-//            liveParameter.setIsFollow(liveItem.getIs_follow());
-//            liveParameter.setIsSupport(liveItem.getIs_supported());
-//            liveParameter.setLiveId(liveItem.getId());
-//            liveParameter.setLiveTitle(liveItem.getTitle());
-//            liveParameter.setOnLineNumber(liveItem.getOnline_num());
-//            liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
-//            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-//            liveParameter.setSupportNumber(liveItem.getSupport());
-//            liveParameter.setTeacherId(liveItem.getTeacher_id());
-//            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+//        LiveParameter liveParameter = new LiveParameter();
+//        liveParameter.setLiveId(liveItem.getId());
+//        liveParameter.setLiveTitle(liveItem.getTitle());
+//        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+//        liveParameter.setTeacherId(liveItem.getTeacher_id());
+//        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
 //        } else {
 //            ToastUtils.showToast(mContext, liveItem.getLive_msg());
 //        }
@@ -266,15 +254,9 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     public void clickRePlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
-        liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-        liveParameter.setIsFollow(liveItem.getIs_follow());
-        liveParameter.setIsSupport(liveItem.getIs_supported());
         liveParameter.setLiveId(liveItem.getPlayback_id());
         liveParameter.setLiveTitle(liveItem.getTitle());
-        liveParameter.setOnLineNumber(liveItem.getOnline_num());
-        liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
         liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-        liveParameter.setSupportNumber(liveItem.getSupport());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
 
         PlayLiveActivity.intoNewIntent(mContext, liveParameter);

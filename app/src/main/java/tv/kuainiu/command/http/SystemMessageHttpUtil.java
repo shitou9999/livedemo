@@ -2,14 +2,14 @@ package tv.kuainiu.command.http;
 
 import android.content.Context;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author jack on 2016/4/22.
@@ -27,7 +27,7 @@ public class SystemMessageHttpUtil {
     }
 
     /**
-     * 股轩助手消息接口
+     * 助手消息接口
      *
      * @param context
      * @param builder
@@ -41,7 +41,7 @@ public class SystemMessageHttpUtil {
     }
 
     /**
-     * 股轩评论消息接口
+     * 评论消息接口
      *
      * @param context
      * @param builder
@@ -53,9 +53,24 @@ public class SystemMessageHttpUtil {
         map.put("size", String.valueOf(builder.size));
         OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.COMMENT_MESSAGE_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig(builder.page));
     }
+
     /**
-     * 股轩活动消息详情接口
-     *1.6.1 活动消息详情页 （V2)
+     * 删除系统消息
+     *
+     * @param context
+     * @param message_id
+     * @param action
+     */
+    public static void deleteSystemMessage(Context context, String message_id, Action action) {
+        Map<String, String> map = new HashMap<>();
+        map.put("message_id", message_id);
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.del_system_msg, ParamUtil.getParam(map), action);
+    }
+
+    /**
+     * 活动消息详情接口
+     * 1.6.1 活动消息详情页 （V2)
+     *
      * @param context
      * @param builder
      * @param action
@@ -64,11 +79,13 @@ public class SystemMessageHttpUtil {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(builder.page));
         map.put("size", String.valueOf(builder.size));
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.ACTIVITY_INFO, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig(builder.page));
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.ACTIVITY_INFO, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig(builder.page));
     }
+
     /**
-     * 1.6股轩活动消息列表接口
-     *1.6 活动消息列表 （V2)
+     * 1.6活动消息列表接口
+     * 1.6 活动消息列表 （V2)
+     *
      * @param context
      * @param builder
      * @param action
@@ -77,7 +94,7 @@ public class SystemMessageHttpUtil {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(builder.page));
         map.put("size", String.valueOf(builder.size));
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.ACTIVITY_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig(builder.page));
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.ACTIVITY_LIST, ParamUtil.getParam(map), action, CacheConfig.getCacheConfig(builder.page));
     }
 
     /**

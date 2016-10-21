@@ -80,15 +80,9 @@ public class PostParentLayout extends RelativeLayout {
     public void clickPlayLive(LiveInfo liveItem) {
         if (liveItem.getLive_status() == Constans.LIVE_ING) {
             LiveParameter liveParameter = new LiveParameter();
-            liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-            liveParameter.setIsFollow(liveItem.getIs_follow());
-            liveParameter.setIsSupport(liveItem.getIs_supported());
             liveParameter.setLiveId(liveItem.getId());
             liveParameter.setLiveTitle(liveItem.getTitle());
-            liveParameter.setOnLineNumber(liveItem.getOnline_num());
-            liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
             liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-            liveParameter.setSupportNumber(liveItem.getSupport());
             liveParameter.setTeacherId(liveItem.getTeacher_id());
             PlayLiveActivity.intoNewIntent(mContext, liveParameter);
         } else {
@@ -215,7 +209,7 @@ public class PostParentLayout extends RelativeLayout {
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PostZoneActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(),teacherZoneDynamicsInfo.getNews_catid(),teacherZoneDynamicsInfo.getNews_catname());
+                        PostZoneActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(),teacherZoneDynamicsInfo.getNews_catid());
                     }
                 });
                 addView(view);

@@ -79,7 +79,19 @@ public class TeacherHttpUtil {
         map.put("user_id", builder.userId);
         OKHttpUtils.getInstance().syncGet(context, Api.FETCH_TEAHCER_INFO + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
     }
-
+    /**
+     * 获取老师详情
+     *
+     * @param context
+     * @param action
+     */
+    public static void fetchTeacherInfo(Context context,String teacher_id,String user_id,String live_id, Action action) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("teacher_id",teacher_id);
+        map.put("user_id",user_id);
+        map.put("live_id", live_id);
+        OKHttpUtils.getInstance().syncGet(context, Api.FETCH_TEAHCER_INFO + ParamUtil.getParamForGet(map), action);
+    }
     /**
      * 关注老师
      *

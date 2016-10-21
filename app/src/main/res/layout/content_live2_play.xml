@@ -208,7 +208,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_launcher"
+                tools:src="@mipmap/ic_launcher"
                 app:civ_border_color="@color/colorGrey500"
                 app:civ_border_overlay="true"/>
 
@@ -220,7 +220,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="开启财富之门"
+                tools:text="开启财富之门"
                 android:textColor="@color/colorGrey900"
                 android:textSize="16sp"/>
 
@@ -232,7 +232,7 @@
                 android:layout_below="@+id/tv_live_title2"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="廖英强"
+                tools:text="廖英强"
                 android:textColor="@color/colorBlue500"
                 android:textSize="14sp"/>
 
@@ -246,7 +246,7 @@
                 android:drawableLeft="@drawable/live_spourt_selector"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="8885赞"
+                tools:text="8885赞"
                 android:textColor="@color/colorGrey500"
                 android:textSize="14sp"/>
 
@@ -271,7 +271,7 @@
                 android:gravity="right"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="444粉丝"
+                tools:text="444粉丝"
                 android:textColor="@color/colorGrey500"
                 android:textSize="14sp"/>
 

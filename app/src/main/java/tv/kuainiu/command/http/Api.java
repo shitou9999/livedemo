@@ -223,6 +223,7 @@ public class Api {
      */
     public static final String live_appointment_list = "live/live_appointment_list";
     public static final String my_live_list = "live/my_live_list";
+    public static final String del_system_msg = "sns/del_system_msg";
 
 
 }

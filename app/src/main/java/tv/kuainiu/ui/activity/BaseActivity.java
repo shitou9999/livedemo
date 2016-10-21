@@ -33,12 +33,15 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.cons.MessageType;
 import tv.kuainiu.modle.push.ActivityMessage;
+import tv.kuainiu.modle.push.AppointmentLive;
 import tv.kuainiu.modle.push.NewsMessage;
 import tv.kuainiu.modle.push.SystemMessage;
 import tv.kuainiu.modle.push.VideoMessage;
 import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
-import tv.kuainiu.ui.message.activity.MessageHomeActivity;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
+import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
@@ -48,6 +51,7 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 
 /**
  * Created by jack on 2016/9/7.
@@ -138,8 +142,7 @@ public class BaseActivity extends AppCompatActivity {
             } else if (-1004 == code) {
                 LogUtils.d("系统错误", "-1004");
                 if (MyApplication.IsDegbug) {
-//                    ToastUtils.showToast(context, "-1004");
-
+                    ToastUtils.showToast(context, "-1004");
                 }
                 initApp(context);
                 return;
@@ -253,20 +256,31 @@ public class BaseActivity extends AppCompatActivity {
                 if (MessageType.SystemType.type().equals(jsonObject.getString("type"))) {//系统消息
                     SystemMessage systemMessage = new Gson().fromJson(extras, SystemMessage.class);
                     isNeedAlert = systemMessage.isNeedAlert();
-                    i.setClass(this, MessageHomeActivity.class);
-                } else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
+                    i.setClass(this, MessageSystemActivity.class);
+                }else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
                     VideoMessage videoMessage = new Gson().fromJson(extras, VideoMessage.class);
                     isNeedAlert = videoMessage.isNeedAlert();
                     i.setClass(this, VideoActivity.class);
                     i.putExtra(VideoActivity.NEWS_ID, String.valueOf(videoMessage.getId()));
-                    i.putExtra(VideoActivity.VIDEO_NAME, "");
-                    i.putExtra(VideoActivity.CAT_ID, videoMessage.getCatid());
-                    i.putExtra(VideoActivity.VIDEO_ID, videoMessage.getUpvideoid());
+                    i.putExtra(VideoActivity.VIDEO_NAME, videoMessage.getNews_title());
+                    i.putExtra(VideoActivity.CAT_ID, videoMessage.getCat_id());
+                    i.putExtra(VideoActivity.VIDEO_ID, videoMessage.getVideo_id());
                 } else if (MessageType.NewsType.type().equals(jsonObject.getString("type"))) {//文章消息
                     NewsMessage newsMessage = new Gson().fromJson(extras, NewsMessage.class);
                     isNeedAlert = newsMessage.isNeedAlert();
                     i.setClass(this, PostZoneActivity.class);
-                    i.putExtra(Constant.KEY_ID, String.valueOf(newsMessage.getDaoshi()));
+                    i.putExtra(Constant.KEY_ID, newsMessage.getId());
+                    i.putExtra(Constant.KEY_CATID, newsMessage.getCat_id());
+                } else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))||MessageType.LiveType.type().equals(jsonObject.getString("type"))){
+                    i.setClass(this, PlayLiveActivity.class);
+                    AppointmentLive mAppointmentLive= new Gson().fromJson(extras, AppointmentLive.class);
+                    isNeedAlert = mAppointmentLive.isNeedAlert();
+                    LiveParameter liveParameter = new LiveParameter();
+                    liveParameter.setLiveId(mAppointmentLive.getLive_id());
+                    liveParameter.setLiveTitle(mAppointmentLive.getLive_title());
+                    liveParameter.setRoomId(mAppointmentLive.getLive_room_id());
+                    liveParameter.setTeacherId(mAppointmentLive.getTeacher_id());
+                    i.putExtra(Constant.ARG_LIVING,liveParameter);
                 }
             }
             //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

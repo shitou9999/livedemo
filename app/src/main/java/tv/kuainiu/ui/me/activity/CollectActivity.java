@@ -29,6 +29,7 @@ import cn.finalteam.loadingviewfinal.OnLoadMoreListener;
 import cn.finalteam.loadingviewfinal.PtrClassicFrameLayout;
 import cn.finalteam.loadingviewfinal.PtrFrameLayout;
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeCheckedDeleteItemClickListening;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -36,7 +37,7 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.ui.BaseActivity;
-import tv.kuainiu.ui.me.adapter.EnshrineAdapter;
+import tv.kuainiu.ui.me.adapter.CollectAdapter;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.NetErrAddLoadView;
@@ -53,7 +54,7 @@ public class CollectActivity extends BaseActivity {
     private List<NewsItem> listCollect = new ArrayList<>();
     private List<NewsItem> selectedListCollect = new ArrayList<>();
     private List<NewsItem> deleteListCollect = new ArrayList<>();
-    private EnshrineAdapter adapterCollectAdapter;
+    private CollectAdapter adapterCollectAdapter;
     @BindView(R.id.ptr_rv_layout)
     PtrClassicFrameLayout mContentFrameLayout;
     @BindView(R.id.lv_custom)
@@ -265,29 +266,29 @@ public class CollectActivity extends BaseActivity {
 
     private void dataBindView() {
         if (adapterCollectAdapter == null) {
-            adapterCollectAdapter = new EnshrineAdapter(this, listCollect);
-            adapterCollectAdapter.setOnItemDelete(new EnshrineAdapter.IdeletItem() {
+            adapterCollectAdapter = new CollectAdapter(this, listCollect);
+            adapterCollectAdapter.setOnItemDelete(new ISwipeCheckedDeleteItemClickListening() {
                 @Override
-                public void delete(SwipeLayout swipeLayout, int position, NewsItem newsItem) {
-                    deleteListCollect.clear();
-                    deleteListCollect.add(newsItem);
-                    delCollect(deleteListCollect);
-                    swipeLayout.close(true);
-                }
-
-                @Override
-                public void selected(NewsItem newsItem) {
-                    selectedListCollect.add(newsItem);
+                public void selected(Object object) {
+                    selectedListCollect.add((NewsItem)object);
                     notfiySelectState();
                 }
 
                 @Override
-                public void unelected(NewsItem newsItem) {
-                    if (selectedListCollect.contains(newsItem)) {
-                        selectedListCollect.remove(newsItem);
+                public void unelected(Object object) {
+                    if (selectedListCollect.contains(object)) {
+                        selectedListCollect.remove(object);
                         notfiySelectState();
                     }
                 }
+                @Override
+                public void delete(SwipeLayout swipeLayout, int position, Object object) {
+                    deleteListCollect.clear();
+                    deleteListCollect.add((NewsItem)object);
+                    delCollect(deleteListCollect);
+                    swipeLayout.close(true);
+                }
+
             });
             lv_custom.setAdapter(adapterCollectAdapter);
         } else {

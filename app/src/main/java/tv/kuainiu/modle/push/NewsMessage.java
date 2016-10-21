@@ -4,22 +4,22 @@ package tv.kuainiu.modle.push;
  * Created by jack on 2016/4/18.
  */
 public class NewsMessage extends BaseMeassge{
-    private int daoshi;//老师ID
-    private String url;//文章URL
+    private int cat_id;//栏目ID
+    private String id;//文章id
 
-    public int getDaoshi() {
-        return daoshi;
+    public int getCat_id() {
+        return cat_id;
     }
 
-    public void setDaoshi(int daoshi) {
-        this.daoshi = daoshi;
+    public void setCat_id(int cat_id) {
+        this.cat_id = cat_id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getId() {
+        return id;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -101,7 +101,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case CUSTOM_VIEW_POINT:
                 count = teacherZoneDynamicsList == null ? 0 : teacherZoneDynamicsList.size();
                 break;
-           default:
+            default:
                 count = customVideoList == null ? 0 : customVideoList.size();
                 break;
         }
@@ -109,7 +109,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         int type = 0;
         switch (position) {
             case 0:
@@ -180,7 +181,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         holder.mTvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
         holder.mTvFollowButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (null != mOnClickListener) {
                     mOnClickListener.onClick(view);
                 }
@@ -215,7 +217,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
-        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo=info.getNews_info();
+        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
         holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         switch (info.getType()) {
             case 1:
@@ -251,7 +253,8 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.ivSupport.setTag(info);
         holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick(view);
                 }
@@ -260,15 +263,25 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (!TextUtils.isEmpty(info.getThumb())) {
             String[] array = info.getThumb().split(",");
             if (array != null) {
+                holder.exgv_appraisal_pic.setVisibility(View.VISIBLE);
                 ArrayList<String> list = new ArrayList<>();
                 for (int i = 0; i < array.length; i++) {
                     if (!TextUtils.isEmpty(array[i])) {
                         list.add(array[i]);
                     }
                 }
-                UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
-                holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                if(list.size()>0) {
+                    UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
+                    holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                    holder.exgv_appraisal_pic.setVisibility(View.VISIBLE);
+                }else{
+                    holder.exgv_appraisal_pic.setVisibility(View.GONE);
+                }
+            } else {
+                holder.exgv_appraisal_pic.setVisibility(View.GONE);
             }
+        } else {
+            holder.exgv_appraisal_pic.setVisibility(View.GONE);
         }
     }
 
@@ -333,12 +346,14 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.ivSupport.setTag(info);
         holder.ivSupport.setTag(R.id.tv_friends_post_like, holder.mTvFriendsPostLike);
         holder.ivSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick(view);
                 }
             }
         });
+        holder.exgv_appraisal_pic.setVisibility(View.GONE);
     }
 
     @Override
@@ -376,14 +391,22 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     //banner ViewPager
     static class TopViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivBanner) ImageView ivBanner;
-        @BindView(R.id.ci_avatar) CircleImageView mCiAvatar;
-        @BindView(R.id.rl_avatar) RelativeLayout mRlAvatar;
-        @BindView(R.id.tvTheme) TextView mTvTheme;
-        @BindView(R.id.tvTeacherName) TextView mTvTeacherName;
-        @BindView(R.id.tv_follow_button) TextView mTvFollowButton;
-        @BindView(R.id.tv_follow_number) TextView mTvFollowNumber;
-        @BindView(R.id.ll_fragment_friends_main_news_info) LinearLayout mLlFragmentFriendsMainNewsInfo;
+        @BindView(R.id.ivBanner)
+        ImageView ivBanner;
+        @BindView(R.id.ci_avatar)
+        CircleImageView mCiAvatar;
+        @BindView(R.id.rl_avatar)
+        RelativeLayout mRlAvatar;
+        @BindView(R.id.tvTheme)
+        TextView mTvTheme;
+        @BindView(R.id.tvTeacherName)
+        TextView mTvTeacherName;
+        @BindView(R.id.tv_follow_button)
+        TextView mTvFollowButton;
+        @BindView(R.id.tv_follow_number)
+        TextView mTvFollowNumber;
+        @BindView(R.id.ll_fragment_friends_main_news_info)
+        LinearLayout mLlFragmentFriendsMainNewsInfo;
 
         public TopViewHolder(View itemView) {
             super(itemView);
@@ -392,8 +415,10 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     } //banner ViewPager
 
     static class TabViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.btnPublish) Button mBtnPublish;
-        @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
+        @BindView(R.id.btnPublish)
+        Button mBtnPublish;
+        @BindView(R.id.tab_fragment_major)
+        TabLayout mTabFragmentMajor;
 
         public TabViewHolder(View itemView) {
             super(itemView);
@@ -403,17 +428,27 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     //banner ViewPager
     static class BodyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_friends_post_time) TextView mTvFriendsPostTime;
-        @BindView(R.id.view_friends_post_line) View mViewFriendsPostLine;
-        @BindView(R.id.civ_friends_post_head) CircleImageView mCivFriendsPostHead;
+        @BindView(R.id.tv_friends_post_time)
+        TextView mTvFriendsPostTime;
+        @BindView(R.id.view_friends_post_line)
+        View mViewFriendsPostLine;
+        @BindView(R.id.civ_friends_post_head)
+        CircleImageView mCivFriendsPostHead;
         //        @BindView(R.id.iv_friends_post_temp) ImageView mIvFriendsTemp;
-        @BindView(R.id.pl_friends_post_group) PostParentLayout mPostParentLayout;
-        @BindView(R.id.tv_friends_post_nickname) TextView mTvFriendsPostNickname;
-        @BindView(R.id.tv_friends_post_content) TextView mTvFriendsPostContent;
-        @BindView(R.id.tv_friends_post_type) TextView mTvFriendsPostType;
-        @BindView(R.id.tv_friends_post_comment) TextView mTvFriendsPostComment;
-        @BindView(R.id.tv_friends_post_like) TextView mTvFriendsPostLike;
-        @BindView(R.id.view_friends_post_line_bottom) View mViewFriendsPostLineBottom;
+        @BindView(R.id.pl_friends_post_group)
+        PostParentLayout mPostParentLayout;
+        @BindView(R.id.tv_friends_post_nickname)
+        TextView mTvFriendsPostNickname;
+        @BindView(R.id.tv_friends_post_content)
+        TextView mTvFriendsPostContent;
+        @BindView(R.id.tv_friends_post_type)
+        TextView mTvFriendsPostType;
+        @BindView(R.id.tv_friends_post_comment)
+        TextView mTvFriendsPostComment;
+        @BindView(R.id.tv_friends_post_like)
+        TextView mTvFriendsPostLike;
+        @BindView(R.id.view_friends_post_line_bottom)
+        View mViewFriendsPostLineBottom;
         @BindView(R.id.ivSupport)
         ImageView ivSupport;
         @BindView(R.id.exgv_appraisal_pic)

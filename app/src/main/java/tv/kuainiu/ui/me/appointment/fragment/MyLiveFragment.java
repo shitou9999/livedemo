@@ -213,7 +213,7 @@ public class MyLiveFragment extends BaseFragment {
             if (!isRemind) {
                 boolean flag = mSubscribeDao.insert(entry.getId(), 1);
                 if (flag) {
-                    alarmManager.set(AlarmManager.RTC, recLen*1000, pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, recLen*1000, pendingIntent);
                 } else {
                     DebugUtils.showToast(context, "添加直播提醒失败，请稍后再试");
                 }

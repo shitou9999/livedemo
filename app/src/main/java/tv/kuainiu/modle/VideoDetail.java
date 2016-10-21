@@ -37,7 +37,7 @@ public class VideoDetail {
     private String permission;
     private String voice_url;
     private String catname;
-    private String inputtime;
+    private long inputtime;
     private String url;
 
     private TeacherInfo teacher_info;
@@ -102,11 +102,11 @@ public class VideoDetail {
         this.catname = catname;
     }
 
-    public String getInputtime() {
+    public long getInputtime() {
         return inputtime;
     }
 
-    public void setInputtime(String inputtime) {
+    public void setInputtime(long inputtime) {
         this.inputtime = inputtime;
     }
 

@@ -12,6 +12,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import java.util.List;
 
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.PostParentLayout;
@@ -23,7 +24,7 @@ import tv.kuainiu.widget.PostParentLayout;
 public class PublicDynamicAdapter extends BaseSwipeAdapter {
     private Context context;
     private List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo;
-    private IDeleteItemClickListener iDeleteItemClickListener;
+    private ISwipeDeleteItemClickListening iDeleteItemClickListener;
     private boolean isEdit = false;
 
     public PublicDynamicAdapter(Context context, List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo) {
@@ -31,7 +32,7 @@ public class PublicDynamicAdapter extends BaseSwipeAdapter {
         this.listTeacherZoneDynamicsInfo = listTeacherZoneDynamicsInfo;
     }
 
-    public void setIDeleteItemClickListener(IDeleteItemClickListener iDeleteItemClickListener) {
+    public void setIDeleteItemClickListener(ISwipeDeleteItemClickListening iDeleteItemClickListener) {
         this.iDeleteItemClickListener = iDeleteItemClickListener;
     }
 
@@ -62,7 +63,7 @@ public class PublicDynamicAdapter extends BaseSwipeAdapter {
                 if (iDeleteItemClickListener != null) {
                     iDeleteItemClickListener.delete(swipeLayout, position, newsItem);
                 } else {
-                    LogUtils.e("EnshrineAdapter", "删除接口不能为null");
+                    LogUtils.e("CollectAdapter", "删除接口不能为null");
                 }
             }
         });
@@ -83,9 +84,5 @@ public class PublicDynamicAdapter extends BaseSwipeAdapter {
         return position;
     }
 
-    public interface IDeleteItemClickListener {
-        public void delete(SwipeLayout swipeLayout, int position, TeacherZoneDynamicsInfo newsItem);
-
-    }
 
 }

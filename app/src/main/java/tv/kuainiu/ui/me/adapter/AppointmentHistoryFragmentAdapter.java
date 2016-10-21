@@ -97,7 +97,7 @@ public class AppointmentHistoryFragmentAdapter extends BaseSwipeAdapter {
                 if (idelectItem != null) {
                     idelectItem.delete(swipeLayout, position, itemData);
                 } else {
-                    LogUtils.e("EnshrineAdapter", "删除接口不能为null");
+                    LogUtils.e("CollectAdapter", "删除接口不能为null");
                 }
             }
         });

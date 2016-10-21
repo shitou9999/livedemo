@@ -637,7 +637,7 @@ public class VideoActivity extends BaseActivity implements
         tvTiltle.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getTitle()));
         tvDescripion.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getCatname()));//栏目
 
-        tvDate.setText(DateUtil.getDurationString(StringUtils.replaceNullToEmpty(mVideoDetail.getInputtime())));//日期
+        tvDate.setText(DateUtil.getDurationString(mVideoDetail.getInputtime()));//日期
         //播放次数
         tvViewNumber.setText(String.format(Locale.CHINA, "%s次", StringUtils.getDecimal(Integer.parseInt(StringUtils.replaceNullToEmpty(mVideoDetail.getView_num(), "0")), Constant.TEN_THOUSAND, "万", "")));
         //点赞次数
@@ -690,6 +690,7 @@ public class VideoActivity extends BaseActivity implements
                     try {
                         JSONObject object = new JSONObject(json);
                         String info = object.optString("info");
+                        LogUtils.e("VideoActivity2222", info);
                         mVideoDetail = new DataConverter<VideoDetail>().JsonToObject(info, VideoDetail.class);
                         dataBind();
                     } catch (Exception e) {

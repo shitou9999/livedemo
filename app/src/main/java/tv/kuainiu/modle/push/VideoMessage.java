@@ -3,11 +3,12 @@ package tv.kuainiu.modle.push;
 /**
  * Created by jack on 2016/4/18.
  */
-public class VideoMessage extends BaseMeassge{
+public class VideoMessage extends BaseMeassge {
     private String id;
-    private int daoshi;//老师ID
-    private String catid;//栏目ID
-    private String upvideoid;//视频ID
+    private String teacher_id;//老师ID
+    private String cat_id;//栏目ID
+    private String video_id;//视频ID
+    private String news_title;//视频名称
 
     public String getId() {
         return id;
@@ -17,27 +18,35 @@ public class VideoMessage extends BaseMeassge{
         this.id = id;
     }
 
-    public int getDaoshi() {
-        return daoshi;
+    public String getTeacher_id() {
+        return teacher_id;
     }
 
-    public void setDaoshi(int daoshi) {
-        this.daoshi = daoshi;
+    public void setTeacher_id(String teacher_id) {
+        this.teacher_id = teacher_id;
     }
 
-    public String getCatid() {
-        return catid;
+    public String getCat_id() {
+        return cat_id;
     }
 
-    public void setCatid(String catid) {
-        this.catid = catid;
+    public void setCat_id(String cat_id) {
+        this.cat_id = cat_id;
     }
 
-    public String getUpvideoid() {
-        return upvideoid;
+    public String getVideo_id() {
+        return video_id;
     }
 
-    public void setUpvideoid(String upvideoid) {
-        this.upvideoid = upvideoid;
+    public void setVideo_id(String video_id) {
+        this.video_id = video_id;
+    }
+
+    public String getNews_title() {
+        return news_title;
+    }
+
+    public void setNews_title(String news_title) {
+        this.news_title = news_title;
     }
 }

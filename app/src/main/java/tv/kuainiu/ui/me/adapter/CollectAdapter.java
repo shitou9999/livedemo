@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeCheckedDeleteItemClickListening;
 import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
@@ -31,14 +32,14 @@ import tv.kuainiu.utils.StringUtils;
  * Created by jack on 2016/4/28.
  * 收藏
  */
-public class EnshrineAdapter extends BaseSwipeAdapter {
+public class CollectAdapter extends BaseSwipeAdapter {
     private Context context;
     private List<NewsItem> listCollect;
-    private IdeletItem idelectItem;
+    private ISwipeCheckedDeleteItemClickListening mISwipeCheckedDeleteItemClickListening;
     private boolean isEdit = false;
     private List<NewsItem> selectedListCollect = new ArrayList<NewsItem>();
 
-    public EnshrineAdapter(Context context, List<NewsItem> listCollect) {
+    public CollectAdapter(Context context, List<NewsItem> listCollect) {
         this.context = context;
         this.listCollect = listCollect;
     }
@@ -48,8 +49,8 @@ public class EnshrineAdapter extends BaseSwipeAdapter {
         return R.id.swipe;
     }
 
-    public void setOnItemDelete(IdeletItem idelectItem) {
-        this.idelectItem = idelectItem;
+    public void setOnItemDelete(ISwipeCheckedDeleteItemClickListening mISwipeCheckedDeleteItemClickListening) {
+        this.mISwipeCheckedDeleteItemClickListening = mISwipeCheckedDeleteItemClickListening;
     }
 
     public boolean getEdit() {
@@ -104,10 +105,10 @@ public class EnshrineAdapter extends BaseSwipeAdapter {
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (idelectItem != null) {
-                    idelectItem.delete(swipeLayout, position, newsItem);
+                if (mISwipeCheckedDeleteItemClickListening != null) {
+                    mISwipeCheckedDeleteItemClickListening.delete(swipeLayout, position, newsItem);
                 } else {
-                    LogUtils.e("EnshrineAdapter", "删除接口不能为null");
+                    LogUtils.e("CollectAdapter", "删除接口不能为null");
                 }
             }
         });
@@ -125,9 +126,9 @@ public class EnshrineAdapter extends BaseSwipeAdapter {
                         selectedListCollect = new ArrayList<NewsItem>();
                     }
                     if (selectedListCollect != null && selectedListCollect.contains(newsItem)) {
-                        idelectItem.unelected(newsItem);
+                        mISwipeCheckedDeleteItemClickListening.unelected(newsItem);
                     } else {
-                        idelectItem.selected(newsItem);
+                        mISwipeCheckedDeleteItemClickListening.selected(newsItem);
                     }
                 } else {
                     jump(context, newsItem);
@@ -151,13 +152,6 @@ public class EnshrineAdapter extends BaseSwipeAdapter {
         return position;
     }
 
-    public interface IdeletItem {
-        public void delete(SwipeLayout swipeLayout, int position, NewsItem newsItem);
-
-        public void selected(NewsItem newsItem);
-
-        public void unelected(NewsItem newsItem);
-    }
 
     /**
      * @param newsItem

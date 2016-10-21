@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -343,9 +344,9 @@ public class PublishDynamicActivity extends BaseActivity {
         if (mPublicDynamicAdapter == null) {
             mPublicDynamicAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
             elv_friends_post_group.setAdapter(mPublicDynamicAdapter);
-            mPublicDynamicAdapter.setIDeleteItemClickListener(new PublicDynamicAdapter.IDeleteItemClickListener() {
+            mPublicDynamicAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
                 @Override
-                public void delete(SwipeLayout swipeLayout, int position, TeacherZoneDynamicsInfo newsItem) {
+                public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
                     listTeacherZoneDynamicsInfo.remove(newsItem);
                     mPublicDynamicAdapter.notifyDataSetChanged();
                 }

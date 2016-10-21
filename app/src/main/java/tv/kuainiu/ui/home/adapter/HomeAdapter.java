@@ -309,7 +309,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if (TextUtils.isEmpty(videoId)) {
-                        PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId(), newsItem.getCatname());
+                        PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId());
                     } else {
                         VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
                     }
@@ -424,15 +424,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void clickPlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
-        liveParameter.setFansNumber(liveItem.getTeacher_info().getFans_count());
-        liveParameter.setIsFollow(liveItem.getIs_follow());
-        liveParameter.setIsSupport(liveItem.getIs_supported());
         liveParameter.setLiveId(liveItem.getId());
         liveParameter.setLiveTitle(liveItem.getTitle());
-        liveParameter.setOnLineNumber(liveItem.getOnline_num());
-        liveParameter.setTeacherAvatar(liveItem.getTeacher_info().getAvatar());
         liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-        liveParameter.setSupportNumber(liveItem.getSupport());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
 
         PlayLiveActivity.intoNewIntent(mContext, liveParameter);

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_option_normal"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
->
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:id="@+id/ivNewIamge"
@@ -18,7 +16,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorGrey230"/>
+        android:background="@color/colorGrey230"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/tvNewTitle"
@@ -30,7 +29,7 @@
         android:singleLine="true"
         android:textColor="@color/colorGrey333333"
         android:textSize="@dimen/text_size_large"
-        tools:text="直播：下周调整能否结束"/>
+        tools:text="直播：下周调整能否结束" />
 
     <TextView
         android:id="@+id/tvNewContent"
@@ -43,7 +42,7 @@
         android:maxLines="2"
         android:textColor="@color/colorGrey333333"
         android:textSize="@dimen/text_size_micro"
-        tools:text="沪指联系调整多日，下周能否做出选择？沪指联系调整多日，下周能否做出选择？沪指联系调整多日，下周能否做出选择？"/>
+        tools:text="沪指联系调整多日，下周能否做出选择？沪指联系调整多日，下周能否做出选择？沪指联系调整多日，下周能否做出选择？" />
 
     <TextView
         android:id="@+id/tvType"
@@ -58,5 +57,5 @@
         android:paddingRight="5dp"
         android:paddingTop="2dp"
         android:text="直播"
-        android:textColor="@color/colorBlue500"/>
+        android:textColor="@color/colorBlue500" />
 </RelativeLayout>

@@ -25,6 +25,7 @@ public class Constant {
     public static final String INTENT_ACTION_ACTIVITY_COLLECT = "INTENT_ACTION_ACTIVITY_COLLECT";
     public static final String INTENT_ACTION_ACTIVITY_MSG_NUM = "INTENT_ACTION_ACTIVITY_MSG_NUM";
     public static final String INTENT_ACTION_MESSAGE_HOME_ACTIVITY_MSG_NUM = "INTENT_ACTION_MESSAGE_HOME_ACTIVITY_MSG_NUM";
+    public static final String ARG_LIVING = "living";
     /**
      * 一万
      */
