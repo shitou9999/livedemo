@@ -280,7 +280,7 @@ public class BaseActivity extends AppCompatActivity {
                     liveParameter.setRoomId(mAppointmentLive.getLive_room_id());
                     liveParameter.setTeacherId(mAppointmentLive.getTeacher_id());
                     i.putExtra(Constant.ARG_LIVING, liveParameter);
-                }else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))) {
+                } else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))) {
                     i.setClass(this, TeacherZoneActivity.class);
                     AppointmentLive mAppointmentLive = new Gson().fromJson(extras, AppointmentLive.class);
                     isNeedAlert = mAppointmentLive.isNeedAlert();
@@ -325,24 +325,30 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void tip(String content, final boolean isClose) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
-                .setTitle(this.getString(R.string.prompt))
-                .setMessage(content)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        try {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+                    .setTitle(this.getString(R.string.prompt))
+                    .setMessage(content)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
 
+                        }
+                    });
+            mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (isClose) {
+                        finish();
                     }
-                });
-        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (isClose) {
-                    finish();
                 }
+            });
+            if (this != null) {
+                mBuilder.create().show();
             }
-        });
-        mBuilder.create().show();
+        }catch (Exception e){
+            LogUtils.e(TAG,"is_support",e);
+        }
     }
 }

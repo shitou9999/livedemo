@@ -162,8 +162,9 @@ public class ReplayLiveActivity extends BaseActivity implements
 //    private int[] tabNamesTags = new int[]{0, 1, 2};
     private String[] tabNames = new String[]{LIVE};
     private int[] tabNamesTags = new int[]{0};
-    private String liveId = "";
-    private String[] liveIdArray;
+    private String CcId = "";
+    private String live_id = "";
+    private String[] CcIdArray;
     private int replayNumber = 0;
     private String teacherId = "";
 
@@ -339,16 +340,16 @@ public class ReplayLiveActivity extends BaseActivity implements
         iv_mInfo = (ImageView) findViewById(R.id.iv_mInfo);
 
         handler = new MyHandle(this);
-        if (mLivingInfo == null) {
-            ToastUtils.showToast(this, "未获取到回放信息");
-            finish();
+        if (mLivingInfo == null || TextUtils.isEmpty(mLivingInfo.getCcid())) {
+            tip("未获取到回放信息");
             return;
         }
 
-        liveId = mLivingInfo.getCcid();
-        liveIdArray = liveId.split(",");
-        if (liveIdArray != null && liveIdArray.length > 0) {
-            liveId = liveIdArray[replayNumber];
+        CcId = mLivingInfo.getCcid();
+        live_id = mLivingInfo.getLiveId();
+        CcIdArray = CcId.split(",");
+        if (CcIdArray != null && CcIdArray.length > 0) {
+            CcId = CcIdArray[replayNumber];
         }
         teacherId = mLivingInfo.getTeacherId();
         roomId = mLivingInfo.getRoomId();
@@ -386,10 +387,18 @@ public class ReplayLiveActivity extends BaseActivity implements
         ImageDisplayUtil.displayImage(this, civ_avatar, mTeacherInfo.getAvatar());
         tv_live_title.setText(mLivingInfo.getLiveTitle());
         tv_live_teacher.setText(mTeacherInfo.getNickname());
-        tv_live_teacher_zan.setText(String.valueOf(mTeacherInfo.getLive_info().getSupport_num()));
-        tv_teacher_fans.setText(String.valueOf(mTeacherInfo.getFans_count()));
-//        tv_live_teacher_zan.setVisibility(View.INVISIBLE);
-//        tv_teacher_fans.setVisibility(View.INVISIBLE);
+        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num()));
+        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
+        if (mTeacherInfo.getIs_follow() == 0) {
+            btn_teacher_follow.setSelected(false);
+        } else {
+            btn_teacher_follow.setSelected(true);
+        }
+        if (mTeacherInfo.getLive_info().getIs_support() == 0) {
+            tv_live_teacher_zan.setSelected(false);
+        } else {
+            tv_live_teacher_zan.setSelected(true);
+        }
     }
 
     private void initTab(int selectedIndex) {
@@ -480,6 +489,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
         map.put("teacher_id", teacherId);
+        map.put("live_id", live_id);
         password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
@@ -487,13 +497,13 @@ public class ReplayLiveActivity extends BaseActivity implements
             public void run() {
 
                 if (password == null || "".equals(password)) {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, liveId, viewerName);
+                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName);
                 } else {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, liveId, viewerName, password);
+                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName, password);
                 }
                 LogUtils.e("login", "userId=" + userId);
                 LogUtils.e("login", "roomId=" + roomId);
-                LogUtils.e("login", "liveId=" + liveId);
+                LogUtils.e("login", "CcId=" + CcId);
                 LogUtils.e("login", "viewerName=" + viewerName);
                 LogUtils.e("login", "password=" + password);
                 dwLive.startLogin();
@@ -897,8 +907,8 @@ public class ReplayLiveActivity extends BaseActivity implements
     public void onCompletion(IMediaPlayer mp) {
         LogUtils.e("demo", "=============================>onCompletion");
         replayNumber++;
-        if (replayNumber < liveIdArray.length) {
-            liveId = liveIdArray[replayNumber];
+        if (replayNumber < CcIdArray.length) {
+            CcId = CcIdArray[replayNumber];
             loginLive();
         } else {
             handler.sendEmptyMessage(FINISH);
@@ -1174,7 +1184,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             //点赞
             case R.id.tv_live_teacher_zan2:
                 if (isLogin(this)) {
-                    LiveHttpUtil.executeAddLike(this, liveId);
+                    LiveHttpUtil.executeAddLike(this, live_id);
                 }
                 break;
             //关注
@@ -1239,7 +1249,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                     playLiveActivity.setPlayControllerVisible(false);
                     break;
                 case HIDE_PALY:
-                    if (playLiveActivity.loginTime < 3) {
+                    if (playLiveActivity.loginTime < Constant.LiveLoginNumber) {
                         playLiveActivity.loginTime++;
                         playLiveActivity.loginLive();
                     } else {
@@ -1278,7 +1288,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                     break;
                 case INIT_FINISH:
                     LogUtils.i(TAG, "回放初始化成功");
-                    LiveHttpUtil.historyCountPlusOne(playLiveActivity, playLiveActivity.mLivingInfo.getLiveId());
+//                    LiveHttpUtil.historyCountPlusOne(playLiveActivity, playLiveActivity.mLivingInfo.getLiveId());
                     break;
                 case EXCEPTION:
                     String errorMessage = "";
@@ -1368,7 +1378,7 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private void getTeacherInfo() {
 //        LiveHttpUtil.fetchLiveNowTopInfo(this);
-        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), CcId, Action.live_teacher_info);
     }
 
     @Override

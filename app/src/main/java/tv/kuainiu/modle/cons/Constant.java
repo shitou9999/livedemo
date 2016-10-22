@@ -5,13 +5,14 @@ package tv.kuainiu.modle.cons;
  * Created by guxuan on 2016/2/29.
  */
 public class Constant {
+    public static final int LiveLoginNumber = 2;
     /**
-     *图片预览
+     * 图片预览
      */
     public static final int PICTURE_PREVIEW = 40001;
 
     /**
-     *图片选择
+     * 图片选择
      */
     public static final int SELECT_PICTURE = 40002;
     public static final String PICTURE_PREVIEW_KEY = "picture_preview_key";

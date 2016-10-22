@@ -326,9 +326,8 @@ public class PlayLiveActivity extends BaseActivity implements
 
         handler = new MyHandle(this);
         mLivingInfo = getIntent().getExtras().getParcelable(Constant.ARG_LIVING);
-        if (mLivingInfo == null) {
-            ToastUtils.showToast(this, "未获取到直播信息");
-            finish();
+        if (mLivingInfo == null || TextUtils.isEmpty(mLivingInfo.getRoomId())) {
+            tip("未获取到直播信息");
             return;
         }
 
@@ -352,7 +351,7 @@ public class PlayLiveActivity extends BaseActivity implements
         tv_live_title.setText(mLivingInfo.getLiveTitle());
         tv_live_teacher.setText(mTeacherInfo.getNickname());
         tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num()));
-//        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", mTeacherInfo.getOnLineNumber()));
+        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
         if (mTeacherInfo.getIs_follow() == 0) {
             btn_teacher_follow.setSelected(false);
         } else {
@@ -807,7 +806,7 @@ public class PlayLiveActivity extends BaseActivity implements
     private void initAbout() {
 //        String hhh = "毛鹏皓老师具有30年以上操作经历。<br/>毛鹏皓老师不仅是&ldquo;孔明线&rdquo;的创始人，也是飙股工作室总监。<br/>&nbsp;<a href=\"http://wwww.baidu.com\">ssssssss</a><br/>毛鹏皓老师曾任多家证券投资顾问公司副总经理与总经理，在各家投资顾问公司的操作绩效极优，三位数绩效股多达十余档以上。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122307630.png\"style=\"height: 186px; width: 369px\"/><br/>毛鹏皓老师曾担任非凡电视台、台湾电视台、TVBS电视台、学者电视台等电视台专属讲师，中国广播公司、正声广播电台、快乐广播电台特聘讲师。<br/>&nbsp;<br/>毛鹏皓老师也曾担任财讯日报、产经日报、鑫报之特聘主笔。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122335409.png\"style=\"height: 394px; width: 554px\"/><br/><div style=\"text-align: center\">TVBS&ldquo;热线一路发&rdquo;投资组合成绩报告</div>&nbsp;<br/>毛鹏皓老师曾三次参加台湾电视台投资组合竞赛，皆获冠军并获得&ldquo;股市不败神话&rdquo;之雅号。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122410329.png\"style=\"height: 369px; width: 441px\"/><br/>毛鹏皓老师他的&ldquo;天机操盘术&rdquo;帮助投资者选择飙股；他的&ldquo;孔明线战法&rdquo;是帮助操盘者掌握高低档的买卖点，绝对能帮助投资者们超越指数、战胜大盘。<br/>&nbsp;<br/>这一次，毛鹏皓老师将把他多年来的操盘心法分享给大家，并将他&ldquo;孔明线战法&rdquo;的精华融入他的课堂内容中。这一期的课程会从简单的价、量、指标与波浪等技术分析一一切入。除了技术分析领域以外，毛鹏皓老师将配合基本面、筹码面、心理面的掌控，让具有多年股龄和熟悉技术分析的学员们都能从课程中吸收到毛鹏皓老师独特的操盘技巧与心法。<br/>&nbsp;<br/>毛鹏皓老师的课程能帮助学员们走向成功之路，他不仅要帮助你改变你的脑袋，还要改造你的态度，因为，脑袋会改变你的口袋，正确的态度会决定你的命运！<br/>&nbsp;<br/>毛鹏皓老师会与学员们分享德国股神、日本股神、美国股神、债券天王、新兴市场教父等投资大师的操盘心得。例如，毛鹏皓老师会提供给你巴菲特的六大选股法则，教你怎样选择长期投资的优良标的。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;将教你如何选股，你会掌握短线、中线和长线如何切入、如何加码、如何观察成交量，并且指导你如何运用K线、把握布局时机以及各种指标处于不同的多空时点该如何运用与操盘。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;的操盘课程会教你&ldquo;天机操盘术&rdquo;的72项绝技，让新手知道如何辨识头部与底部现象，让老手能准确地掌握底部买进的切入点和顶部如何避开风险的法则与退场卖点。<br/>&nbsp;<br/>毛鹏皓老师的股市操盘18招更是广大股民前所未见的投资秘笈。<br/>&nbsp;<br/>毛鹏皓老师作为理周集团证券分析师教育训练总督导已经培养出不计其数的优秀分析师，其中有5位达到千万元绩效，有一位达到上亿绩效！<br/>&nbsp;<br/>欢迎各路高手一起来探索&ldquo;孔明线&rdquo;与&ldquo;天机战法&rdquo;的奥妙之处！<br/>";
 //        LogUtils.i("web_live_about", StringUtils.replaceNullToEmpty(mLivingInfo.getLiveing().getAnchor_about(), "45555"));
-        if (web_live_about!=null && mTeacherInfo != null) {
+        if (web_live_about != null && mTeacherInfo != null) {
             web_live_about.setWebViewClient(new MyWebViewClient());
             web_live_about.loadDataWithBaseURL(null, mTeacherInfo.getIntroduce(), "text/html", "utf-8", null);
         }
@@ -1559,7 +1558,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     break;
                 case HIDE_PALY:
 
-                    if (playLiveActivity.loginTime < 3) {
+                    if (playLiveActivity.loginTime < Constant.LiveLoginNumber) {
                         playLiveActivity.loginLive();
                         playLiveActivity.loginTime++;
                     } else {
@@ -1738,7 +1737,7 @@ public class PlayLiveActivity extends BaseActivity implements
     }
 
     private void getTeacherInfo() {
-        TeacherHttpUtil.fetchTeacherInfo(this, teacherId,MyApplication.getUser()==null?"0": MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
     }
 
     @Override

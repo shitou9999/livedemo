@@ -82,7 +82,7 @@ public class LiveHttpUtil {
 
     /**
      * 回放次数+1。用于后台统计
-     *
+     *@deprecated
      * @param context nil
      * @param id      回放视频 id
      */

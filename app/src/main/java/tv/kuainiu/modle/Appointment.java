@@ -33,6 +33,7 @@ public class Appointment {
     private String live_id;
     private int live_status;
     private String live_msg;
+    private String playback_id;
 
     public String getId() {
         return id;
@@ -128,5 +129,13 @@ public class Appointment {
 
     public void setLive_msg(String live_msg) {
         this.live_msg = live_msg;
+    }
+
+    public String getPlayback_id() {
+        return playback_id;
+    }
+
+    public void setPlayback_id(String playback_id) {
+        this.playback_id = playback_id;
     }
 }

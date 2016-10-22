@@ -38,6 +38,8 @@ import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.liveold.ReplayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.adapter.MyLiveHistoryFragmentAdapter;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.StringUtils;
@@ -121,7 +123,14 @@ public class MyLiveHistoryFragment extends BaseFragment {
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                LiveInfo liveItem=listData.get(position);
+                LiveParameter liveParameter = new LiveParameter();
+                liveParameter.setLiveId(liveItem.getId());
+                liveParameter.setLiveTitle(liveItem.getTitle());
+                liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                liveParameter.setTeacherId(liveItem.getTeacher_info().getId());
+                liveParameter.setCcid(liveItem.getPlayback_id());
+                ReplayLiveActivity.intoNewIntent(getActivity(), liveParameter);
             }
         });
     }

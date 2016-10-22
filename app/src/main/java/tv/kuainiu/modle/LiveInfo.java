@@ -46,7 +46,7 @@ public class LiveInfo {
     private String create_date;
     private String playback_id;
     private String description;
-    private int is_supported;
+    private int is_support;
     private int live_status;//1直播结束，2直播中，3直播未开始
     private String user_id;
     private int is_follow;
@@ -155,11 +155,11 @@ public class LiveInfo {
     }
 
     public int getIs_supported() {
-        return is_supported;
+        return is_support;
     }
 
     public void setIs_supported(int is_supported) {
-        this.is_supported = is_supported;
+        this.is_support = is_supported;
     }
 
     public int getLive_status() {
