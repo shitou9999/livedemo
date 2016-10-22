@@ -1,12 +1,11 @@
 package tv.kuainiu.event;
 
 
-import tv.kuainiu.modle.cons.Action;
-
 import org.json.JSONObject;
 
+import tv.kuainiu.modle.cons.Action;
+
 /**
- * @author nanck 2016/3/10.
  */
 public class HttpEvent {
     protected Action action;

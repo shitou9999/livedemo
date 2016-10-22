@@ -51,7 +51,6 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.StringUtils;
-import tv.kuainiu.utils.ToastUtils;
 
 /**
  * Created by jack on 2016/9/7.
@@ -59,7 +58,7 @@ import tv.kuainiu.utils.ToastUtils;
 public class BaseActivity extends AppCompatActivity {
     public String TAG = "";
     public static final String CLIENT_INIT_TIME = "client_init_time";
-    public static final int CLIENT_INIT_NUMBER = 5;
+    public static final int CLIENT_INIT_NUMBER = 2;
     public static final int CLIENT_INIT_MINUTE = 5;
     public static int initClientNumbers = 0;
     public boolean isUpLoadRegistrationID = false;
@@ -122,7 +121,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 //        initClientNumbers = 0;
         //连续初始化5次之后，再不成功就停止初始化
-        if (initClientNumbers < CLIENT_INIT_NUMBER) {
+//        if (initClientNumbers < CLIENT_INIT_NUMBER) {
 
             if (-1001 == code) {
                 LogUtils.d("重新初始化", "BaseActivity 重新初始化：" + code);
@@ -141,9 +140,6 @@ public class BaseActivity extends AppCompatActivity {
                 initClientNumbers++;
             } else if (-1004 == code) {
                 LogUtils.d("系统错误", "-1004");
-                if (MyApplication.IsDegbug) {
-                    ToastUtils.showToast(context, "-1004");
-                }
                 initApp(context);
                 return;
             } else if (-1002 == code) {
@@ -155,8 +151,8 @@ public class BaseActivity extends AppCompatActivity {
             if (!NetUtils.isOnline(context)) {
                 return;
             }
-            OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
-        }
+//            OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
+//        }
 
     }
 
@@ -173,7 +169,7 @@ public class BaseActivity extends AppCompatActivity {
             public void sure() {
                 MyApplication.getInstance().setDeviceId("");
                 MyApplication.getInstance().clearLocalData();
-                OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
+                OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
             }
         });
     }

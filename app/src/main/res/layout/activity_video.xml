@@ -38,7 +38,7 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="top"
             android:background="#80000000"
-            android:visibility="gone" >
+           >
 
             <ImageView
                 android:id="@+id/backPlayList"
@@ -107,7 +107,7 @@
             android:layout_alignParentBottom="true"
             android:background="#80000000"
             android:orientation="horizontal"
-            android:visibility="gone" >
+            >
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -181,7 +181,8 @@
                 android:gravity="center"
                 android:text="@string/screensize"
                 android:background="@null"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout

@@ -38,6 +38,8 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
+import tv.kuainiu.ui.comments.CommentListActivity;
+import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
@@ -145,6 +147,11 @@ public class CustomVideoFragment extends BaseFragment implements OnItemClickList
                 customVideo = (CustomVideo) v.getTag();
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
                 SupportHttpUtil.supportVideoDynamics(getActivity(), customVideo.getCat_id(), customVideo.getId());
+                break;
+            case R.id.tv_friends_post_comment:
+//                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
+                customVideo = (CustomVideo) v.getTag();
+                CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(customVideo.getId()), "");
                 break;
         }
     }

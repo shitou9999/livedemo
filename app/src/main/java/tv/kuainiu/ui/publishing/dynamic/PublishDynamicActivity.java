@@ -159,7 +159,7 @@ public class PublishDynamicActivity extends BaseActivity {
         LogUtils.e(TAG, "path=" + path);
         Luban.get(PublishDynamicActivity.this)
                 .load(new File(path))                     //传人要压缩的图片
-                .putGear(1)      //设定压缩档次，默认三挡
+                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
                 .setCompressListener(new OnCompressListener() { //设置回调
 
                     @Override

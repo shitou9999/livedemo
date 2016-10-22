@@ -174,6 +174,7 @@ public enum Action {
     CUSTOM_LIST,   //2.9 定制列表 - 名师观点   sns/custom_list     圈子-名师观点
     CUSTOM_VIDEO_LIST,   // 圈子-解盘视频
     SUPPORT_DYNAMICS,   // 文章动态点赞
+    SUPPORT_DYNAMICS_teacher,   // 文章动态点赞
     SUPPORT_DYNAMICS2,   // 文章动态点赞
     home_support_dynamics,   // 文章动态点赞
     CUSTOM_LIVE_LIST,   // 圈子-直播
@@ -199,4 +200,5 @@ public enum Action {
     my_live_list,   // 我的直播
     del_system_msg,   // 删除系统消息
     live_teacher_info,   // 直播老师信息
+    custom_teacher_list,   // 圈子老师
 }

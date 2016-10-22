@@ -209,7 +209,7 @@ public class VideoCommentAdapter extends RecyclerView.Adapter<VideoCommentAdapte
         ImageDisplayUtil.displayImage(mContext, holder.civHead, commentItem.getAvatar(), R.mipmap.default_avatar);
         // 赞
         resetFavourView(holder.textFavour, commentItem);
-        // 评论时间
+        // 时间
         long time = Long.parseLong(commentItem.getCreate_date());
         String date = DateUtil.getDurationString(DateUtil.toJava(time));
         holder.textDate.setText(date);

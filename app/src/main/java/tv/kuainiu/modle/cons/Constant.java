@@ -26,6 +26,7 @@ public class Constant {
     public static final String INTENT_ACTION_ACTIVITY_MSG_NUM = "INTENT_ACTION_ACTIVITY_MSG_NUM";
     public static final String INTENT_ACTION_MESSAGE_HOME_ACTIVITY_MSG_NUM = "INTENT_ACTION_MESSAGE_HOME_ACTIVITY_MSG_NUM";
     public static final String ARG_LIVING = "living";
+    public static final String ALARMRECEIVER_ACTION = "tv.kuainiu.android.intent.ALARMRECEIVER";
     /**
      * 一万
      */

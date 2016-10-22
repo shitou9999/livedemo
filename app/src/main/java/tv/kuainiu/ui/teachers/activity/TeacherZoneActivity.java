@@ -46,6 +46,8 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.comments.CommentListActivity;
+import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.friends.model.Message;
 import tv.kuainiu.ui.teachers.adapter.TeacherZoneAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
@@ -216,6 +218,17 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                 }else{
                     customVideo = (CustomVideo) v.getTag();
                     SupportHttpUtil.supportVideoDynamics(this,customVideo.getCat_id(),customVideo.getId() );
+                }
+
+                break;
+            case R.id.tv_friends_post_comment:
+                if(selectedIndex==0) {
+                    teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
+                    SupportHttpUtil.supportDynamics(this, String.valueOf(teacherZoneDynamics.getId()),Action.SUPPORT_DYNAMICS2);
+                    CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_DYNAMIC, String.valueOf(teacherZoneDynamics.getId()), "");
+                }else{
+                    customVideo = (CustomVideo) v.getTag();
+                    CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_DYNAMIC, String.valueOf(customVideo.getId()), "");
                 }
 
                 break;

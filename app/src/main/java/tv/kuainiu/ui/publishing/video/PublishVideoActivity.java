@@ -61,7 +61,6 @@ import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
-import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.utils.ToastUtils;
@@ -586,7 +585,7 @@ public class PublishVideoActivity extends BaseActivity {
                         if (json != null && json.has("description")) {
                             description = json.get("description").getAsString();
                         }
-                        ShareUtils.showShare(ShareUtils.ARTICLE, PublishVideoActivity.this, title, description, thumb, url, null);
+//                        ShareUtils.showShare(ShareUtils.ARTICLE, PublishVideoActivity.this, title, description, thumb, url, null);
                     } catch (Exception e) {
                         LogUtils.e(TAG, "Exception", e);
 

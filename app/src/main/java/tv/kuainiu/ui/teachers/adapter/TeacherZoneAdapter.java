@@ -211,7 +211,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getCreate_date()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
@@ -260,7 +260,17 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         });
-        if (!TextUtils.isEmpty(info.getThumb())) {
+        holder.mTvFriendsPostComment.setTag(info);
+        holder.mTvFriendsPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(v);
+                }
+            }
+        });
+        String thumb=StringUtils.replaceNullToEmpty(info.getThumb());
+        if (!TextUtils.isEmpty(thumb) && !"false".equals(thumb)) {
             String[] array = info.getThumb().split(",");
             if (array != null) {
                 holder.exgv_appraisal_pic.setVisibility(View.VISIBLE);
@@ -291,7 +301,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getInputtime()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getInputtime()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
 
@@ -350,6 +360,15 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onClick(View view) {
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick(view);
+                }
+            }
+        });
+        holder.mTvFriendsPostComment.setTag(info);
+        holder.mTvFriendsPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(v);
                 }
             }
         });

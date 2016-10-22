@@ -38,6 +38,8 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.comments.CommentListActivity;
+import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
@@ -94,10 +96,12 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         initData();
         return view;
     }
+
     private void initData() {
-        page=1;
+        page = 1;
         fetchTeacherDynamicsList();
     }
+
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -131,16 +135,23 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     }
 
     TextView mTvFriendsPostLike;
+//    TextView mTvFriendsPostComment;
     TeacherZoneDynamics teacherZoneDynamics;
     View ivSupport;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSupport:
-                ivSupport=v;
+                ivSupport = v;
                 teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
                 SupportHttpUtil.supportDynamics(getActivity(), String.valueOf(teacherZoneDynamics.getId()), Action.SUPPORT_DYNAMICS);
+                break;
+            case R.id.tv_friends_post_comment:
+                teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
+//                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
+                CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(teacherZoneDynamics.getId()), "");
                 break;
         }
     }
@@ -159,6 +170,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
 //        adapter.notifyItemRangeInserted(size, teacherZoneDynamicsList.size());
         adapter.notifyDataSetChanged();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(EmptyEvent event) {
         switch (event.getAction()) {
@@ -167,6 +179,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
                 break;
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
@@ -196,7 +209,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
-                            Log.e("jsonObject",jsonObject.toString());
+                            Log.e("jsonObject", jsonObject.toString());
                             List<TeacherZoneDynamics> tempTeacherZoneDynamicsList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
                             }.getType());
                             if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {

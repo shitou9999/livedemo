@@ -116,7 +116,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getCreate_date()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
@@ -144,9 +144,19 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                 }
             }
         });
-
-        if (!TextUtils.isEmpty(info.getThumb())) {
-            String[] array = info.getThumb().split(",");
+        holder.mTvFriendsPostComment.setTag(info);
+        holder.mTvFriendsPostComment.setTag(R.id.tv_friends_post_comment, holder.mTvFriendsPostComment);
+        holder.mTvFriendsPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(v);
+                }
+            }
+        });
+        String thumb=StringUtils.replaceNullToEmpty(info.getThumb());
+        if (!TextUtils.isEmpty(thumb) && !"false".equals(thumb)) {
+            String[] array = thumb.split(",");
             if (array != null) {
                 ArrayList<String> list = new ArrayList<>();
                 for (int i = 0; i < array.length; i++) {
@@ -177,7 +187,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("HH:ss", info.getInputtime()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getInputtime()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
@@ -209,6 +219,16 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(view);
+                }
+            }
+        });
+        holder.mTvFriendsPostComment.setTag(info);
+        holder.mTvFriendsPostComment.setTag(R.id.tv_friends_post_comment, holder.mTvFriendsPostComment);
+        holder.mTvFriendsPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onClick(v);
                 }
             }
         });

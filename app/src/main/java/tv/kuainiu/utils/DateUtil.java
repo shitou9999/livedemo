@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by guxuan on 2016/3/16.
+ * 时间工具
  */
 public class DateUtil {
     public static final String FORMAT_DATE = "yyyy-MM-dd";
@@ -34,6 +34,25 @@ public class DateUtil {
             e.printStackTrace();
             return value;
         }
+    }
+
+    /**
+     * 将时间戳转换成某种格式的字符串形式
+     *
+     * @param value
+     * @return
+     */
+    public static long toTimestampFormStingDate(String value) {
+        long timTamp = 0;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(value);
+            timTamp = date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timTamp;
     }
 
     /**
@@ -80,22 +99,25 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CHINA);
         String result = "000000";
         try {
-            result = sdf.format(new Date(time));
+
+            result = sdf.format(new Date(toJava(time)));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-
     public static long toPhp(long millis) {
-        String temp = String.valueOf(millis);
-        return Long.parseLong(temp.substring(0, temp.length() - 3));
+        return millis / 1000;
     }
 
     public static long toJava(long millis) {
-        String temp = String.valueOf(millis);
-        return Long.parseLong(temp.concat("000"));
+
+        if (String.valueOf(millis).length() >= 13) {
+            return millis;
+        } else {
+            return millis * 1000;
+        }
     }
 
 
@@ -184,7 +206,10 @@ public class DateUtil {
         }
         return date;
     }
+    public static String getTimeString_HH_mm(long value) {
 
+        return DateUtil.toTimestampForString("HH:mm", value);
+    }
     public static String getDurationString(long value) {
         return getDurationString("yyyy-MM-dd", value);
     }
@@ -214,6 +239,7 @@ public class DateUtil {
         }
         return minute;
     }
+
     /**
      * 计算两个日期相隔的秒数
      *

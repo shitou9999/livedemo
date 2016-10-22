@@ -32,10 +32,10 @@ public class MyLiveActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
         ButterKnife.bind(this);
-        tbvTitle= (TitleBarView) findViewById(R.id.tbv_title);
+        tbvTitle = (TitleBarView) findViewById(R.id.tbv_title);
         tbvTitle.setText("我的直播");
-        mTabFragmentMajor= (TabLayout) findViewById(R.id.tab_fragment_major);
-        mNvpFragmentMajor= (NoSlideViewPager) findViewById(R.id.nvp_fragment_major);
+        mTabFragmentMajor = (TabLayout) findViewById(R.id.tab_fragment_major);
+        mNvpFragmentMajor = (NoSlideViewPager) findViewById(R.id.nvp_fragment_major);
         initFragment();
 
         mNvpFragmentMajor.setAdapter(new TabMajorFragment.SimpleViewPager(getSupportFragmentManager(), mBaseFragments, titles));

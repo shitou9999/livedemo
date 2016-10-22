@@ -484,23 +484,19 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 mRvComments.setAdapter(mTeacherCommentAdapter);
             }
         } else {
-            mRvComments.setAdapter(mTeacherCommentAdapter);
+            if (0 == mPage) {
+                mRvComments.setAdapter(mPostCommentListAdapter);
+            } else {
+                mRvComments.setAdapter(mTeacherCommentAdapter);
+            }
         }
     }
 
     private void intHttpRequest() {
-        if (MODE_ARTICLE == mMode) {
-            if (0 == mPage) {
-                fetchHotComment();
-            } else {
-                fetchTeacherComment(Constant.DEFAULT_PAGE_NUMBER);
-            }
+        if (0 == mPage) {
+            fetchHotComment();
         } else {
-            if (0 == mPage) {
-                fetchAllComment(Constant.DEFAULT_PAGE_NUMBER);
-            } else {
-                fetchTeacherComment(Constant.DEFAULT_PAGE_NUMBER);
-            }
+            fetchTeacherComment(Constant.DEFAULT_PAGE_NUMBER);
         }
     }
 
@@ -519,7 +515,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         Map<String, String> map = new HashMap<>();
         map.put("type", String.valueOf(mMode));
         map.put("news_id", mPostId);
-        map.put("dynamics_id", mPostId);
+        map.put("dynamics_id", dynamics_id);
         map.put("cat_id", mCatId);
         map.put(Constant.KEY_PAGE, String.valueOf(page));
         map.put("just_teacher", just);
@@ -533,7 +529,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         Map<String, String> map = new HashMap<>();
         map.put("type", String.valueOf(mMode));
         map.put("news_id", mPostId);
-        map.put("dynamics_id", mPostId);
+        map.put("dynamics_id", dynamics_id);
         map.put("cat_id", mCatId);
         String param = ParamUtil.getParam(map);
         OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.COMMENT_LIST_HOT, param, Action.comment_list_hot);
@@ -600,19 +596,8 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                         loading = false;
                         mAllCommentList.addAll(list);
                     }
-
-                    if (MODE_ARTICLE == mMode) {
-                        if (0 == mPage) {
-                            mPostCommentListAdapter.setAllData(mAllCommentList);
-                            mPostCommentListAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        if (0 == mPage) {
-                            mTeacherCommentAdapter.setAllData(mAllCommentList);
-                            mTeacherCommentAdapter.notifyDataSetChanged();
-                        }
-                    }
-
+                    mPostCommentListAdapter.setAllData(mAllCommentList);
+                    mPostCommentListAdapter.notifyDataSetChanged();
                 }
             }
         }

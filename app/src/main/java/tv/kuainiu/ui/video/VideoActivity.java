@@ -566,7 +566,7 @@ public class VideoActivity extends BaseActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvDown:
-                //TODO 视频下载
+                //视频下载
                 downloader = new Downloader(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY);
                 downloader.setOnProcessDefinitionListener(onProcessDefinitionListener);
                 downloader.getDefinitionMap();
@@ -637,7 +637,7 @@ public class VideoActivity extends BaseActivity implements
         tvTiltle.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getTitle()));
         tvDescripion.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getCatname()));//栏目
 
-        tvDate.setText(DateUtil.getDurationString(mVideoDetail.getInputtime()));//日期
+        tvDate.setText(DateUtil.getDurationString(DateUtil.toJava(mVideoDetail.getInputtime())));//日期
         //播放次数
         tvViewNumber.setText(String.format(Locale.CHINA, "%s次", StringUtils.getDecimal(Integer.parseInt(StringUtils.replaceNullToEmpty(mVideoDetail.getView_num(), "0")), Constant.TEN_THOUSAND, "万", "")));
         //点赞次数
@@ -1009,12 +1009,13 @@ public class VideoActivity extends BaseActivity implements
         isPrepared = true;
         if (!isFreeze) {
             if (isPlaying == null || isPlaying.booleanValue()) {
-                player.start();
-                playOp.setImageResource(R.drawable.btn_pause);
+//                player.pause();
+                playOp.setImageResource(R.drawable.btn_play);
+                currentPosition=0;
             }
         }
 
-        if (currentPosition > 0) {
+        if (currentPosition >=0) {
             player.seekTo(currentPosition);
         } else {
             if (lastPlayPosition > 0) {

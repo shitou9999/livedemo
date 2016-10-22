@@ -77,7 +77,7 @@ public class ReadingTapeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
 //        }
 //        ViewGroup viewgroup = (ViewGroup) view.getParent();
 //        if (viewgroup != null) {
@@ -110,28 +110,19 @@ public class ReadingTapeFragment extends BaseFragment {
     }
 
     private void initData() {
-//        getBannerData();
+        page = 1;
         getData();
-//        getHuiFangData();
-    }
-
-    private void getBannerData() {
-        LiveHttpUtil.liveIndex(getActivity(), "4", page, Action.live_zhi_bo_kauiniu_tv);
     }
 
     private void getData() {
         LiveHttpUtil.liveIndex(getActivity(), "1", page, Action.live_zhi_bo_kan_pan);
-    }
-    private void getHuiFangData() {
-        LiveHttpUtil.liveIndex(getActivity(), "3", page, Action.live_hui_fang_kan_pan);
     }
 
     private void initListener() {
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                getData();
+                initData();
             }
         });
         rvReadingTap.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -165,14 +156,8 @@ public class ReadingTapeFragment extends BaseFragment {
         mReadingTapeAdapter.notifyDataSetChanged();
     }
 
-    private void dataLiveBind() {
-        mReadingTapeAdapter.setLiveList(mLiveHuiFangItemList);
-//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
-        mReadingTapeAdapter.notifyDataSetChanged();
-    }
-
     private void dataBannerBind() {
-        mReadingTapeAdapter.setBannerList(mLiveItemList);
+        mReadingTapeAdapter.setBannerList(mLiveHuiFangItemList);
 //        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
         mReadingTapeAdapter.notifyDataSetChanged();
     }
@@ -192,43 +177,23 @@ public class ReadingTapeFragment extends BaseFragment {
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
                         }.getType());
 
+                        if (page == 1) {
+                            List<LiveInfo> tempKuainiuLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("guanfang_list"), new TypeToken<List<LiveInfo>>() {
+                            }.getType());
+                            mLiveHuiFangItemList.clear();
+                            mLiveHuiFangItemList.addAll(tempKuainiuLiveItemList);
+                            dataBannerBind();
+                        }
                         if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
                             loading = false;
                             int size = mLiveItemList.size();
                             mLiveItemList.addAll(tempLiveItemList);
-                            dataBannerBind();
                             dataLiveListBind(size);
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                         ToastUtils.showToast(getActivity(), "直播列表解析失败");
-                    }
-                } else {
-                    ToastUtils.showToast(getActivity(), event.getMsg());
-                }
-                break;
-            case live_hui_fang_kan_pan:
-                if (page == 1) {
-                    mLiveHuiFangItemList.clear();
-                    srlRefresh.setRefreshing(false);
-                }
-                if (Constant.SUCCEED == event.getCode()) {
-                    String json = event.getData().optString("data");
-                    try {
-                        JSONObject object = new JSONObject(json);
-                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
-                        }.getType());
-
-                        if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
-                            int size = mLiveHuiFangItemList.size();
-                            mLiveHuiFangItemList.addAll(tempLiveItemList);
-                            dataLiveBind();
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ToastUtils.showToast(getActivity(), "直播回放解析失败");
                     }
                 } else {
                     ToastUtils.showToast(getActivity(), event.getMsg());

@@ -1,9 +1,6 @@
 package tv.kuainiu.ui.me.appointment.fragment;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,11 +39,10 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
-import tv.kuainiu.ui.liveold.AlarmReceiver;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
-import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_LIVE;
@@ -201,25 +197,31 @@ public class MyLiveFragment extends BaseFragment {
 
     private void dataLiveListBind(int size) {
         if (mLiveItemList.size() > 0) {
-            LiveInfo entry= mLiveItemList.get(0);
-            recLen = DateUtil.secondBetweenTwoDate(DateUtil.getCurrentDate(),entry.getStart_date());
-            mSubscribeDao = new LiveSubscribeDao(context);
+            LiveInfo entry = mLiveItemList.get(0);
+            recLen = DateUtil.secondBetweenTwoDate(DateUtil.getCurrentDate(), entry.getStart_date());
+          /*
+           本地提醒
+           mSubscribeDao = new LiveSubscribeDao(context);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(context.getApplicationContext(), AlarmReceiver.class);
-            intent.putExtra("id", entry.getId());
-            intent.putExtra("title", entry.getTitle());
+            Intent intent = new Intent(ALARMRECEIVER_ACTION);
+            intent.putExtra(AlarmReceiver.LIVE_ID, entry.getId());
+            intent.putExtra(AlarmReceiver.TEACHER_ID, entry.getTeacher_info().getId());
+            intent.putExtra(AlarmReceiver.LIVE_TITLE, entry.getTitle());
+            intent.putExtra(AlarmReceiver.ROOM_ID, entry.getTeacher_info().getLive_roomid());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 200, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            boolean isRemind=mSubscribeDao.has(entry.getId());
+            boolean isRemind = mSubscribeDao.has(entry.getId());
             if (!isRemind) {
                 boolean flag = mSubscribeDao.insert(entry.getId(), 1);
-                if (flag) {
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, recLen*1000, pendingIntent);
+                if (flag && page == 1) {
+                    LogUtils.e("AlarmReceiver", "添加直播提醒成功");
+                    //提前5分钟提醒
+                    alarmManager.set(AlarmManager.RTC, DateUtil.toTimestampFormStingDate(entry.getStart_date()) - ADV_TEN_MINUTES, pendingIntent);
                 } else {
-                    DebugUtils.showToast(context, "添加直播提醒失败，请稍后再试");
+                    LogUtils.e("AlarmReceiver", "添加直播提醒失败");
                 }
 
 
-            }
+            }*/
             handler.removeCallbacks(runnable);
 //            if (recLen <= 600) {
             handler.postDelayed(runnable, 0);
@@ -229,7 +231,6 @@ public class MyLiveFragment extends BaseFragment {
             rlCountdown.setVisibility(View.GONE);
         }
         mReadingTapeAdapter.setLiveListList(mLiveItemList);
-//        mReadingTapeAdapter.notifyItemRangeInserted(size, mLiveItemList.size());
         mReadingTapeAdapter.notifyDataSetChanged();
     }
 
@@ -243,6 +244,7 @@ public class MyLiveFragment extends BaseFragment {
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
+                    LogUtils.e("json", "json:" + json);
                     try {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("live_list"), new TypeToken<List<LiveInfo>>() {
