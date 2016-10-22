@@ -208,7 +208,7 @@ public class DateUtil {
     }
     public static String getTimeString_HH_mm(long value) {
 
-        return DateUtil.toTimestampForString("HH:mm", value);
+        return getDurationString("HH:mm", value);
     }
     public static String getDurationString(long value) {
         return getDurationString("yyyy-MM-dd", value);

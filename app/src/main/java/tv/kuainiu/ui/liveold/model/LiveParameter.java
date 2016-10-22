@@ -19,10 +19,12 @@ public class LiveParameter implements Parcelable {
     }
 
     protected LiveParameter(Parcel in) {
+
         liveId = in.readString();
         teacherId = in.readString();
         liveTitle = in.readString();
         roomId = in.readString();
+        ccid = in.readString();
     }
 
     @Override
@@ -31,6 +33,7 @@ public class LiveParameter implements Parcelable {
         dest.writeString(teacherId);
         dest.writeString(liveTitle);
         dest.writeString(roomId);
+        dest.writeString(ccid);
     }
 
     @Override

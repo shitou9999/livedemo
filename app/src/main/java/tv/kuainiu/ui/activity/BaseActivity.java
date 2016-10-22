@@ -1,8 +1,10 @@
 package tv.kuainiu.ui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +44,7 @@ import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
@@ -123,34 +126,34 @@ public class BaseActivity extends AppCompatActivity {
         //连续初始化5次之后，再不成功就停止初始化
 //        if (initClientNumbers < CLIENT_INIT_NUMBER) {
 
-            if (-1001 == code) {
-                LogUtils.d("重新初始化", "BaseActivity 重新初始化：" + code);
-                MyApplication.getInstance().clearLocalData();
-                if (initClientNumbers == 0) {
-                    PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
-                }
-                initClientNumbers++;
-            } else if (-1003 == code) {
-                LogUtils.d("重新初始化", "BaseActivity 重新初始化（重新生成设备号）：" + code);
-                if (initClientNumbers == 0) {
-                    PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
-                }
-                MyApplication.getInstance().setDeviceId("");
-                MyApplication.getInstance().clearLocalData();
-                initClientNumbers++;
-            } else if (-1004 == code) {
-                LogUtils.d("系统错误", "-1004");
-                initApp(context);
-                return;
-            } else if (-1002 == code) {
-                offLine(context);
-                return;
-            } else {
-                return;
+        if (-1001 == code) {
+            LogUtils.d("重新初始化", "BaseActivity 重新初始化：" + code);
+            MyApplication.getInstance().clearLocalData();
+            if (initClientNumbers == 0) {
+                PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
             }
-            if (!NetUtils.isOnline(context)) {
-                return;
+            initClientNumbers++;
+        } else if (-1003 == code) {
+            LogUtils.d("重新初始化", "BaseActivity 重新初始化（重新生成设备号）：" + code);
+            if (initClientNumbers == 0) {
+                PreferencesUtils.putString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
             }
+            MyApplication.getInstance().setDeviceId("");
+            MyApplication.getInstance().clearLocalData();
+            initClientNumbers++;
+        } else if (-1004 == code) {
+            LogUtils.d("系统错误", "-1004");
+            initApp(context);
+            return;
+        } else if (-1002 == code) {
+            offLine(context);
+            return;
+        } else {
+            return;
+        }
+        if (!NetUtils.isOnline(context)) {
+            return;
+        }
 //            OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V2, Api.CLIENT_INIT, ParamUtil.getParam(null), Action.client_init);
 //        }
 
@@ -253,7 +256,7 @@ public class BaseActivity extends AppCompatActivity {
                     SystemMessage systemMessage = new Gson().fromJson(extras, SystemMessage.class);
                     isNeedAlert = systemMessage.isNeedAlert();
                     i.setClass(this, MessageSystemActivity.class);
-                }else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
+                } else if (MessageType.VideoType.type().equals(jsonObject.getString("type"))) {//视频消息
                     VideoMessage videoMessage = new Gson().fromJson(extras, VideoMessage.class);
                     isNeedAlert = videoMessage.isNeedAlert();
                     i.setClass(this, VideoActivity.class);
@@ -267,16 +270,21 @@ public class BaseActivity extends AppCompatActivity {
                     i.setClass(this, PostZoneActivity.class);
                     i.putExtra(Constant.KEY_ID, newsMessage.getId());
                     i.putExtra(Constant.KEY_CATID, newsMessage.getCat_id());
-                } else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))||MessageType.LiveType.type().equals(jsonObject.getString("type"))){
+                } else if (MessageType.LiveType.type().equals(jsonObject.getString("type"))) {
                     i.setClass(this, PlayLiveActivity.class);
-                    AppointmentLive mAppointmentLive= new Gson().fromJson(extras, AppointmentLive.class);
+                    AppointmentLive mAppointmentLive = new Gson().fromJson(extras, AppointmentLive.class);
                     isNeedAlert = mAppointmentLive.isNeedAlert();
                     LiveParameter liveParameter = new LiveParameter();
                     liveParameter.setLiveId(mAppointmentLive.getLive_id());
                     liveParameter.setLiveTitle(mAppointmentLive.getLive_title());
                     liveParameter.setRoomId(mAppointmentLive.getLive_room_id());
                     liveParameter.setTeacherId(mAppointmentLive.getTeacher_id());
-                    i.putExtra(Constant.ARG_LIVING,liveParameter);
+                    i.putExtra(Constant.ARG_LIVING, liveParameter);
+                }else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))) {
+                    i.setClass(this, TeacherZoneActivity.class);
+                    AppointmentLive mAppointmentLive = new Gson().fromJson(extras, AppointmentLive.class);
+                    isNeedAlert = mAppointmentLive.isNeedAlert();
+                    i.putExtra(TeacherZoneActivity.ID, mAppointmentLive.getTeacher_id());
                 }
             }
             //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -310,5 +318,31 @@ public class BaseActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void tip(String content) {
+        tip(content, true);
+    }
+
+    public void tip(String content, final boolean isClose) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+                .setTitle(this.getString(R.string.prompt))
+                .setMessage(content)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (isClose) {
+                    finish();
+                }
+            }
+        });
+        mBuilder.create().show();
     }
 }

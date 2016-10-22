@@ -19,7 +19,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -1645,7 +1644,6 @@ public class PlayLiveActivity extends BaseActivity implements
                     playLiveActivity.tip("已被踢出");
                     break;
                 case NOT_START:
-
                     playLiveActivity.tip("直播未开始");
                     break;
                 case FADE_OUT_INFO:
@@ -1655,25 +1653,25 @@ public class PlayLiveActivity extends BaseActivity implements
         }
     }
 
-    public void tip(String content) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
-                .setTitle(this.getString(R.string.prompt))
-                .setMessage(content)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                    }
-                });
-        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                finish();
-            }
-        });
-        mBuilder.create().show();
-    }
+//    public void tip(String content) {
+//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+//                .setTitle(this.getString(R.string.prompt))
+//                .setMessage(content)
+//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//
+//                    }
+//                });
+//        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                finish();
+//            }
+//        });
+//        mBuilder.create().show();
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(HttpEvent event) {
@@ -1740,7 +1738,7 @@ public class PlayLiveActivity extends BaseActivity implements
     }
 
     private void getTeacherInfo() {
-        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId,MyApplication.getUser()==null?"0": MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
     }
 
     @Override

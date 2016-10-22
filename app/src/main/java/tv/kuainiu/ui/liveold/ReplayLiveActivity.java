@@ -163,6 +163,8 @@ public class ReplayLiveActivity extends BaseActivity implements
     private String[] tabNames = new String[]{LIVE};
     private int[] tabNamesTags = new int[]{0};
     private String liveId = "";
+    private String[] liveIdArray;
+    private int replayNumber = 0;
     private String teacherId = "";
 
     /**
@@ -223,6 +225,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     private static final int ANSWER = 11;
     private static final int USER_COUNT = 20;
     private static final int INIT_FINISH = 40;
+    private static final int FINISH = 41;
     private static final int FADE_OUT_INFO = 4;
     TemplateInfo templateInfo;
     LiveParameter mLivingInfo;
@@ -262,6 +265,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         intent.putExtra(Constant.ARG_LIVING, liveParameter);
         context.startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -342,8 +346,12 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
 
         liveId = mLivingInfo.getCcid();
+        liveIdArray = liveId.split(",");
+        if (liveIdArray != null && liveIdArray.length > 0) {
+            liveId = liveIdArray[replayNumber];
+        }
         teacherId = mLivingInfo.getTeacherId();
-//        roomId = mHistory.getCc_id();
+        roomId = mLivingInfo.getRoomId();
         dwLive = DWLiveReplay.getInstance();
         loginLive();
         getTeacherInfo();
@@ -520,9 +528,11 @@ public class ReplayLiveActivity extends BaseActivity implements
             loginTime = 0;
             LogUtils.e("login", "回放登陆成功");
         }
+
     }
 
     ;
+
 
     private void initPlayer() {
         player = new IjkMediaPlayer();
@@ -834,7 +844,11 @@ public class ReplayLiveActivity extends BaseActivity implements
     private void initAbout() {
 //        String hhh = "毛鹏皓老师具有30年以上操作经历。<br/>毛鹏皓老师不仅是&ldquo;孔明线&rdquo;的创始人，也是飙股工作室总监。<br/>&nbsp;<a href=\"http://wwww.baidu.com\">ssssssss</a><br/>毛鹏皓老师曾任多家证券投资顾问公司副总经理与总经理，在各家投资顾问公司的操作绩效极优，三位数绩效股多达十余档以上。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122307630.png\"style=\"height: 186px; width: 369px\"/><br/>毛鹏皓老师曾担任非凡电视台、台湾电视台、TVBS电视台、学者电视台等电视台专属讲师，中国广播公司、正声广播电台、快乐广播电台特聘讲师。<br/>&nbsp;<br/>毛鹏皓老师也曾担任财讯日报、产经日报、鑫报之特聘主笔。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122335409.png\"style=\"height: 394px; width: 554px\"/><br/><div style=\"text-align: center\">TVBS&ldquo;热线一路发&rdquo;投资组合成绩报告</div>&nbsp;<br/>毛鹏皓老师曾三次参加台湾电视台投资组合竞赛，皆获冠军并获得&ldquo;股市不败神话&rdquo;之雅号。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122410329.png\"style=\"height: 369px; width: 441px\"/><br/>毛鹏皓老师他的&ldquo;天机操盘术&rdquo;帮助投资者选择飙股；他的&ldquo;孔明线战法&rdquo;是帮助操盘者掌握高低档的买卖点，绝对能帮助投资者们超越指数、战胜大盘。<br/>&nbsp;<br/>这一次，毛鹏皓老师将把他多年来的操盘心法分享给大家，并将他&ldquo;孔明线战法&rdquo;的精华融入他的课堂内容中。这一期的课程会从简单的价、量、指标与波浪等技术分析一一切入。除了技术分析领域以外，毛鹏皓老师将配合基本面、筹码面、心理面的掌控，让具有多年股龄和熟悉技术分析的学员们都能从课程中吸收到毛鹏皓老师独特的操盘技巧与心法。<br/>&nbsp;<br/>毛鹏皓老师的课程能帮助学员们走向成功之路，他不仅要帮助你改变你的脑袋，还要改造你的态度，因为，脑袋会改变你的口袋，正确的态度会决定你的命运！<br/>&nbsp;<br/>毛鹏皓老师会与学员们分享德国股神、日本股神、美国股神、债券天王、新兴市场教父等投资大师的操盘心得。例如，毛鹏皓老师会提供给你巴菲特的六大选股法则，教你怎样选择长期投资的优良标的。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;将教你如何选股，你会掌握短线、中线和长线如何切入、如何加码、如何观察成交量，并且指导你如何运用K线、把握布局时机以及各种指标处于不同的多空时点该如何运用与操盘。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;的操盘课程会教你&ldquo;天机操盘术&rdquo;的72项绝技，让新手知道如何辨识头部与底部现象，让老手能准确地掌握底部买进的切入点和顶部如何避开风险的法则与退场卖点。<br/>&nbsp;<br/>毛鹏皓老师的股市操盘18招更是广大股民前所未见的投资秘笈。<br/>&nbsp;<br/>毛鹏皓老师作为理周集团证券分析师教育训练总督导已经培养出不计其数的优秀分析师，其中有5位达到千万元绩效，有一位达到上亿绩效！<br/>&nbsp;<br/>欢迎各路高手一起来探索&ldquo;孔明线&rdquo;与&ldquo;天机战法&rdquo;的奥妙之处！<br/>";
         web_live_about.setWebViewClient(new MyWebViewClient());
-        web_live_about.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+        String introduce = "";
+        if (mTeacherInfo != null) {
+            introduce = mTeacherInfo.getIntroduce();
+        }
+        web_live_about.loadDataWithBaseURL(null, introduce, "text/html", "utf-8", null);
 //        web_live_about.loadDataWithBaseURL(null, hhh, "text/html", "utf-8", null);
     }
 
@@ -882,6 +896,13 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Override
     public void onCompletion(IMediaPlayer mp) {
         LogUtils.e("demo", "=============================>onCompletion");
+        replayNumber++;
+        if (replayNumber < liveIdArray.length) {
+            liveId = liveIdArray[replayNumber];
+            loginLive();
+        } else {
+            handler.sendEmptyMessage(FINISH);
+        }
 //        if (dwLive != null && !isStop) {
 //            if(qaMsgs!=null) {
 //                qaMsgs.clear();
@@ -1034,6 +1055,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         public void onInitFinished() {
             handler.sendEmptyMessage(INIT_FINISH);
         }
+
     };
 
 
@@ -1228,8 +1250,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
-                        ToastUtils.showToast(playLiveActivity, errorMessage);
-                        playLiveActivity.finish();
+                        playLiveActivity.tip(errorMessage);
                     }
                     break;
                 case 1110:
@@ -1260,16 +1281,22 @@ public class ReplayLiveActivity extends BaseActivity implements
                     LiveHttpUtil.historyCountPlusOne(playLiveActivity, playLiveActivity.mLivingInfo.getLiveId());
                     break;
                 case EXCEPTION:
-                    String message = "";
+                    String errorMessage = "";
                     if (msg.obj != null) {
                         DWLiveException exception = (DWLiveException) msg.obj;
-                        message = exception.getMessage();
+                        errorMessage = exception.getMessage();
                     }
-                    ToastUtils.showToast(playLiveActivity, StringUtils.replaceNullToEmpty(message, "回放失败，请重试"));
-                    playLiveActivity.finish();
+                    playLiveActivity.tip(errorMessage);
                     break;
                 case FADE_OUT_INFO:
                     playLiveActivity.fadeOutInfo();
+                    break;
+                case FINISH:
+                    if (playLiveActivity.isFinish) {
+                        return;
+                    }
+                    playLiveActivity.tip("回放结束");
+                    playLiveActivity.setHolderBlack("回放结束");
                     break;
             }
         }
@@ -1341,7 +1368,7 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private void getTeacherInfo() {
 //        LiveHttpUtil.fetchLiveNowTopInfo(this);
-        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
     }
 
     @Override
@@ -1362,9 +1389,11 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
-        player.pause();
-        player.stop();
-        player.release();
+        if (player != null) {
+            player.pause();
+            player.stop();
+            player.release();
+        }
         if (dwLive != null) {
             dwLive.stop();
         }

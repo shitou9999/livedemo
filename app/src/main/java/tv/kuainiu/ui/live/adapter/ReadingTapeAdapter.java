@@ -3,6 +3,7 @@ package tv.kuainiu.ui.live.adapter;
 import android.app.Activity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DensityUtils;
@@ -136,7 +138,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ivIamge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickPlayLive(liveItem);
+                        if(TextUtils.isEmpty(liveItem.getPlayback_id())){
+                            clickPlayLive(liveItem);
+                        }else{
+                            clickRePlayLive(liveItem);
+                        }
                 }
             });
             mList.add(view);
@@ -160,7 +166,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             TextView mTvState = (TextView) view.findViewById(R.id.tv_state);//直播间状态
             TextView mTvTime = (TextView) view.findViewById(R.id.tv_time);//时间
             TextView mTvNextTime = (TextView) view.findViewById(R.id.tv_next_time);//下一时段
-            //TODO 绑定中间直播信息
+            //绑定中间直播信息
             LiveInfo liveItem = mLiveList.get(i);
             ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
@@ -170,7 +176,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View view) {
                     //TODO 完善直播参数传递
                     LiveInfo liveItem = (LiveInfo) view.getTag();
-                    clickRePlayLive(liveItem);
+                        if(TextUtils.isEmpty(liveItem.getPlayback_id())){
+                            clickPlayLive(liveItem);
+                        }else{
+                            clickRePlayLive(liveItem);
+                        }
                 }
             });
             mList.add(view);
@@ -221,8 +231,15 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mIvIamge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO 完善直播参数传递
-                clickPlayLive(liveItem);
+                //直播参数传递
+                if (type == ZHI_BO) {
+                    if(TextUtils.isEmpty(liveItem.getPlayback_id())){
+                        clickPlayLive(liveItem);
+                    }else{
+                        clickRePlayLive(liveItem);
+                    }
+
+                }
             }
         });
 
@@ -254,12 +271,12 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     public void clickRePlayLive(LiveInfo liveItem) {
         LiveParameter liveParameter = new LiveParameter();
-        liveParameter.setLiveId(liveItem.getPlayback_id());
+        liveParameter.setLiveId(liveItem.getId());
         liveParameter.setLiveTitle(liveItem.getTitle());
         liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
-
-        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+        liveParameter.setCcid(liveItem.getPlayback_id());
+        ReplayLiveActivity.intoNewIntent(mContext, liveParameter);
     }
 
     @Override

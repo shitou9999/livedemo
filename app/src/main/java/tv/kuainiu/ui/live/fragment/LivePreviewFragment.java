@@ -143,7 +143,7 @@ public class LivePreviewFragment extends BaseFragment {
     }
 
     private void getData() {
-        LiveHttpUtil.liveIndex(getActivity(), "2", page, Action.live_zhi_bo_yu_gao);
+        LiveHttpUtil.liveIndex(getActivity(), "3", page, Action.live_zhi_bo_yu_gao);
     }
 
     private void initListener() {

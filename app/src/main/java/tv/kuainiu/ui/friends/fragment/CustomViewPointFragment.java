@@ -93,8 +93,15 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         adapter = new FriendsPostAdapter(context);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
-        initData();
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtils.e("CustomViewPointFragment", "onResume");
+        initData();
     }
 
     private void initData() {
@@ -135,7 +142,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     }
 
     TextView mTvFriendsPostLike;
-//    TextView mTvFriendsPostComment;
+    //    TextView mTvFriendsPostComment;
     TeacherZoneDynamics teacherZoneDynamics;
     View ivSupport;
 

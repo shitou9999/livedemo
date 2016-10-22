@@ -63,7 +63,7 @@ import tv.kuainiu.widget.TitleBarView;
  */
 public class TeacherZoneActivity extends BaseActivity implements OnItemClickListener {
 
-    private static final String ID = "ID";
+    public static final String ID = "ID";
     @BindView(R.id.tbv_title)
     TitleBarView mTbvTitle;
     @BindView(R.id.rvReadingTap)

@@ -31,6 +31,7 @@ import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
 
 /**
@@ -159,7 +160,7 @@ public class MyReceiver extends BroadcastReceiver {
                         i.setClass(context, PostZoneActivity.class);
                         i.putExtra(Constant.KEY_ID, newsMessage.getId());
                         i.putExtra(Constant.KEY_CATID, newsMessage.getCat_id());
-                    } else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type")) || MessageType.LiveType.type().equals(jsonObject.getString("type"))) {
+                    } else if (MessageType.LiveType.type().equals(jsonObject.getString("type"))) {
                         i.setClass(context, PlayLiveActivity.class);
                         AppointmentLive mAppointmentLive = new Gson().fromJson(extras, AppointmentLive.class);
                         LiveParameter liveParameter = new LiveParameter();
@@ -168,6 +169,10 @@ public class MyReceiver extends BroadcastReceiver {
                         liveParameter.setRoomId(mAppointmentLive.getLive_room_id());
                         liveParameter.setTeacherId(mAppointmentLive.getTeacher_id());
                         i.putExtra(Constant.ARG_LIVING, liveParameter);
+                    }else if (MessageType.AppointmentLiveType.type().equals(jsonObject.getString("type"))) {
+                        i.setClass(context, TeacherZoneActivity.class);
+                        AppointmentLive mAppointmentLive = new Gson().fromJson(extras, AppointmentLive.class);
+                        i.putExtra(TeacherZoneActivity.ID, mAppointmentLive.getTeacher_id());
                     }
                 }
                 //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
