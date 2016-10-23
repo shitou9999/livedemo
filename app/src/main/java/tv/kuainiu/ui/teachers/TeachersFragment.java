@@ -42,7 +42,7 @@ import tv.kuainiu.modle.TeacherItem;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity2;
 import tv.kuainiu.ui.teachers.adapter.TeacherListAdapter;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
@@ -479,7 +479,8 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
 //
             case R.id.ll_root:
                 tempTeacher = (TeacherItem) v.getTag(R.id.ll_root);
-                TeacherZoneActivity.intoNewIntent(getActivity(), tempTeacher.id);
+//                TeacherZoneActivity.intoNewIntent(getActivity(), tempTeacher.id);
+                TeacherZoneActivity2.intoNewIntent(getActivity(), tempTeacher.id);
                 break;
 
             case R.id.tv_follow_button:

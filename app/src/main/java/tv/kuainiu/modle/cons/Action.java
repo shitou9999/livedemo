@@ -90,6 +90,8 @@ public enum Action {
     teacher_fg_del_follow,
     home_teacher_fg_add_follow,
     home_teacher_fg_del_follow,
+    teacher_zone_fg_add_follow,
+    teacher_zone_fg_del_follow,
     teacher_fg_add_subscribe,
     teacher_fg_del_subscribe,
     teacher_fg_fetch_follow_list,
@@ -201,4 +203,6 @@ public enum Action {
     del_system_msg,   // 删除系统消息
     live_teacher_info,   // 直播老师信息
     custom_teacher_list,   // 圈子老师
+    teacher_zone_appoint,   // 老师专区-观点
+    teacher_zone_jiepan,   // 老师专区-接盘
 }

@@ -140,6 +140,9 @@
             android:name=".ui.teachers.activity.TeacherZoneActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.teachers.activity.TeacherZoneActivity2"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.WebActivity"
             android:screenOrientation="portrait" />
         <activity

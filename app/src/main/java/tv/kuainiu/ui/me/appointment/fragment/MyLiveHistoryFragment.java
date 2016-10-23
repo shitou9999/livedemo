@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -41,9 +39,11 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.adapter.MyLiveHistoryFragmentAdapter;
+import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+
 
 /**
  * 我的直播回放
@@ -53,27 +53,37 @@ public class MyLiveHistoryFragment extends BaseFragment {
 
     @BindView(R.id.srlRefresh)
     SwipeRefreshLayout mSrlRefresh;
-    @BindView(R.id.lvList)
-    ListView lvList;
+    @BindView(R.id.mRecyclerView)
+    RecyclerView mRecyclerView;
     private int page = 1;
     private List<LiveInfo> listData = new ArrayList<>();
     Activity context;
-    private boolean loading = false;
-    private ListView.OnScrollListener loadMoreListener;
     private MyLiveHistoryFragmentAdapter adapter;
+    private String teacherId;
+    private boolean loading = false;
+    private RecyclerView.OnScrollListener loadMoreListener;
+    CustomLinearLayoutManager mLayoutManager;
 
-    public static MyLiveHistoryFragment newInstance() {
+    public static MyLiveHistoryFragment newInstance(String teacherId) {
         Bundle args = new Bundle();
         MyLiveHistoryFragment fragment = new MyLiveHistoryFragment();
+        args.putString(TEACHER_ID, teacherId);
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            teacherId = getArguments().getString(TEACHER_ID);
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_appointment, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_live_history, container, false);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -81,15 +91,23 @@ public class MyLiveHistoryFragment extends BaseFragment {
         context = getActivity();
         initListener();
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
-        lvList.setOnScrollListener(loadMoreListener);
-        adapter = new MyLiveHistoryFragmentAdapter(context, listData, new MyLiveHistoryFragmentAdapter.IdeletItem() {
+        mLayoutManager = new CustomLinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addOnScrollListener(loadMoreListener);
+        adapter = new MyLiveHistoryFragmentAdapter(context, listData, new OnItemClickListener() {
             @Override
-            public void delete(SwipeLayout swipeLayout, int position, LiveInfo mAppointment2) {
-//                mAppointment = mAppointment2;
-//                AppointmentRequestUtil.deleteAppointment(context, mAppointment.getLive_id(), Action.del_live_appointment_history);
+            public void onClick(View v) {
+                LiveInfo liveItem = (LiveInfo) v.getTag();
+                LiveParameter liveParameter = new LiveParameter();
+                liveParameter.setLiveId(liveItem.getId());
+                liveParameter.setLiveTitle(liveItem.getTitle());
+                liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                liveParameter.setTeacherId(liveItem.getTeacher_info().getId());
+                liveParameter.setCcid(liveItem.getPlayback_id());
+                ReplayLiveActivity.intoNewIntent(getActivity(), liveParameter);
             }
         });
-        lvList.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
         initData();
         return view;
     }
@@ -106,33 +124,29 @@ public class MyLiveHistoryFragment extends BaseFragment {
                 initData();
             }
         });
-        loadMoreListener = new ListView.OnScrollListener() {
+        loadMoreListener = new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount == totalItemCount - 1) {
-                    page += 1;
-                    fetchList();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) //向下滚动
+                {
+                    int visibleItemCount = mLayoutManager.getChildCount();
+                    int totalItemCount = mLayoutManager.getItemCount();
+                    int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                        loading = true;
+                        page += 1;
+                        fetchList();
+                    }
                 }
             }
         };
-        lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LiveInfo liveItem=listData.get(position);
-                LiveParameter liveParameter = new LiveParameter();
-                liveParameter.setLiveId(liveItem.getId());
-                liveParameter.setLiveTitle(liveItem.getTitle());
-                liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-                liveParameter.setTeacherId(liveItem.getTeacher_info().getId());
-                liveParameter.setCcid(liveItem.getPlayback_id());
-                ReplayLiveActivity.intoNewIntent(getActivity(), liveParameter);
-            }
-        });
     }
 
     /**
@@ -140,11 +154,11 @@ public class MyLiveHistoryFragment extends BaseFragment {
      */
     public void fetchList() {
         Map<String, Object> map = new HashMap<>();
-        map.put("user_id", MyApplication.getUser().getUser_id());
-        map.put("teacher_id", MyApplication.getUser().getUser_id());
+        map.put("user_id", MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id());
+        map.put("teacher_id", teacherId);
         map.put("live_type", "2");
         map.put("page", String.valueOf(page));
-        OKHttpUtils.getInstance().syncGet(context, Api.my_live_list+ParamUtil.getParamForGet(map), Action.my_live_list_history);
+        OKHttpUtils.getInstance().syncGet(context, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list_history);
     }
 
 

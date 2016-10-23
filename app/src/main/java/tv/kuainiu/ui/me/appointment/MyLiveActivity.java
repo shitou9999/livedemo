@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.ui.activity.BaseActivity;
@@ -65,7 +66,7 @@ public class MyLiveActivity extends BaseActivity {
 
     private void initFragment() {
         mBaseFragments.clear();
-        mBaseFragments.add(MyLiveFragment.newInstance(0));
-        mBaseFragments.add(MyLiveHistoryFragment.newInstance());
+        mBaseFragments.add(MyLiveFragment.newInstance(MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id()));
+        mBaseFragments.add(MyLiveHistoryFragment.newInstance(MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id()));
     }
 }

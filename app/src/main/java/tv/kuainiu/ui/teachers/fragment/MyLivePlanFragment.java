@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.me.appointment.fragment;
+package tv.kuainiu.ui.teachers.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -50,7 +50,7 @@ import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_LIVE;
 /**
  * 我的直播
  */
-public class MyLiveFragment extends BaseFragment {
+public class MyLivePlanFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
     @BindView(R.id.rlCountdown)
     RelativeLayout rlCountdown;
@@ -90,8 +90,8 @@ public class MyLiveFragment extends BaseFragment {
         }
     };
 
-    public static MyLiveFragment newInstance(String teacherId) {
-        MyLiveFragment fragment = new MyLiveFragment();
+    public static MyLivePlanFragment newInstance(String teacherId) {
+        MyLivePlanFragment fragment = new MyLivePlanFragment();
         Bundle args = new Bundle();
         args.putString(TEACHER_ID, teacherId);
         fragment.setArguments(args);
@@ -156,7 +156,7 @@ public class MyLiveFragment extends BaseFragment {
         Map<String, Object> map = new HashMap<>();
         map.put("user_id",MyApplication.getUser()==null?"": MyApplication.getUser().getUser_id());
         map.put("teacher_id", teacherId);
-        map.put("live_type", "1");
+        map.put("live_type", "3");
         map.put("page", String.valueOf(page));
         OKHttpUtils.getInstance().syncGet(context, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list);
     }

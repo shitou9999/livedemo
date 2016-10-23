@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/vFriendsTopPadding"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
 
     <TextView
         android:id="@+id/tv_friends_post_time"
@@ -13,7 +18,7 @@
         android:gravity="center"
         android:text="08:23"
         android:textColor="@color/colorWhite"
-        tools:background="@color/colorGrey700"/>
+        tools:background="@color/colorGrey700" />
 
     <LinearLayout
         android:id="@+id/ll_friends_post_time"
@@ -26,7 +31,7 @@
             android:id="@+id/view_friends_post_line"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            tools:background="@color/colorRed500"/>
+            tools:background="@color/colorRed500" />
 
 
         <LinearLayout
@@ -52,7 +57,7 @@
                     app:civ_border_width="1dp"
                     app:paddingEnd="2dp"
                     app:paddingStart="2dp"
-                    tools:src="@mipmap/ic_launcher"/>
+                    tools:src="@mipmap/ic_launcher" />
 
                 <TextView
                     android:id="@+id/tv_friends_post_nickname"
@@ -64,14 +69,15 @@
                     android:layout_marginStart="8dp"
                     android:layout_toRightOf="@+id/civ_friends_post_head"
                     android:text="张三丰"
-                    android:textColor="@color/colorBlue700"/>
+                    android:textColor="@color/colorBlue700" />
+
                 <ImageView
                     android:id="@+id/ivSupport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
-                    android:src="@mipmap/feyzin_btn"/>
+                    android:src="@mipmap/feyzin_btn" />
             </RelativeLayout>
 
             <TextView
@@ -79,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/value_friends_post_content"/>
+                android:text="@string/value_friends_post_content" />
 
             <tv.kuainiu.widget.ExpandGridView
                 android:id="@+id/exgv_appraisal_pic"
@@ -88,13 +94,14 @@
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="3"/>
+                android:numColumns="3" />
+
             <tv.kuainiu.widget.PostParentLayout
                 android:id="@+id/pl_friends_post_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"/>
+                android:layout_marginTop="@dimen/activity_vertical_margin" />
 
             <!-- Nil -->
 
@@ -116,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGrey450"
                     android:textSize="12sp"
-                    tools:text="模块名称"/>
+                    tools:text="模块名称" />
 
                 <TextView
                     android:id="@+id/tv_friends_post_comment"
@@ -130,8 +137,7 @@
                     android:drawablePadding="4dp"
                     android:drawableStart="@mipmap/review_ic"
                     android:text="(88)"
-                    android:textColor="@color/colorGrey450"
-                    />
+                    android:textColor="@color/colorGrey450" />
 
                 <TextView
                     android:id="@+id/tv_friends_post_like"
@@ -144,8 +150,7 @@
                     android:drawableStart="@drawable/selector_suport"
                     android:gravity="center_vertical"
                     android:text="(458)"
-                    android:textColor="@color/colorGrey450"
-                    />
+                    android:textColor="@color/colorGrey450" />
 
 
             </RelativeLayout>
@@ -156,11 +161,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="@color/colorGrey500"/>
+                android:background="@color/colorGrey500" />
 
             <Space
                 android:layout_width="0dp"
-                android:layout_height="24dp"/>
+                android:layout_height="24dp" />
 
         </LinearLayout>
 

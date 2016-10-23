@@ -31,9 +31,12 @@ public class TabMajorFragment extends BaseFragment {
             {"直播", "点播"},
             {"小道消息", "谈古论今"}};
 
-    @BindView(R.id.tab_fragment_major) TabLayout mTabFragmentMajor;
-    @BindView(R.id.nvp_fragment_major) ViewPager mNvpFragmentMajor;
-    @BindView(R.id.sw_fragment_major) SwitchCompat mSwitchCompat;
+    @BindView(R.id.tab_fragment_major)
+    TabLayout mTabFragmentMajor;
+    @BindView(R.id.nvp_fragment_major)
+    ViewPager mNvpFragmentMajor;
+    @BindView(R.id.sw_fragment_major)
+    SwitchCompat mSwitchCompat;
 
     private int mParentPosition;
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
@@ -73,16 +76,19 @@ public class TabMajorFragment extends BaseFragment {
             mTabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
             mTabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
             mTabFragmentMajor.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override public void onTabSelected(TabLayout.Tab tab) {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
                     int position = tab.getPosition();
                     mNvpFragmentMajor.setCurrentItem(position);
                 }
 
-                @Override public void onTabUnselected(TabLayout.Tab tab) {
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
 
                 }
 
-                @Override public void onTabReselected(TabLayout.Tab tab) {
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
 
                 }
             });
@@ -106,12 +112,12 @@ public class TabMajorFragment extends BaseFragment {
         mBaseFragments.clear();
         switch (mParentPosition) {
             case 0:
-                mBaseFragments.add(CustomViewPointFragment.newInstance());
+                mBaseFragments.add(CustomViewPointFragment.newInstance(false, ""));
                 mBaseFragments.add(CustomTeacherFragment.newInstance());
                 break;
 
             case 1:
-                mBaseFragments.add(CustomLiveFragment.newInstance());
+                mBaseFragments.add(CustomLiveFragment.newInstance(false, ""));
                 mBaseFragments.add(CustomVideoFragment.newInstance());
                 break;
 
@@ -132,15 +138,18 @@ public class TabMajorFragment extends BaseFragment {
         }
 
 
-        @Override public Fragment getItem(int position) {
+        @Override
+        public Fragment getItem(int position) {
             return mFragments.get(position);
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return mFragments.size();
         }
 
-        @Override public CharSequence getPageTitle(int position) {
+        @Override
+        public CharSequence getPageTitle(int position) {
             return mTitles[position];
         }
     }

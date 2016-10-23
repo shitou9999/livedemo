@@ -36,6 +36,7 @@ public class TeacherZoneDynamics {
     private int status;
     private int is_support;
     private TeacherZoneDynamicsInfo news_info;
+    private LiveInfo live_info;
 
     public int getId() {
         return id;
@@ -155,5 +156,13 @@ public class TeacherZoneDynamics {
 
     public void setIs_support(int is_support) {
         this.is_support = is_support;
+    }
+
+    public LiveInfo getLive_info() {
+        return live_info;
+    }
+
+    public void setLive_info(LiveInfo live_info) {
+        this.live_info = live_info;
     }
 }

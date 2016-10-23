@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
-import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
@@ -37,21 +35,23 @@ import tv.kuainiu.widget.PostParentLayout;
 public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.ViewHolder> {
     public static final int CUSTOM_VIEW_POINT = 0;
     public static final int CUSTOM_VIDEO = 1;
-    public static final int CUSTOM_LIVE = 2;
     private Activity mContext;
     private List<TeacherZoneDynamics> teacherZoneDynamicsList;
     private List<CustomVideo> customVideoList;
     private List<LiveInfo> customLiveList;
     private int type = CUSTOM_VIEW_POINT;
     private OnItemClickListener onItemClickListener;
+    private boolean isTeacher = false;
 
-    public FriendsPostAdapter(Activity context) {
+    public FriendsPostAdapter(Activity context, boolean isTeacher) {
         mContext = context;
+        this.isTeacher = isTeacher;
     }
 
-    public FriendsPostAdapter(Activity context, int type) {
+    public FriendsPostAdapter(Activity context, int type, boolean isTeacher) {
         mContext = context;
         this.type = type;
+        this.isTeacher = isTeacher;
     }
 
     public void setOnClick(OnItemClickListener onItemClickListener) {
@@ -84,25 +84,23 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             case CUSTOM_VIDEO:
                 count = customVideoList == null ? 0 : customVideoList.size();
                 break;
-            case CUSTOM_LIVE:
-                count = customLiveList == null ? 0 : customLiveList.size();
-                break;
         }
         return count;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        if (position == 0) {
+            holder.vFriendsTopPadding.setVisibility(View.INVISIBLE);
+        } else {
+            holder.vFriendsTopPadding.setVisibility(View.GONE);
+        }
         switch (type) {
             case CUSTOM_VIEW_POINT:
                 dataViewPoint(holder, position);
                 break;
             case CUSTOM_VIDEO:
                 dataVideo(holder, position);
-                break;
-            case CUSTOM_LIVE:
-                dataLive(holder, position);
                 break;
         }
     }
@@ -120,7 +118,12 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
-        holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
+        LiveInfo liveInfo = info.getLive_info();
+        if (liveInfo != null) {
+            holder.mPostParentLayout.setPostType(liveInfo);
+        } else {
+            holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
+        }
         //不是直播中就是黑色边框
         holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
         holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
@@ -154,7 +157,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                 }
             }
         });
-        String thumb=StringUtils.replaceNullToEmpty(info.getThumb());
+        String thumb = StringUtils.replaceNullToEmpty(info.getThumb());
         if (!TextUtils.isEmpty(thumb) && !"false".equals(thumb)) {
             String[] array = thumb.split(",");
             if (array != null) {
@@ -164,17 +167,17 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                         list.add(array[i]);
                     }
                 }
-                if(list.size()>0) {
+                if (list.size() > 0) {
                     UpLoadImageAdapter mUpLoadImageAdapter = new UpLoadImageAdapter(list, (tv.kuainiu.ui.activity.BaseActivity) mContext, 1, true);
                     holder.exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     holder.exgv_appraisal_pic.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     holder.exgv_appraisal_pic.setVisibility(View.GONE);
                 }
-            }else{
+            } else {
                 holder.exgv_appraisal_pic.setVisibility(View.GONE);
             }
-        }else{
+        } else {
             holder.exgv_appraisal_pic.setVisibility(View.GONE);
         }
     }
@@ -235,7 +238,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.exgv_appraisal_pic.setVisibility(View.GONE);
     }
 
-    private void dataLive(ViewHolder holder, int position) {
+    /*private void dataLive(ViewHolder holder, int position) {
         LiveInfo info = customLiveList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getAnchor()));
@@ -250,6 +253,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         holder.mTvFriendsPostLike.setLayoutParams(lp);
         holder.mPostParentLayout.setPostType(info);
+
         switch (info.getLive_status()) {
             case Constans.LIVE_END://直播结束
                 holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
@@ -291,17 +295,23 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             }
         });
         holder.exgv_appraisal_pic.setVisibility(View.GONE);
-    }
+    }*/
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_friends_post, parent, false);
         ViewHolder vh = new ViewHolder(view);
+//        if (isTeacher) {
+//            vh.mCivFriendsPostHead.setVisibility(View.GONE);
+//            vh.mTvFriendsPostNickname.setVisibility(View.GONE);
+//        }
         return vh;
     }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.vFriendsTopPadding)
+        View vFriendsTopPadding;
         @BindView(R.id.tv_friends_post_time)
         TextView mTvFriendsPostTime;
         @BindView(R.id.view_friends_post_line)

@@ -77,18 +77,26 @@ public class PostParentLayout extends RelativeLayout {
         mContext = context;
 
     }
+
     public void clickPlayLive(LiveInfo liveItem) {
-        if (liveItem.getLive_status() == Constans.LIVE_ING) {
-            LiveParameter liveParameter = new LiveParameter();
-            liveParameter.setLiveId(liveItem.getId());
-            liveParameter.setLiveTitle(liveItem.getTitle());
-            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-            liveParameter.setTeacherId(liveItem.getTeacher_id());
-            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
-        } else {
-            ToastUtils.showToast(mContext, liveItem.getLive_msg());
-        }
+//        if (liveItem.getLive_status() == Constans.LIVE_ING) {
+//            LiveParameter liveParameter = new LiveParameter();
+//            liveParameter.setLiveId(liveItem.getId());
+//            liveParameter.setLiveTitle(liveItem.getTitle());
+//            liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+//            liveParameter.setTeacherId(liveItem.getTeacher_id());
+//            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+//        } else {
+//            ToastUtils.showToast(mContext, liveItem.getLive_msg());
+//        }
+        LiveParameter liveParameter = new LiveParameter();
+        liveParameter.setLiveId(liveItem.getId());
+        liveParameter.setLiveTitle(liveItem.getTitle());
+        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+        liveParameter.setTeacherId(liveItem.getTeacher_id());
+        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
     }
+
     private void loadPostView() {
         View view;
         switch (mPostType) {
@@ -119,30 +127,19 @@ public class PostParentLayout extends RelativeLayout {
 
                 }
                 view.setOnClickListener(new OnClickListener() {
-                    @Override public void onClick(View view) {
-                        switch (liveInfo.getLive_status()) {
-                            case Constans.LIVE_ING:
-                                //TODO 完善直播参数传递
-                                clickPlayLive(liveInfo);
-                                break;
-                            case Constans.LiVE_UN_START:
-                                ToastUtils.showToast(mContext, "直播未开始");
-                                break;
-                            case Constans.LIVE_END:
-                                ToastUtils.showToast(mContext, "直播已结束");
-                                break;
-
-                        }
+                    @Override
+                    public void onClick(View view) {
+                        clickPlayLive(liveInfo);
                     }
                 });
-                tvLiveDescription2.setText(liveInfo.getDescription());
+                tvLiveDescription2.setText(liveInfo.getTitle());
                 addView(view);
                 break;
             //视频
             case Constans.TYPE_VIDEO:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_video, this, false);
 //                if (getChildAt(0) != null) {
-                    removeAllViews();
+                removeAllViews();
 //                }
 //                ImageView ivivPlay = (ImageView) view.findViewById(R.id.ivPlay);
                 TextView tvTitle2 = (TextView) view.findViewById(R.id.tvTitle);
@@ -150,7 +147,7 @@ public class PostParentLayout extends RelativeLayout {
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VideoActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(),teacherZoneDynamicsInfo.getNews_video_id(), teacherZoneDynamicsInfo.getNews_catid(),StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
+                        VideoActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(), teacherZoneDynamicsInfo.getNews_video_id(), teacherZoneDynamicsInfo.getNews_catid(), StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
                     }
                 });
                 addView(view);
@@ -169,11 +166,11 @@ public class PostParentLayout extends RelativeLayout {
                     public void onClick(View view) {
                         if (!TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_voice_url())) {
                             try {
-                                MediaPlayUtil   mMediaPlayUtil = MediaPlayUtil.getInstance();
-                                if(mMediaPlayUtil.isPlaying()){
+                                MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
+                                if (mMediaPlayUtil.isPlaying()) {
                                     mMediaPlayUtil.stop();
                                     //停止动画
-                                }else {
+                                } else {
                                     mMediaPlayUtil.play(teacherZoneDynamicsInfo.getNews_voice_url());
                                     //开始动画
                                 }
@@ -194,22 +191,22 @@ public class PostParentLayout extends RelativeLayout {
             default:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_normal, this, false);
 //                if (getChildAt(0) != null) {
-                    removeAllViews();
+                removeAllViews();
 //                }
                 ImageView ivThumb = (ImageView) view.findViewById(R.id.ivThumb);
                 TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-                if(TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_thumb())){
+                if (TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_thumb())) {
                     ivThumb.setVisibility(View.GONE);
-                }else{
+                } else {
                     ivThumb.setVisibility(View.VISIBLE);
-                    ImageDisplayUtil.displayImage(mContext, ivThumb, teacherZoneDynamicsInfo.getNews_thumb(),R.mipmap.word_ic);
+                    ImageDisplayUtil.displayImage(mContext, ivThumb, teacherZoneDynamicsInfo.getNews_thumb(), R.mipmap.word_ic);
                 }
 
                 tvTitle.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
                 view.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PostZoneActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(),teacherZoneDynamicsInfo.getNews_catid());
+                        PostZoneActivity.intoNewIntent(mContext, teacherZoneDynamicsInfo.getNews_id(), teacherZoneDynamicsInfo.getNews_catid());
                     }
                 });
                 addView(view);

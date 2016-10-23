@@ -63,7 +63,7 @@ public class TeacherHttpUtil {
         map.put("teacher_id", teacherId);
         map.put("page", String.valueOf(page));
 //        map.put("size", String.valueOf(size));
-        OKHttpUtils.getInstance().syncGet(context, Api.FIND_DYNAMICS_LIST + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(context, Api.FIND_DYNAMICS_LIST + ParamUtil.getParamForGet(map), action);
     }
 
     /**

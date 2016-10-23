@@ -78,8 +78,8 @@ public class PublishPickTimeLayout extends RelativeLayout {
         year = c.get(Calendar.YEAR);
         isRunnian();
         month = c.get(Calendar.MONTH)+1;
-        day = c.get(Calendar.DAY_OF_MONTH)+1;
-        hour = c.get(Calendar.HOUR);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        hour = c.get(Calendar.HOUR_OF_DAY);
         minute = c.get(Calendar.MINUTE);
         NumberPicker.Formatter mFormatter = new NumberPicker.Formatter() {
             @Override

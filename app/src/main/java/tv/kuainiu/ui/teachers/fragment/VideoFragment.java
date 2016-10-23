@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.friends.fragment;
+package tv.kuainiu.ui.teachers.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,19 +25,19 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.SupportHttpUtil;
-import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
+import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
@@ -49,17 +49,21 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
+import static tv.kuainiu.modle.cons.Constant.SUCCEED;
+
 /**
- * 定制直播
+ * 定制解盘视频
  */
-public class CustomLiveFragment extends BaseFragment implements OnItemClickListener {
+public class VideoFragment extends BaseFragment implements OnItemClickListener {
     private static final String TAG = "CustomVideoFragment";
-    View view;
+    private static final String JIE_PAN_TYPE = "jie_pan_type";
+
     @BindView(R.id.rv_fragment_friends_tab)
     RecyclerView mRecyclerView;
     @BindView(R.id.srlRefresh)
     SwipeRefreshLayout mSrlRefresh;
     private int page = 1;
+    private List<CustomVideo> customVideoList = new ArrayList<>();
     private List<TeacherZoneDynamics> teacherZoneDynamicsList = new ArrayList<>();
     private FriendsPostAdapter adapter;
     private String caid = "";
@@ -70,15 +74,14 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     private boolean isTeacher = false;
     private String teacherId = "";
 
-    public static CustomLiveFragment newInstance(boolean isTeacher, String teacherId) {
+    public static VideoFragment newInstance(boolean isTeacher, String teacherId) {
         Bundle args = new Bundle();
-        CustomLiveFragment fragment = new CustomLiveFragment();
+        VideoFragment fragment = new VideoFragment();
         args.putBoolean(IS_TEACHER, isTeacher);
         args.putString(TEACHER_ID, teacherId);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,57 +95,35 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
-        }
+        View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         ButterKnife.bind(this, view);
         context = getActivity();
+
         initListener();
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context, isTeacher);
+        adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO, isTeacher);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
-        getData();
+        initData();
         return view;
     }
 
-    TextView mTvFriendsPostLike;
-    //    TextView mTvFriendsPostComment;
-    TeacherZoneDynamics teacherZoneDynamics;
-    View ivSupport;
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ivSupport:
-                ivSupport = v;
-                teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
-                mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
-                SupportHttpUtil.supportDynamics(getActivity(), String.valueOf(teacherZoneDynamics.getId()), Action.SUPPORT_DYNAMICS);
-                break;
-            case R.id.tv_friends_post_comment:
-                teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
-//                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
-                CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(teacherZoneDynamics.getId()), "");
-                break;
-        }
+    private void initData() {
+        page = 1;
+        getData();
     }
 
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                getData();
+                initData();
             }
         });
         loadMoreListener = new RecyclerView.OnScrollListener() {
@@ -163,25 +144,61 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
                     if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                         loading = true;
                         page += 1;
-//                        getData();
+                        getData();
                     }
                 }
             }
         };
     }
 
+    TextView mTvFriendsPostLike;
+    CustomVideo customVideo;
+    View ivSupport;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivSupport:
+                ivSupport = v;
+                customVideo = (CustomVideo) v.getTag();
+                mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
+                SupportHttpUtil.supportVideoDynamics(getActivity(), customVideo.getCat_id(), customVideo.getId());
+                break;
+            case R.id.tv_friends_post_comment:
+//                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
+                customVideo = (CustomVideo) v.getTag();
+                CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(customVideo.getId()), "");
+                break;
+        }
+    }
+
     /**
      * 动态
      */
     public void getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("user_id", MyApplication.isLogin() ? MyApplication.getUser().getUser_id() : "");
-        OKHttpUtils.getInstance().post(context, Api.custom_live_list, ParamUtil.getParam(map), Action.CUSTOM_LIVE_LIST, CacheConfig.getCacheConfig());
+        Map<String, Object> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("teacher_id", teacherId);
+        map.put("type", "2");
+        OKHttpUtils.getInstance().syncGet(context, Api.FIND_NEWS_LIST + ParamUtil.getParamForGet(map), Action.teacher_zone_jiepan);
     }
 
     private void dataBind(int size) {
-        adapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
-        adapter.notifyItemRangeInserted(size, teacherZoneDynamicsList.size());
+        if (isTeacher) {
+            adapter.setCustomVideoList(customVideoList);
+        } else {
+            adapter.setTeacherZoneDynamicsList(teacherZoneDynamicsList);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHttpEvent(EmptyEvent event) {
+        switch (event.getAction()) {
+            case live_teacher_need_refresh:
+                initData();
+                break;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -189,54 +206,59 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
         switch (event.getAction()) {
             case off_line:
             case login:
-                page = 1;
-                getData();
+                initData();
                 break;
-            case SUPPORT_DYNAMICS:
-                if (teacherZoneDynamics != null) {
-                    if (Constant.SUCCEED == event.getCode()) {
-                        ivSupport.setVisibility(View.INVISIBLE);
-                        mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", teacherZoneDynamics.getSupport_num() + 1));
-                        mTvFriendsPostLike.setSelected(true);
-                        ToastUtils.showToast(getActivity(), "点赞成功");
-                    } else if (-2 == event.getCode()) {
-                        DebugUtils.showToastResponse(getActivity(), "已支持过");
-                    } else {
-                        LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
-                        ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
-                    }
-                    teacherZoneDynamics = null;
+            case video_favour:
+                if (customVideo != null) {
+                    favour(event);
+                    customVideo = null;
                 }
                 break;
-            case CUSTOM_LIVE_LIST:
-                if (page == 1) {
-                    mSrlRefresh.setRefreshing(false);
-                    teacherZoneDynamicsList.clear();
-                }
-                if (Constant.SUCCEED == event.getCode()) {
-                    if (event.getData() != null && event.getData().has("data")) {
-                        try {
-                            JSONObject jsonObject = event.getData().getJSONObject("data");
-                            LogUtils.i("data", event.getData().toString());
-                            List<TeacherZoneDynamics> tempCustomLiveList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
-                            }.getType());
-                            if (tempCustomLiveList != null && tempCustomLiveList.size() > 0) {
-                                loading = false;
-                                int size = teacherZoneDynamicsList.size();
-                                teacherZoneDynamicsList.addAll(tempCustomLiveList);
-                                dataBind(size);
-                            }
+            case teacher_zone_jiepan:
+                LogUtils.e("teacher_zone","_jiepan");
+                data(event);
+                break;
+        }
+    }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            ToastUtils.showToast(getActivity(), "直播信息解析失败");
-                        }
+    private void favour(HttpEvent event) {
+        if (SUCCEED == event.getCode()) {
+            ivSupport.setVisibility(View.INVISIBLE);
+            DebugUtils.showToast(getActivity(), event.getMsg());
+            mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
+        } else if (-2 == event.getCode()) {
+            DebugUtils.showToastResponse(getActivity(), "已支持过");
+        } else {
+            DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+        }
+    }
 
+    private void data(HttpEvent event) {
+        if (page == 1) {
+            mSrlRefresh.setRefreshing(false);
+            customVideoList.clear();
+        }
+        if (Constant.SUCCEED == event.getCode()) {
+            if (event.getData() != null && event.getData().has("data")) {
+                try {
+                    JSONObject jsonObject = event.getData().getJSONObject("data");
+                    List<CustomVideo> tempCustomVideoList = new DataConverter<CustomVideo>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<CustomVideo>>() {
+                    }.getType());
+                    if (tempCustomVideoList != null && tempCustomVideoList.size() > 0) {
+                        loading = false;
+                        int size = customVideoList.size();
+                        customVideoList.addAll(tempCustomVideoList);
+                        dataBind(size);
                     }
-                } else {
-                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取直播信息失败"));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.showToast(getActivity(), "解盘信息解析失败");
                 }
-                break;
+
+            }
+        } else {
+            ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "获取解盘信息失败"));
         }
     }
 
