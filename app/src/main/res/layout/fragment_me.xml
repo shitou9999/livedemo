@@ -63,8 +63,8 @@
                             android:layout_margin="1dp"
                             android:contentDescription="@null"
                             android:scaleType="centerCrop"
-                            app:civ_border_color="@color/colorGrey500"
-                            app:civ_border_width="1dp"
+                            app:civ_border_color="@color/colorCircleImageViewborder"
+                            app:civ_border_width="@dimen/widthCircleImageViewborder"
                             tools:src="@mipmap/net" />
 
                         <ImageView
@@ -268,6 +268,35 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/activity_horizontal_margin">
 
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvLiveNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="@string/null_value"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="18sp"
+                            tools:text="6万" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="直播"
+                            android:textColor="@color/colorGrey333333"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorGrey300" />
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -326,35 +355,6 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorGrey300" />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvLiveNumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/null_value"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="18sp"
-                            tools:text="6万" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:text="直播"
-                            android:textColor="@color/colorGrey333333"
-                            android:textSize="12sp" />
-                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -390,28 +390,6 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/activity_horizontal_margin">
 
-
-                        <RelativeLayout
-                            android:id="@+id/rlCollect"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:src="@mipmap/collection_ic" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_centerHorizontal="true"
-                                android:text="收藏"
-                                android:textColor="@color/colorGrey333333"
-                                android:textSize="12sp" />
-                        </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/rlFollow"
@@ -457,9 +435,31 @@
                                 android:textSize="12sp" />
                         </RelativeLayout>
 
+                        <RelativeLayout
+                            android:id="@+id/rlCollect"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:src="@mipmap/collection_ic" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:text="收藏"
+                                android:textColor="@color/colorGrey333333"
+                                android:textSize="12sp" />
+                        </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/rlRecorder"
+                            style="@style/view_invisibility"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">

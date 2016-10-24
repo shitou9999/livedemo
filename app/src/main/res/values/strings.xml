@@ -257,6 +257,7 @@
     <!-- tag -->
     <string name="tag_comment_hot">热门评论</string>
     <string name="tag_comment_all">全部评论</string>
+    <string name="tag_comment_new">最新评论</string>
     <string name="tag_comment_more">更多评论&#160;▶</string>
     <string name="tag_video_other">其它视频</string>
     <string name="tag_video_recommend">视频推荐</string>

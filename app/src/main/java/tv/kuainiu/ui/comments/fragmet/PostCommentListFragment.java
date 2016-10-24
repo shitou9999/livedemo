@@ -2,7 +2,6 @@ package tv.kuainiu.ui.comments.fragmet;
 
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -56,7 +55,6 @@ import tv.kuainiu.modle.push.SubCommentItem;
 import tv.kuainiu.ui.comments.adapter.CommentListAdapter;
 import tv.kuainiu.ui.comments.adapter.SimpleCommentAdapter;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.KeyBoardUtil;
@@ -333,32 +331,6 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
         });
     }
 
-    private void showLoginTip() {
-        if (isShowLoginTip) {
-            return;
-        }
-        isShowLoginTip = true;
-        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
-        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
-            @Override
-            public void onCancel(DialogInterface dialog, int which) {
-
-            }
-
-            @Override
-            public void onLogin(DialogInterface dialog, int which) {
-                Intent intent = new Intent(PostCommentListFragment.this.getActivity(), LoginActivity.class);
-                PostCommentListFragment.this.getActivity().startActivity(intent);
-            }
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isShowLoginTip = false;
-
-            }
-        });
-        loginPromptDialog.show();
-    }
 
     @Override
     public void onClick(View v) {

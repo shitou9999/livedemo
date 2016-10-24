@@ -320,10 +320,21 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 弹出提示对话框，对话框关闭后当前activity也关闭
+     *
+     * @param content
+     */
     public void tip(String content) {
         tip(content, true);
     }
 
+    /**
+     * 弹出提示对话框
+     *
+     * @param content
+     * @param isClose true关闭当前activity,false不关闭当前对话框
+     */
     public void tip(String content, final boolean isClose) {
         try {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
@@ -347,8 +358,8 @@ public class BaseActivity extends AppCompatActivity {
             if (this != null) {
                 mBuilder.create().show();
             }
-        }catch (Exception e){
-            LogUtils.e(TAG,"is_support",e);
+        } catch (Exception e) {
+            LogUtils.e(TAG, "is_support", e);
         }
     }
 }

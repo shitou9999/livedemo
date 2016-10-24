@@ -1,6 +1,5 @@
 package tv.kuainiu.ui.home;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
@@ -47,7 +48,7 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.home.adapter.HomeAdapter;
-import tv.kuainiu.ui.me.activity.LoginActivity;
+import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -65,8 +66,12 @@ import static tv.kuainiu.modle.cons.Action.hot_point;
  */
 public class HomeFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout srlRefresh;
-    @BindView(R.id.rvReadingTap) RecyclerView rvReadingTap;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout srlRefresh;
+    @BindView(R.id.rvReadingTap)
+    RecyclerView rvReadingTap;
+    @BindView(R.id.ivMessage)
+    ImageView ivMessage;
 
     private int mParentPosition;
     private HomeAdapter mHomeAdapter;
@@ -105,7 +110,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+            view = inflater.inflate(R.layout.fragment_home, container, false);
             ButterKnife.bind(this, view);
             initListener();
             initView();
@@ -119,6 +124,7 @@ public class HomeFragment extends BaseFragment {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -140,7 +146,7 @@ public class HomeFragment extends BaseFragment {
 
     private void getBannerData() {
         OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar, CacheConfig.getCacheConfig());
-        LiveHttpUtil.liveIndex(getActivity(), "1", 1,1, Action.live_zhi_bo_home);
+        LiveHttpUtil.liveIndex(getActivity(), "1", 1, 1, Action.live_zhi_bo_home);
     }
 
     private void getHotPoint() {
@@ -158,7 +164,8 @@ public class HomeFragment extends BaseFragment {
 
     private void initListener() {
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 NewsPage = 1;
                 initData();
             }
@@ -192,10 +199,20 @@ public class HomeFragment extends BaseFragment {
     TextView mTvHotPointSupport;
     HotPonit mHotPoint2;
     View vSupport;
+
+    @OnClick(R.id.ivMessage)
+    public void onClick() {
+        Intent messageIntent = new Intent();
+        messageIntent.setClass(getActivity(), MessageSystemActivity.class);
+        startActivity(messageIntent);
+    }
+
+
     class itemClick implements OnItemClickListener {
 
-        @Override public void onClick(View v) {
-            if(!MyApplication.isLogin()){
+        @Override
+        public void onClick(View v) {
+            if (!MyApplication.isLogin()) {
                 showLoginTip();
                 return;
             }
@@ -212,17 +229,17 @@ public class HomeFragment extends BaseFragment {
                     }
                     break;
                 case R.id.ll_hot_point_support:
-                    vSupport=v;
+                    vSupport = v;
                     mHotPoint2 = (HotPonit) v.getTag();
                     mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
                     if (!MyApplication.isLogin()) {
                         new LoginPromptDialog(getActivity()).show();
                         return;
                     } else {
-                        if(mHotPoint2.getIs_support()== Constant.FAVOURED){
+                        if (mHotPoint2.getIs_support() == Constant.FAVOURED) {
                             vSupport.setSelected(true);
-                            ToastUtils.showToast(getActivity(),"已经点过赞了");
-                        }else{
+                            ToastUtils.showToast(getActivity(), "已经点过赞了");
+                        } else {
                             SupportHttpUtil.supportDynamics(getActivity(), mHotPoint2.getId(), Action.home_support_dynamics);
                         }
                     }
@@ -354,7 +371,7 @@ public class HomeFragment extends BaseFragment {
                     LogUtils.e("FindFragment", "获取实时新闻数据失败:" + event.getMsg());
                 }
                 break;
-            case home_teacher_fg_del_follow :
+            case home_teacher_fg_del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTvFollowButton.setText("+ 关注");
                     mTvFollowButton.setSelected(false);
@@ -402,30 +419,5 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
         }
-    }
-    private void showLoginTip() {
-        if (isShowLoginTip) {
-            return;
-        }
-        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
-        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
-            @Override
-            public void onCancel(DialogInterface dialog, int which) {
-
-            }
-
-            @Override
-            public void onLogin(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                isShowLoginTip = true;
-            }
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isShowLoginTip = false;
-            }
-        });
-        loginPromptDialog.show();
     }
 }

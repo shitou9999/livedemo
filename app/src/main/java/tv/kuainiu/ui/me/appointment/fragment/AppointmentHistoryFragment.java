@@ -35,7 +35,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
-import tv.kuainiu.ui.me.adapter.AppointmentHistoryFragmentAdapter;
+import tv.kuainiu.ui.me.adapter.AppointmentFragmentAdapter;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
@@ -55,7 +55,7 @@ public class AppointmentHistoryFragment extends BaseFragment {
     Activity context;
     private boolean loading = false;
     private ListView.OnScrollListener loadMoreListener;
-    private AppointmentHistoryFragmentAdapter adapter;
+    private AppointmentFragmentAdapter adapter;
 
     public static AppointmentHistoryFragment newInstance() {
         Bundle args = new Bundle();
@@ -78,7 +78,7 @@ public class AppointmentHistoryFragment extends BaseFragment {
         initListener();
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         lvList.setOnScrollListener(loadMoreListener);
-        adapter = new AppointmentHistoryFragmentAdapter(context, listData, new AppointmentHistoryFragmentAdapter.IdeletItem() {
+        adapter = new AppointmentFragmentAdapter(context, listData, new AppointmentFragmentAdapter.IdeletItem() {
             @Override
             public void delete(SwipeLayout swipeLayout, int position, Appointment mAppointment2) {
                 mAppointment = mAppointment2;

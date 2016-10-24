@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/def_option_height"
         android:gravity="center_vertical"
-        android:text="@string/tag_comment_all"
+        android:text="@string/tag_comment_new"
         />
 
 </FrameLayout>

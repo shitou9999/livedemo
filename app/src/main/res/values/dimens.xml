@@ -119,4 +119,6 @@
     <dimen name="expgv_setting_service_image_margin">10dp</dimen>
     <dimen name="expgv_setting_service_image_horizontalSpacing">5dp</dimen>
     <dimen name="ten_dp">10dp</dimen>
+    <dimen name="widthCircleImageViewborder">1dp</dimen>
+    <dimen name="CircleImageViewHeight">36dp</dimen>
 </resources>

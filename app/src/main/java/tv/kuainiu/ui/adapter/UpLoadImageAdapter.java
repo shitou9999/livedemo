@@ -28,7 +28,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
     private ArrayList<String> imageList;
     private BaseActivity activity;
     private Context context;
-
+    private int showNumberInline = 3;
     private int width = 0;
     private int height = 0;
     private RelativeLayout.LayoutParams paramsFrameLayout;
@@ -47,12 +47,12 @@ public class UpLoadImageAdapter extends BaseAdapter {
                 * context.getResources().getDimensionPixelSize(
                 R.dimen.expgv_setting_service_image_margin) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
 
-    public UpLoadImageAdapter(ArrayList<String> imageList,BaseActivity activity, int i) {
+    public UpLoadImageAdapter(ArrayList<String> imageList, BaseActivity activity, int i) {
         super();
         this.imageList = imageList;
         this.activity = activity;
@@ -62,7 +62,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -79,7 +79,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -94,7 +94,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / Constant.UPLOAD_IMAGE_MAX_NUMBER;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) /showNumberInline;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -189,7 +189,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
                             .get(list.size() - 1))) {
                         list.remove(list.size() - 1);
                     }
-                    intent.putExtra(PicturePreviewActivity.ONLY_PREVIEW,only_preview);
+                    intent.putExtra(PicturePreviewActivity.ONLY_PREVIEW, only_preview);
                     intent.putExtra(
                             Constant.PICTURE_PREVIEW_KEY,
                             list);

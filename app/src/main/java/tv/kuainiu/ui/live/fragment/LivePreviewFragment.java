@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
@@ -76,7 +77,7 @@ public class LivePreviewFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
 //        }
 //        ViewGroup viewgroup = (ViewGroup) view.getParent();
 //        if (viewgroup != null) {
@@ -119,6 +120,10 @@ public class LivePreviewFragment extends BaseFragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tvAppointment:
+                        if (!MyApplication.isLogin()) {
+                            showLoginTip();
+                            return;
+                        }
                         tvAppointment = (TextView) v;
                         liveInfo = (LiveInfo) v.getTag();
                         position = (int) v.getTag(R.id.tvAppointment);
@@ -193,7 +198,7 @@ public class LivePreviewFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (tvAppointment != null) {
                         tvAppointment.setSelected(true);
-                        tvAppointment.setText("取消预约提醒");
+                        tvAppointment.setText("预约");
                         liveInfo.setIs_appointment(1);
                         if (position > -1 && position < mLiveItemList.size()) {
                             mLiveItemList.get(position).setIs_appointment(1);
@@ -209,7 +214,7 @@ public class LivePreviewFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (tvAppointment != null) {
                         tvAppointment.setSelected(false);
-                        tvAppointment.setText("加入预约提醒");
+                        tvAppointment.setText("预约");
                         liveInfo.setIs_appointment(0);
                         if (position > -1 && position < mLiveItemList.size()) {
                             mLiveItemList.get(position).setIs_appointment(0);

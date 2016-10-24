@@ -49,12 +49,12 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_friends_post_head"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/CircleImageViewHeight"
+                    android:layout_height="@dimen/CircleImageViewHeight"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    app:civ_border_color="@color/colorAmber300"
-                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/colorCircleImageViewborder"
+                    app:civ_border_width="@dimen/widthCircleImageViewborder"
                     app:paddingEnd="2dp"
                     app:paddingStart="2dp"
                     tools:src="@mipmap/ic_launcher" />
@@ -69,7 +69,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_toRightOf="@+id/civ_friends_post_head"
                     android:text="张三丰"
-                    android:textColor="@color/colorBlue700" />
+                    android:textColor="@color/colorTeacherName" />
 
                 <ImageView
                     android:id="@+id/ivSupport"
@@ -85,7 +85,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/value_friends_post_content" />
+                android:text="@string/value_friends_post_content"
+                android:textColor="@color/colorGrey333333" />
 
             <tv.kuainiu.widget.ExpandGridView
                 android:id="@+id/exgv_appraisal_pic"
@@ -93,6 +94,8 @@
                 android:layout_height="wrap_content"
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
+                android:verticalSpacing="5dp"
+                android:layout_marginTop="5dp"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="3" />
 

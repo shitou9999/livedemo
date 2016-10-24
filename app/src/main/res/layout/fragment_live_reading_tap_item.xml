@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp">
+        android:layout_height="180dp">
 
         <ImageView
             android:id="@+id/ivIamge"
@@ -23,6 +23,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/bg_translucent" />
+
         <include layout="@layout/include_liveing" />
 
         <RelativeLayout
@@ -40,15 +41,14 @@
             <TextView
                 android:id="@+id/tv_teacher_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_below="@+id/il_avatar"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/selector_bg_blue2"
-                android:paddingBottom="2dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 tools:text="王丽" />
@@ -70,26 +70,52 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_teacher_introduce"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
                 tools:text="波段交易，稳健获利" />
         </RelativeLayout>
 
 
-
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvAppointment"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/selector_bg_appointment"
-        android:gravity="center"
-        android:textColor="@drawable/selector_bg_appointment_text"
-        android:text="加入预约提醒" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white_color">
+
+        <TextView
+            android:id="@+id/tvAppointment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/selector_bg_appointment"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="预约"
+            android:textColor="@drawable/selector_bg_appointment_text" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tvAppointment"
+            android:gravity="top|left"
+            android:maxLines="2"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/colorGrey333333"
+            android:textSize="14sp"
+            tools:text="德国进口的接口好的双方均可获得试试粉红丝带上的课发的深刻的时间发货速度发多少" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorGrey400" />
 </LinearLayout>

@@ -1,93 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <tv.kuainiu.widget.TitleBarView
+        android:id="@+id/tbv_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:mytitle="名师"
+        app:right_visibility="invisible" />
 
-        <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white_color"
-            android:orientation="vertical"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <tv.kuainiu.widget.TitleBarView
-                android:id="@+id/tbv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mytitle="名师"
-                app:right_visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/ivBanner"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/net" />
-
-            <include layout="@layout/include_teacher_info" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/ll_fragment_friends_main_news_info"
-                style="@style/view_gone_visibility"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="@color/white_color"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:text="断线(%68)" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:text="趋势波段(%23)" />
+                <ImageView
+                    android:id="@+id/ivBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/net" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:text="技术(%16)" />
+                <include layout="@layout/include_teacher_info" />
 
+                <LinearLayout
+                    android:id="@+id/ll_fragment_friends_main_news_info"
+                    style="@style/view_gone_visibility"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:text="断线(%68)" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:text="趋势波段(%23)" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:text="技术(%16)" />
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_fragment_major"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_fragment_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_color"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@color/colorRed500"
+                app:tabSelectedTextColor="@color/colorRed500"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@android:style/TextAppearance.Small"
+                app:tabTextColor="@color/colorGrey600" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorGrey450" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vpTeacherZone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white_color"
-            app:tabGravity="center"
-            app:tabIndicatorColor="@color/colorRed500"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorRed500"
-            app:tabTextAppearance="@android:style/TextAppearance.Small"
-            app:tabTextColor="@color/colorGrey600" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorGrey450" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vpTeacherZone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-</android.support.design.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

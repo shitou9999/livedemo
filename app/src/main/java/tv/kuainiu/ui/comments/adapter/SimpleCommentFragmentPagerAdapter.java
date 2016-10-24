@@ -12,7 +12,7 @@ import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
  */
 public class SimpleCommentFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[]{"全部评论", "老师回复"};
+    private String tabTitles[] = new String[]{"全部评论", "作者回复"};
     private Context context;
     private int mode;
 

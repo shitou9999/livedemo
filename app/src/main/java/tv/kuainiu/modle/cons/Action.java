@@ -68,6 +68,7 @@ public enum Action {
     comment_list,     // 评论列表
     comment_teacher,  // 老师回复列表
     comment_list_hot, // 热门评论
+    comment_list_hot_video, // 热门评论
     add_comment,      // 添加评论
     favour_comment,   // 评论点赞
     favour_comment_video,   // 视频评论点赞

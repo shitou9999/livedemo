@@ -5,7 +5,7 @@ package tv.kuainiu.modle.cons;
  * Created by guxuan on 2016/2/29.
  */
 public class Constant {
-    public static final int LiveLoginNumber = 2;
+    public static final int LiveLoginNumber = 1;
     /**
      * 图片预览
      */
@@ -17,7 +17,7 @@ public class Constant {
     public static final int SELECT_PICTURE = 40002;
     public static final String PICTURE_PREVIEW_KEY = "picture_preview_key";
     public static final String PICTURE_PREVIEW_INDEX_KEY = "picture_preview_index_key";
-    public static final int UPLOAD_IMAGE_MAX_NUMBER = 3;
+    public static final int UPLOAD_IMAGE_MAX_NUMBER = 6;
     public static final String UPLOADIMAGE = "上传图片";
     public static final String PRIVATE_KEY = "private_key";
     public static final String INTENT_ACTION_GET_WEB = "INTENT_ACTION_GET_WEB";

@@ -22,12 +22,12 @@
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:layout_alignTop="@+id/iv_teacher_item_photo"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/iv_teacher_item_photo"
         android:gravity="center"
-        android:textColor="@color/colorRed500"
+        android:textColor="@color/colorTeacherName"
         android:textSize="@dimen/text_size_large"
         tools:text="张三丰"/>
 
@@ -38,6 +38,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/tv_name"
         android:background="@drawable/selector_follow_button_bg"
+        android:textColor="@drawable/selector_follow_button_text_color"
         android:gravity="center"
         android:paddingBottom="2dp"
         android:paddingLeft="5dp"
@@ -50,9 +51,10 @@
     <TextView
         android:id="@+id/tv_fans_count"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:layout_alignBottom="@+id/tv_name"
         android:layout_marginRight="10dp"
+        android:gravity="center"
         android:layout_toLeftOf="@+id/tv_follow_button"
         android:textSize="@dimen/text_size_micro"
         tools:text="2222个粉丝"
@@ -64,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_name"
         android:layout_below="@+id/tv_name"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:singleLine="true"
         tools:text="新奇特表现亮眼，多维布局共成长"/>

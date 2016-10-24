@@ -206,10 +206,22 @@ public class DateUtil {
         }
         return date;
     }
+
+    public static String getDurationStringOriginal(String dateFormat, long value) {
+        String date = DateUtil.toTimestampForString(dateFormat, value);
+        return date;
+    }
+
     public static String getTimeString_HH_mm(long value) {
 
         return getDurationString("HH:mm", value);
     }
+
+    public static String getTimeString_MM_dd(long value) {
+
+        return getDurationString("MM-dd", value);
+    }
+
     public static String getDurationString(long value) {
         return getDurationString("yyyy-MM-dd", value);
     }

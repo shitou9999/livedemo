@@ -7,6 +7,7 @@ package tv.kuainiu.modle;
 public class LiveingInfo {
     private int support_num = 0;
     private int is_support = 0;
+    private int view_num = 0;
 
     public int getIs_support() {
         return is_support;
@@ -22,5 +23,13 @@ public class LiveingInfo {
 
     public void setSupport_num(int support_num) {
         this.support_num = support_num;
+    }
+
+    public int getView_num() {
+        return view_num;
+    }
+
+    public void setView_num(int view_num) {
+        this.view_num = view_num;
     }
 }

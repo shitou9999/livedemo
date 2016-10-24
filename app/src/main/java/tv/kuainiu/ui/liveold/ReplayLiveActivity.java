@@ -105,6 +105,8 @@ import tv.kuainiu.utils.WeakHandler;
 import tv.kuainiu.widget.BarrageLayout;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
+import static tv.kuainiu.R.id.tvCount2;
+
 
 /**
  * 重播
@@ -117,8 +119,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         IjkMediaPlayer.OnErrorListener,
         IjkMediaPlayer.OnBufferingUpdateListener,
         IjkMediaPlayer.OnInfoListener,
-        IjkMediaPlayer.OnCompletionListener,
-        View.OnTouchListener {
+        IjkMediaPlayer.OnCompletionListener {
 
     RelativeLayout rlPlay;
     LinearLayout llBottomLayout;
@@ -138,6 +139,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     BarrageLayout mBarrageLayout;
     ViewPager mPager;
     CircleImageView civ_avatar;
+    TextView tvPlayMsg;
     TextView tv_live_teacher_zan;
     TextView tv_live_title;
     TextView tv_teacher_fans;
@@ -145,7 +147,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     TextView currentTime;
     SeekBar playSeekBar;
     TextView totalTime;
-    Button btn_teacher_follow;
+    TextView btn_teacher_follow;
 
     TextView mInfo;
     RelativeLayout rl_mInfo;
@@ -310,7 +312,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         ll_seek.setVisibility(View.VISIBLE);
         llFullscreen = (LinearLayout) findViewById(R.id.ll_fullscreen_msg_send2);
         llFullscreen.setVisibility(View.GONE);
-        tvCount = (TextView) findViewById(R.id.tvCount2);
+        tvCount = (TextView) findViewById(tvCount2);
         tvCount.setVisibility(View.INVISIBLE);
         mTabLayout = (TabLayout) findViewById(R.id.tab_live_top2);
         sv = (SurfaceView) findViewById(R.id.sv2);
@@ -325,6 +327,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         mBarrageLayout = (BarrageLayout) findViewById(R.id.bl_barrage2);
         mPager = (ViewPager) findViewById(R.id.mPager2);
         civ_avatar = (CircleImageView) findViewById(R.id.civ_avatar2);
+        tvPlayMsg = (TextView) findViewById(R.id.tvPlayMsg);
         tv_live_teacher_zan = (TextView) findViewById(R.id.tv_live_teacher_zan2);
         tv_live_title = (TextView) findViewById(R.id.tv_live_title2);
         tv_teacher_fans = (TextView) findViewById(R.id.tv_teacher_fans2);
@@ -332,7 +335,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         tv_live_teacher = (TextView) findViewById(R.id.tv_live_teacher2);
         playSeekBar = (SeekBar) findViewById(R.id.play_seekBar);
         totalTime = (TextView) findViewById(R.id.total_time);
-        btn_teacher_follow = (Button) findViewById(R.id.btn_teacher_follow2);
+        btn_teacher_follow = (TextView) findViewById(R.id.btn_teacher_follow2);
 //        btn_teacher_follow.setVisibility(View.INVISIBLE);
 
         mInfo = (TextView) findViewById(R.id.mInfo);
@@ -375,6 +378,12 @@ public class ReplayLiveActivity extends BaseActivity implements
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
         });
+        sv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return onTouchEvent2(event);
+            }
+        });
     }
 
     private void intView() {
@@ -399,6 +408,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         } else {
             tv_live_teacher_zan.setSelected(true);
         }
+        tvCount.setText(String.format(Locale.CHINA, "%d人", mTeacherInfo.getLive_info().getView_num()));
     }
 
     private void initTab(int selectedIndex) {
@@ -982,7 +992,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             setHolderBlack("音频播放中……");
             return;
         }
-//        tvPlayMsg.setVisibility(View.GONE);
+        tvPlayMsg.setVisibility(View.GONE);
         if (sv != null) {
             sv.setLayoutParams(getScreenSizeParams());
         }
@@ -1100,8 +1110,8 @@ public class ReplayLiveActivity extends BaseActivity implements
         canvas.drawColor(Color.BLACK);
         mHolder.unlockCanvasAndPost(canvas);
 
-//        tvPlayMsg.setVisibility(View.VISIBLE);
-//        tvPlayMsg.setText(text);
+        tvPlayMsg.setVisibility(View.VISIBLE);
+        tvPlayMsg.setText(text);
     }
 
     @Override
@@ -1482,18 +1492,13 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        onTouchEvent(event);
-        return false;
-    }
 
     /**
      * show/hide the overlay
      */
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent2(MotionEvent event) {
+
         DisplayMetrics screen = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(screen);
 
@@ -1534,7 +1539,9 @@ public class ReplayLiveActivity extends BaseActivity implements
             }
             return false;
         }
-
+        if (isPortrait()) {
+            return false;
+        }
 
         switch (event.getAction()) {
 

@@ -35,6 +35,8 @@
     <color name="colorGrey420">#B4ABAB</color>
     <color name="colorGrey475">#AAAAAA</color>
     <color name="colorGrey500">#9E9E9E</color>
+    <color name="colorCircleImageViewborder">@color/colorGrey500</color>
+    <color name="colorGreyCommonBg">#f5f5f5</color>
     <color name="colorGreyb1b1b1">#b1b1b1</color>
     <color name="colorGrey600">#757575</color>
     <color name="colorGrey600x">#88757575</color>
@@ -54,6 +56,7 @@
     <color name="colorBlue350">#569AFF</color>
     <color name="colorBlue150">#9FCDFF</color>
     <color name="colorBlue50">#F0F7FF</color>
+    <color name="colorTeacherName">@color/colorBlue700</color>
 
     <!-- Yellow 黄色 -->
     <!-- Orange 橙色 -->

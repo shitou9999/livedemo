@@ -678,7 +678,7 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void getHotCommentList() {
-        CommentHttpUtil.hotComment(this, "1", cat_id, news_id, "", 1);
+        CommentHttpUtil.hotComment(this, "1", cat_id, news_id, "", 1,Action.comment_list_hot_video);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -705,7 +705,7 @@ public class VideoActivity extends BaseActivity implements
                     finish();
                 }
                 break;
-            case comment_list_hot:
+            case comment_list_hot_video:
                 if (SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
                     LogUtils.e("VideoActivity", "json=" + json);

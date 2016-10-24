@@ -65,7 +65,7 @@ public class CommentHttpUtil {
      size           每页条数     非必传     默认5
 
      */
-    public static void hotComment(Context context, String type, String cat_id, String news_id, String dynamics_id, int page) {
+    public static void hotComment(Context context, String type, String cat_id, String news_id, String dynamics_id, int page,Action action) {
         Map<String, String> map = new HashMap<>();
         map.put("type", type);
         map.put("cat_id", cat_id);
@@ -73,7 +73,7 @@ public class CommentHttpUtil {
         map.put("dynamics_id", dynamics_id);
         map.put("page",String.valueOf(page));
         String param = ParamUtil.getParam(map);
-        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.COMMENT_LIST_HOT, param, Action.comment_list_hot);
+        OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST, Api.COMMENT_LIST_HOT, param,action);
     }
     /**
      * 评论列表

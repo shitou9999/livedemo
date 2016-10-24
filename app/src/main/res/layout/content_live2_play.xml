@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_play2"
@@ -18,15 +17,13 @@
             android:id="@+id/sv2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            />
+            android:layout_centerInParent="true" />
 
         <tv.kuainiu.widget.BarrageLayout
             android:id="@+id/bl_barrage2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
-        </tv.kuainiu.widget.BarrageLayout>
+            android:visibility="gone"></tv.kuainiu.widget.BarrageLayout>
 
         <RelativeLayout
             android:id="@+id/rl_control2"
@@ -47,7 +44,7 @@
                     android:layout_width="@dimen/live_bar_height"
                     android:layout_height="match_parent"
                     android:scaleType="center"
-                    android:src="@mipmap/back_icon"/>
+                    android:src="@mipmap/back_icon" />
 
                 <ImageView
                     android:id="@+id/iv_share2"
@@ -55,7 +52,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:scaleType="center"
-                    android:src="@drawable/live_share_selector"/>
+                    android:src="@drawable/live_share_selector" />
 
                 <TextView
                     android:id="@+id/tvCount2"
@@ -66,7 +63,7 @@
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:text="人"
-                    android:textColor="@color/white_color"/>
+                    android:textColor="@color/white_color" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -80,7 +77,7 @@
                     android:layout_width="@dimen/live_bar_height"
                     android:layout_height="match_parent"
                     android:scaleType="centerInside"
-                    android:src="@drawable/live_play_pause_selector"/>
+                    android:src="@drawable/live_play_pause_selector" />
 
                 <ImageView
                     android:id="@+id/full_screen2"
@@ -88,7 +85,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/full_screen_b"/>
+                    android:src="@mipmap/full_screen_b" />
 
                 <LinearLayout
                     android:id="@+id/ll_fullscreen_msg_send2"
@@ -115,12 +112,12 @@
                         android:maxLength="140"
                         android:maxLines="2"
                         android:padding="3dp"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@android:color/darker_gray"/>
+                        android:background="@android:color/darker_gray" />
 
                     <Button
                         android:id="@+id/btn_fullscreen_send2"
@@ -128,7 +125,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:scaleType="centerInside"
-                        android:text="发送"/>
+                        android:text="发送" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -138,24 +135,23 @@
                     android:layout_toLeftOf="@+id/full_screen2"
                     android:layout_toRightOf="@+id/iv_control2"
                     android:gravity="center_vertical"
-                    android:visibility="visible"
-                    >
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/current_time"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:textColor="#FFF"
                         android:gravity="end"
-                        android:textSize="10sp"/>
+                        android:textColor="#FFF"
+                        android:textSize="10sp" />
 
                     <SeekBar
                         android:id="@+id/play_seekBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/linearLayout1"
-                        android:layout_weight="100"/>
+                        android:layout_weight="100" />
 
                     <TextView
                         android:id="@+id/total_time"
@@ -163,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:textColor="#FFF"
-                        android:textSize="10sp"/>
+                        android:textSize="10sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -177,16 +173,24 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:src="@mipmap/start"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
-        <include layout="@layout/touch_over"/>
+        <TextView
+            android:id="@+id/tvPlayMsg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/white_color"
+            android:textSize="14sp" />
+
+        <include layout="@layout/touch_over" />
     </RelativeLayout>
 
     <LinearLayout
@@ -208,21 +212,22 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                tools:src="@mipmap/ic_launcher"
                 app:civ_border_color="@color/colorGrey500"
-                app:civ_border_overlay="true"/>
+                app:civ_border_overlay="true"
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/tv_live_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/civ_avatar2"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                tools:text="开启财富之门"
                 android:textColor="@color/colorGrey900"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                tools:text="开启财富之门" />
 
             <TextView
                 android:id="@+id/tv_live_teacher2"
@@ -232,9 +237,10 @@
                 android:layout_below="@+id/tv_live_title2"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                tools:text="廖英强"
+                android:singleLine="true"
                 android:textColor="@color/colorBlue500"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="廖英强" />
 
             <TextView
                 android:id="@+id/tv_live_teacher_zan2"
@@ -243,37 +249,38 @@
                 android:layout_alignTop="@+id/tv_live_teacher2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="10dp"
-                android:drawableLeft="@drawable/live_spourt_selector"
+                android:drawableLeft="@drawable/selector_video_suport_number"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                tools:text="8885赞"
                 android:textColor="@color/colorGrey500"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="8885赞" />
 
-            <Button
+            <TextView
                 android:id="@+id/btn_teacher_follow2"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/tv_live_teacher_zan2"
-                android:background="@drawable/selector_home_follow_button_bg"
+                android:layout_alignTop="@id/tv_live_teacher2"
+                android:background="@drawable/selector_follow_button_bg"
                 android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="+关注"
-                android:textColor="@drawable/selector_home_follow_text_color"
-                android:textSize="12sp"/>
+                android:textColor="@drawable/selector_follow_button_text_color" />
 
             <TextView
                 android:id="@+id/tv_teacher_fans2"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_alignTop="@id/tv_live_teacher_zan2"
+                android:layout_alignTop="@id/tv_live_teacher2"
                 android:layout_toLeftOf="@id/btn_teacher_follow2"
-                android:gravity="right"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                tools:text="444粉丝"
                 android:textColor="@color/colorGrey500"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                tools:text="444粉丝" />
 
 
         </RelativeLayout>
@@ -281,23 +288,23 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@color/colorGrey230"/>
+            android:background="@color/colorGrey230" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_live_top2"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/bg_custom_tab"
-            app:tabIndicatorColor="@color/colorAmber550"
             app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorAmber550"
-            app:tabTextColor="@color/def_TextColor"/>
+            app:tabIndicatorColor="@color/colorRed500"
+            app:tabSelectedTextColor="@color/colorRed500"
+            app:tabTextColor="@color/def_TextColor" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/mPager2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorGrey230"/>
+            android:background="@color/colorGrey230" />
     </LinearLayout>
 </LinearLayout>

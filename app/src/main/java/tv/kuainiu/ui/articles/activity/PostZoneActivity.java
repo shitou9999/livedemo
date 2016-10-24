@@ -22,6 +22,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -43,6 +44,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
@@ -64,6 +66,7 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.WebActivity;
 import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.umeng.UMEventManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -76,6 +79,8 @@ import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
+
+import static tv.kuainiu.R.id.ci_avatar;
 
 
 /**
@@ -95,7 +100,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     TitleBarView tbv_title;
     @BindView(R.id.rl_top_navigation)
     RelativeLayout mRlTopNavigation;
-    @BindView(R.id.ci_avatar)
+    @BindView(ci_avatar)
     CircleImageView mCivTeacherHead;
     @BindView(R.id.tv_follow_button)
     TextView mTVFollowButton;
@@ -124,10 +129,18 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     RadioButton mRadioButton3;
     @BindView(R.id.radioButton4)
     RadioButton mRadioButton4;
-    @BindView(R.id.ivIsVip) ImageView mIvIsVip;
-    @BindView(R.id.tvTheme) TextView mTvTheme;
-    @BindView(R.id.tvTeacherName) TextView mTvTeacherName;
-    @BindView(R.id.tv_follow_number) TextView mTvFollowNumber;
+    @BindView(R.id.ivIsVip)
+    ImageView mIvIsVip;
+    @BindView(R.id.tvTheme)
+    TextView mTvTheme;
+    @BindView(R.id.tvTeacherName)
+    TextView mTvTeacherName;
+    @BindView(R.id.tv_follow_number)
+    TextView mTvFollowNumber;
+    @BindView(R.id.line_bottom)
+    View lineBottom;
+    @BindView(R.id.ll_bottom_bar)
+    LinearLayout llBottomBar;
     /**
      * 来源
      */
@@ -329,6 +342,13 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
             UserHttpRequest.authLogin(this, user.getUser_id(), user.getPhone(), Action.AUTO_LOGIN);
         } else {//提示去登录
             new LoginPromptDialog(this).show();
+        }
+    }
+
+    @OnClick(ci_avatar)
+    public void onClick() {
+        if (mDetailsEntity != null) {
+            TeacherZoneActivity.intoNewIntent(this, mDetailsEntity.getUser_id());
         }
     }
 

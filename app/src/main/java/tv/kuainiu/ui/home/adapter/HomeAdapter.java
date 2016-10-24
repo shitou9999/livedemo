@@ -303,7 +303,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final String videoId = newsItem.getUpVideoId();
             //绑定新闻Item
             holder.mTvNewTitle.setText(StringUtils.replaceNullToEmpty(newsItem.getTitle()));
-            holder.mTvNewContent.setText(StringUtils.replaceNullToEmpty(newsItem.getDescription()));
+            holder.tvTeacherName.setText(StringUtils.replaceNullToEmpty(newsItem.getDaoshi_name()));
+            holder.tvDate.setText(DateUtil.getTimeString_MM_dd(newsItem.getInputtime()));
             ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(newsItem.getThumb()));
             holder.rootview.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -311,12 +312,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (TextUtils.isEmpty(videoId)) {
                         PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId());
                     } else {
-                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
+                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId(), StringUtils.replaceNullToEmpty(newsItem.getTitle()));
                     }
                 }
             });
-            //TODO 列表直播标签是否显示
-            holder.tvType.setVisibility(View.INVISIBLE);
         }
 //
     }
@@ -356,8 +355,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((HotPointHolder) vh).rc_hot_point.addItemDecoration(mDividerItemDecoration);
                 break;
             case TEXT_HOT_POINT:
-            case TEXT_HOT_NEW:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_text, parent, false);
+                vh = new TextViewHolder(view);
+                break;
+            case TEXT_HOT_NEW:
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_item_text_white_bg, parent, false);
                 vh = new TextViewHolder(view);
                 break;
             default:
@@ -409,10 +411,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mIvNewIamge;
         @BindView(R.id.tvNewTitle)
         TextView mTvNewTitle;
-        @BindView(R.id.tvNewContent)
-        TextView mTvNewContent;
-        @BindView(R.id.tvType)
-        TextView tvType;
+        @BindView(R.id.tvDate)
+        TextView tvDate;
+        @BindView(R.id.tvTeacherName)
+        TextView tvTeacherName;
         View rootview;
 
         public ViewNewHolder(View itemView) {

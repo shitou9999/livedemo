@@ -1,10 +1,15 @@
 package tv.kuainiu.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+
+import tv.kuainiu.ui.me.activity.LoginActivity;
+import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 public class BaseFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -14,7 +19,7 @@ public class BaseFragment extends Fragment {
     public static final String TEACHER_ID = "teacherId";
     private String mParam1;
     private String mParam2;
-
+    public boolean isShowLoginTip;
     private OnFragmentInteractionListener mListener;
     public String TAG = "";
     public View view = null;
@@ -95,5 +100,33 @@ public class BaseFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void showLoginTip() {
+        if (isShowLoginTip) {
+            return;
+        }
+        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
+        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
+
+
+            @Override
+            public void onCancel(DialogInterface dialog, int which) {
+
+            }
+
+            @Override
+            public void onLogin(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                isShowLoginTip = true;
+            }
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowLoginTip = false;
+            }
+        });
+        loginPromptDialog.show();
     }
 }

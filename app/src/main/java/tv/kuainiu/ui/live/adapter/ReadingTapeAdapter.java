@@ -138,11 +138,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ivIamge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                        if(TextUtils.isEmpty(liveItem.getPlayback_id())){
-                            clickPlayLive(liveItem);
-                        }else{
-                            clickRePlayLive(liveItem);
-                        }
+                    if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
+                        clickPlayLive(liveItem);
+                    } else {
+                        clickRePlayLive(liveItem);
+                    }
                 }
             });
             mList.add(view);
@@ -176,11 +176,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View view) {
                     //TODO 完善直播参数传递
                     LiveInfo liveItem = (LiveInfo) view.getTag();
-                        if(TextUtils.isEmpty(liveItem.getPlayback_id())){
-                            clickPlayLive(liveItem);
-                        }else{
-                            clickRePlayLive(liveItem);
-                        }
+                    if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
+                        clickPlayLive(liveItem);
+                    } else {
+                        clickRePlayLive(liveItem);
+                    }
                 }
             });
             mList.add(view);
@@ -212,7 +212,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvAppointment.setTag(liveItem);
             holder.tvAppointment.setTag(R.id.tvAppointment, position);
             holder.tvAppointment.setSelected(liveItem.getIs_appointment() != 0);
-            holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? "加入预约提醒" : "取消预约提醒");
+            holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? "预约" : "预约");
             holder.tvAppointment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -225,20 +225,18 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             holder.mTvLiveingNumber.setText(DateUtil.formatDate(liveItem.getStart_date(), "yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm"));
         }
+        holder.tvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(liveItem.getAnchor()));
         holder.mTvTeacherIntroduce.setText(StringUtils.replaceNullToEmpty(liveItem.getTeacher_info().getSlogan()));
-        holder.mTvTeacherTheme.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
+        holder.mTvTeacherTheme.setText(StringUtils.replaceNullToEmpty(liveItem.getTeacher_info().getSlogan()));
         holder.mIvIamge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //直播参数传递
-                if (type == ZHI_BO) {
-                    if(TextUtils.isEmpty(liveItem.getPlayback_id())){
-                        clickPlayLive(liveItem);
-                    }else{
-                        clickRePlayLive(liveItem);
-                    }
-
+                if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
+                    clickPlayLive(liveItem);
+                } else {
+                    clickRePlayLive(liveItem);
                 }
             }
         });
@@ -252,16 +250,6 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
         PlayLiveActivity.intoNewIntent(mContext, liveParameter);
-//        if (liveItem.getLive_status() == Constans.LIVE_ING) {
-//        LiveParameter liveParameter = new LiveParameter();
-//        liveParameter.setLiveId(liveItem.getId());
-//        liveParameter.setLiveTitle(liveItem.getTitle());
-//        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
-//        liveParameter.setTeacherId(liveItem.getTeacher_id());
-//        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
-//        } else {
-//            ToastUtils.showToast(mContext, liveItem.getLive_msg());
-//        }
     }
 
     /**
@@ -356,6 +344,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView mTvTeacherTheme;
         @BindView(R.id.tvAppointment)
         TextView tvAppointment;
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);

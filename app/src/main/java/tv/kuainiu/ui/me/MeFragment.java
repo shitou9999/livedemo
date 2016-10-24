@@ -1,7 +1,6 @@
 package tv.kuainiu.ui.me;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -47,6 +46,7 @@ import tv.kuainiu.ui.me.activity.SettingActivity;
 import tv.kuainiu.ui.me.appointment.AppointmentActivity;
 import tv.kuainiu.ui.me.appointment.MyLiveActivity;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -146,7 +146,6 @@ public class MeFragment extends BaseFragment {
     RelativeLayout mRlRecorder;
 
     private Context context;
-    private boolean isShowLoginTip;
 
     public static MeFragment newInstance() {
         MeFragment fragment = new MeFragment();
@@ -212,16 +211,22 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish,R.id.ivMessage})
+            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish, R.id.ivMessage, R.id.tv_me_home})
     public void onClick(View view) {
 
         switch (view.getId()) {
+            case R.id.rlHomePage:
+                if (!MyApplication.isLogin()) {
+                    showLoginTip();
+                    return;
+                }
+                TeacherZoneActivity.intoNewIntent(getActivity(), MyApplication.getUser().getUser_id());
+                break;
             case R.id.ivMessage:
                 Intent messageIntent = new Intent();
                 messageIntent.setClass(getActivity(), MessageSystemActivity.class);
                 startActivity(messageIntent);
                 break;
-            case R.id.rlHomePage:
             case R.id.tv_me_phone:
             case R.id.tv_me_name:
             case R.id.ivEdite:
@@ -237,6 +242,10 @@ public class MeFragment extends BaseFragment {
                     showLoginTip();
                     return;
                 }
+//                if(MyApplication.getUser().getIs_teacher()==0){
+//                    ToastUtils.showToast(getActivity(),"只有老师才有直播");
+//                    return;
+//                }
                 Intent intentMyLiveActivity = new Intent(getActivity(), MyLiveActivity.class);
                 startActivity(intentMyLiveActivity);
                 break;
@@ -399,11 +408,21 @@ public class MeFragment extends BaseFragment {
             rlLogOut.setVisibility(View.GONE);
             if (user.getIs_teacher() == 0) {
                 mBtnPublish.setVisibility(View.INVISIBLE);
-                mRlLive.setVisibility(View.GONE);
+//                mRlLive.setVisibility(View.GONE);
+                rlHomePage.setVisibility(View.GONE);
             } else {
                 mBtnPublish.setVisibility(View.VISIBLE);
-                mRlLive.setVisibility(View.VISIBLE);
+//                mRlLive.setVisibility(View.VISIBLE);
+                rlHomePage.setVisibility(View.VISIBLE);
             }
+            mIvTextVip.setSelected(user.getIs_teacher() != 0);
+            mIvIconVip.setSelected(user.getIs_teacher() != 0);
+            mIvIconPlay.setSelected(user.getIs_teacher() != 0);
+            mIvIconVideo.setSelected(user.getIs_teacher() != 0);
+            mIvIconGroup.setSelected(user.getIs_teacher() != 0);
+            mIvIconLesson.setSelected(user.getIs_teacher() != 0);
+            mIvIconInstitution.setSelected(user.getIs_teacher() != 0);
+            mIvInstitution.setSelected(user.getIs_teacher() != 0);
         }
         setFollowAndSubText(user);
     }
@@ -425,30 +444,6 @@ public class MeFragment extends BaseFragment {
         }
     }
 
-    private void showLoginTip() {
-        if (isShowLoginTip) {
-            return;
-        }
-        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(getActivity());
-        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
-            @Override
-            public void onCancel(DialogInterface dialog, int which) {
 
-            }
-
-            @Override
-            public void onLogin(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                isShowLoginTip = true;
-            }
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isShowLoginTip = false;
-            }
-        });
-        loginPromptDialog.show();
-    }
 
 }

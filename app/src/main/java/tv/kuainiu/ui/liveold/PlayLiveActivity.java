@@ -129,6 +129,7 @@ public class PlayLiveActivity extends BaseActivity implements
     LinearLayout llBottomLayout;
     LinearLayout llFullscreen;
     TextView tvCount;
+    TextView tvPlayMsg;
     TabLayout mTabLayout;
     SurfaceView sv;
     ProgressBar pb_loading;
@@ -146,7 +147,7 @@ public class PlayLiveActivity extends BaseActivity implements
     TextView tv_live_title;
     TextView tv_teacher_fans;
     TextView tv_live_teacher;
-    Button btn_teacher_follow;
+    TextView btn_teacher_follow;
     TextView mInfo;
     RelativeLayout rl_mInfo;
     ImageView iv_mInfo;
@@ -301,6 +302,7 @@ public class PlayLiveActivity extends BaseActivity implements
         llBottomLayout = (LinearLayout) findViewById(R.id.ll_bottom_layout2);
         llFullscreen = (LinearLayout) findViewById(R.id.ll_fullscreen_msg_send2);
         tvCount = (TextView) findViewById(R.id.tvCount2);
+        tvPlayMsg = (TextView) findViewById(R.id.tvPlayMsg);
         mTabLayout = (TabLayout) findViewById(R.id.tab_live_top2);
         sv = (SurfaceView) findViewById(R.id.sv2);
         pb_loading = (ProgressBar) findViewById(R.id.pb_loading);
@@ -318,7 +320,7 @@ public class PlayLiveActivity extends BaseActivity implements
         tv_live_title = (TextView) findViewById(R.id.tv_live_title2);
         tv_teacher_fans = (TextView) findViewById(R.id.tv_teacher_fans2);
         tv_live_teacher = (TextView) findViewById(R.id.tv_live_teacher2);
-        btn_teacher_follow = (Button) findViewById(R.id.btn_teacher_follow2);
+        btn_teacher_follow = (TextView) findViewById(R.id.btn_teacher_follow2);
         mInfo = (TextView) findViewById(R.id.mInfo);
         rl_mInfo = (RelativeLayout) findViewById(R.id.rl_mInfo);
         iv_mInfo = (ImageView) findViewById(R.id.iv_mInfo);
@@ -337,6 +339,12 @@ public class PlayLiveActivity extends BaseActivity implements
         dwLive = DWLive.getInstance();
         loginLive();
         getTeacherInfo();
+        sv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return onTouchEvent2(event);
+            }
+        });
 
     }
 
@@ -473,6 +481,8 @@ public class PlayLiveActivity extends BaseActivity implements
     }
 
     int loginTime = 0;
+
+
 
     /**
      * 登陆监听
@@ -1168,7 +1178,7 @@ public class PlayLiveActivity extends BaseActivity implements
             setHolderBlack("音频播放中……");
             return;
         }
-//        tvPlayMsg.setVisibility(View.GONE);
+        tvPlayMsg.setVisibility(View.GONE);
         if (sv != null) {
             sv.setLayoutParams(getScreenSizeParams());
         }
@@ -1402,9 +1412,8 @@ public class PlayLiveActivity extends BaseActivity implements
         }
         canvas.drawColor(Color.BLACK);
         mHolder.unlockCanvasAndPost(canvas);
-
-//        tvPlayMsg.setVisibility(View.VISIBLE);
-//        tvPlayMsg.setText(text);
+        tvPlayMsg.setVisibility(View.VISIBLE);
+        tvPlayMsg.setText(text);
     }
 
     @Override
@@ -1569,7 +1578,7 @@ public class PlayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
-                        playLiveActivity.tip(errorMessage);
+                        playLiveActivity.tip(errorMessage, false);
                     }
                     break;
                 case SHOW_PALY:
@@ -1635,7 +1644,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     if (playLiveActivity.isFinish) {
                         return;
                     }
-                    playLiveActivity.tip("直播结束");
+                    playLiveActivity.tip("直播结束", false);
                     playLiveActivity.setHolderBlack("直播结束");
                     break;
                 case KICK_OUT:
@@ -1643,7 +1652,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     playLiveActivity.tip("已被踢出");
                     break;
                 case NOT_START:
-                    playLiveActivity.tip("直播未开始");
+                    playLiveActivity.tip("直播未开始", false);
                     break;
                 case FADE_OUT_INFO:
                     playLiveActivity.fadeOutInfo();
@@ -1769,6 +1778,11 @@ public class PlayLiveActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        if (player != null) {
+            player.pause();
+            player.stop();
+            player.release();
+        }
         if (dwLive != null) {
             dwLive.stop();
         }
@@ -1850,9 +1864,7 @@ public class PlayLiveActivity extends BaseActivity implements
     /**
      * show/hide the overlay
      */
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent2(MotionEvent event) {
         if (isPrepared) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (rl_control.getVisibility() == View.VISIBLE) {
@@ -1875,7 +1887,9 @@ public class PlayLiveActivity extends BaseActivity implements
             }
             return false;
         }
-
+        if (isPortrait()) {
+            return false;
+        }
         DisplayMetrics screen = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(screen);
 

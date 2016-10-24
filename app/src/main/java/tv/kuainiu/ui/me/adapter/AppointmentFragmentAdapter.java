@@ -18,6 +18,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.Appointment;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -69,7 +70,7 @@ public class AppointmentFragmentAdapter extends BaseSwipeAdapter {
         ImageDisplayUtil.displayImage(context, ci_avatar, StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getAvatar()), R.mipmap.default_avatar);
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getNickname()));
         tvTheme.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getSlogan()));
-        tv_live_time.setText(StringUtils.replaceNullToEmpty(itemData.getStart_date()));
+        tv_live_time.setText(DateUtil.getDurationStringOriginal("MM-dd HH:ss", itemData.getStart_datetime()));
         tvLiveState.setText(StringUtils.replaceNullToEmpty(itemData.getLive_msg()));
         switch (itemData.getLive_status()) {
             case Constans.LIVE_END://直播结束
@@ -80,7 +81,7 @@ public class AppointmentFragmentAdapter extends BaseSwipeAdapter {
                 tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorRed500));
                 break;
             case Constans.LiVE_UN_START://直播未开始
-                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey450));
+                tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorRed500));
                 break;
             default:
                 tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey900));
