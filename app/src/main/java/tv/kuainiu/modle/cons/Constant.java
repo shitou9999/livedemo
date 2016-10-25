@@ -89,6 +89,7 @@ public class Constant {
      * TYPE-声音
      */
     public static final int NEWS_TYPE_VOICE = 3;
+    public static final int NEWS_TYPE_LIVE = 4;
 
     /**
      * TYPE-文章

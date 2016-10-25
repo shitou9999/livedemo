@@ -37,6 +37,8 @@ public class TeacherZoneDynamics {
     private int is_support;
     private TeacherZoneDynamicsInfo news_info;
     private LiveInfo live_info;
+    private TeacherInfo teacher_info;
+    private String[] tag_list;
 
     public int getId() {
         return id;
@@ -164,5 +166,21 @@ public class TeacherZoneDynamics {
 
     public void setLive_info(LiveInfo live_info) {
         this.live_info = live_info;
+    }
+
+    public String[] getTag_list() {
+        return tag_list;
+    }
+
+    public void setTag_list(String[] tag_list) {
+        this.tag_list = tag_list;
+    }
+
+    public TeacherInfo getTeacher_info() {
+        return teacher_info;
+    }
+
+    public void setTeacher_info(TeacherInfo teacher_info) {
+        this.teacher_info = teacher_info;
     }
 }

@@ -70,6 +70,8 @@ public class LiveInfo {
     private String start_date;
     private String thumb;
     private String synchro_wb;
+    private String live_catname;
+    private String live_roomid;
     private int online_num;//在线人数
     private int is_appointment;//是否已预约
     private int appointment_count;//预约总数
@@ -322,5 +324,27 @@ public class LiveInfo {
         this.end_datetime = end_datetime;
     }
 
+    public int getIs_support() {
+        return is_support;
+    }
 
+    public void setIs_support(int is_support) {
+        this.is_support = is_support;
+    }
+
+    public String getLive_catname() {
+        return live_catname;
+    }
+
+    public void setLive_catname(String live_catname) {
+        this.live_catname = live_catname;
+    }
+
+    public String getLive_roomid() {
+        return live_roomid;
+    }
+
+    public void setLive_roomid(String live_roomid) {
+        this.live_roomid = live_roomid;
+    }
 }

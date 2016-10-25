@@ -11,11 +11,15 @@ private String nickname;//"曾国良",
     private String description;//"A股评论：成交量4549亿元，1，万科A在8月16日随出货式漲停走票后在25日補8月12日跳空缺口时作龙回首观察，昨天以61万手強锁涨停",
     private String support_num;//"56",
     private String news_id;//"13",
-    private String create_date;//"1473482663",
+    private long create_date;//"1473482663",
     private String[] tag_list;// ["新1", "金子", "大涨"],
     private String fans_count;//"1",
     private int is_follow;//0
     private int is_support;//0
+    private int quote_type;//0
+    private TeacherZoneDynamicsInfo news_info;
+    private LiveInfo live_info;
+    private TeacherInfo teacher_info;
 
     public String getNickname() {
         return nickname;
@@ -73,11 +77,11 @@ private String nickname;//"曾国良",
         this.news_id = news_id;
     }
 
-    public String getCreate_date() {
+    public long getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(String create_date) {
+    public void setCreate_date(long create_date) {
         this.create_date = create_date;
     }
 
@@ -111,5 +115,37 @@ private String nickname;//"曾国良",
 
     public void setIs_support(int is_support) {
         this.is_support = is_support;
+    }
+
+    public int getQuote_type() {
+        return quote_type;
+    }
+
+    public void setQuote_type(int quote_type) {
+        this.quote_type = quote_type;
+    }
+
+    public TeacherZoneDynamicsInfo getNews_info() {
+        return news_info;
+    }
+
+    public void setNews_info(TeacherZoneDynamicsInfo news_info) {
+        this.news_info = news_info;
+    }
+
+    public LiveInfo getLive_info() {
+        return live_info;
+    }
+
+    public void setLive_info(LiveInfo live_info) {
+        this.live_info = live_info;
+    }
+
+    public TeacherInfo getTeacher_info() {
+        return teacher_info;
+    }
+
+    public void setTeacher_info(TeacherInfo teacher_info) {
+        this.teacher_info = teacher_info;
     }
 }

@@ -103,6 +103,7 @@ public class Api {
     public static final String ADD_FEEDBACK = "sns/add_feedback";              // 添加反馈
     public static final String ABOUT_ME = "news/about";                        // 关于我们
     public static final String FIND_BANNAR = "news/banner_list";               // 发现_Bannar
+    public static final String index_recom_live = "news/index_recom_live";               // 发现_Bannar
     public static final String FIND_IMPORTANT_NEWS = "news/important_news";    // 发现_重点资讯、前三条
     public static final String FIND_NEWS_LIST = "news/news_list";              // 发现_视频/文章 列表
     public static final String FIND_PROGRAM_LIST = "news/program_list";        // 发现_栏目列表

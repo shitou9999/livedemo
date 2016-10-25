@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!--直播头部布局-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpReadingTap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:layout_marginBottom="50dp"
+       />
+</RelativeLayout>

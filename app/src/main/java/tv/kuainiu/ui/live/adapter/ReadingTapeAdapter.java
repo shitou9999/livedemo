@@ -27,6 +27,7 @@ import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DensityUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
@@ -125,15 +126,31 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindBannerViewHolder(BannerViewHolder holder) {
         holder.mIndicator.setVisibility(View.VISIBLE);
         List<View> mList = new ArrayList<>();
-        //TODO 绑定banner
         for (int i = 0; i < mBannerList.size(); i++) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item, null);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item2, null);
             ImageView ivIamge = (ImageView) view.findViewById(R.id.ivIamge);
-            TextView tvBannarTitle = (TextView) view.findViewById(R.id.tvBannarTitle);
             TextView tvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);
+            RelativeLayout rl_avatar = (RelativeLayout) view.findViewById(R.id.rl_avatar);//头像
+            CircleImageView civ_avatar = (CircleImageView) view.findViewById(R.id.civ_avatar);//头像
+            ImageView mIvLeft = (ImageView) view.findViewById(R.id.iv_left);//左箭头
+            ImageView mIvRight = (ImageView) view.findViewById(R.id.iv_right);//右箭头
+            mIvLeft.setVisibility(View.GONE);
+            mIvRight.setVisibility(View.GONE);
+            TextView mTvTitle = (TextView) view.findViewById(R.id.tv_title);//直播标题
+            mTvTitle.setVisibility(View.VISIBLE);
+            TextView mTvState = (TextView) view.findViewById(R.id.tv_state);//直播间状态
+            mTvState.setVisibility(View.VISIBLE);
+            TextView mTvTime = (TextView) view.findViewById(R.id.tv_time);//时间
+            mTvTime.setVisibility(View.VISIBLE);
+            TextView mTvNextTime = (TextView) view.findViewById(R.id.tv_next_time);//下一时段
+            //绑定中间直播信息
             final LiveInfo liveItem = mBannerList.get(i);
             ImageDisplayUtil.displayImage(mContext, ivIamge, liveItem.getThumb());
-            tvBannarTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
+            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+            ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
+            mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
+            mTvState.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
+            mTvTime.setText(DateUtil.formatDate(liveItem.getStart_date()) + "-" + DateUtil.formatDate(liveItem.getEnd_date()));//时间
             tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             ivIamge.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,6 +160,23 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     } else {
                         clickRePlayLive(liveItem);
                     }
+                }
+            });
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
+                        clickPlayLive(liveItem);
+                    } else {
+                        clickRePlayLive(liveItem);
+                    }
+                }
+            });
+            rl_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TeacherZoneActivity.intoNewIntent(mContext, liveItem.getTeacher_info().getId());
                 }
             });
             mList.add(view);
@@ -193,7 +227,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindLiveItemViewHolder(ViewHolder holder, int position) {
         int currentPosition = position - types.size();
         final LiveInfo liveItem = mLiveListList.get(currentPosition);
-        //TODO 绑定直播Item
+        //绑定直播Item
         ImageDisplayUtil.displayImage(mContext, holder.mIvIamge, liveItem.getThumb());
         ImageDisplayUtil.displayImage(mContext, holder.civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
         if (type == ZHI_BO) {
@@ -227,7 +261,16 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         holder.tvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(liveItem.getAnchor()));
-        holder.mTvTeacherIntroduce.setText(StringUtils.replaceNullToEmpty(liveItem.getTeacher_info().getSlogan()));
+        String tags = "";
+        if (liveItem.getTeacher_info() != null && liveItem.getTeacher_info().getTag_list() != null) {
+            String[] tag_list = liveItem.getTeacher_info().getTag_list();
+            if (tag_list.length > 0) {
+                for (int i = 0; i < tag_list.length; i++) {
+                    tags += tag_list[i] + "　";
+                }
+            }
+        }
+        holder.mTvTeacherIntroduce.setText(StringUtils.replaceNullToEmpty(tags));
         holder.mTvTeacherTheme.setText(StringUtils.replaceNullToEmpty(liveItem.getTeacher_info().getSlogan()));
         holder.mIvIamge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,7 +319,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //        vh.mViewFriendsPostLine.setLayoutParams(lp);
         switch (viewType) {
             case BANNER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager2, parent, false);
                 BannerViewHolder bannerViewHolder = new BannerViewHolder(view);
                 int width = ScreenUtils.getScreenWidth(mContext);
                 int height = (int) (width / 1.67);

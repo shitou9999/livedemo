@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -80,6 +81,8 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView tvAnalysis;
         @BindView(R.id.ll_root)
         RelativeLayout ll_root;
+        @BindView(R.id.llLiveState)
+        LinearLayout llLiveState;
 
         public TeacherViewHolder(View itemView) {
             super(itemView);
@@ -252,16 +255,23 @@ public class TeacherListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         holder.textName.setText(item.nickname);
         ImageDisplayUtil.displayImage(mContext, holder.imgPhoto, item.avatar, R.mipmap.default_avatar);
-        holder.tvAnalysis.setText(StringUtils.replaceNullToEmpty(item.description));
+        String tags = "";
+        if (item.tag_list != null || item.tag_list.length > 0) {
+            for (int i = 0; i < item.tag_list.length; i++) {
+                tags += item.tag_list[i] + "　";
+            }
+        }
+        holder.tvAnalysis.setText(StringUtils.replaceNullToEmpty(tags));
         holder.tvSubject.setText(StringUtils.replaceNullToEmpty(item.slogan));
         resetFollowCheckBox(holder.textFollow, holder.textFansCount, item);
         if (item.nickname != null && !item.nickname.contains("助手")) {
             holder.textFollow.setOnClickListener(this);
             holder.ll_root.setOnClickListener(this);
             holder.textFollow.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.textFollow.setVisibility(View.INVISIBLE);
         }
+        holder.llLiveState.setVisibility(item.is_living==0?View.GONE:View.VISIBLE);
 
     }
 

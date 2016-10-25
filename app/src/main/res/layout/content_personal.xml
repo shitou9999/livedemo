@@ -231,6 +231,7 @@
                 android:id="@+id/rl_personalIdentity"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/def_option_height"
+                android:visibility="gone"
                 android:background="@drawable/selector_option_normal">
 
                 <TextView

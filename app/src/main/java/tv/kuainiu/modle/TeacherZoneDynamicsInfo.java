@@ -27,6 +27,7 @@ public class TeacherZoneDynamicsInfo implements Serializable {
     private String news_title;
     private String news_video_id;
     private String news_voice_url;
+    private int news_voice_time;
 
     public String getId() {
         return id;
@@ -106,5 +107,13 @@ public class TeacherZoneDynamicsInfo implements Serializable {
 
     public void setNews_voice_url(String news_voice_url) {
         this.news_voice_url = news_voice_url;
+    }
+
+    public int getNews_voice_time() {
+        return news_voice_time;
+    }
+
+    public void setNews_voice_time(int news_voice_time) {
+        this.news_voice_time = news_voice_time;
     }
 }

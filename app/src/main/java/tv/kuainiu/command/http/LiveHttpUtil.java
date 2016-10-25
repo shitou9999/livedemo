@@ -46,5 +46,11 @@ public class LiveHttpUtil {
 //        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
         OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action);
     }
-
+    public static void liveHomeIndex(Context context, String type, int page, Action action) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("page", String.valueOf(page));
+//        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(context, Api.index_recom_live + ParamUtil.getParamForGet(map), action);
+    }
 }

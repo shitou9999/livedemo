@@ -30,11 +30,13 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.AppointmentRequestUtil;
 import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamics;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -120,6 +122,8 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     //    TextView mTvFriendsPostComment;
     TeacherZoneDynamics teacherZoneDynamics;
     View ivSupport;
+    TextView tvAppointment;
+    LiveInfo liveInfo;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -134,6 +138,21 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
 //                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
                 CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(teacherZoneDynamics.getId()), "");
                 break;
+            case R.id.tvAppointment:
+                liveInfo = (LiveInfo) v.getTag();
+                tvAppointment = (TextView) v;
+                appointment(liveInfo);
+                break;
+        }
+    }
+    private void appointment(LiveInfo liveInfo) {
+        if (liveInfo == null) {
+            return;
+        }
+        if (liveInfo.getIs_appointment() == 0) {
+            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(),liveInfo.getLive_roomid(), Action.add_live_appointment);
+        } else {
+            AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
         }
     }
 
@@ -191,6 +210,33 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
             case login:
                 page = 1;
                 getData();
+                break;
+            case add_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (liveInfo != null) {
+                        tvAppointment.setSelected(true);
+                        tvAppointment.setText("预约");
+                        liveInfo.setIs_appointment(1);
+                        tvAppointment.setTag(liveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "预约失败"));
+                }
+                liveInfo = null;
+                break;
+            case del_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (liveInfo != null) {
+                        tvAppointment.setSelected(false);
+                        tvAppointment.setText("预约");
+                        liveInfo.setIs_appointment(0);
+                        tvAppointment.setTag(liveInfo);
+
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消预约失败"));
+                }
+                liveInfo = null;
                 break;
             case SUPPORT_DYNAMICS:
                 if (teacherZoneDynamics != null) {

@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -141,6 +142,8 @@ public class PublishVoiceActivity extends BaseActivity {
     TextView tvTime;
     @BindView(elv_friends_post_group)
     ExpandListView elvFriendsPostGroup;
+    @BindView(R.id.rlVoicePanel)
+    RelativeLayout rlVoicePanel;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private List<Categroy> mCategroyList = new ArrayList<>();
@@ -655,6 +658,7 @@ public class PublishVoiceActivity extends BaseActivity {
                         updateMicStatus();
                         // TODO 开启定时器
                         mHandler.postDelayed(runnable, 1000);
+                        rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorRedVoice));
                     } catch (Exception e) {
                         if (wakeLock.isHeld()) {
                             wakeLock.release();
@@ -664,6 +668,7 @@ public class PublishVoiceActivity extends BaseActivity {
 
                     break;
                 case MotionEvent.ACTION_UP:
+                    rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorBlue50));
                     if (wakeLock.isHeld()) {
                         wakeLock.release();
                     }
@@ -747,6 +752,7 @@ public class PublishVoiceActivity extends BaseActivity {
         tvTime.setText("0" + '"');
         ivVoiceBtn.setImageDrawable(getResources().getDrawable(R.drawable.selector_publish_voice_icon));
         recordingHint.setText("按住说话");
+        rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorBlue50));
     }
 
     /**

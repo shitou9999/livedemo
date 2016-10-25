@@ -53,6 +53,9 @@ public class TeacherItem implements Parcelable {
     public String avatar;
     public String slogan;
     public String listorder;
+    public int is_living;
+    public String[] tag_list;
+
 
     protected TeacherItem(Parcel in) {
         id = in.readString();
@@ -72,6 +75,8 @@ public class TeacherItem implements Parcelable {
         avatar = in.readString();
         slogan = in.readString();
         listorder = in.readString();
+        is_living = in.readInt();
+        tag_list = in.createStringArray();
     }
 
     public static final Creator<TeacherItem> CREATOR = new Creator<TeacherItem>() {

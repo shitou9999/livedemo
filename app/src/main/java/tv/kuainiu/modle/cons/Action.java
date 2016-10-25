@@ -206,4 +206,5 @@ public enum Action {
     custom_teacher_list,   // 圈子老师
     teacher_zone_appoint,   // 老师专区-观点
     teacher_zone_jiepan,   // 老师专区-接盘
+    home_bannar,   // 老师专区-接盘
 }

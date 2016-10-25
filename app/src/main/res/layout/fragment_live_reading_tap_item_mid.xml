@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--直播中间itme布局-->
+<?xml version="1.0" encoding="utf-8"?><!--直播中间itme布局-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:background="@color/white_color"
-                android:layout_height="50dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white_color">
 
     <ImageView
         android:id="@+id/iv_left"
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:padding="10dp"
-        android:src="@drawable/selector_left"/>
+        android:src="@drawable/selector_left" />
 
     <ImageView
         android:id="@+id/iv_right"
@@ -20,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:padding="10dp"
-        android:src="@drawable/selector_right"/>
+        android:src="@drawable/selector_right" />
 
     <TextView
         android:id="@+id/tv_next_time"
@@ -29,16 +28,19 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/iv_right"
-        android:textColor="@color/colorBlue400"
+        android:background="@drawable/selector_bg_appointment"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textColor="@drawable/selector_bg_appointment_text"
         android:textSize="12sp"
-        tools:text="下一时段"/>
+        tools:text="预约" />
 
     <RelativeLayout
         android:id="@+id/rl_avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/iv_left">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -50,9 +52,10 @@
             android:scaleType="centerCrop"
             app:civ_border_color="@color/colorGrey500"
             app:civ_border_width="1dp"
-            tools:src="@mipmap/net"/>
+            tools:src="@mipmap/net" />
 
         <ImageView
+            style="@style/view_invisibility"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_alignParentBottom="true"
@@ -60,15 +63,16 @@
             android:layout_marginBottom="2dp"
             android:layout_marginRight="2dp"
             android:scaleType="centerInside"
-            style="@style/view_invisibility"
-            android:src="@mipmap/vip_ic"/>
+            android:src="@mipmap/vip_ic" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/tv_next_time"
         android:layout_toRightOf="@+id/rl_avatar">
+
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -79,7 +83,7 @@
             android:maxLines="2"
             android:textColor="@color/colorGrey333333"
             android:textSize="15sp"
-            tools:text="曹老师-今日趋势"/>
+            tools:text="曹老师-今日趋势" />
 
         <TextView
             android:id="@+id/tv_state"
@@ -89,8 +93,7 @@
             android:layout_below="@+id/tv_title"
             android:textColor="@color/colorRed500"
             android:textSize="12sp"
-            tools:text="直播中"
-        />
+            tools:text="直播中" />
 
         <TextView
             android:id="@+id/tv_time"
@@ -101,6 +104,6 @@
             android:layout_toRightOf="@+id/tv_state"
             android:textColor="@color/colorGrey450"
             android:textSize="12sp"
-            tools:text="9:00-10:00"/>
+            tools:text="9:00-10:00" />
     </RelativeLayout>
 </RelativeLayout>

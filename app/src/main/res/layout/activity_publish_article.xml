@@ -27,12 +27,13 @@
             <include
                 layout="@layout/include_publish_share"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:visibility="gone"/>
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <include
                 layout="@layout/include_pick_picture"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/ivAddCover_height"/>
+                android:layout_height="@dimen/ivAddCover_height" />
 
             <EditText
                 android:id="@+id/etTitle"
@@ -41,7 +42,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@null"
-                android:hint="请输入标题"
+                android:hint="请输入标题（必填）"
+                android:maxLength="@integer/title_length"
                 android:text="" />
 
             <View
@@ -83,8 +85,14 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="文章栏目"
+                    android:textColor="@color/publishTextColor" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tvCategory"
+                    android:layout_centerVertical="true"
+                    android:text="（必选）"
                     android:textColor="@color/colorRed500" />
-
                 <Spinner
                     android:id="@+id/spCategory"
                     android:layout_width="wrap_content"
@@ -111,7 +119,7 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
                     android:text="同步动态直播"
-                    android:textColor="@color/colorRed500" />
+                    android:textColor="@color/publishTextColor" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/sw_dynamic"
@@ -121,9 +129,9 @@
                     android:layout_alignParentRight="true"
                     android:background="@null"
                     android:checked="true"
+                    android:textColor="@color/colorRed500"
                     android:textOff=""
                     android:textOn=""
-                    android:textColor="@color/colorRed500"
                     app:showText="true" />
 
                 <LinearLayout
@@ -144,7 +152,7 @@
                         android:gravity="start"
                         android:hint="请输入内容"
                         android:inputType="textMultiLine"
-                        android:maxLines="500"
+                        android:maxLength="@integer/content_length"
                         android:minLines="3"
                         android:text=""
                         android:textColorHint="@color/colorGrey400"
@@ -164,6 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
+                            android:visibility="invisible"
                             android:text="还可以输入10个字" />
                     </RelativeLayout>
                 </LinearLayout>

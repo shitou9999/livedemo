@@ -34,7 +34,7 @@
                     layout="@layout/include_publish_share"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <include
                     layout="@layout/include_pick_picture"
@@ -49,6 +49,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@null"
                     android:hint="请输入标题"
+                    android:maxLength="@integer/title_length"
                     android:text="" />
 
                 <View
@@ -71,7 +72,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="文章栏目"
+                        android:text="选择栏目"
+                        android:textColor="@color/publishTextColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvCategory"
+                        android:text="（必选）"
                         android:textColor="@color/colorRed500" />
 
                     <Spinner
@@ -95,12 +104,19 @@
                     android:paddingRight="10dp">
 
                     <TextView
+                        android:id="@+id/tvLingingTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="直播时间"
+                        android:textColor="@color/publishTextColor" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvLingingTime"
+                        android:text="（必选）"
                         android:textColor="@color/colorRed500" />
-
                     <LinearLayout
                         android:id="@+id/llStartTime"
                         android:layout_width="match_parent"
@@ -113,14 +129,14 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center|right"
-                            android:hint="开始时间"
+                            android:hint="开始时间（必选）"
                             tools:text="2016-10-12 09:06:18" />
 
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="match_parent"
-                            android:scaleType="centerInside"
                             android:padding="10dp"
+                            android:scaleType="centerInside"
                             android:src="@drawable/selector_right" />
                     </LinearLayout>
 
@@ -137,13 +153,13 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center|right"
-                            android:hint="结束时间"
+                            android:hint="结束时间（必选）"
                             tools:text="2016-10-12 10:06:18" />
 
                         <ImageView
                             android:layout_width="40dp"
-                            android:padding="10dp"
                             android:layout_height="match_parent"
+                            android:padding="10dp"
                             android:scaleType="centerInside"
                             android:src="@drawable/selector_right" />
                     </LinearLayout>
@@ -158,11 +174,20 @@
                     android:paddingRight="10dp">
 
                     <TextView
+                        android:id="@+id/tvPermissions"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_alignParentTop="true"
                         android:gravity="center_vertical"
                         android:text="观看权限"
+                        android:textColor="@color/publishTextColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvPermissions"
+                        android:text="（必选）"
                         android:textColor="@color/colorRed500" />
 
                     <Spinner
@@ -244,7 +269,7 @@
                             android:gravity="start"
                             android:hint="请输入内容"
                             android:inputType="textMultiLine"
-                            android:maxLines="500"
+                            android:maxLength="@integer/content_length"
                             android:minLines="3"
                             android:text=""
                             android:textColorHint="@color/colorGrey400"
@@ -264,7 +289,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="还可以输入10个字" />
+                                android:text="还可以输入10个字"
+                                android:visibility="invisible" />
                         </RelativeLayout>
                     </LinearLayout>
                 </RelativeLayout>

@@ -21,7 +21,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="#66ffffff">
+        android:background="#11000000">
 
         <TextView
             android:layout_width="wrap_content"

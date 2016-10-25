@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
@@ -289,6 +290,28 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     clickPlayLive(liveInfo);
                 }
             });
+            switch (liveInfo.getLive_status()) {
+                case Constans.LIVE_END:
+                    mTvNextTime.setText("回放");
+                    break;
+                case Constans.LIVE_ING:
+                    mTvNextTime.setText("直播中");
+                    break;
+                case Constans.LiVE_UN_START:
+                    mTvNextTime.setText("预约");
+                    mTvNextTime.setTag(liveInfo);
+                    mTvNextTime.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnItemClickListener == null) {
+                                mOnItemClickListener.onClick(v);
+                            }
+                        }
+                    });
+                    break;
+            }
+
+
             mList.add(view);
         }
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);

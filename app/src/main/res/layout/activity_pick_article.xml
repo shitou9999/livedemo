@@ -15,7 +15,7 @@
             android:id="@+id/tbv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mytitle="选择引用文章"
+            app:mytitle="选择博文观点/视频"
             app:right_visibility="invisible" />
 
         <ListView

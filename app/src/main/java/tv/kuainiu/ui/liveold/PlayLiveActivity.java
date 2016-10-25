@@ -483,7 +483,6 @@ public class PlayLiveActivity extends BaseActivity implements
     int loginTime = 0;
 
 
-
     /**
      * 登陆监听
      */
@@ -1652,6 +1651,8 @@ public class PlayLiveActivity extends BaseActivity implements
                     playLiveActivity.tip("已被踢出");
                     break;
                 case NOT_START:
+                    playLiveActivity.pb_loading.setVisibility(View.GONE);
+                    playLiveActivity.tvPlayMsg.setText("直播未开始");
                     playLiveActivity.tip("直播未开始", false);
                     break;
                 case FADE_OUT_INFO:
@@ -1764,11 +1765,14 @@ public class PlayLiveActivity extends BaseActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (dwLive != null) {
+            dwLive.stop();
+        }
         if (player != null && player.isPlaying()) {
             player.pause();
         }
         qaMap.clear();
-        dwLive.stop();
+
         isPrepared = false;
         isOnPause = true;
         stopLiveTimerTask();
@@ -1778,13 +1782,14 @@ public class PlayLiveActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+
+        if (dwLive != null) {
+            dwLive.stop();
+        }
         if (player != null) {
             player.pause();
             player.stop();
             player.release();
-        }
-        if (dwLive != null) {
-            dwLive.stop();
         }
         if (handler != null && playHideRunnable != null) {
             handler.removeCallbacks(playHideRunnable);

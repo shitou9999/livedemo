@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
@@ -34,6 +37,7 @@ public class PostParentLayout extends RelativeLayout {
     private BasePost mBasePost;
     private TeacherZoneDynamicsInfo teacherZoneDynamicsInfo;
     private LiveInfo liveInfo;
+    OnItemClickListener onItemClickListener;
 
     public PostParentLayout(Context context) {
         super(context);
@@ -78,6 +82,10 @@ public class PostParentLayout extends RelativeLayout {
 
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public void clickPlayLive(LiveInfo liveItem) {
 //        if (liveItem.getLive_status() == Constans.LIVE_ING) {
 //            LiveParameter liveParameter = new LiveParameter();
@@ -103,9 +111,10 @@ public class PostParentLayout extends RelativeLayout {
             case Constans.TYPE_LIVE:
                 view = LayoutInflater.from(mContext).inflate(R.layout.include_post_live, this, false);
 //                if (getChildAt(0) != null) {
-                    removeAllViews();
+                removeAllViews();
 //                }
                 TextView tvState2 = (TextView) view.findViewById(R.id.tvLiveState);
+                TextView tvAppointment = (TextView) view.findViewById(R.id.tvAppointment);
                 View vLine = view.findViewById(R.id.vLine);
                 TextView tvLiveDescription2 = (TextView) view.findViewById(R.id.tvLiveDescription);
                 switch (liveInfo.getLive_status()) {
@@ -113,13 +122,28 @@ public class PostParentLayout extends RelativeLayout {
                         tvState2.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg(), "直播中"));
                         tvState2.setBackgroundColor(Color.RED);
                         vLine.setBackgroundColor(Color.RED);
+                        tvAppointment.setVisibility(View.GONE);
                         break;
                     case Constans.LiVE_UN_START:
-                        tvState2.setText(liveInfo.getLive_msg() + "/n" + DateUtil.formatDate(liveInfo.getStart_date()));
+                        tvState2.setText("");
+                        tvState2.append(DateUtil.formatDate(liveInfo.getStart_date(), "yyyy-MM-dd HH:mm:ss", "MM-dd"));
+                        tvState2.append("\n");
+                        tvState2.append(DateUtil.formatDate(liveInfo.getStart_date(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvState2.setBackgroundColor(Color.RED);
                         vLine.setBackgroundColor(Color.RED);
+                        tvAppointment.setVisibility(View.VISIBLE);
+                        tvAppointment.setTag(liveInfo);
+                        tvAppointment.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (onItemClickListener != null) {
+                                    onItemClickListener.onClick(v);
+                                }
+                            }
+                        });
                         break;
                     case Constans.LIVE_END:
+                        tvAppointment.setVisibility(View.GONE);
                         tvState2.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
                         vLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey450));
                         tvState2.setText(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg(), "已结束"));
@@ -158,9 +182,10 @@ public class PostParentLayout extends RelativeLayout {
                 if (getChildAt(0) != null) {
                     removeAllViews();
                 }
-                ImageView ivPlayVoice = (ImageView) view.findViewById(R.id.ivPlay);
+                final ImageView ivPlayVoice = (ImageView) view.findViewById(R.id.ivPlay);
+                final ImageView ivVoiceBg = (ImageView) view.findViewById(R.id.ivVoiceBg);
                 TextView tvVideoLength = (TextView) view.findViewById(R.id.tvVideoLength);
-                tvVideoLength.setText(teacherZoneDynamicsInfo.getNews_title());
+                tvVideoLength.setText(String.format(Locale.CHINA, "%d\"", teacherZoneDynamicsInfo.getNews_voice_time()));
                 ivPlayVoice.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -168,14 +193,20 @@ public class PostParentLayout extends RelativeLayout {
                             try {
                                 MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
                                 if (mMediaPlayUtil.isPlaying()) {
+                                    view.setSelected(true);
+//                                    Glide.with(mContext).load(R.drawable.audio_gif).centerCrop().into(ivVoiceBg);
                                     mMediaPlayUtil.stop();
                                     //停止动画
                                 } else {
+                                    view.setSelected(false);
+//                                    Glide.with(mContext).load(R.drawable.audio_ic).centerCrop().into(ivVoiceBg);
                                     mMediaPlayUtil.play(teacherZoneDynamicsInfo.getNews_voice_url());
                                     //开始动画
                                 }
 
                             } catch (Exception e) {
+                                ivPlayVoice.setSelected(false);
+//                                Glide.with(mContext).load(R.drawable.audio_ic).centerCrop().into(ivVoiceBg);
                                 ToastUtils.showToast(mContext, "该音频无法播放");
                                 e.printStackTrace();
                             }

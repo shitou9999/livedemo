@@ -12,14 +12,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +32,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
+import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.TeacherHttpUtil;
+import tv.kuainiu.command.http.core.OKHttpUtils;
+import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -37,6 +45,8 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.fragment.CustomViewPointFragment;
 import tv.kuainiu.ui.friends.fragment.TabMajorFragment;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.appointment.fragment.MyLiveHistoryFragment;
 import tv.kuainiu.ui.teachers.fragment.AppointFragment;
 import tv.kuainiu.ui.teachers.fragment.MyLivePlanFragment;
@@ -44,6 +54,7 @@ import tv.kuainiu.ui.teachers.fragment.VideoFragment;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
@@ -85,12 +96,15 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
     ViewPager vpTeacherZone;
     @BindView(R.id.ll_fragment_friends_main_news_info)
     LinearLayout llFragmentFriendsMainNewsInfo;
+    @BindView(R.id.tvLiningTitle)
+    TextView tvLiningTitle;
     private String[] tabNames = new String[]{"动态", "观点", "解盘", "直播计划", "直播回看"};
     int selectedIndex = 0;
     private String teacherid = "";
     private String user_id = "";
     private TeacherInfo teacherInfo;
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
+    public List<LiveInfo> mLiveItemList = new ArrayList<>();
 
     public static void intoNewIntent(Activity context, String id) {
         Intent intent = new Intent(context, TeacherZoneActivity.class);
@@ -120,7 +134,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
 
     private void initView() {
         int screenWidth = ScreenUtils.getScreenWidth(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, (int) (screenWidth / 7 * 3));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(screenWidth, (int) (screenWidth / 7 * 3));
         ivBanner.setLayoutParams(lp);
     }
 
@@ -136,6 +150,16 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
 
     private void initData() {
         TeacherHttpUtil.fetchTeacherDetails(this, new TeacherHttpUtil.ParamBuilder(teacherid, user_id), Action.teacher_fg_fetch_detail);
+        getLivingData();
+    }
+
+    private void getLivingData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id());
+        map.put("teacher_id", teacherid);
+        map.put("live_type", "1");
+        map.put("page", String.valueOf(1));
+        OKHttpUtils.getInstance().syncGet(this, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list);
     }
 
     @OnClick({R.id.tv_follow_button})
@@ -230,8 +254,50 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                     DebugUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
                 }
                 break;
+            case my_live_list:
+                mLiveItemList.clear();
+                if (Constant.SUCCEED == event.getCode()) {
+                    String json = event.getData().optString("data");
+                    LogUtils.e("json", "json:" + json);
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("live_list"), new TypeToken<List<LiveInfo>>() {
+                        }.getType());
+
+                        if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
+                            int size = mLiveItemList.size();
+                            mLiveItemList.addAll(tempLiveItemList);
+                            dataLiveListBind();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    LogUtils.e(TAG, event == null ? "获取正在直播信息失败" : event.getMsg());
+                }
+                break;
         }
 
+    }
+
+    private void dataLiveListBind() {
+        if (mLiveItemList.size() > 0) {
+            final LiveInfo liveItem = mLiveItemList.get(0);
+            tvLiningTitle.setText(liveItem.getTitle());
+            tvLiningTitle.setVisibility(View.VISIBLE);
+            tvLiningTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LiveParameter liveParameter = new LiveParameter();
+                    liveParameter.setLiveId(liveItem.getId());
+                    liveParameter.setLiveTitle(liveItem.getTitle());
+                    liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                    liveParameter.setTeacherId(liveItem.getTeacher_id());
+                    PlayLiveActivity.intoNewIntent(TeacherZoneActivity.this, liveParameter);
+                }
+            });
+        }
     }
 
 

@@ -397,6 +397,8 @@ public class MeFragment extends BaseFragment {
             tvLiveNumber.setText(nullValue);
             mTvFollowCount.setText(nullValue);
             mBtnPublish.setVisibility(View.INVISIBLE);
+            mTvLiveTip.setText("");
+            mTvAppointmentTip.setText("");
         } else {
             displayAvatar(user.getAvatar());
             mTvMePhone.setText(StringUtils.getX(user.getPhone()));
@@ -423,6 +425,8 @@ public class MeFragment extends BaseFragment {
             mIvIconLesson.setSelected(user.getIs_teacher() != 0);
             mIvIconInstitution.setSelected(user.getIs_teacher() != 0);
             mIvInstitution.setSelected(user.getIs_teacher() != 0);
+            mTvAppointmentTip.setText(String.valueOf(user.getAppointment_count()));
+            mTvLiveTip.setText(String.valueOf(user.getLive_wait_count()));
         }
         setFollowAndSubText(user);
     }
@@ -443,7 +447,6 @@ public class MeFragment extends BaseFragment {
             ImageDisplayUtil.displayImage(getActivity(), ci_avatar, StringUtils.replaceNullToEmpty(imagePath), R.mipmap.default_avatar);
         }
     }
-
 
 
 }

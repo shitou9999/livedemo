@@ -24,6 +24,7 @@ import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -106,15 +107,23 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataViewPoint(ViewHolder holder, int position) {
-        TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
+        final TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
 
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getNews_info() != null ? info.getNews_info().getNews_catname() : ""));
-        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getCreate_date()));
+        String[] tags = info.getTag_list();
+        String tagString = "";
+        if (tags != null && tags.length > 0) {
+            for (int i = 0; i < tags.length; i++) {
+                tagString += tags[i] + "　";
+            }
+
+        }
+        holder.mTvFriendsPostType.setText(tagString);
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("MM-dd HH:mm", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
@@ -124,9 +133,19 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         } else {
             holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         }
-        //不是直播中就是黑色边框
-        holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-        holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
+        holder.mPostParentLayout.setOnItemClickListener(onItemClickListener);
+        String startTime = DateUtil.getCurrentDate() + " 09:30:00";
+        long startTimeL = DateUtil.getLongTimeFromStr(startTime, "yyyy-MM-dd HH:mm:ss");
+        String endTime = DateUtil.getCurrentDate() + " 15:00:00";
+        long endTimeL = DateUtil.getLongTimeFromStr(endTime, "yyyy-MM-dd HH:mm:ss");
+        if (DateUtil.toJava(info.getCreate_date()) < startTimeL || endTimeL < DateUtil.toJava(info.getCreate_date())) {
+            holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+            holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
+        } else {
+            holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+            holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
+        }
+
         // Hide bottom line
         int v = position == teacherZoneDynamicsList.size() - 1 ? View.GONE : View.VISIBLE;
         holder.mViewFriendsPostLineBottom.setVisibility(v);
@@ -157,6 +176,14 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
                 }
             }
         });
+        holder.mCivFriendsPostHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (info.getTeacher_info() != null) {
+                    TeacherZoneActivity.intoNewIntent(mContext, info.getTeacher_info().getId());
+                }
+            }
+        });
         String thumb = StringUtils.replaceNullToEmpty(info.getThumb());
         if (!TextUtils.isEmpty(thumb) && !"false".equals(thumb)) {
             String[] array = thumb.split(",");
@@ -183,14 +210,14 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataVideo(ViewHolder holder, int position) {
-        CustomVideo info = customVideoList.get(position);
+       final CustomVideo info = customVideoList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostTime.setText(DateUtil.getTimeString_HH_mm(info.getInputtime()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("MM-dd HH:mm", info.getInputtime()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
@@ -201,9 +228,19 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         news_info.setNews_inputtime(info.getInputtime());
         news_info.setNews_id(info.getId());
         holder.mPostParentLayout.setPostType(news_info);
-        //不是直播中就是黑色边框
-        holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
-        holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
+        holder.mPostParentLayout.setOnItemClickListener(onItemClickListener);
+        String startTime = DateUtil.getCurrentDate() + " 09:30:00";
+        long startTimeL = DateUtil.getLongTimeFromStr(startTime, "yyyy-MM-dd HH:mm:ss");
+        String endTime = DateUtil.getCurrentDate() + " 15:00:00";
+        long endTimeL = DateUtil.getLongTimeFromStr(endTime, "yyyy-MM-dd HH:mm:ss");
+        if (DateUtil.toJava(info.getInputtime()) < startTimeL || endTimeL < DateUtil.toJava(info.getInputtime())) {
+            holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+            holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
+        } else {
+            holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+            holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
+        }
+
 
         // Hide bottom live
         int v = position == customVideoList.size() - 1 ? View.GONE : View.VISIBLE;

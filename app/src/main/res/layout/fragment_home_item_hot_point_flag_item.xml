@@ -6,9 +6,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_bg_grey"
-    android:paddingLeft="10dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
+    android:paddingLeft="2dp"
+    android:paddingBottom="1dp"
+    android:paddingTop="1dp"
     android:singleLine="true"
-    android:paddingRight="10dp"
-    android:gravity="left" tools:text="标签"/>
+    android:paddingRight="2dp"
+    android:textSize="12sp"
+    android:gravity="center" tools:text="标签"/>

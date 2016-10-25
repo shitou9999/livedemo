@@ -46,6 +46,9 @@ public class User implements Parcelable {
     private int msg_num;
     private int fans_count;
     private int live_count;
+    private int live_wait_count;
+    private int appointment_count;
+
     private String session_id;
     private int is_teacher;
 
@@ -87,6 +90,8 @@ public class User implements Parcelable {
         live_count = in.readInt();
         session_id = in.readString();
         is_teacher = in.readInt();
+        live_wait_count = in.readInt();
+        appointment_count = in.readInt();
     }
 
     @Override
@@ -112,6 +117,8 @@ public class User implements Parcelable {
         dest.writeInt(live_count);
         dest.writeString(session_id);
         dest.writeInt(is_teacher);
+        dest.writeInt(live_wait_count);
+        dest.writeInt(appointment_count);
     }
 
     @Override
@@ -297,5 +304,21 @@ public class User implements Parcelable {
 
     public void setIs_teacher(int is_teacher) {
         this.is_teacher = is_teacher;
+    }
+
+    public int getLive_wait_count() {
+        return live_wait_count;
+    }
+
+    public void setLive_wait_count(int live_wait_count) {
+        this.live_wait_count = live_wait_count;
+    }
+
+    public int getAppointment_count() {
+        return appointment_count;
+    }
+
+    public void setAppointment_count(int appointment_count) {
+        this.appointment_count = appointment_count;
     }
 }

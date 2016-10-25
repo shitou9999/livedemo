@@ -19,6 +19,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.HotPonit;
+import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -52,9 +54,9 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
     @Override
     public void onBindViewHolder(final HotPointHolder holder, int position) {
         final HotPonit mHotPoint = mHotPointList.get(position);
-        holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(mHotPoint.getNickname()));
+        holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(mHotPoint.getTeacher_info()==null?"":mHotPoint.getTeacher_info().getNickname(),mHotPoint.getNickname()));
         holder.mTvHotPointContent.setText(StringUtils.replaceNullToEmpty(mHotPoint.getDescription()));
-        ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getAvatar()), R.mipmap.default_avatar);
+        ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getTeacher_info()==null?"":mHotPoint.getTeacher_info().getAvatar(),mHotPoint.getAvatar()), R.mipmap.default_avatar);
         holder.mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%s)", StringUtils.replaceNullToEmpty(mHotPoint.getSupport_num(), "0")));
         if (mHotPoint.getTag_list() != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
@@ -62,14 +64,46 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
             holder.mLlFlag.setAdapter(adapter);
         }
         if (mHotPoint.getIs_follow() == 0) {
-            holder.mTvFollowButton.setText("+关注");
+            holder.mTvFollowButton.setText(" +关注");
         } else {
             holder.mTvFollowButton.setText("已关注");
         }
-        holder.mTvFollowType.setVisibility(View.INVISIBLE);
+        switch (mHotPoint.getQuote_type()) {
+            case Constant.NEWS_TYPE_ARTICLE:
+                holder.mTvType.setText("文章");
+                break;
+            case Constant.NEWS_TYPE_VIDEO:
+                holder.mTvType.setText("视频");
+                break;
+            case Constant.NEWS_TYPE_VOICE:
+                holder.mTvType.setText("声音");
+                break;
+            case Constant.NEWS_TYPE_LIVE:
+                holder.mTvType.setText("直播");
+                break;
+        }
+        holder.mTvHotPointContent.setTag(mHotPoint);
+        holder.mCivAvatar.setTag(mHotPoint);
+        holder.mCivAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onClick(v);
+                }
+            }
+        });
+        holder.mTvHotPointContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onClick(v);
+                }
+            }
+        });
         holder.mTvFollowButton.setSelected(mHotPoint.getIs_follow() != 0);
         holder.mTvFollowButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (mOnItemClickListener != null) {
                     view.setTag(mHotPoint);
                     mOnItemClickListener.onClick(view);
@@ -81,8 +115,10 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
         } else {
             holder.mLlHotPointSupport.setSelected(true);
         }
+        holder.tvDate.setText(DateUtil.getTimeString_MM_dd(mHotPoint.getCreate_date()));
         holder.mLlHotPointSupport.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 //点赞
                 if (mOnItemClickListener != null) {
                     view.setTag(mHotPoint);
@@ -107,14 +143,24 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
 
     //热点指数
     static class HotPointHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.civ_avatar) CircleImageView mCivAvatar;
-        @BindView(R.id.tv_teacher_name) TextView mTvTeacherName;
-        @BindView(R.id.tv_follow_button) TextView mTvFollowButton;
-        @BindView(R.id.ll_flag) NoScrollGridView mLlFlag;
-        @BindView(R.id.tv_follow_type) TextView mTvFollowType;
-        @BindView(R.id.tv_hot_point_content) TextView mTvHotPointContent;
-        @BindView(R.id.tv_hot_point_support) TextView mTvHotPointSupport;
-        @BindView(R.id.ll_hot_point_support) LinearLayout mLlHotPointSupport;
+        @BindView(R.id.civ_avatar)
+        CircleImageView mCivAvatar;
+        @BindView(R.id.tv_teacher_name)
+        TextView mTvTeacherName;
+        @BindView(R.id.tv_follow_button)
+        TextView mTvFollowButton;
+        @BindView(R.id.ll_flag)
+        NoScrollGridView mLlFlag;
+        @BindView(R.id.tvType)
+        TextView mTvType;
+        @BindView(R.id.tv_hot_point_content)
+        TextView mTvHotPointContent;
+        @BindView(R.id.tv_hot_point_support)
+        TextView mTvHotPointSupport;
+        @BindView(R.id.tvDate)
+        TextView tvDate;
+        @BindView(R.id.ll_hot_point_support)
+        LinearLayout mLlHotPointSupport;
 
         public HotPointHolder(View itemView) {
             super(itemView);

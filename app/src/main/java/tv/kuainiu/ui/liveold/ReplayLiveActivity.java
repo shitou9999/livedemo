@@ -1374,7 +1374,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                         String info = data.getString("info");
                         mTeacherInfo = new DataConverter<TeacherInfo>().JsonToObject(info, TeacherInfo.class);
                         bindDataToView();
-                        initAbout();
+//                        initAbout();
                     } catch (Exception e) {
                         // mErrView.StopLoading(event.getCode(), event.getMsg());
                         LogUtils.e(TAG, "解析老师信息异常", e);
@@ -1409,13 +1409,13 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        if (dwLive != null) {
+            dwLive.stop();
+        }
         if (player != null) {
             player.pause();
             player.stop();
             player.release();
-        }
-        if (dwLive != null) {
-            dwLive.stop();
         }
         if (handler != null && playHideRunnable != null) {
             handler.removeCallbacks(playHideRunnable);

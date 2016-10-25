@@ -185,7 +185,7 @@ public class DateUtil {
     }
 
     public static String getDurationString(String dateFormat, long value) {
-        Duration duration = DateUtil.millise(value);
+        Duration duration = DateUtil.millise(toJava(value));
         long day = Math.abs(duration.getStandardDays());
         long hour = Math.abs(duration.getStandardHours());
         long minutes = Math.abs(duration.getStandardMinutes());
@@ -293,5 +293,15 @@ public class DateUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat(StringUtils.replaceNullToEmpty(format, "yyyy-MM-dd HH:mm:ss"),
                 Locale.CHINA);// 可以方便地修改日期格式
         return dateFormat.format(now);
+    }
+    public static long getLongTimeFromStr(String date,String format){
+        long longDate=0l;
+        try {
+            SimpleDateFormat sd=new SimpleDateFormat(format);
+            longDate=sd.parse(date).getTime();
+        } catch (ParseException e) {
+            LogUtils.e("","",e);
+        }
+        return longDate;
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,35 +19,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorBlue500"
-                android:src="@drawable/ic_play_arrow_white_24dp" />
+                android:src="@drawable/selector_vioce_play_btn" />
 
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_weight="1"
-            android:background="@color/colorGrey300">
+            android:layout_weight="1">
 
             <tv.kuainiu.widget.WaveformView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/ivVoiceBg"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/audio_ic"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter" />
+
             <TextView
                 android:id="@+id/tvVideoLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:minLines="2"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingStart="8dp"
-                tools:text="山无常势，水无常形。天下武功，唯快不破。"
-                android:textColor="@color/colorGrey800"/>
+                android:textColor="@color/colorGrey800"
+                tools:text="60s" />
         </FrameLayout>
 
         <View

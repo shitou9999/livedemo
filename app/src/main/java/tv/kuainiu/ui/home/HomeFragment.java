@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.AppointmentRequestUtil;
 import tv.kuainiu.command.http.LiveHttpUtil;
 import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.TeacherHttpUtil;
@@ -44,11 +46,18 @@ import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.NewsItem;
+import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.home.adapter.HomeAdapter;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.ReplayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
+import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
+import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
@@ -59,6 +68,7 @@ import tv.kuainiu.widget.DividerItemDecoration;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 import static tv.kuainiu.R.id.tv_follow_button;
+import static tv.kuainiu.R.id.tv_next_time;
 import static tv.kuainiu.modle.cons.Action.hot_point;
 
 /**
@@ -146,7 +156,7 @@ public class HomeFragment extends BaseFragment {
 
     private void getBannerData() {
         OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST, Api.FIND_BANNAR, ParamUtil.getParam(null), Action.find_bannar, CacheConfig.getCacheConfig());
-        LiveHttpUtil.liveIndex(getActivity(), "1", 1, 1, Action.live_zhi_bo_home);
+        LiveHttpUtil.liveHomeIndex(getActivity(), "1", 1, Action.live_zhi_bo_home);
     }
 
     private void getHotPoint() {
@@ -207,18 +217,27 @@ public class HomeFragment extends BaseFragment {
         startActivity(messageIntent);
     }
 
-
+    LiveInfo appointmentLiveInfo;
+    TextView tvAppointment;
     class itemClick implements OnItemClickListener {
 
         @Override
         public void onClick(View v) {
-            if (!MyApplication.isLogin()) {
-                showLoginTip();
-                return;
-            }
+
+            HotPonit mHotPoint = (HotPonit) v.getTag();
+            LiveInfo liveItem = mHotPoint == null ? null : mHotPoint.getLive_info();
+            TeacherZoneDynamicsInfo newsInfo = mHotPoint == null ? null : mHotPoint.getNews_info();
             switch (v.getId()) {
-                case tv_follow_button:
-                    HotPonit mHotPoint = (HotPonit) v.getTag();
+                case tv_next_time://预约
+                    appointmentLiveInfo= (LiveInfo) v.getTag();
+                    tvAppointment= (TextView) v;
+                    appointment(appointmentLiveInfo);
+                    break;
+                case tv_follow_button://点关注
+                    if (!MyApplication.isLogin()) {
+                        showLoginTip();
+                        return;
+                    }
                     mTvFollowButton = (TextView) v;
                     //关注
                     if (!MyApplication.isLogin()) {
@@ -228,12 +247,12 @@ public class HomeFragment extends BaseFragment {
                         addFollow(mHotPoint.getIs_follow(), mHotPoint.getUser_id());
                     }
                     break;
-                case R.id.ll_hot_point_support:
+                case R.id.ll_hot_point_support://点赞
                     vSupport = v;
                     mHotPoint2 = (HotPonit) v.getTag();
                     mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
                     if (!MyApplication.isLogin()) {
-                        new LoginPromptDialog(getActivity()).show();
+                        showLoginTip();
                         return;
                     } else {
                         if (mHotPoint2.getIs_support() == Constant.FAVOURED) {
@@ -244,11 +263,57 @@ public class HomeFragment extends BaseFragment {
                         }
                     }
                     break;
+                case R.id.civ_avatar://点击头像
+                    if (mHotPoint != null && mHotPoint.getTeacher_info() != null) {
+                        TeacherZoneActivity.intoNewIntent(getActivity(), mHotPoint.getTeacher_info().getId());
+                    }
+                    break;
+                case R.id.tv_hot_point_content://带你内容
+                    if (mHotPoint != null) {
+                        switch (mHotPoint.getQuote_type()) {
+                            case Constant.NEWS_TYPE_ARTICLE:
+
+                                if (newsInfo != null) {
+                                    PostZoneActivity.intoNewIntent(getActivity(), newsInfo.getNews_id(), newsInfo.getNews_catid());
+                                }
+
+                                break;
+                            case Constant.NEWS_TYPE_VIDEO:
+                                if (newsInfo != null) {
+                                    VideoActivity.intoNewIntent(getActivity(), newsInfo.getNews_id(), newsInfo.getNews_video_id(), newsInfo.getNews_catid(), StringUtils.replaceNullToEmpty(newsInfo.getNews_title()));
+                                }
+                                break;
+                            case Constant.NEWS_TYPE_LIVE:
+                                if (liveItem != null) {
+                                    LiveParameter liveParameter = new LiveParameter();
+                                    liveParameter.setLiveId(liveItem.getId());
+                                    liveParameter.setLiveTitle(liveItem.getTitle());
+                                    liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                                    liveParameter.setTeacherId(liveItem.getTeacher_id());
+                                    if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
+                                        PlayLiveActivity.intoNewIntent(getActivity(), liveParameter);
+                                    } else {
+                                        ReplayLiveActivity.intoNewIntent(getActivity(), liveParameter);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
             }
 
         }
     }
-
+    private void appointment(LiveInfo liveInfo) {
+        if (liveInfo == null) {
+            return;
+        }
+        if (liveInfo.getIs_appointment() == 0) {
+            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getLive_roomid(), Action.add_live_appointment);
+        } else {
+            AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
+        }
+    }
     private void dataBind() {
         if (mHomeAdapter == null) {
             mHomeAdapter = new HomeAdapter(getActivity());
@@ -274,6 +339,33 @@ public class HomeFragment extends BaseFragment {
             case off_line:
             case login:
                 getHotPoint();
+                break;
+            case add_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (appointmentLiveInfo != null) {
+                        tvAppointment.setSelected(true);
+                        tvAppointment.setText("预约");
+                        appointmentLiveInfo.setIs_appointment(1);
+                        tvAppointment.setTag(appointmentLiveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "预约失败"));
+                }
+                appointmentLiveInfo = null;
+                break;
+            case del_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (appointmentLiveInfo != null) {
+                        tvAppointment.setSelected(false);
+                        tvAppointment.setText("预约");
+                        appointmentLiveInfo.setIs_appointment(0);
+                        tvAppointment.setTag(appointmentLiveInfo);
+
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消预约失败"));
+                }
+                appointmentLiveInfo = null;
                 break;
             case home_support_dynamics:
                 if (Constant.SUCCEED == event.getCode()) {
@@ -398,14 +490,13 @@ public class HomeFragment extends BaseFragment {
                     String json = event.getData().optString("data");
                     try {
                         JSONObject object = new JSONObject(json);
-                        List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("list"), new TypeToken<List<LiveInfo>>() {
-                        }.getType());
+                        LiveInfo tempLiveItem = new DataConverter<LiveInfo>().JsonToObject(object.optString("info"), LiveInfo.class);
 
-                        if (tempLiveItemList != null && tempLiveItemList.size() > 0) {
+                        if (tempLiveItem != null ) {
                             mLiveItemList.clear();
                             loading = false;
                             int size = mLiveItemList.size();
-                            mLiveItemList.addAll(tempLiveItemList);
+                            mLiveItemList.add(tempLiveItem);
                             mHomeAdapter.setLiveList(mLiveItemList);
                             mHomeAdapter.notifyDataSetChanged();
                         }

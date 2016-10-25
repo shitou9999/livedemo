@@ -31,7 +31,20 @@
         android:text="鉴于20个设计的核心要素和原则（上）取得了不错的反响，所以我决定把下篇也出了，希望能帮到大家！"
         android:textColor="@color/colorGrey800"
     />
-
+    <TextView
+        android:id="@+id/tvAppointment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:background="@drawable/selector_bg_appointment"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="预约"
+        android:visibility="gone"
+        android:textColor="@drawable/selector_bg_appointment_text" />
     <View
         android:id="@+id/vLine"
         android:layout_width="6dp"

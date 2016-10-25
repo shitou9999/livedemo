@@ -32,6 +32,8 @@ public class InitInfo implements Serializable {
     private String ke_url;
     private int download_see_login;
     private int is_teacher;
+    private int live_wait_count;
+    private int appointment_count;
 
     public int getLive_count() {
         return live_count;
@@ -119,6 +121,22 @@ public class InitInfo implements Serializable {
 
     public void setIs_teacher(int is_teacher) {
         this.is_teacher = is_teacher;
+    }
+
+    public int getLive_wait_count() {
+        return live_wait_count;
+    }
+
+    public void setLive_wait_count(int live_wait_count) {
+        this.live_wait_count = live_wait_count;
+    }
+
+    public int getAppointment_count() {
+        return appointment_count;
+    }
+
+    public void setAppointment_count(int appointment_count) {
+        this.appointment_count = appointment_count;
     }
 
     @Override public String toString() {

@@ -13,11 +13,14 @@
 
     <TextView
         android:id="@+id/tv_friends_post_time"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="08:23"
         android:textColor="@color/colorWhite"
+        android:textSize="12sp"
         tools:background="@color/colorGrey700" />
 
     <LinearLayout
@@ -92,12 +95,12 @@
                 android:id="@+id/exgv_appraisal_pic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="5dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="3" />
+                android:numColumns="3"
+                android:verticalSpacing="5dp" />
 
             <tv.kuainiu.widget.PostParentLayout
                 android:id="@+id/pl_friends_post_group"
@@ -120,13 +123,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin">
 
-                <TextView
-                    android:id="@+id/tv_friends_post_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorGrey450"
-                    android:textSize="12sp"
-                    tools:text="模块名称" />
 
                 <TextView
                     android:id="@+id/tv_friends_post_comment"
@@ -155,7 +151,17 @@
                     android:text="(458)"
                     android:textColor="@color/colorGrey450" />
 
-
+                <TextView
+                    android:id="@+id/tv_friends_post_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/tv_friends_post_like"
+                    android:singleLine="true"
+                    android:textColor="@color/colorGrey450"
+                    android:textSize="12sp"
+                    tools:text="模块名称" />
             </RelativeLayout>
 
 

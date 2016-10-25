@@ -26,6 +26,7 @@ public class TeacherInfo {
     private int fans_count;
     private int is_follow;
     private LiveingInfo live_info;
+    private String[] tag_list;
 
 
     public String getId() {
@@ -116,5 +117,13 @@ public class TeacherInfo {
      */
     public void setLive_info(LiveingInfo live_info) {
         this.live_info = live_info;
+    }
+
+    public String[] getTag_list() {
+        return tag_list;
+    }
+
+    public void setTag_list(String[] tag_list) {
+        this.tag_list = tag_list;
     }
 }
