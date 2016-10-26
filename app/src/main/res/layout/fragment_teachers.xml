@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:left_visibility="invisible"
         app:right_visibility="invisible"
-        app:mytitle="名师"/>
+        app:mytitle="@string/tab_main_teacher"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
         android:layout_width="match_parent"

@@ -51,6 +51,7 @@ public class LiveInfo {
     private String user_id;
     private int is_follow;
     private int support;
+    private int support_num;
     private String status;
     private String permission;
     private String avatar;
@@ -72,7 +73,9 @@ public class LiveInfo {
     private String synchro_wb;
     private String live_catname;
     private String live_roomid;
+    private String url;
     private int online_num;//在线人数
+    private int view_num;//在线人数
     private int is_appointment;//是否已预约
     private int appointment_count;//预约总数
 
@@ -346,5 +349,29 @@ public class LiveInfo {
 
     public void setLive_roomid(String live_roomid) {
         this.live_roomid = live_roomid;
+    }
+
+    public int getSupport_num() {
+        return support_num;
+    }
+
+    public void setSupport_num(int support_num) {
+        this.support_num = support_num;
+    }
+
+    public int getView_num() {
+        return view_num;
+    }
+
+    public void setView_num(int view_num) {
+        this.view_num = view_num;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

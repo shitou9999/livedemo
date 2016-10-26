@@ -21,7 +21,6 @@
         android:layout_height="match_parent">
 
 
-
         <LinearLayout
             android:id="@+id/ll_main"
             android:layout_width="match_parent"
@@ -43,7 +42,7 @@
                 <TextView
                     android:id="@+id/tv_main_home"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="首页" />
+                    android:text="@string/tab_main_home" />
             </LinearLayout>
 
             <LinearLayout
@@ -116,11 +115,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ll_main" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/colorGrey200"
-            android:layout_above="@+id/ll_main"/>
+            android:layout_above="@+id/ll_main"
+            android:background="@color/colorGrey200" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

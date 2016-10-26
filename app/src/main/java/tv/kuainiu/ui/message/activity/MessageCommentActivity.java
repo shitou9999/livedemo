@@ -271,7 +271,7 @@ public class MessageCommentActivity extends BaseActivity {
 //        map.put("is_reply", isReply);
 //        String param = ParamUtil.getParam(map);
 //        OKHttpUtils.getInstance().post(this, Api.TEST_DNS_API_HOST_V2, Api.ADD_COMMENT, param, Action.add_comment);
-//TODO： 评论
+//TODO： 评论消息还没有可以先不加
 //        CommentHttpUtil.addComment(this, mId, mCatId, content, parentId, nickname, isReply);
     }
 

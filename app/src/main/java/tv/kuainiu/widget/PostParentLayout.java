@@ -100,7 +100,7 @@ public class PostParentLayout extends RelativeLayout {
         LiveParameter liveParameter = new LiveParameter();
         liveParameter.setLiveId(liveItem.getId());
         liveParameter.setLiveTitle(liveItem.getTitle());
-        liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+        liveParameter.setRoomId(liveItem.getTeacher_info() == null ? liveItem.getLive_roomid() : liveItem.getTeacher_info().getLive_roomid());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
         PlayLiveActivity.intoNewIntent(mContext, liveParameter);
     }
@@ -131,6 +131,7 @@ public class PostParentLayout extends RelativeLayout {
                         tvState2.append(DateUtil.formatDate(liveInfo.getStart_date(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvState2.setBackgroundColor(Color.RED);
                         vLine.setBackgroundColor(Color.RED);
+                        tvAppointment.setSelected(liveInfo.getIs_appointment() != 0);
                         tvAppointment.setVisibility(View.VISIBLE);
                         tvAppointment.setTag(liveInfo);
                         tvAppointment.setOnClickListener(new OnClickListener() {

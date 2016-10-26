@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.liveold;
+package tv.kuainiu.ui.live.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,29 +49,34 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bokecc.sdk.mobile.live.DWLive;
+import com.bokecc.sdk.mobile.live.DWLiveListener;
+import com.bokecc.sdk.mobile.live.DWLiveLoginListener;
 import com.bokecc.sdk.mobile.live.Exception.DWLiveException;
+import com.bokecc.sdk.mobile.live.pojo.Answer;
+import com.bokecc.sdk.mobile.live.pojo.ChatMessage;
+import com.bokecc.sdk.mobile.live.pojo.Question;
+import com.bokecc.sdk.mobile.live.pojo.RoomInfo;
 import com.bokecc.sdk.mobile.live.pojo.TemplateInfo;
 import com.bokecc.sdk.mobile.live.pojo.Viewer;
-import com.bokecc.sdk.mobile.live.replay.DWLiveReplay;
-import com.bokecc.sdk.mobile.live.replay.DWLiveReplayListener;
-import com.bokecc.sdk.mobile.live.replay.DWLiveReplayLoginListener;
-import com.bokecc.sdk.mobile.live.replay.pojo.ReplayChatMsg;
-import com.bokecc.sdk.mobile.live.replay.pojo.ReplayQAMsg;
 import com.bokecc.sdk.mobile.live.widget.DocView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeSet;
 
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,39 +87,36 @@ import tv.kuainiu.R;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.BaseActivity;
 import tv.kuainiu.ui.activity.WebActivity;
+import tv.kuainiu.ui.liveold.LiveHttpUtil;
+import tv.kuainiu.ui.liveold.adapter.MyChatListViewAdapter;
 import tv.kuainiu.ui.liveold.adapter.MyGridViewAdapter;
-import tv.kuainiu.ui.liveold.adapter.MyReplayChatListViewAdapter;
-import tv.kuainiu.ui.liveold.adapter.MyReplayQAListViewAdapter;
+import tv.kuainiu.ui.liveold.adapter.MyQAListViewAdapter;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
+import tv.kuainiu.ui.liveold.model.QAMsg;
 import tv.kuainiu.ui.me.activity.LoginActivity;
-import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DataConverter;
-import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
-import tv.kuainiu.utils.ScreenUtils;
-import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.TimeFormatUtil;
 import tv.kuainiu.utils.ToastUtils;
-import tv.kuainiu.utils.Utils;
 import tv.kuainiu.utils.WeakHandler;
 import tv.kuainiu.widget.BarrageLayout;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 
 /**
- * 重播
+ * 直播
  */
-public class ReplayLiveActivity extends BaseActivity implements
+public class PlayLiveActivity extends BaseActivity implements
         OnClickListener,
         SurfaceHolder.Callback,
         IjkMediaPlayer.OnPreparedListener,
@@ -127,8 +129,8 @@ public class ReplayLiveActivity extends BaseActivity implements
     RelativeLayout rlPlay;
     LinearLayout llBottomLayout;
     LinearLayout llFullscreen;
-    LinearLayout ll_seek;
     TextView tvCount;
+    TextView tvPlayMsg;
     TabLayout mTabLayout;
     SurfaceView sv;
     ProgressBar pb_loading;
@@ -142,41 +144,25 @@ public class ReplayLiveActivity extends BaseActivity implements
     BarrageLayout mBarrageLayout;
     ViewPager mPager;
     CircleImageView civ_avatar;
-    TextView tvPlayMsg;
     TextView tv_live_teacher_zan;
     TextView tv_live_title;
-    TextView tvDate;
     TextView tv_teacher_fans;
     TextView tv_live_teacher;
-    TextView currentTime;
-    SeekBar playSeekBar;
-    TextView totalTime;
     TextView btn_teacher_follow;
-    TextView tvTheme;
-    private TextView tvLiveDescripion;
-
     TextView mInfo;
     RelativeLayout rl_mInfo;
     ImageView iv_mInfo;
-    ImageView ivCloseMessage;
-    TextView tvCloseMessage;
-    RelativeLayout ll_chat_bottom;
-    RelativeLayout rlOpenMessage;
-    private final static String TAG = "ReplayLiveActivity";
     private List<TabLayout.Tab> listTab;
 
     private final String LIVE = "聊天室";
     private final String PUT_QUESTION = "问答";
     private final String ABOUT = "关于";
 
-    //    private String[] tabNames = new String[]{LIVE, PUT_QUESTION, ABOUT};
-//    private int[] tabNamesTags = new int[]{0, 1, 2};
-    private String[] tabNames = new String[]{LIVE,ABOUT};
-    private int[] tabNamesTags = new int[]{0,1};
-    private String CcId = "";
-    private String live_id = "";
-    private String[] CcIdArray;
-    private int replayNumber = 0;
+    private String[] tabNames = new String[]{LIVE, PUT_QUESTION, ABOUT};
+    private int[] tabNamesTags = new int[]{0, 1, 2};
+    private LiveParameter mLivingInfo;
+    private TeacherInfo mTeacherInfo;
+    private String liveId = "";
     private String teacherId = "";
 
     /**
@@ -197,7 +183,7 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private IjkMediaPlayer player;
 
-    private DWLiveReplay dwLive;
+    private DWLive dwLive;
 
     private SurfaceHolder holder;
 
@@ -208,10 +194,10 @@ public class ReplayLiveActivity extends BaseActivity implements
     private ImageButton sendQABtn;
     private EditText etMsg, etQA;
     private ListView lvChat, lvQA;
-    private TreeSet<ReplayQAMsg> qaMsgs;
-    private TreeSet<ReplayChatMsg> replayChatMsgs;
-    private MyReplayChatListViewAdapter myReplayChatListViewAdapter;
-    private MyReplayQAListViewAdapter myReplayQAListViewAdapter;
+    private MyChatListViewAdapter chatAdapter;
+    private MyQAListViewAdapter qaAdapter;
+    private List<ChatMessage> chatMsgs = new ArrayList<ChatMessage>();
+    private LinkedHashMap<String, QAMsg> qaMap = new LinkedHashMap<String, QAMsg>();
     private boolean isKickOut = false;
     private WindowManager wm;
     private InputMethodManager imm;
@@ -219,6 +205,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     private boolean isSendPublicChatMsg = false;
 
     private int playSourceCount = 0;
+
     private int sourceChangeCount = 0;
     private Viewer viewer;
     private boolean isStop = false;
@@ -233,23 +220,18 @@ public class ReplayLiveActivity extends BaseActivity implements
     private static final int PRIVATE_QUESTION_MSG = 1;
     private static final int PRIVATE_ANSWER_MSG = 2;
     private static final int QUESTION = 10;
-    private static final int EXCEPTION = 17;
     private static final int ANSWER = 11;
     private static final int USER_COUNT = 20;
-    private static final int INIT_FINISH = 40;
-    private static final int FINISH = 41;
+    private static final int FINISH = 40;
+    private static final int KICK_OUT = -1;
+    private static final int NOT_START = 41;
     private static final int FADE_OUT_INFO = 4;
     TemplateInfo templateInfo;
-    LiveParameter mLivingInfo;
     private MyHandle handler;
     private boolean isLoginSuccess = false;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mReceiver;
     private IntentFilter intentFilter;
-    private Timer timer;
-    private TimerTask timerTask;
-
-    private final int seekBarMax = 10000;
 
     //Touch Events
     private int mVideoHeight;
@@ -270,14 +252,13 @@ public class ReplayLiveActivity extends BaseActivity implements
     // Brightness
     private boolean mIsFirstBrightnessGesture = true;
     private boolean mEnableBrightnessGesture = true;
-    private TeacherInfo mTeacherInfo;
-    private LiveInfo mLiveInfo;
-    int height;
-    int minHeight;
-    RelativeLayout.LayoutParams layoutParamsFrameLayout = null;
+    /**
+     * 是否可以拾遗
+     */
+    private int dvr;
 
     public static void intoNewIntent(Context context, LiveParameter liveParameter) {
-        Intent intent = new Intent(context, ReplayLiveActivity.class);
+        Intent intent = new Intent(context, PlayLiveActivity.class);
         intent.putExtra(Constant.ARG_LIVING, liveParameter);
         context.startActivity(intent);
     }
@@ -291,16 +272,6 @@ public class ReplayLiveActivity extends BaseActivity implements
         registerBroadcast();
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-        height = ScreenUtils.getScreenHeight(this);
-        minHeight = getResources().getDimensionPixelSize(R.dimen.live_tab_height);
-        minHeight = height - minHeight - ScreenUtils.getStatusHeight(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height / 3);
-        rlPlay.setLayoutParams(lp);
-
-        layoutParamsFrameLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height / 3 * 2);
-        layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
-        ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
     }
 
     private void registerBroadcast() {
@@ -309,6 +280,10 @@ public class ReplayLiveActivity extends BaseActivity implements
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction() == Constant.INTENT_ACTION_GET_CUSTOM) {
+//                    if (dwLive != null) {
+//                        dwLive.stop();
+//                        isLoginSuccess = false;
+//                    }
                     loginLive();
                     getTeacherInfo();
                 }
@@ -323,18 +298,12 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     @Override
     protected void initContentView(int layoutId) {
-        super.initContentView(R.layout.activity_live_play);
-        mLivingInfo = getIntent().getExtras().getParcelable(Constant.ARG_LIVING);
-        timer = new Timer();
+        super.initContentView(R.layout.activity_live2_play);
         rlPlay = (RelativeLayout) findViewById(R.id.rl_play2);
         llBottomLayout = (LinearLayout) findViewById(R.id.ll_bottom_layout2);
-        ll_seek = (LinearLayout) findViewById(R.id.ll_seek);
-        ll_seek.setVisibility(View.VISIBLE);
-        ll_chat_bottom = (RelativeLayout) findViewById(R.id.ll_chat_bottom);
         llFullscreen = (LinearLayout) findViewById(R.id.ll_fullscreen_msg_send2);
-        llFullscreen.setVisibility(View.GONE);
         tvCount = (TextView) findViewById(R.id.tvCount2);
-        tvCount.setVisibility(View.INVISIBLE);
+        tvPlayMsg = (TextView) findViewById(R.id.tvPlayMsg);
         mTabLayout = (TabLayout) findViewById(R.id.tab_live_top2);
         sv = (SurfaceView) findViewById(R.id.sv2);
         pb_loading = (ProgressBar) findViewById(R.id.pb_loading);
@@ -347,72 +316,37 @@ public class ReplayLiveActivity extends BaseActivity implements
         btnFullscreenSendMsg = (Button) findViewById(R.id.btn_fullscreen_send2);
         mBarrageLayout = (BarrageLayout) findViewById(R.id.bl_barrage2);
         mPager = (ViewPager) findViewById(R.id.mPager2);
-        civ_avatar = (CircleImageView) findViewById(R.id.ci_avatar);
-        tvPlayMsg = (TextView) findViewById(R.id.tvPlayMsg);
+        civ_avatar = (CircleImageView) findViewById(R.id.civ_avatar2);
         tv_live_teacher_zan = (TextView) findViewById(R.id.tv_live_teacher_zan2);
-        tv_live_title = (TextView) findViewById(R.id.tvTiltle);
-        tv_teacher_fans = (TextView) findViewById(R.id.tv_follow_number);
-        currentTime = (TextView) findViewById(R.id.current_time);
-        tv_live_teacher = (TextView) findViewById(R.id.tvTeacherName);
-        playSeekBar = (SeekBar) findViewById(R.id.play_seekBar);
-        totalTime = (TextView) findViewById(R.id.total_time);
-        btn_teacher_follow = (TextView) findViewById(R.id.tv_follow_button);
-        tvTheme = (TextView) findViewById(R.id.tvTheme);
-        tvDate = (TextView) findViewById(R.id.tvDate);
-        tvLiveDescripion = (TextView) findViewById(R.id.tvLiveDescripion);
-//        btn_teacher_follow.setVisibility(View.INVISIBLE);
-
+        tv_live_title = (TextView) findViewById(R.id.tv_live_title2);
+        tv_teacher_fans = (TextView) findViewById(R.id.tv_teacher_fans2);
+        tv_live_teacher = (TextView) findViewById(R.id.tv_live_teacher2);
+        btn_teacher_follow = (TextView) findViewById(R.id.btn_teacher_follow2);
         mInfo = (TextView) findViewById(R.id.mInfo);
         rl_mInfo = (RelativeLayout) findViewById(R.id.rl_mInfo);
         iv_mInfo = (ImageView) findViewById(R.id.iv_mInfo);
 
-        ivCloseMessage = (ImageView) findViewById(R.id.ivCloseMessage);
-        tvCloseMessage = (TextView) findViewById(R.id.tvCloseMessage);
-        ll_chat_bottom = (RelativeLayout) findViewById(R.id.ll_chat_bottom);
-        rlOpenMessage = (RelativeLayout) findViewById(R.id.rlOpenMessage);
 
         handler = new MyHandle(this);
-        if (mLivingInfo == null || TextUtils.isEmpty(mLivingInfo.getCcid())) {
-            tip("未获取到回放信息");
+        mLivingInfo = getIntent().getExtras().getParcelable(Constant.ARG_LIVING);
+        if (mLivingInfo == null || TextUtils.isEmpty(mLivingInfo.getRoomId())) {
+            tip("未获取到直播信息");
             return;
         }
 
-        CcId = mLivingInfo.getCcid();
-        live_id = mLivingInfo.getLiveId();
-        CcIdArray = CcId.split(",");
-        if (CcIdArray != null && CcIdArray.length > 0) {
-            CcId = CcIdArray[replayNumber];
-        }
+        liveId = mLivingInfo.getLiveId();
         teacherId = mLivingInfo.getTeacherId();
         roomId = mLivingInfo.getRoomId();
-        dwLive = DWLiveReplay.getInstance();
+        dwLive = DWLive.getInstance();
         loginLive();
         getTeacherInfo();
-        playSeekBar.setMax(seekBarMax);
-        playSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                int currentPosition = seekBar.getProgress();
-                if (player.isPlayable()) {
-                    player.seekTo(player.getDuration() * currentPosition / seekBar.getMax());
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            }
-        });
         sv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return onTouchEvent2(event);
             }
         });
+
     }
 
     private void intView() {
@@ -422,33 +356,21 @@ public class ReplayLiveActivity extends BaseActivity implements
     }
 
     private void bindDataToView() {
-        if (mLiveInfo == null) {
-            return;
-        }
-        mTeacherInfo = mLiveInfo.getTeacher_info();
-        if (mTeacherInfo == null) {
-            mTeacherInfo = new TeacherInfo();
-            mTeacherInfo.setId(teacherId);
-        }
-        ImageDisplayUtil.displayImage(this, civ_avatar, mTeacherInfo.getAvatar());
+        ImageDisplayUtil.displayImage(this, civ_avatar, mTeacherInfo.getAvatar(), R.mipmap.default_avatar);
         tv_live_title.setText(mLivingInfo.getLiveTitle());
         tv_live_teacher.setText(mTeacherInfo.getNickname());
-        tvTheme.setText(StringUtils.replaceNullToEmpty(mTeacherInfo.getSlogan()));
-        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLiveInfo.getSupport_num()));
-        tv_teacher_fans.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(mTeacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
-        btn_teacher_follow.setSelected(mTeacherInfo.getIs_follow() == Constant.FOLLOWED);
-        if (mTeacherInfo.getIs_follow() != Constant.FOLLOWED) {
-            btn_teacher_follow.setText("+关注");
+        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num()));
+        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
+        if (mTeacherInfo.getIs_follow() == 0) {
+            btn_teacher_follow.setSelected(false);
         } else {
-            btn_teacher_follow.setText("已关注");
+            btn_teacher_follow.setSelected(true);
         }
-        if (mLiveInfo.getIs_support() == 0) {
+        if (mTeacherInfo.getLive_info().getIs_support() == 0) {
             tv_live_teacher_zan.setSelected(false);
         } else {
             tv_live_teacher_zan.setSelected(true);
         }
-        tvLiveDescripion.setText(StringUtils.replaceNullToEmpty(mLiveInfo.getDescription()));
-        tvDate.setText(DateUtil.getDurationString("MM-dd HH:ss", mLiveInfo.getStart_datetime()));
     }
 
     private void initTab(int selectedIndex) {
@@ -470,7 +392,6 @@ public class ReplayLiveActivity extends BaseActivity implements
 
             }
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-            ll_chat_bottom.setVisibility(View.VISIBLE);
         }
     }
 
@@ -485,10 +406,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         etFullscreen.setOnClickListener(this);
         tv_live_teacher_zan.setOnClickListener(this);
         btn_teacher_follow.setOnClickListener(this);
-        civ_avatar.setOnClickListener(this);
-        ivCloseMessage.setOnClickListener(this);
-        tvCloseMessage.setOnClickListener(this);
-        rlOpenMessage.setOnClickListener(this);
+
         etFullscreen.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -499,7 +417,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             }
         });
         btnFullscreenSendMsg.setOnClickListener(this);
-//        sv.setOnClickListener(new OnClickListener() {
+//        rlPlay.setOnClickListener(new OnClickListener() {
 //
 //            @Override
 //            public void onClick(View v) {
@@ -543,7 +461,6 @@ public class ReplayLiveActivity extends BaseActivity implements
         viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
         map.put("teacher_id", teacherId);
-        map.put("live_id", live_id);
         password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
@@ -551,13 +468,12 @@ public class ReplayLiveActivity extends BaseActivity implements
             public void run() {
 
                 if (password == null || "".equals(password)) {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName);
+                    dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName);
                 } else {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName, password);
+                    dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName, password);
                 }
                 LogUtils.e("login", "userId=" + userId);
                 LogUtils.e("login", "roomId=" + roomId);
-                LogUtils.e("login", "CcId=" + CcId);
                 LogUtils.e("login", "viewerName=" + viewerName);
                 LogUtils.e("login", "password=" + password);
                 dwLive.startLogin();
@@ -571,32 +487,31 @@ public class ReplayLiveActivity extends BaseActivity implements
     /**
      * 登陆监听
      */
-    class MyDWLiveReplayListener implements DWLiveReplayLoginListener {
-
+    class LiveLoginListener implements DWLiveLoginListener {
+        @Override
+        public void onLogin(TemplateInfo _templateInfo, Viewer _viewer, RoomInfo roomInfo) {
+            templateInfo = _templateInfo;
+            viewer = _viewer;
+            isLoginSuccess = true;
+            loginTime = 0;
+            LogUtils.e("login", "登陆成功");
+            dvr = roomInfo.getDvr();
+            if (dvr > 0) {
+                durationMax = dvr * 3600;
+            }
+            showLive();
+        }
 
         @Override
         public void onException(DWLiveException e) {
-            LogUtils.e("login", "回放登陆回调返回异常", e);
+            LogUtils.e("login", "登陆回调返回异常", e);
             isLoginSuccess = false;
             Message msg = handler.obtainMessage();
             msg.obj = e;
             msg.what = HIDE_PALY;
             handler.sendMessage(msg);
         }
-
-        @Override
-        public void onLogin(TemplateInfo _templateInfo) {
-            templateInfo = _templateInfo;
-            isLoginSuccess = true;
-            showLive();
-            loginTime = 0;
-            LogUtils.e("login", "回放登陆成功");
-        }
-
     }
-
-    ;
-
 
     private void initPlayer() {
         player = new IjkMediaPlayer();
@@ -610,9 +525,10 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private void showLive() {
         intView();
+        initSeekBar();
         initPlayer();
-        dwLive.setReplayParams(player, docView, replayListener);
-        dwLive.start(holder.getSurface());
+        dwLive.setDWLivePlayParams(dwLiveListener, docView, player);
+        initAndStartLivePlay();
         handler.sendEmptyMessage(SHOW_PALY);
         handler.sendEmptyMessage(INIT_LVCHAT);
 
@@ -622,7 +538,6 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     private void initFace(View view) {
         gvFace = (GridView) view.findViewById(R.id.gv_face);
-        gvFace.setVisibility(View.GONE);
         gvFace.setAdapter(new MyGridViewAdapter(this, etMsg));
     }
 
@@ -685,13 +600,13 @@ public class ReplayLiveActivity extends BaseActivity implements
         if (templateInfo != null && templateInfo.getChatView().equals("1")) {
             pagerViewList.add(chatView);
         }
-//        //提问题
-//        View qaView = inflater.inflate(R.layout.qa_layout, null);
-//        initQaLayout(qaView);
-//        if (templateInfo != null && templateInfo.getQaView().equals("1")) {
-//            pagerViewList.add(qaView);
-//        }
-//        //教案白板,关于
+        //提问题
+        View qaView = inflater.inflate(R.layout.qa_layout, null);
+        initQaLayout(qaView);
+        if (templateInfo != null && templateInfo.getQaView().equals("1")) {
+            pagerViewList.add(qaView);
+        }
+        //教案白板,关于
 //        View picView = inflater.infate(R.layout.pic_layout, null);
         View picView = inflater.inflate(R.layout.live_about_layout, null);
         pagerViewList.add(picView);
@@ -706,13 +621,12 @@ public class ReplayLiveActivity extends BaseActivity implements
     private void initPicLayout(View view) {
 //        docView = (DocView) view.findViewById(R.id.live_docView);
         web_live_about = (WebView) view.findViewById(R.id.web_live_about);
+
     }
 
     private Switch swi;
 
     private void initChatLayout(View view) {
-        LinearLayout ll_chat_bottom = (LinearLayout) view.findViewById(R.id.ll_chat_bottom);
-        ll_chat_bottom.setVisibility(View.GONE);
         swi = (Switch) view.findViewById(R.id.swi);
         swi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -800,15 +714,17 @@ public class ReplayLiveActivity extends BaseActivity implements
             llFullscreen.setVisibility(View.GONE);
             mBarrageLayout.stop();
             mBarrageLayout.setVisibility(View.GONE);
+            llProgress.setVisibility(View.VISIBLE);
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.full_screen_b));
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setRelativeLayoutPlay(false);
-            llFullscreen.setVisibility(View.GONE);
+            llFullscreen.setVisibility(View.VISIBLE);
             mBarrageLayout.start();
             mBarrageLayout.setVisibility(View.VISIBLE);
+            llProgress.setVisibility(View.GONE);
 //           	etFullscreen.requestFocus();
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.exit_full_b));
@@ -827,7 +743,6 @@ public class ReplayLiveActivity extends BaseActivity implements
             layoutParams = new LinearLayout.LayoutParams(width, height / 3);
         } else {
             layoutParams = new LinearLayout.LayoutParams(width, height);
-            ll_chat_bottom.setVisibility(View.GONE);
         }
         rlPlay.setLayoutParams(layoutParams);
     }
@@ -855,9 +770,9 @@ public class ReplayLiveActivity extends BaseActivity implements
         String msg = etMsg.getText().toString().trim();
         if (!"".equals(msg)) {
             if (isSendPublicChatMsg) {
-//                dwLive.sendPublicChatMsg(msg);
+                dwLive.sendPublicChatMsg(msg);
             } else {
-//                dwLive.sendPrivateChatMsg(msg);
+                dwLive.sendPrivateChatMsg(msg);
             }
         }
         etMsg.setText("");
@@ -881,12 +796,8 @@ public class ReplayLiveActivity extends BaseActivity implements
     }
 
     private void initLvChat() {
-        if (myReplayChatListViewAdapter == null) {
-            myReplayChatListViewAdapter = new MyReplayChatListViewAdapter(this, replayChatMsgs);
-            lvChat.setAdapter(myReplayChatListViewAdapter);
-        } else {
-            myReplayChatListViewAdapter.notifyDataSetChanged();
-        }
+        chatAdapter = new MyChatListViewAdapter(this, viewer, chatMsgs);
+        lvChat.setAdapter(chatAdapter);
     }
 
     private void initQaLayout(View view) {
@@ -898,23 +809,256 @@ public class ReplayLiveActivity extends BaseActivity implements
     }
 
     private void initLvQa() {
-        if (myReplayQAListViewAdapter == null) {
-            myReplayQAListViewAdapter = new MyReplayQAListViewAdapter(this, qaMsgs);
-            lvQA.setAdapter(myReplayQAListViewAdapter);
-        } else {
-            myReplayQAListViewAdapter.notifyDataSetChanged();
-        }
+        qaAdapter = new MyQAListViewAdapter(this, viewer, qaMap);
+        lvQA.setAdapter(qaAdapter);
     }
 
     private void initAbout() {
 //        String hhh = "毛鹏皓老师具有30年以上操作经历。<br/>毛鹏皓老师不仅是&ldquo;孔明线&rdquo;的创始人，也是飙股工作室总监。<br/>&nbsp;<a href=\"http://wwww.baidu.com\">ssssssss</a><br/>毛鹏皓老师曾任多家证券投资顾问公司副总经理与总经理，在各家投资顾问公司的操作绩效极优，三位数绩效股多达十余档以上。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122307630.png\"style=\"height: 186px; width: 369px\"/><br/>毛鹏皓老师曾担任非凡电视台、台湾电视台、TVBS电视台、学者电视台等电视台专属讲师，中国广播公司、正声广播电台、快乐广播电台特聘讲师。<br/>&nbsp;<br/>毛鹏皓老师也曾担任财讯日报、产经日报、鑫报之特聘主笔。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122335409.png\"style=\"height: 394px; width: 554px\"/><br/><div style=\"text-align: center\">TVBS&ldquo;热线一路发&rdquo;投资组合成绩报告</div>&nbsp;<br/>毛鹏皓老师曾三次参加台湾电视台投资组合竞赛，皆获冠军并获得&ldquo;股市不败神话&rdquo;之雅号。<br/><img alt=\"\"src=\"http://www.iguxuan.com/uploadfile/2015/0803/20150803122410329.png\"style=\"height: 369px; width: 441px\"/><br/>毛鹏皓老师他的&ldquo;天机操盘术&rdquo;帮助投资者选择飙股；他的&ldquo;孔明线战法&rdquo;是帮助操盘者掌握高低档的买卖点，绝对能帮助投资者们超越指数、战胜大盘。<br/>&nbsp;<br/>这一次，毛鹏皓老师将把他多年来的操盘心法分享给大家，并将他&ldquo;孔明线战法&rdquo;的精华融入他的课堂内容中。这一期的课程会从简单的价、量、指标与波浪等技术分析一一切入。除了技术分析领域以外，毛鹏皓老师将配合基本面、筹码面、心理面的掌控，让具有多年股龄和熟悉技术分析的学员们都能从课程中吸收到毛鹏皓老师独特的操盘技巧与心法。<br/>&nbsp;<br/>毛鹏皓老师的课程能帮助学员们走向成功之路，他不仅要帮助你改变你的脑袋，还要改造你的态度，因为，脑袋会改变你的口袋，正确的态度会决定你的命运！<br/>&nbsp;<br/>毛鹏皓老师会与学员们分享德国股神、日本股神、美国股神、债券天王、新兴市场教父等投资大师的操盘心得。例如，毛鹏皓老师会提供给你巴菲特的六大选股法则，教你怎样选择长期投资的优良标的。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;将教你如何选股，你会掌握短线、中线和长线如何切入、如何加码、如何观察成交量，并且指导你如何运用K线、把握布局时机以及各种指标处于不同的多空时点该如何运用与操盘。<br/>&nbsp;<br/>&ldquo;天机操盘术&rdquo;的操盘课程会教你&ldquo;天机操盘术&rdquo;的72项绝技，让新手知道如何辨识头部与底部现象，让老手能准确地掌握底部买进的切入点和顶部如何避开风险的法则与退场卖点。<br/>&nbsp;<br/>毛鹏皓老师的股市操盘18招更是广大股民前所未见的投资秘笈。<br/>&nbsp;<br/>毛鹏皓老师作为理周集团证券分析师教育训练总督导已经培养出不计其数的优秀分析师，其中有5位达到千万元绩效，有一位达到上亿绩效！<br/>&nbsp;<br/>欢迎各路高手一起来探索&ldquo;孔明线&rdquo;与&ldquo;天机战法&rdquo;的奥妙之处！<br/>";
-        web_live_about.setWebViewClient(new MyWebViewClient());
-        String introduce = "";
-        if (mTeacherInfo != null) {
-            introduce = mTeacherInfo.getIntroduce();
+//        LogUtils.i("web_live_about", StringUtils.replaceNullToEmpty(mLivingInfo.getLiveing().getAnchor_about(), "45555"));
+        if (web_live_about != null && mTeacherInfo != null) {
+            web_live_about.setWebViewClient(new MyWebViewClient());
+            web_live_about.loadDataWithBaseURL(null, mTeacherInfo.getIntroduce(), "text/html", "utf-8", null);
         }
-        web_live_about.loadDataWithBaseURL(null, introduce, "text/html", "utf-8", null);
-//        web_live_about.loadDataWithBaseURL(null, hhh, "text/html", "utf-8", null);
+//        web_live_about.loadDataWithBaseURL(null, StringUtils.replaceNullToEmpty(mLivingInfo.getLiveing().getAnchor_about()), "text/html", "utf-8", null);
+
+    }
+
+    private TextView tvLiveDuration, total_time;
+    //    private TextView tvCurrentPlayTip, tvLiveDuration, tvSeekTime;
+    private int durationMax = 3600;
+    private SeekBar seekBar;
+    private Timer playerTimer = new Timer();
+    private TimerTask playbackTimerTask;
+    private int currentPosition;
+    private int seekBarMax = 1000;
+    private boolean isPlayBack = false;
+    //    private RelativeLayout rlDvrTime;
+    private LinearLayout llProgress;
+
+    //    private TextView backToLive;
+    private void initSeekBar() {
+        llProgress = (LinearLayout) findViewById(R.id.ll_seek);
+        tvLiveDuration = (TextView) findViewById(R.id.current_time);
+        total_time = (TextView) findViewById(R.id.total_time);
+        seekBar = (SeekBar) findViewById(R.id.play_seekBar);
+        if (dvr < 1) {
+            return;
+        }
+//        backToLive = (TextView) findViewById(R.id.back_to_live);
+//        tvCurrentPlayTip = (TextView) findViewById(R.id.tv_current_play_tip);
+
+//        tvSeekTime = (TextView) findViewById(R.id.tv_seek_time);
+//        rlDvrTime = (RelativeLayout) findViewById(R.id.rl_dvr_time);
+//        backToLive.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                player.pause();
+//                setHolderBlack(plsWait);
+//                startLivePlay();
+//            }
+//        });
+
+
+        seekBar.setMax(seekBarMax);
+
+        seekBar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            } // 去除界面点击触发
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+
+            Runnable seekTipsR = new Runnable() {
+
+                @Override
+                public void run() {
+//                    rlDvrTime.setVisibility(View.GONE);
+                    fadeOutInfo();
+                }
+            };
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+//				stopPlaybackTimerTask();
+                isStartTracking = false;
+                player.pause();
+//                setHolderBlack(plsWait);
+                handler.postDelayed(seekTipsR, 2000); //解决快速滑动，导致显示不准的问题
+
+                if (progress == seekBarMax) {
+                    startLivePlay();
+                    return;
+                }
+
+                String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
+//                mInfo.setText(centerDvrStr);
+                if (liveDuration > 0) {
+                    showInfo(centerDvrStr, 2000, -1);
+                }
+
+                try {
+                    currentPosition = getRelTime();
+                    dwLive.startPlayedBackPlay(liveDuration - currentPosition);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DWLiveException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                handler.removeCallbacks(seekTipsR);
+                isStartTracking = true;
+//                rlDvrTime.setVisibility(View.VISIBLE);
+                String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
+//                mInfo.setText(centerDvrStr);
+                if (liveDuration > 0) {
+                    showInfo(centerDvrStr, 2000, -1);
+                }
+            }
+
+            @Override
+            public void onProgressChanged(final SeekBar seekBar, int _progress, boolean fromUser) {
+                Log.e("demo", _progress + "");
+                progress = _progress;
+                String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
+//                mInfo.setText(centerDvrStr);
+                if (liveDuration > 0) {
+                    showInfo(centerDvrStr, 2000, -1);
+                }
+            }
+        });
+
+        seekBar.setProgress(seekBar.getMax());
+    }
+
+    int progress;
+
+    // 获取当前的偏移时间
+    private int getRelTime() {
+        int mRelTime = 0;
+        if (liveDuration > durationMax) {
+            mRelTime = (int) ((float) durationMax * (float) progress / (float) seekBarMax) + liveDuration - durationMax;
+        } else {
+            mRelTime = (int) ((float) liveDuration * (float) progress / (float) seekBarMax);
+        }
+        return mRelTime;
+    }
+
+    private boolean isStartTracking = false;
+
+    private int liveDuration;
+    private TimerTask liveTimerTask;
+    private boolean isLiveTimerTaskStart = false;
+
+    // 回放计时器
+    private void startPlaybackTimerTask() {
+        stopPlaybackTimerTask();
+        isPlayBack = true;
+//        tvCurrentPlayTip.setText("回放中");
+//        backToLive.setVisibility(View.VISIBLE);
+        playbackTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currentPosition++;
+                        if (isPlayBack) {
+                            tvLiveDuration.setText(TimeFormatUtil.getTime(currentPosition));
+                            total_time.setText(TimeFormatUtil.getTime(liveDuration));
+                        }
+
+                        // 如果当前正在拖动seekbar，则停止刷新滑块位置
+                        if (!isStartTracking) {
+                            if (liveDuration > durationMax) {
+                                seekBar.setProgress((int) ((float) seekBarMax * (float) (durationMax - (liveDuration - currentPosition)) / (float) durationMax));
+                            } else {
+                                seekBar.setProgress((int) ((float) seekBarMax * (float) currentPosition / (float) liveDuration));
+                            }
+                        }
+                    }
+                });
+            }
+        };
+        playerTimer.schedule(playbackTimerTask, 0, 1000);
+    }
+
+    private void stopPlaybackTimerTask() {
+        isPlayBack = false;
+        if (playbackTimerTask != null) {
+            playbackTimerTask.cancel();
+        }
+    }
+
+    private void startLivePlay() {
+        stopPlaybackTimerTask();
+        try {
+            dwLive.startLivePlay();
+        } catch (Exception e) {
+            Log.e("demo", e + "");
+        }
+        isPlayBack = false;
+
+        setLiveStatusView();
+    }
+
+    private void setLiveStatusView() {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (seekBar == null) {
+                    return;
+                }
+                seekBar.setProgress(seekBarMax);
+//                tvCurrentPlayTip.setText("直播中");
+//                backToLive.setVisibility(View.INVISIBLE);
+                currentPosition = 0;
+            }
+        });
+    }
+
+    // 开始直播定时器
+    private void startLiveTimerTask() {
+        isLiveTimerTaskStart = true;
+
+        if (liveTimerTask != null) {
+            liveTimerTask.cancel();
+        }
+
+        liveTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        liveDuration++;
+                        if (!isPlayBack) {
+                            tvLiveDuration.setText(TimeFormatUtil.getTime(liveDuration));
+                            total_time.setText(TimeFormatUtil.getTime(liveDuration));
+                        }
+                    }
+                });
+            }
+        };
+        playerTimer.schedule(liveTimerTask, 0, 1000);
+        setLiveStatusView();
+    }
+
+    private void stopLiveTimerTask() {
+        isLiveTimerTaskStart = false;
+        liveDuration = 0;
+        if (liveTimerTask != null) {
+            liveTimerTask.cancel();
+        }
+
     }
 
     /**
@@ -931,6 +1075,12 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Override
     public boolean onError(IMediaPlayer mp, int what, int extra) {
         LogUtils.e("demo", "=============================>onError:" + what);
+        Toast.makeText(this, "播放异常，回到直播", Toast.LENGTH_LONG).show();
+        if (dwLive != null && !isStop) {
+            qaMap.clear();
+            dwLive.stop();
+            initAndStartLivePlay();
+        }
         return false;
     }
 
@@ -938,13 +1088,14 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     @Override
     public boolean onInfo(IMediaPlayer arg0, int arg1, int arg2) {
+        Log.e("demo", "oninfo");
         if (arg1 == IMediaPlayer.MEDIA_INFO_BUFFERING_START) {
             r = new Runnable() {
                 @Override
                 public void run() {
                     dwLive.stop();
                     if (isLoginSuccess) {
-                        dwLive.start(holder.getSurface());
+                        initAndStartLivePlay();
                     }
 
                 }
@@ -961,22 +1112,13 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Override
     public void onCompletion(IMediaPlayer mp) {
         LogUtils.e("demo", "=============================>onCompletion");
-        replayNumber++;
-        if (replayNumber < CcIdArray.length) {
-            CcId = CcIdArray[replayNumber];
-            loginLive();
-        } else {
-            handler.sendEmptyMessage(FINISH);
+        if (dwLive != null && !isStop) {
+            qaMap.clear();
+            dwLive.stop();
+            if (isLoginSuccess) {
+                initAndStartLivePlay();
+            }
         }
-//        if (dwLive != null && !isStop) {
-//            if(qaMsgs!=null) {
-//                qaMsgs.clear();
-//            }
-//            dwLive.stop();
-//            if (isLoginSuccess) {
-//                dwLive.start(holder);
-//            }
-//        }
     }
 
     @Override
@@ -989,34 +1131,33 @@ public class ReplayLiveActivity extends BaseActivity implements
         handler.sendEmptyMessage(SHOW_CONTROL);
         hidePlayHander();
         player.start();
-        totalTime.setText(parseTime(player.getDuration()));
-        startTimer();
-    }
-
-    @NonNull
-    private String parseTime(long timeLong) {
-        StringBuilder sb = new StringBuilder();
-        timeLong = timeLong < 0 ? 0 : timeLong;
-        timeLong = timeLong / 1000;
-        long minuteTime = timeLong / 60;
-        long secondTime = timeLong % 60;
-        return String.format(Locale.CHINA, "%02d:%02d", minuteTime, secondTime);
-    }
-
-    private void startTimer() {
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.sendEmptyMessage(1110);
+        if (dvr > 0) {
+            if (!isLiveTimerTaskStart) {
+                liveDuration = 0;
+                startLiveTimerTask();
             }
-        };
-        timer.schedule(timerTask, 0, 1000);
+
+            if (seekBar.getProgress() < seekBarMax) {
+                startPlaybackTimerTask();
+            }
+        }
     }
 
-    private void stopTimer() {
-        if (timerTask != null) {
-            timerTask.cancel();
-        }
+    /**
+     * 初始化界面和定时器，并调用start方法开始播放
+     */
+    private void initAndStartLivePlay() {
+        resumeLiveView();
+        dwLive.getLivePlayedTime();
+        dwLive.start(holder.getSurface());
+    }
+
+    /**
+     * 恢复到直播的界面显示
+     */
+    private void resumeLiveView() {
+        stopPlaybackTimerTask();
+        setLiveStatusView();
     }
 
     /**
@@ -1094,35 +1235,151 @@ public class ReplayLiveActivity extends BaseActivity implements
         return params;
     }
 
-    private DWLiveReplayListener replayListener = new DWLiveReplayListener() {
-
+    private DWLiveListener dwLiveListener = new DWLiveListener() {
         @Override
-        public void onQuestionAnswer(TreeSet<ReplayQAMsg> qaMsgs) {
-//            LiveReplayActivity.this.qaMsgs = qaMsgs;
-            handler.sendEmptyMessage(QUESTION);
-        }
-
-        @Override
-        public void onException(DWLiveException exception) {
-            LogUtils.e(TAG, "回放异常", exception);
-            Message msg = handler.obtainMessage(EXCEPTION);
-            msg.obj = exception;
+        public void onQuestion(Question question) {
+            LogUtils.i("demo", "onQuestion:" + question.toString());
+            Message msg = new Message();
+            msg.what = QUESTION;
+            msg.obj = question;
             handler.sendMessage(msg);
         }
 
         @Override
-        public void onChatMessage(TreeSet<ReplayChatMsg> replayChatMsgs) {
-            ReplayLiveActivity.this.replayChatMsgs = replayChatMsgs;
-            handler.sendEmptyMessage(PUBLIC_MSG);
+        public void onAnswer(Answer answer) {
+            LogUtils.i("demo", "onAnswer:" + answer.toString());
+            Message msg = new Message();
+            msg.what = ANSWER;
+            msg.obj = answer;
+            handler.sendMessage(msg);
         }
 
         @Override
-        public void onInitFinished() {
-            handler.sendEmptyMessage(INIT_FINISH);
+        public void onLiveStatus(DWLive.PlayStatus status) {
+            LogUtils.i("demo", "onLiveStatusChange:" + status);
+            switch (status) {
+                case PLAYING:
+                    isStop = false;
+                    break;
+                case PREPARING:
+                    isStop = true;
+                    handler.sendEmptyMessage(NOT_START);
+                    break;
+            }
+        }
+
+        @Override
+        public void onPublicChatMessage(ChatMessage msg) {
+            LogUtils.i("demo", "onPublicChatMessage:" + msg + "" + msg.getAvatar());
+            Message handlerMsg = new Message();
+            handlerMsg.what = PUBLIC_MSG;
+            handlerMsg.obj = msg;
+            handler.sendMessage(handlerMsg);
+        }
+
+        @Override
+        public void onPrivateQuestionChatMessage(ChatMessage msg) {
+            LogUtils.i("demo", "onPrivateQuestionChatMessage:" + msg);
+            Message handlerMsg = new Message();
+            handlerMsg.what = PRIVATE_QUESTION_MSG;
+            handlerMsg.obj = msg;
+            handler.sendMessage(handlerMsg);
+        }
+
+        @Override
+        public void onPrivateAnswerChatMessage(ChatMessage msg) {
+            LogUtils.i("demo", "onPrivateAnswerChatMessage:" + msg);
+            Message handlerMsg = new Message();
+            handlerMsg.what = PRIVATE_ANSWER_MSG;
+            handlerMsg.obj = msg;
+            handler.sendMessage(handlerMsg);
+        }
+
+        @Override
+        public void onUserCountMessage(int count) {
+            Message msg = new Message();
+            msg.what = USER_COUNT;
+            msg.obj = count;
+            handler.sendMessage(msg);
+        }
+
+        @Override
+        public void onNotification(String msg) {
+            LogUtils.i("demo", "onNotification:" + msg);
+        }
+
+        @Override
+        public void onInformation(String msg) {
+            LogUtils.i("demo", "information:" + msg);
+        }
+
+        @Override
+        public void onException(DWLiveException exception) {
+            LogUtils.e("demo", exception.getMessage() + "");
+        }
+
+        @Override
+        public void onIntervalException(Exception e) {
+            //TODO 间隙播放请求异常
+
+        }
+
+        @Override
+        public void onInitFinished(int playSourceCount) {
+            PlayLiveActivity.this.playSourceCount = playSourceCount;
+        }
+
+        @Override
+        public void onSilenceUserChatMessage(ChatMessage msg) {
+            LogUtils.i("demo", "onSilenceUserChatMessage:" + msg);
+            Message handlerMsg = new Message();
+            handlerMsg.what = PUBLIC_MSG; //收到禁言消息，作为公有消息展示出去，也可以不展示
+            handlerMsg.obj = msg;
+            handler.sendMessage(handlerMsg);
+        }
+
+        @Override
+        public void onKickOut() {
+            Message kickOutMsg = new Message();
+            kickOutMsg.what = KICK_OUT;
+            handler.sendMessage(kickOutMsg);
+        }
+
+        @Override
+        public void onLivePlayedTime(int playedTime) {
+            if (playedTime >= 0 && dvr > 0) {
+
+                stopLiveTimerTask();
+                liveDuration = playedTime;
+                startLiveTimerTask();
+            }
+        }
+
+        @Override
+        public void onLivePlayedTimeException(Exception e) {
+            dwLive.getLivePlayedTime();
+        }
+
+        @Override
+        public void isPlayedBack(boolean isPlayedBack) {
+            if (!isPlayedBack) {
+                // 收到这条信息相当于是重新加载，所以把界面初始化到直播状态
+                stopPlaybackTimerTask();
+                setLiveStatusView();
+            }
+        }
+
+
+        @Override
+        public void onStreamEnd(boolean isNormal) {
+            isStop = true;
+            isPrepared = false;
+            Message msg = new Message();
+            msg.what = FINISH;
+            handler.sendMessage(msg);
         }
 
     };
-
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -1139,11 +1396,12 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     }
 
+    boolean isSurfaceDestroyed = false;
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        isPrepared = false;
-        stopTimer();
-        dwLive.stop();
+        isSurfaceDestroyed = true;
+        Log.i("demo", "surfaceDestroyed");
     }
 
     private void setHolderBlack(String text) {
@@ -1154,7 +1412,6 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
         canvas.drawColor(Color.BLACK);
         mHolder.unlockCanvasAndPost(canvas);
-
         tvPlayMsg.setVisibility(View.VISIBLE);
         tvPlayMsg.setText(text);
     }
@@ -1172,27 +1429,9 @@ public class ReplayLiveActivity extends BaseActivity implements
                 break;
             //分享按钮
             case R.id.iv_share2:
-                //分享
-                if (mLiveInfo != null && !TextUtils.isEmpty(mLiveInfo.getUrl())) {
-                    String imageUrl = mLiveInfo.getThumb();
-                    if (TextUtils.isEmpty(imageUrl)) {
-                        if (mTeacherInfo != null) {
-                            imageUrl = mTeacherInfo.getAvatar();
-                        }
-                    }
-                    ShareUtils.showShare(ShareUtils.APP, this, getResources().getString(R.string.app_name), mLiveInfo.getTitle(), imageUrl, mLiveInfo.getUrl(), null);
-                }
-                break;
-            case R.id.ci_avatar:
-                TeacherZoneActivity.intoNewIntent(this, teacherId);
-                finish();
-                break;
-            case R.id.tvCloseMessage:
-            case R.id.ivCloseMessage:
-                intro();
-                break;
-            case R.id.rlOpenMessage:
-                intro();
+                //TODO 分享
+//                String imageUrl = "http://www.mob.com/files/apps/icon/1462255299.png";
+//                ShareUtils.showShare(ShareUtils.APP, this, "爱股轩 - [爱股轩]", "爱股轩，您身边的股票技术分析师", imageUrl, "http://app.iguxuan.com/wap.html", null);
                 break;
             // 暂停播放按钮
             case R.id.iv_control2:
@@ -1200,9 +1439,12 @@ public class ReplayLiveActivity extends BaseActivity implements
                 if (iv_control.isSelected()) {
                     iv_control.setSelected(false);
                     player.pause();
+                    stopLiveTimerTask();
                 } else {
                     iv_control.setSelected(true);
                     player.start();
+                    dwLive.getLivePlayedTime();
+                    startLiveTimerTask();
                 }
                 break;
             //全屏按钮
@@ -1245,25 +1487,27 @@ public class ReplayLiveActivity extends BaseActivity implements
                     return;
                 }
                 if (!"".equals(qaMsg)) {
-//                    try {
-////                        dwLive.sendQuestionMsg(qaMsg);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        dwLive.sendQuestionMsg(qaMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 etQA.setText("");
                 hideEditTextSoftInput(etQA);
                 break;
             //点赞
             case R.id.tv_live_teacher_zan2:
-                if (isLogin(this)) {
-                    LiveHttpUtil.executeAddLike(this, live_id);
+                if (mTeacherInfo != null && isLogin(this)) {
+                    LiveHttpUtil.executeAddLike(this, liveId);
                 }
                 break;
             //关注
-            case R.id.tv_follow_button:
-                if (isLogin(this)) {
+            case R.id.btn_teacher_follow2:
+                if (mTeacherInfo != null && isLogin(this)) {
                     addFollow(teacherId, btn_teacher_follow.isSelected());
+                } else {
+
                 }
                 break;
 
@@ -1279,6 +1523,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
     }
 
+
     /**
      * 全屏发送文字
      */
@@ -1288,7 +1533,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             ToastUtils.showToast(this, "最多140个字符");
         }
         if (!"".equals(info)) {
-//            dwLive.sendPublicChatMsg(info);
+            dwLive.sendPublicChatMsg(info);
             etFullscreen.setText("");
         }
         hideEditTextSoftInput(etFullscreen);
@@ -1304,27 +1549,27 @@ public class ReplayLiveActivity extends BaseActivity implements
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public static class MyHandle extends WeakHandler<ReplayLiveActivity> {
+    public static class MyHandle extends WeakHandler<PlayLiveActivity> {
 
-        public MyHandle(ReplayLiveActivity owner) {
+        public MyHandle(PlayLiveActivity owner) {
             super(owner);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            ReplayLiveActivity playLiveActivity = getOwner();
+            final PlayLiveActivity playLiveActivity = getOwner();
             switch (msg.what) {
                 case SHOW_CONTROL:
                     playLiveActivity.setPlayControllerVisible(true);
-//                    playLiveActivity.bindDataToView();
                     break;
                 case HIDE_CONTROL:
                     playLiveActivity.setPlayControllerVisible(false);
                     break;
                 case HIDE_PALY:
+
                     if (playLiveActivity.loginTime < Constant.LiveLoginNumber) {
-                        playLiveActivity.loginTime++;
                         playLiveActivity.loginLive();
+                        playLiveActivity.loginTime++;
                     } else {
                         String errorMessage = "进入直播间失败，请重试！";
                         if (msg.obj != null) {
@@ -1333,57 +1578,110 @@ public class ReplayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
-                        playLiveActivity.tip(errorMessage);
-                    }
-                    break;
-                case 1110:
-                    if (playLiveActivity.player != null && playLiveActivity.player.isPlayable() && playLiveActivity.player.isPlaying()) {
-                        long currentPosition = playLiveActivity.player.getCurrentPosition();
-                        playLiveActivity.currentTime.setText(playLiveActivity.parseTime(currentPosition));
-                        int progress = (int) (playLiveActivity.seekBarMax * (double) currentPosition / (double) playLiveActivity.player.getDuration());
-                        playLiveActivity.playSeekBar.setProgress(progress);
+                        playLiveActivity.tip(errorMessage, false);
                     }
                     break;
                 case SHOW_PALY:
                     playLiveActivity.iv_control.setSelected(true);
+
+//                    playLiveActivity.bindDataToView(playLiveActivity.mTeacherInfo);
                     break;
                 case INIT_LVCHAT:
                     playLiveActivity.initTab(0);
                     playLiveActivity.initPagerItemView();
                     playLiveActivity.initPager();
+                    playLiveActivity.initLvChat();
+                    playLiveActivity.initLvQa();
                     playLiveActivity.initAbout();
                     break;
                 case PUBLIC_MSG:
-                    playLiveActivity.initLvChat();
+                    ChatMessage publicMsg = (ChatMessage) msg.obj;
+
+                    if (playLiveActivity.mBarrageLayout.getVisibility() == View.VISIBLE) {
+                        playLiveActivity.mBarrageLayout.addNewInfo(publicMsg.getMessage());
+                    }
+                    playLiveActivity.chatMsgs.add(publicMsg);
+                    playLiveActivity.chatAdapter.notifyDataSetChanged();
+                    playLiveActivity.lvChat.setSelection(playLiveActivity.chatMsgs.size() - 1);
+                    break;
+                case PRIVATE_QUESTION_MSG:
+                case PRIVATE_ANSWER_MSG:
+                    ChatMessage privateMsg = (ChatMessage) msg.obj;
+                    playLiveActivity.chatMsgs.add(privateMsg);
+                    playLiveActivity.chatAdapter.notifyDataSetChanged();
+                    playLiveActivity.lvChat.setSelection(playLiveActivity.chatMsgs.size() - 1);
                     break;
                 case QUESTION:
-//                    playLiveActivity.initLvQa();
-                    break;
-                case INIT_FINISH:
-                    LogUtils.i(TAG, "回放初始化成功");
-//                    LiveHttpUtil.historyCountPlusOne(playLiveActivity, playLiveActivity.mLivingInfo.getLiveId());
-                    break;
-                case EXCEPTION:
-                    String errorMessage = "";
-                    if (msg.obj != null) {
-                        DWLiveException exception = (DWLiveException) msg.obj;
-                        errorMessage = exception.getMessage();
+                    Question question = (Question) msg.obj;
+                    String questionId = question.getId();
+                    if (!playLiveActivity.qaMap.containsKey(questionId)) {
+                        QAMsg qaMsg = new QAMsg();
+                        qaMsg.setQuestion(question);
+                        playLiveActivity.qaMap.put(questionId, qaMsg);
+                        playLiveActivity.qaAdapter.notifyDataSetChanged();
+                        playLiveActivity.lvQA.setSelection(playLiveActivity.qaMap.size() - 1);
                     }
-                    playLiveActivity.tip(errorMessage);
                     break;
-                case FADE_OUT_INFO:
-                    playLiveActivity.fadeOutInfo();
+                case ANSWER:
+                    Answer answer = (Answer) msg.obj;
+                    String qaId = answer.getQuestionId();
+                    int indexQa = new ArrayList<String>(playLiveActivity.qaMap.keySet()).indexOf(qaId);
+                    if (indexQa == -1) {
+                        return; //没有收到answer对应的问题，直接返回
+                    }
+                    QAMsg qaMsg = playLiveActivity.qaMap.get(qaId);
+                    qaMsg.setAnswer(answer);
+                    playLiveActivity.qaAdapter.notifyDataSetChanged();
+                    playLiveActivity.lvQA.setSelection(indexQa);
+                    break;
+                case USER_COUNT:
+                    if (playLiveActivity.tvCount != null && msg.obj != null) {
+                        playLiveActivity.tvCount.setText((Integer) msg.obj + "人");
+                        playLiveActivity.tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", (Integer) msg.obj));
+                    }
                     break;
                 case FINISH:
                     if (playLiveActivity.isFinish) {
                         return;
                     }
-                    playLiveActivity.tip("回放结束");
-                    playLiveActivity.setHolderBlack("回放结束");
+                    playLiveActivity.tip("直播结束", false);
+                    playLiveActivity.setHolderBlack("直播结束");
+                    break;
+                case KICK_OUT:
+                    playLiveActivity.isKickOut = true;
+                    playLiveActivity.tip("已被踢出");
+                    break;
+                case NOT_START:
+                    playLiveActivity.pb_loading.setVisibility(View.GONE);
+                    playLiveActivity.tvPlayMsg.setText("直播未开始");
+                    playLiveActivity.tip("直播未开始", false);
+                    break;
+                case FADE_OUT_INFO:
+                    playLiveActivity.fadeOutInfo();
                     break;
             }
         }
     }
+
+//    public void tip(String content) {
+//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+//                .setTitle(this.getString(R.string.prompt))
+//                .setMessage(content)
+//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//
+//                    }
+//                });
+//        mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                finish();
+//            }
+//        });
+//        mBuilder.create().show();
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(HttpEvent event) {
@@ -1393,8 +1691,6 @@ public class ReplayLiveActivity extends BaseActivity implements
                     tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));
                     tv_live_teacher_zan.setSelected(true);
                     ToastUtils.showToast(this, "点赞成功");
-                } else if (Constant.HAS_SUCCEED == event.getCode()) {
-                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "已赞过"));
                 } else {
                     LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
@@ -1403,7 +1699,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             case teacher_fg_del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() - 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人关注", mTeacherInfo.getFans_count()));
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(false);
                     btn_teacher_follow.setText("＋关注");
                 } else {
@@ -1414,7 +1710,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             case teacher_fg_add_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() + 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人关注", mTeacherInfo.getFans_count()));
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(true);
                     btn_teacher_follow.setText("已关注");
                 } else {
@@ -1439,7 +1735,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                         String info = data.getString("info");
                         mTeacherInfo = new DataConverter<TeacherInfo>().JsonToObject(info, TeacherInfo.class);
                         bindDataToView();
-//                        initAbout();
+                        initAbout();
                     } catch (Exception e) {
                         // mErrView.StopLoading(event.getCode(), event.getMsg());
                         LogUtils.e(TAG, "解析老师信息异常", e);
@@ -1448,48 +1744,46 @@ public class ReplayLiveActivity extends BaseActivity implements
                     LogUtils.e(TAG, "获取老师信息失败：" + event.getMsg());
                 }
                 break;
-            case fetchLiveInfo:
-                if (Constant.SUCCEED == event.getCode()) {
-                    String json = event.getData().optString("data");
-                    try {
-                        JSONObject object = new JSONObject(json);
-                        mLiveInfo = new DataConverter<LiveInfo>().JsonToObject(object.optString("info"), LiveInfo.class);
-                        bindDataToView();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        tip("直播信息解析失败", false);
-                    }
-                } else {
-                    tip(event.getMsg(), false);
-                }
-                break;
         }
     }
 
     private void getTeacherInfo() {
-//        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), CcId, Action.live_teacher_info);
-        tv.kuainiu.command.http.LiveHttpUtil.fetchLiveInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), live_id, Action.fetchLiveInfo);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), liveId, Action.live_teacher_info);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isPrepared) {
-            player.start();
+
+        if (isOnPause && !isSurfaceDestroyed && isLoginSuccess) {
+            initAndStartLivePlay();
         }
+        isOnPause = false;
     }
+
+    private boolean isOnPause = false;
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (isPrepared) {
+        if (dwLive != null) {
+            dwLive.stop();
+        }
+        if (player != null && player.isPlaying()) {
             player.pause();
         }
+        qaMap.clear();
+
+        isPrepared = false;
+        isOnPause = true;
+        stopLiveTimerTask();
+        stopPlaybackTimerTask();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
+
         if (dwLive != null) {
             dwLive.stop();
         }
@@ -1540,7 +1834,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (!TextUtils.isEmpty(url)) {
-                Intent intent = new Intent(ReplayLiveActivity.this, WebActivity.class);
+                Intent intent = new Intent(PlayLiveActivity.this, WebActivity.class);
                 intent.putExtra(Constant.KEY_URL, url);
                 startActivity(intent);
                 return true;
@@ -1573,31 +1867,10 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
     }
 
-
     /**
      * show/hide the overlay
      */
-
     public boolean onTouchEvent2(MotionEvent event) {
-
-        DisplayMetrics screen = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(screen);
-
-        if (mSurfaceYDisplayRange == 0)
-            mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
-
-        float y_changed = event.getRawY() - mTouchY;
-        float x_changed = event.getRawX() - mTouchX;
-
-        // coef is the gradient's move to determine a neutral zone
-        float coef = Math.abs(y_changed / x_changed);
-        float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
-
-        /* Offset for Mouse Events */
-        int[] offset = new int[2];
-        sv.getLocationOnScreen(offset);
-        int xTouch = Math.round((event.getRawX() - offset[0]) * mVideoWidth / sv.getWidth());
-        int yTouch = Math.round((event.getRawY() - offset[1]) * mVideoHeight / sv.getHeight());
         if (isPrepared) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (rl_control.getVisibility() == View.VISIBLE) {
@@ -1623,6 +1896,24 @@ public class ReplayLiveActivity extends BaseActivity implements
         if (isPortrait()) {
             return false;
         }
+        DisplayMetrics screen = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(screen);
+
+        if (mSurfaceYDisplayRange == 0)
+            mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
+
+        float y_changed = event.getRawY() - mTouchY;
+        float x_changed = event.getRawX() - mTouchX;
+
+        // coef is the gradient's move to determine a neutral zone
+        float coef = Math.abs(y_changed / x_changed);
+        float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
+
+        /* Offset for Mouse Events */
+        int[] offset = new int[2];
+        sv.getLocationOnScreen(offset);
+        int xTouch = Math.round((event.getRawX() - offset[0]) * mVideoWidth / sv.getWidth());
+        int yTouch = Math.round((event.getRawY() - offset[1]) * mVideoHeight / sv.getHeight());
 
         switch (event.getAction()) {
 
@@ -1635,16 +1926,6 @@ public class ReplayLiveActivity extends BaseActivity implements
                 mTouchX = event.getRawX();
                 // Mouse events for the core
 //                mVideoView.sendMouseEvent(MotionEvent.ACTION_DOWN, 0, xTouch, yTouch);
-
-                if (mTouchAction == TOUCH_NONE) {
-                    if (!mShowing) {
-                        Log.i("ACTION_UP", "2");
-                        showOverlay();
-                    } else {
-                        Log.i("ACTION_UP", "3");
-                        hideOverlay();
-                    }
-                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -1657,7 +1938,6 @@ public class ReplayLiveActivity extends BaseActivity implements
                     if (mEnableBrightnessGesture && mTouchX < (screen.widthPixels / 2)) {
                         doBrightnessTouch(y_changed);
                     }
-
                 }
                 // Mouse events for the core
 //                mVideoView.sendMouseEvent(MotionEvent.ACTION_MOVE, 0, xTouch, yTouch);
@@ -1672,7 +1952,15 @@ public class ReplayLiveActivity extends BaseActivity implements
 //                LibVLC.sendMouseEvent(MotionEvent.ACTION_UP, 0, xTouch, yTouch);
                 Log.i("ACTION_UP", "1");
                 // Audio or Brightness
-
+                if (mTouchAction == TOUCH_NONE) {
+                    if (!mShowing) {
+                        Log.i("ACTION_UP", "2");
+                        showOverlay();
+                    } else {
+                        Log.i("ACTION_UP", "3");
+                        hideOverlay();
+                    }
+                }
                 // Seek
                 doSeekTouch(coef, xgesturesize, true);
                 break;
@@ -1692,9 +1980,9 @@ public class ReplayLiveActivity extends BaseActivity implements
         // Always show seekbar when searching
         if (!mShowing) showOverlay();
 
-        long length = player.getDuration();
-//        long mediaController.setProgress();
-        long time = player.getCurrentPosition();
+//        dwLive.getLivePlayedTime();
+        long length = liveDuration * 1000;
+        long time = getRelTime() * 1000;
 
         // Size of the jump, 10 minutes max (600000), with a bi-cubic progression, for a 8cm gesture
         int jump = (int) (Math.signum(gesturesize) * ((600000 * Math.pow((gesturesize / 8), 4)) + 3000));
@@ -1702,22 +1990,40 @@ public class ReplayLiveActivity extends BaseActivity implements
         // Adjust the jump
         if ((jump > 0) && ((time + jump) > length))
             jump = (int) (length - time);
-        if ((jump < 0) && ((time + jump) < 0))
+        if ((jump < 0) && ((time + jump) < 0)) {
             jump = (int) -time;
+        }
 
         //Jump !
-        if (seek && length > 0)
-//            mVideoView.seekTo(time + jump);
-            player.seekTo(time + jump);
-        if (length > 0)
+        if (seek && length > 0) {
+            int pr = (int) ((float) seekBarMax * (float) (((int) (time + jump) / 1000)) / (float) liveDuration);
+            LogUtils.e("sdsdsd", "time =" + time);
+            LogUtils.e("sdsdsd", "jump=" + jump);
+            LogUtils.e("sdsdsd", "time + jump=" + (time + jump));
+            LogUtils.e("sdsdsd", "pr=" + pr);
+            progress = pr;
+            seekBar.setProgress(pr);
+            try {
+                currentPosition = getRelTime();
+                dwLive.startPlayedBackPlay(liveDuration - currentPosition);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DWLiveException e) {
+                e.printStackTrace();
+            }
+
+        }
+        if (length > 0) {
             //Show the jump's size
-            showInfo(String.format("%s%s (%s)",
-                    jump >= 0 ? "+" : "",
-                    Utils.millisToString(jump),
-                    Utils.millisToString(time + jump)), 1000, (jump > 0 ? R.mipmap.ic_fast_forward_white_48dp : R.mipmap.ic_fast_rewind_white_48dp));
-        else
-            showInfo("播放时不支持定位的流", 1000, R.mipmap.ic_video_reload);
+            showInfo(String.format("%s/%s",
+                    TimeFormatUtil.getTime(time + jump),
+                    TimeFormatUtil.getTime(length)), 1000, -1);
+        } else {
+            showInfo("播放时不支持定位的流", 1000, -1);
+        }
+
     }
+
 
     /**
      * 调整音量
@@ -1783,7 +2089,12 @@ public class ReplayLiveActivity extends BaseActivity implements
     private void showInfo(String text, int duration, int image) {
         rl_mInfo.setVisibility(View.VISIBLE);
         mInfo.setText(text);
-        ImageDisplayUtil.displayImage(this, iv_mInfo, image);
+        if (image == -1) {
+            iv_mInfo.setVisibility(View.GONE);
+        } else {
+            iv_mInfo.setVisibility(View.VISIBLE);
+            ImageDisplayUtil.displayImage(this, iv_mInfo, image);
+        }
         handler.removeMessages(FADE_OUT_INFO);
         handler.sendEmptyMessageDelayed(FADE_OUT_INFO, duration);
     }
@@ -1795,27 +2106,9 @@ public class ReplayLiveActivity extends BaseActivity implements
         if (rl_mInfo != null) {
             if (rl_mInfo.getVisibility() == View.VISIBLE)
                 rl_mInfo.startAnimation(AnimationUtils.loadAnimation(
-                        this, android.R.anim.fade_out));
+                        PlayLiveActivity.this, android.R.anim.fade_out));
             rl_mInfo.setVisibility(View.INVISIBLE);
         }
     }
 
-    /**
-     * 控制聊天面板的显示与隐藏
-     */
-    boolean isClose = true;
-
-    public void intro() {
-        if (isClose) {
-            isClose = false;
-            rlOpenMessage.setVisibility(View.GONE);
-            layoutParamsFrameLayout.setMargins(0, height / 3, 0, 0);
-            ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
-        } else {
-            isClose = true;
-            layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
-            ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
-            rlOpenMessage.setVisibility(View.VISIBLE);
-        }
-    }
 }

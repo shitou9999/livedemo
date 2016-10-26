@@ -15,8 +15,10 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.utils.FaceStringUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.StringUtils;
 
 /**
  * Created by jack on 2016/7/11.
@@ -63,11 +65,13 @@ public class MyChatListViewAdapter extends BaseAdapter {
         return position;
     }
 
-    @Override public int getViewTypeCount() {
+    @Override
+    public int getViewTypeCount() {
         return 2;
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         if (viewerId.equals(chatMsgs.get(position).getUserId())) {
             return MY_SELF;
         } else {
@@ -105,7 +109,7 @@ public class MyChatListViewAdapter extends BaseAdapter {
             }
             viewHolder.tv_chat_time2.setText(String.format(Locale.CHINA, "(%s)", chatMessage.getTime()));
             viewHolder.tv.setText(FaceStringUtil.parseFaceMsg(context, text));
-            ImageDisplayUtil.displayImage(context, viewHolder.avatar, chatMessage.getAvatar(), R.mipmap.default_avatar);
+            ImageDisplayUtil.displayImage(context, viewHolder.avatar, StringUtils.replaceNullToEmpty(chatMessage.getAvatar(), Constant.DEFAULT_AVATAR), R.mipmap.default_avatar);
 
         } else {
             ViewHolderMySelf viewHolderMySelf = null;
@@ -130,7 +134,7 @@ public class MyChatListViewAdapter extends BaseAdapter {
                 text = chatMessage.getMessage();
             }
             viewHolderMySelf.tv.setText(FaceStringUtil.parseFaceMsg(context, text));
-            ImageDisplayUtil.displayImage(context, viewHolderMySelf.avatar, chatMessage.getAvatar(), R.mipmap.default_avatar);
+            ImageDisplayUtil.displayImage(context, viewHolderMySelf.avatar, StringUtils.replaceNullToEmpty(chatMessage.getAvatar(), Constant.DEFAULT_AVATAR), R.mipmap.default_avatar);
         }
         return convertView;
     }

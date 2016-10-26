@@ -285,5 +285,7 @@ public class Constant {
      * 二维码扫描时间
      */
     public static final String CONNECT_TIME = "connect_time";
+    public static final String DEFAULT_AVATAR = "http://img.kuainiu.tv/uploadfile/avatar/default2.png";
+    public static final String DEFAULT_LOGO = "http://img.kuainiu.tv/uploadfile/avatar/default2.png";
 
 }

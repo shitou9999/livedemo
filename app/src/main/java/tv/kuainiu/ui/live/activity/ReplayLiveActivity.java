@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.liveold;
+package tv.kuainiu.ui.live.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -82,33 +82,31 @@ import tv.kuainiu.R;
 import tv.kuainiu.command.http.TeacherHttpUtil;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.TeacherInfo;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.BaseActivity;
 import tv.kuainiu.ui.activity.WebActivity;
+import tv.kuainiu.ui.liveold.LiveHttpUtil;
 import tv.kuainiu.ui.liveold.adapter.MyGridViewAdapter;
 import tv.kuainiu.ui.liveold.adapter.MyReplayChatListViewAdapter;
 import tv.kuainiu.ui.liveold.adapter.MyReplayQAListViewAdapter;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.activity.LoginActivity;
-import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DataConverter;
-import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
-import tv.kuainiu.utils.ScreenUtils;
-import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.utils.Utils;
 import tv.kuainiu.utils.WeakHandler;
 import tv.kuainiu.widget.BarrageLayout;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
+
+import static tv.kuainiu.R.id.tvCount2;
 
 
 /**
@@ -145,23 +143,17 @@ public class ReplayLiveActivity extends BaseActivity implements
     TextView tvPlayMsg;
     TextView tv_live_teacher_zan;
     TextView tv_live_title;
-    TextView tvDate;
     TextView tv_teacher_fans;
     TextView tv_live_teacher;
     TextView currentTime;
     SeekBar playSeekBar;
     TextView totalTime;
     TextView btn_teacher_follow;
-    TextView tvTheme;
-    private TextView tvLiveDescripion;
 
     TextView mInfo;
     RelativeLayout rl_mInfo;
     ImageView iv_mInfo;
-    ImageView ivCloseMessage;
-    TextView tvCloseMessage;
-    RelativeLayout ll_chat_bottom;
-    RelativeLayout rlOpenMessage;
+
     private final static String TAG = "ReplayLiveActivity";
     private List<TabLayout.Tab> listTab;
 
@@ -171,8 +163,8 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     //    private String[] tabNames = new String[]{LIVE, PUT_QUESTION, ABOUT};
 //    private int[] tabNamesTags = new int[]{0, 1, 2};
-    private String[] tabNames = new String[]{LIVE,ABOUT};
-    private int[] tabNamesTags = new int[]{0,1};
+    private String[] tabNames = new String[]{LIVE};
+    private int[] tabNamesTags = new int[]{0};
     private String CcId = "";
     private String live_id = "";
     private String[] CcIdArray;
@@ -271,10 +263,6 @@ public class ReplayLiveActivity extends BaseActivity implements
     private boolean mIsFirstBrightnessGesture = true;
     private boolean mEnableBrightnessGesture = true;
     private TeacherInfo mTeacherInfo;
-    private LiveInfo mLiveInfo;
-    int height;
-    int minHeight;
-    RelativeLayout.LayoutParams layoutParamsFrameLayout = null;
 
     public static void intoNewIntent(Context context, LiveParameter liveParameter) {
         Intent intent = new Intent(context, ReplayLiveActivity.class);
@@ -291,16 +279,6 @@ public class ReplayLiveActivity extends BaseActivity implements
         registerBroadcast();
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mAudioMax = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-        height = ScreenUtils.getScreenHeight(this);
-        minHeight = getResources().getDimensionPixelSize(R.dimen.live_tab_height);
-        minHeight = height - minHeight - ScreenUtils.getStatusHeight(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height / 3);
-        rlPlay.setLayoutParams(lp);
-
-        layoutParamsFrameLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height / 3 * 2);
-        layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
-        ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
     }
 
     private void registerBroadcast() {
@@ -323,17 +301,19 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     @Override
     protected void initContentView(int layoutId) {
-        super.initContentView(R.layout.activity_live_play);
+        super.initContentView(R.layout.activity_live2_play);
+
         mLivingInfo = getIntent().getExtras().getParcelable(Constant.ARG_LIVING);
+
         timer = new Timer();
+
         rlPlay = (RelativeLayout) findViewById(R.id.rl_play2);
         llBottomLayout = (LinearLayout) findViewById(R.id.ll_bottom_layout2);
         ll_seek = (LinearLayout) findViewById(R.id.ll_seek);
         ll_seek.setVisibility(View.VISIBLE);
-        ll_chat_bottom = (RelativeLayout) findViewById(R.id.ll_chat_bottom);
         llFullscreen = (LinearLayout) findViewById(R.id.ll_fullscreen_msg_send2);
         llFullscreen.setVisibility(View.GONE);
-        tvCount = (TextView) findViewById(R.id.tvCount2);
+        tvCount = (TextView) findViewById(tvCount2);
         tvCount.setVisibility(View.INVISIBLE);
         mTabLayout = (TabLayout) findViewById(R.id.tab_live_top2);
         sv = (SurfaceView) findViewById(R.id.sv2);
@@ -347,29 +327,21 @@ public class ReplayLiveActivity extends BaseActivity implements
         btnFullscreenSendMsg = (Button) findViewById(R.id.btn_fullscreen_send2);
         mBarrageLayout = (BarrageLayout) findViewById(R.id.bl_barrage2);
         mPager = (ViewPager) findViewById(R.id.mPager2);
-        civ_avatar = (CircleImageView) findViewById(R.id.ci_avatar);
+        civ_avatar = (CircleImageView) findViewById(R.id.civ_avatar2);
         tvPlayMsg = (TextView) findViewById(R.id.tvPlayMsg);
         tv_live_teacher_zan = (TextView) findViewById(R.id.tv_live_teacher_zan2);
-        tv_live_title = (TextView) findViewById(R.id.tvTiltle);
-        tv_teacher_fans = (TextView) findViewById(R.id.tv_follow_number);
+        tv_live_title = (TextView) findViewById(R.id.tv_live_title2);
+        tv_teacher_fans = (TextView) findViewById(R.id.tv_teacher_fans2);
         currentTime = (TextView) findViewById(R.id.current_time);
-        tv_live_teacher = (TextView) findViewById(R.id.tvTeacherName);
+        tv_live_teacher = (TextView) findViewById(R.id.tv_live_teacher2);
         playSeekBar = (SeekBar) findViewById(R.id.play_seekBar);
         totalTime = (TextView) findViewById(R.id.total_time);
-        btn_teacher_follow = (TextView) findViewById(R.id.tv_follow_button);
-        tvTheme = (TextView) findViewById(R.id.tvTheme);
-        tvDate = (TextView) findViewById(R.id.tvDate);
-        tvLiveDescripion = (TextView) findViewById(R.id.tvLiveDescripion);
+        btn_teacher_follow = (TextView) findViewById(R.id.btn_teacher_follow2);
 //        btn_teacher_follow.setVisibility(View.INVISIBLE);
 
         mInfo = (TextView) findViewById(R.id.mInfo);
         rl_mInfo = (RelativeLayout) findViewById(R.id.rl_mInfo);
         iv_mInfo = (ImageView) findViewById(R.id.iv_mInfo);
-
-        ivCloseMessage = (ImageView) findViewById(R.id.ivCloseMessage);
-        tvCloseMessage = (TextView) findViewById(R.id.tvCloseMessage);
-        ll_chat_bottom = (RelativeLayout) findViewById(R.id.ll_chat_bottom);
-        rlOpenMessage = (RelativeLayout) findViewById(R.id.rlOpenMessage);
 
         handler = new MyHandle(this);
         if (mLivingInfo == null || TextUtils.isEmpty(mLivingInfo.getCcid())) {
@@ -422,33 +394,22 @@ public class ReplayLiveActivity extends BaseActivity implements
     }
 
     private void bindDataToView() {
-        if (mLiveInfo == null) {
-            return;
-        }
-        mTeacherInfo = mLiveInfo.getTeacher_info();
-        if (mTeacherInfo == null) {
-            mTeacherInfo = new TeacherInfo();
-            mTeacherInfo.setId(teacherId);
-        }
         ImageDisplayUtil.displayImage(this, civ_avatar, mTeacherInfo.getAvatar());
         tv_live_title.setText(mLivingInfo.getLiveTitle());
         tv_live_teacher.setText(mTeacherInfo.getNickname());
-        tvTheme.setText(StringUtils.replaceNullToEmpty(mTeacherInfo.getSlogan()));
-        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLiveInfo.getSupport_num()));
-        tv_teacher_fans.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(mTeacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
-        btn_teacher_follow.setSelected(mTeacherInfo.getIs_follow() == Constant.FOLLOWED);
-        if (mTeacherInfo.getIs_follow() != Constant.FOLLOWED) {
-            btn_teacher_follow.setText("+关注");
+        tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num()));
+        tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
+        if (mTeacherInfo.getIs_follow() == 0) {
+            btn_teacher_follow.setSelected(false);
         } else {
-            btn_teacher_follow.setText("已关注");
+            btn_teacher_follow.setSelected(true);
         }
-        if (mLiveInfo.getIs_support() == 0) {
+        if (mTeacherInfo.getLive_info().getIs_support() == 0) {
             tv_live_teacher_zan.setSelected(false);
         } else {
             tv_live_teacher_zan.setSelected(true);
         }
-        tvLiveDescripion.setText(StringUtils.replaceNullToEmpty(mLiveInfo.getDescription()));
-        tvDate.setText(DateUtil.getDurationString("MM-dd HH:ss", mLiveInfo.getStart_datetime()));
+        tvCount.setText(String.format(Locale.CHINA, "%d人", mTeacherInfo.getLive_info().getView_num()));
     }
 
     private void initTab(int selectedIndex) {
@@ -470,7 +431,6 @@ public class ReplayLiveActivity extends BaseActivity implements
 
             }
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-            ll_chat_bottom.setVisibility(View.VISIBLE);
         }
     }
 
@@ -485,10 +445,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         etFullscreen.setOnClickListener(this);
         tv_live_teacher_zan.setOnClickListener(this);
         btn_teacher_follow.setOnClickListener(this);
-        civ_avatar.setOnClickListener(this);
-        ivCloseMessage.setOnClickListener(this);
-        tvCloseMessage.setOnClickListener(this);
-        rlOpenMessage.setOnClickListener(this);
+
         etFullscreen.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -692,10 +649,10 @@ public class ReplayLiveActivity extends BaseActivity implements
 //            pagerViewList.add(qaView);
 //        }
 //        //教案白板,关于
-//        View picView = inflater.infate(R.layout.pic_layout, null);
-        View picView = inflater.inflate(R.layout.live_about_layout, null);
-        pagerViewList.add(picView);
-        initPicLayout(picView);
+////        View picView = inflater.infate(R.layout.pic_layout, null);
+//        View picView = inflater.inflate(R.layout.live_about_layout, null);
+//        pagerViewList.add(picView);
+//        initPicLayout(picView);
 
 
     }
@@ -827,7 +784,6 @@ public class ReplayLiveActivity extends BaseActivity implements
             layoutParams = new LinearLayout.LayoutParams(width, height / 3);
         } else {
             layoutParams = new LinearLayout.LayoutParams(width, height);
-            ll_chat_bottom.setVisibility(View.GONE);
         }
         rlPlay.setLayoutParams(layoutParams);
     }
@@ -1172,27 +1128,9 @@ public class ReplayLiveActivity extends BaseActivity implements
                 break;
             //分享按钮
             case R.id.iv_share2:
-                //分享
-                if (mLiveInfo != null && !TextUtils.isEmpty(mLiveInfo.getUrl())) {
-                    String imageUrl = mLiveInfo.getThumb();
-                    if (TextUtils.isEmpty(imageUrl)) {
-                        if (mTeacherInfo != null) {
-                            imageUrl = mTeacherInfo.getAvatar();
-                        }
-                    }
-                    ShareUtils.showShare(ShareUtils.APP, this, getResources().getString(R.string.app_name), mLiveInfo.getTitle(), imageUrl, mLiveInfo.getUrl(), null);
-                }
-                break;
-            case R.id.ci_avatar:
-                TeacherZoneActivity.intoNewIntent(this, teacherId);
-                finish();
-                break;
-            case R.id.tvCloseMessage:
-            case R.id.ivCloseMessage:
-                intro();
-                break;
-            case R.id.rlOpenMessage:
-                intro();
+                //TODO 分享
+//                String imageUrl = "http://www.mob.com/files/apps/icon/1462255299.png";
+//                ShareUtils.showShare(ShareUtils.APP, this, "爱股轩 - [爱股轩]", "爱股轩，您身边的股票技术分析师", imageUrl, "http://app.iguxuan.com/wap.html", null);
                 break;
             // 暂停播放按钮
             case R.id.iv_control2:
@@ -1261,7 +1199,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                 }
                 break;
             //关注
-            case R.id.tv_follow_button:
+            case R.id.btn_teacher_follow2:
                 if (isLogin(this)) {
                     addFollow(teacherId, btn_teacher_follow.isSelected());
                 }
@@ -1351,7 +1289,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                     playLiveActivity.initTab(0);
                     playLiveActivity.initPagerItemView();
                     playLiveActivity.initPager();
-                    playLiveActivity.initAbout();
+//                    playLiveActivity.initAbout();
                     break;
                 case PUBLIC_MSG:
                     playLiveActivity.initLvChat();
@@ -1393,8 +1331,6 @@ public class ReplayLiveActivity extends BaseActivity implements
                     tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));
                     tv_live_teacher_zan.setSelected(true);
                     ToastUtils.showToast(this, "点赞成功");
-                } else if (Constant.HAS_SUCCEED == event.getCode()) {
-                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "已赞过"));
                 } else {
                     LogUtils.e("点赞失败", StringUtils.replaceNullToEmpty(event.getMsg()));
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "点赞失败"));
@@ -1403,7 +1339,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             case teacher_fg_del_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() - 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人关注", mTeacherInfo.getFans_count()));
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(false);
                     btn_teacher_follow.setText("＋关注");
                 } else {
@@ -1414,7 +1350,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             case teacher_fg_add_follow:
                 if (Constant.SUCCEED == event.getCode()) {
                     mTeacherInfo.setFans_count(mTeacherInfo.getFans_count() + 1);
-                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人关注", mTeacherInfo.getFans_count()));
+                    tv_teacher_fans.setText(String.format(Locale.CHINA, "%d粉丝", mTeacherInfo.getFans_count()));
                     btn_teacher_follow.setSelected(true);
                     btn_teacher_follow.setText("已关注");
                 } else {
@@ -1448,28 +1384,12 @@ public class ReplayLiveActivity extends BaseActivity implements
                     LogUtils.e(TAG, "获取老师信息失败：" + event.getMsg());
                 }
                 break;
-            case fetchLiveInfo:
-                if (Constant.SUCCEED == event.getCode()) {
-                    String json = event.getData().optString("data");
-                    try {
-                        JSONObject object = new JSONObject(json);
-                        mLiveInfo = new DataConverter<LiveInfo>().JsonToObject(object.optString("info"), LiveInfo.class);
-                        bindDataToView();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        tip("直播信息解析失败", false);
-                    }
-                } else {
-                    tip(event.getMsg(), false);
-                }
-                break;
         }
     }
 
     private void getTeacherInfo() {
-//        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), CcId, Action.live_teacher_info);
-        tv.kuainiu.command.http.LiveHttpUtil.fetchLiveInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), live_id, Action.fetchLiveInfo);
+//        LiveHttpUtil.fetchLiveNowTopInfo(this);
+        TeacherHttpUtil.fetchTeacherInfo(this, teacherId, MyApplication.getUser() == null ? "0" : MyApplication.getUser().getUser_id(), CcId, Action.live_teacher_info);
     }
 
     @Override
@@ -1800,22 +1720,4 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
     }
 
-    /**
-     * 控制聊天面板的显示与隐藏
-     */
-    boolean isClose = true;
-
-    public void intro() {
-        if (isClose) {
-            isClose = false;
-            rlOpenMessage.setVisibility(View.GONE);
-            layoutParamsFrameLayout.setMargins(0, height / 3, 0, 0);
-            ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
-        } else {
-            isClose = true;
-            layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
-            ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
-            rlOpenMessage.setVisibility(View.VISIBLE);
-        }
-    }
 }

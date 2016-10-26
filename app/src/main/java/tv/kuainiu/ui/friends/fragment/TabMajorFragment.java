@@ -27,7 +27,7 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 public class TabMajorFragment extends BaseFragment {
     private static final String ARG_POSITION = "ARG_POSITION";
     private static final String[][] titles = {
-            {"消息", "名师"},
+            {"消息", "牛人"},
             {"直播", "点播"}};
 
     @BindView(R.id.tab_fragment_major)

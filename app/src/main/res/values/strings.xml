@@ -3,9 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="null_value">-</string>
     <!-- Main -->
+    <string name="tab_main_home">快牛</string>
     <string name="tab_main_live">直播</string>
-    <string name="tab_main_friends">圈子</string>
-    <string name="tab_main_teacher">名师</string>
+    <string name="tab_main_friends">动态</string>
+    <string name="tab_main_teacher">牛人</string>
     <string name="tab_main_me">我的</string>
 
     <string name="value_friends_post_content">

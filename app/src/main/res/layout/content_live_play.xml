@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_play2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGrey900">
+
+            <SurfaceView
+                android:id="@+id/sv2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true" />
+
+            <tv.kuainiu.widget.BarrageLayout
+                android:id="@+id/bl_barrage2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"></tv.kuainiu.widget.BarrageLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_control2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/live_bar_height"
+                    android:background="#88000000">
+
+                    <ImageView
+                        android:id="@+id/iv_back2"
+                        android:layout_width="@dimen/live_bar_height"
+                        android:layout_height="match_parent"
+                        android:scaleType="center"
+                        android:src="@mipmap/back_icon" />
+
+                    <ImageView
+                        android:id="@+id/iv_share2"
+                        android:layout_width="@dimen/live_bar_height"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="center"
+                        android:src="@drawable/live_share_selector" />
+
+                    <TextView
+                        android:id="@+id/tvCount2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:drawableLeft="@mipmap/online_ppl"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:text="人"
+                        android:textColor="@color/white_color" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/live_bar_height"
+                    android:layout_alignParentBottom="true"
+                    android:background="#88000000">
+
+                    <ImageView
+                        android:id="@+id/iv_control2"
+                        android:layout_width="@dimen/live_bar_height"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/live_play_pause_selector" />
+
+                    <ImageView
+                        android:id="@+id/full_screen2"
+                        android:layout_width="@dimen/live_bar_height"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/full_screen_b" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_fullscreen_msg_send2"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="5dp"
+                        android:layout_toLeftOf="@+id/full_screen2"
+                        android:layout_toRightOf="@+id/iv_control2"
+                        android:background="@drawable/bg_live_chat"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="invisible">
+
+                        <EditText
+                            android:id="@+id/et_fullscreen2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="100"
+                            android:background="@android:color/transparent"
+                            android:focusable="true"
+                            android:hint="请输入聊天内容"
+                            android:imeOptions="actionSend"
+                            android:inputType="text"
+                            android:maxLength="140"
+                            android:maxLines="2"
+                            android:padding="3dp"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray" />
+
+                        <Button
+                            android:id="@+id/btn_fullscreen_send2"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:scaleType="centerInside"
+                            android:text="发送" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/full_screen2"
+                        android:layout_toRightOf="@+id/iv_control2"
+                        android:gravity="center_vertical"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/current_time"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="end"
+                            android:textColor="#FFF"
+                            android:textSize="10sp" />
+
+                        <SeekBar
+                            android:id="@+id/play_seekBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/linearLayout1"
+                            android:layout_weight="100" />
+
+                        <TextView
+                            android:id="@+id/total_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:textColor="#FFF"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_live_play_button2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/start"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvPlayMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@color/white_color"
+                android:textSize="14sp" />
+
+            <include layout="@layout/touch_over" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_color"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTiltle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    android:minLines="1"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/colorGrey333333"
+                    android:textSize="@dimen/text_size_small"
+                    tools:text="王丽-解盘视频技术分析" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/tv_live_teacher_zan2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:drawableLeft="@drawable/selector_video_suport_number"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/colorGrey500"
+                        android:textSize="14sp"
+                        tools:text="8885赞" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        tools:text="2016-06-12" />
+                </RelativeLayout>
+
+                <include layout="@layout/include_teacher_info" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/colorGrey230" />
+
+                <TextView
+                    android:id="@+id/tvLiveDescripion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_marginBottom="@dimen/live_tab_height"
+                    android:gravity="left|top" />
+                <!--
+                            <android.support.design.widget.TabLayout
+                                android:id="@+id/tab_live_top2"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/bg_custom_tab"
+                                app:tabIndicatorColor="@color/colorRed500"
+                                app:tabIndicatorHeight="2dp"
+                                app:tabMode="scrollable"
+                                app:tabSelectedTextColor="@color/colorRed500"
+                                app:tabTextColor="@color/def_TextColor" />
+
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/mPager2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorGrey230" />-->
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

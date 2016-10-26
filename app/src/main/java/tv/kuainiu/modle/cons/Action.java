@@ -207,4 +207,5 @@ public enum Action {
     teacher_zone_appoint,   // 老师专区-观点
     teacher_zone_jiepan,   // 老师专区-接盘
     home_bannar,   // 老师专区-接盘
+    fetchLiveInfo,   //获取直播间信息
 }

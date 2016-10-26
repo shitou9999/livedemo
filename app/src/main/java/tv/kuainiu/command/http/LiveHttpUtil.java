@@ -53,4 +53,12 @@ public class LiveHttpUtil {
 //        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
         OKHttpUtils.getInstance().syncGet(context, Api.index_recom_live + ParamUtil.getParamForGet(map), action);
     }
+
+    public static void fetchLiveInfo(Context context,String teacher_id,String user_id,String live_id, Action action) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("teacher_id",teacher_id);
+        map.put("user_id",user_id);
+        map.put("live_id", live_id);
+        OKHttpUtils.getInstance().syncGet(context, Api.live_info + ParamUtil.getParamForGet(map), action);
+    }
 }
