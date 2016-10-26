@@ -118,6 +118,7 @@ import tv.kuainiu.widget.MyBottomBehavior;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 import static tv.kuainiu.R.id.rl_play2;
+import static tv.kuainiu.modle.cons.Action.teacher_fg_del_follow;
 
 
 /**
@@ -280,7 +281,6 @@ public class PlayLiveActivity extends BaseActivity implements
         intent.putExtra(Constant.ARG_LIVING, liveParameter);
         context.startActivity(intent);
     }
-
 
 
     @Override
@@ -536,22 +536,23 @@ public class PlayLiveActivity extends BaseActivity implements
         map.put("teacher_id", teacherId);
         password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        tv.kuainiu.command.http.LiveHttpUtil.check_permission(this, roomId, viewerName, password, Action.self_check_permission);
+    }
 
-                if (password == null || "".equals(password)) {
-                    dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName);
-                } else {
-                    dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName, password);
-                }
-                LogUtils.e("login", "userId=" + userId);
-                LogUtils.e("login", "roomId=" + roomId);
-                LogUtils.e("login", "viewerName=" + viewerName);
-                LogUtils.e("login", "password=" + password);
-                dwLive.startLogin();
-            }
-        }, 1000);
+    /**
+     * 登录CC
+     */
+    private void loginCC() {
+        if (password == null || "".equals(password)) {
+            dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName);
+        } else {
+            dwLive.setDWLiveLoginParams(new LiveLoginListener(), userId, roomId, viewerName, password);
+        }
+        LogUtils.e("login", "userId=" + userId);
+        LogUtils.e("login", "roomId=" + roomId);
+        LogUtils.e("login", "viewerName=" + viewerName);
+        LogUtils.e("login", "password=" + password);
+        dwLive.startLogin();
     }
 
     int loginTime = 0;
@@ -1487,6 +1488,7 @@ public class PlayLiveActivity extends BaseActivity implements
         canvas.drawColor(Color.BLACK);
         mHolder.unlockCanvasAndPost(canvas);
         tvPlayMsg.setVisibility(View.VISIBLE);
+        pb_loading.setVisibility(View.GONE);
         tvPlayMsg.setText(text);
     }
 
@@ -1609,7 +1611,7 @@ public class PlayLiveActivity extends BaseActivity implements
     // 添加 or 取消关注
     private void addFollow(String teacherId, boolean is_follow) {
         if (is_follow) {
-            TeacherHttpUtil.delFollowForTeacherId(this, teacherId, Action.teacher_fg_del_follow);
+            TeacherHttpUtil.delFollowForTeacherId(this, teacherId, teacher_fg_del_follow);
         } else {
             TeacherHttpUtil.addFollowForTeacherID(this, teacherId, Action.teacher_fg_add_follow);
         }
@@ -1670,6 +1672,7 @@ public class PlayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
+                        playLiveActivity.setHolderBlack(errorMessage);
                         playLiveActivity.tip(errorMessage, false);
                     }
                     break;
@@ -1728,8 +1731,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     break;
                 case USER_COUNT:
                     if (playLiveActivity.tvCount != null && msg.obj != null) {
-                        playLiveActivity.tvCount.setText((Integer) msg.obj + "人");
-                        playLiveActivity.tv_teacher_fans.setText(String.format(Locale.CHINA, "%d人在线", (Integer) msg.obj));
+                        playLiveActivity.tvCount.setText(String.format(Locale.CHINA, "%d人在线", (Integer) msg.obj));
                     }
                     break;
                 case FINISH:
@@ -1743,12 +1745,12 @@ public class PlayLiveActivity extends BaseActivity implements
                 case KICK_OUT:
                     playLiveActivity.isKickOut = true;
                     playLiveActivity.tip("已被踢出");
+                    playLiveActivity.setHolderBlack("已被踢出");
                     sendEmptyMessage(SHOW_CONTROL);
                     break;
                 case NOT_START:
-                    playLiveActivity.pb_loading.setVisibility(View.GONE);
-                    playLiveActivity.tvPlayMsg.setText("直播未开始");
                     playLiveActivity.tip("直播未开始", false);
+                    playLiveActivity.setHolderBlack("直播未开始");
                     sendEmptyMessage(SHOW_CONTROL);
                     break;
                 case FADE_OUT_INFO:
@@ -1781,6 +1783,14 @@ public class PlayLiveActivity extends BaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(HttpEvent event) {
         switch (event.getAction()) {
+            case self_check_permission:
+                if (Constant.SUCCEED == event.getCode()) {
+                    loginCC();
+                } else {
+                    setHolderBlack(event.getMsg());
+                    tip(event.getMsg());
+                }
+                break;
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
                     tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));

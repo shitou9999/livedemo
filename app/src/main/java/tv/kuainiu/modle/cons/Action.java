@@ -208,4 +208,5 @@ public enum Action {
     teacher_zone_jiepan,   // 老师专区-接盘
     home_bannar,   // 老师专区-接盘
     fetchLiveInfo,   //获取直播间信息
+    self_check_permission,   //获取直播间信息
 }

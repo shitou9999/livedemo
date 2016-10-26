@@ -171,8 +171,8 @@ public class ReplayLiveActivity extends BaseActivity implements
 
     //    private String[] tabNames = new String[]{LIVE, PUT_QUESTION, ABOUT};
 //    private int[] tabNamesTags = new int[]{0, 1, 2};
-    private String[] tabNames = new String[]{LIVE,ABOUT};
-    private int[] tabNamesTags = new int[]{0,1};
+    private String[] tabNames = new String[]{LIVE, ABOUT};
+    private int[] tabNamesTags = new int[]{0, 1};
     private String CcId = "";
     private String live_id = "";
     private String[] CcIdArray;
@@ -436,6 +436,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         tvTheme.setText(StringUtils.replaceNullToEmpty(mTeacherInfo.getSlogan()));
         tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLiveInfo.getSupport_num()));
         tv_teacher_fans.setText(String.format(Locale.CHINA, "%s人关注", StringUtils.getDecimal(mTeacherInfo.getFans_count(), Constant.TEN_THOUSAND, "万", "")));
+        tvCount.setText(String.format(Locale.CHINA, "%s人观看", StringUtils.getDecimal(mLiveInfo.getView_num(), Constant.TEN_THOUSAND, "万", "")));
         btn_teacher_follow.setSelected(mTeacherInfo.getIs_follow() == Constant.FOLLOWED);
         if (mTeacherInfo.getIs_follow() != Constant.FOLLOWED) {
             btn_teacher_follow.setText("+关注");
@@ -538,7 +539,6 @@ public class ReplayLiveActivity extends BaseActivity implements
             }
         };
     }
-
     private void loginLive() {
         viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
@@ -546,23 +546,21 @@ public class ReplayLiveActivity extends BaseActivity implements
         map.put("live_id", live_id);
         password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        tv.kuainiu.command.http.LiveHttpUtil.check_permission(this, roomId, viewerName, password, Action.self_check_permission);
+    }
 
-                if (password == null || "".equals(password)) {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName);
-                } else {
-                    dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName, password);
-                }
-                LogUtils.e("login", "userId=" + userId);
-                LogUtils.e("login", "roomId=" + roomId);
-                LogUtils.e("login", "CcId=" + CcId);
-                LogUtils.e("login", "viewerName=" + viewerName);
-                LogUtils.e("login", "password=" + password);
-                dwLive.startLogin();
-            }
-        }, 1000);
+    private void loginCC() {
+        if (password == null || "".equals(password)) {
+            dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName);
+        } else {
+            dwLive.setLoginParams(new MyDWLiveReplayListener(), userId, roomId, CcId, viewerName, password);
+        }
+        LogUtils.e("login", "userId=" + userId);
+        LogUtils.e("login", "roomId=" + roomId);
+        LogUtils.e("login", "CcId=" + CcId);
+        LogUtils.e("login", "viewerName=" + viewerName);
+        LogUtils.e("login", "password=" + password);
+        dwLive.startLogin();
     }
 
     int loginTime = 0;
@@ -1154,7 +1152,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         }
         canvas.drawColor(Color.BLACK);
         mHolder.unlockCanvasAndPost(canvas);
-
+        pb_loading.setVisibility(View.GONE);
         tvPlayMsg.setVisibility(View.VISIBLE);
         tvPlayMsg.setText(text);
     }
@@ -1333,7 +1331,9 @@ public class ReplayLiveActivity extends BaseActivity implements
                                 errorMessage = StringUtils.replaceNullToEmpty(mDWLiveException.getMessage(), errorMessage);
                             }
                         }
-                        playLiveActivity.tip(errorMessage);
+                        playLiveActivity.setHolderBlack(errorMessage);
+                        playLiveActivity.tip(errorMessage,false);
+                        sendEmptyMessage(SHOW_CONTROL);
                     }
                     break;
                 case 1110:
@@ -1369,7 +1369,9 @@ public class ReplayLiveActivity extends BaseActivity implements
                         DWLiveException exception = (DWLiveException) msg.obj;
                         errorMessage = exception.getMessage();
                     }
-                    playLiveActivity.tip(errorMessage);
+                    playLiveActivity.setHolderBlack(errorMessage);
+                    playLiveActivity.tip(errorMessage,false);
+                    sendEmptyMessage(SHOW_CONTROL);
                     break;
                 case FADE_OUT_INFO:
                     playLiveActivity.fadeOutInfo();
@@ -1380,6 +1382,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                     }
                     playLiveActivity.tip("回放结束");
                     playLiveActivity.setHolderBlack("回放结束");
+                    sendEmptyMessage(SHOW_CONTROL);
                     break;
             }
         }
@@ -1388,6 +1391,16 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(HttpEvent event) {
         switch (event.getAction()) {
+            case self_check_permission:
+                if (Constant.SUCCEED == event.getCode()) {
+                    loginCC();
+                } else {
+                    pb_loading.setVisibility(View.GONE);
+                    tvPlayMsg.setVisibility(View.VISIBLE);
+                    tvPlayMsg.setText(event.getMsg());
+                    tip(event.getMsg());
+                }
+                break;
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
                     tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));

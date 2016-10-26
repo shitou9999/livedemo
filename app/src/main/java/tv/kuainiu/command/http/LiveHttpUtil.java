@@ -61,4 +61,11 @@ public class LiveHttpUtil {
         map.put("live_id", live_id);
         OKHttpUtils.getInstance().syncGet(context, Api.live_info + ParamUtil.getParamForGet(map), action);
     }
+    public static void check_permission(Context context,String roomid,String viewername,String viewertoken, Action action) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("roomid",roomid);
+        map.put("viewername",viewername);
+        map.put("viewertoken", viewertoken);
+        OKHttpUtils.getInstance().syncGet(context, Api.self_check_permission + ParamUtil.getParamForGet(map), action);
+    }
 }

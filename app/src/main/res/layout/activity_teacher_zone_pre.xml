@@ -42,16 +42,43 @@
                         android:scaleType="centerCrop"
                         android:src="@mipmap/net" />
 
-                    <TextView
-                        android:id="@+id/tvLiningTitle"
+                    <LinearLayout
+                        android:id="@+id/llLiningTitle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_alignParentBottom="true"
-                        android:background="#66000000"
-                        android:padding="10dp"
-                        android:textColor="@color/white_color"
-                        android:visibility="gone"
-                        tools:text="正在直播的标题" />
+                        android:visibility="invisible"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorRed500"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="正在\n直播"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:minLines="2"
+                            android:textColor="@color/white_color"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvLiningTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:layout_weight="1"
+                            android:background="#99000000"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:minLines="2"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/white_color"
+                            tools:text="正在直播的标题" />
+                    </LinearLayout>
+
                 </RelativeLayout>
 
                 <include layout="@layout/include_teacher_info" />

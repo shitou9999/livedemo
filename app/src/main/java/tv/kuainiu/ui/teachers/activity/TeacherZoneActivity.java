@@ -98,6 +98,8 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
     LinearLayout llFragmentFriendsMainNewsInfo;
     @BindView(R.id.tvLiningTitle)
     TextView tvLiningTitle;
+    @BindView(R.id.llLiningTitle)
+    LinearLayout llLiningTitle;
     private String[] tabNames = new String[]{"动态", "观点", "解盘", "直播计划", "直播回看"};
     int selectedIndex = 0;
     private String teacherid = "";
@@ -285,8 +287,8 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
         if (mLiveItemList.size() > 0) {
             final LiveInfo liveItem = mLiveItemList.get(0);
             tvLiningTitle.setText(liveItem.getTitle());
-            tvLiningTitle.setVisibility(View.VISIBLE);
-            tvLiningTitle.setOnClickListener(new View.OnClickListener() {
+            llLiningTitle.setVisibility(View.VISIBLE);
+            llLiningTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LiveParameter liveParameter = new LiveParameter();
@@ -297,6 +299,8 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                     PlayLiveActivity.intoNewIntent(TeacherZoneActivity.this, liveParameter);
                 }
             });
+        } else {
+            llLiningTitle.setVisibility(View.INVISIBLE);
         }
     }
 
