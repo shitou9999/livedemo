@@ -156,7 +156,8 @@ public class MyLiveFragment extends BaseFragment {
         Map<String, Object> map = new HashMap<>();
         map.put("user_id",MyApplication.getUser()==null?"": MyApplication.getUser().getUser_id());
         map.put("teacher_id", teacherId);
-        map.put("live_type", "1");
+        map.put("live_type", "3");
+        map.put("has_living", "1");
         map.put("page", String.valueOf(page));
         OKHttpUtils.getInstance().syncGet(context, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list);
     }

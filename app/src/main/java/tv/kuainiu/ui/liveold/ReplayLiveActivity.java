@@ -823,6 +823,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         LinearLayout.LayoutParams layoutParams = null;
         if (isPortraitOrien) {
             layoutParams = new LinearLayout.LayoutParams(width, height / 3);
+            ll_chat_bottom.setVisibility(View.VISIBLE);
         } else {
             layoutParams = new LinearLayout.LayoutParams(width, height);
             ll_chat_bottom.setVisibility(View.GONE);

@@ -534,6 +534,7 @@ public class PlayLiveActivity extends BaseActivity implements
         viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
         map.put("teacher_id", teacherId);
+        map.put("live_id", liveId);
         password = ParamUtil.getParam(map);
         pb_loading.setVisibility(View.VISIBLE);
         tv.kuainiu.command.http.LiveHttpUtil.check_permission(this, roomId, viewerName, password, Action.self_check_permission);
@@ -815,6 +816,7 @@ public class PlayLiveActivity extends BaseActivity implements
         LinearLayout.LayoutParams layoutParams = null;
         if (isPortraitOrien) {
             layoutParams = new LinearLayout.LayoutParams(width, height / 3);
+            ll_chat_bottom.setVisibility(View.VISIBLE);
         } else {
             layoutParams = new LinearLayout.LayoutParams(width, height);
             ll_chat_bottom.setVisibility(View.GONE);

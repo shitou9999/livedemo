@@ -83,7 +83,7 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:background="#88F83848"
-            >
+            android:visibility="invisible">
 
             <TextView
                 android:id="@+id/tvState"
@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="直播中"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/white_color"
+                android:textSize="18sp" />
         </RelativeLayout>
     </RelativeLayout>
 
