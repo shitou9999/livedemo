@@ -70,8 +70,10 @@
 
     <dimen name="bottom_navigation_height">48dp</dimen>
 
-
+    <dimen name="me_fragment_permission_margin">5dp</dimen>
+    <dimen name="me_fragment_permission_width">16dp</dimen>
     <!-- zxing -->
+
     <dimen name="zxing_hint_text_size">18sp</dimen>
     <dimen name="zxing_hint_text_margin">30dp</dimen>
     <dimen name="zxing_scan_line_height">5dp</dimen>

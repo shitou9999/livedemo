@@ -3,6 +3,8 @@ package tv.kuainiu.modle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by guxuan on 2016/3/12.
  */
@@ -51,7 +53,7 @@ public class User implements Parcelable {
 
     private String session_id;
     private int is_teacher;
-
+    private List<Permission> permission_list;
 
     public User() {
     }
@@ -320,5 +322,13 @@ public class User implements Parcelable {
 
     public void setAppointment_count(int appointment_count) {
         this.appointment_count = appointment_count;
+    }
+
+    public List<Permission> getPermission_list() {
+        return permission_list;
+    }
+
+    public void setPermission_list(List<Permission> permission_list) {
+        this.permission_list = permission_list;
     }
 }

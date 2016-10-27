@@ -21,6 +21,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,6 +35,7 @@ import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.EmptyEvent;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.Permission;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
@@ -84,20 +87,20 @@ public class MeFragment extends BaseFragment {
     TextView tv_me_home;
     @BindView(R.id.tvFans)
     TextView tvFans;
-    @BindView(R.id.iv_text_vip)
-    ImageView mIvTextVip;
-    @BindView(R.id.iv_icon_vip)
-    ImageView mIvIconVip;
-    @BindView(R.id.iv_icon_play)
-    ImageView mIvIconPlay;
-    @BindView(R.id.iv_icon_video)
-    ImageView mIvIconVideo;
-    @BindView(R.id.iv_icon_group)
-    ImageView mIvIconGroup;
-    @BindView(R.id.iv_icon_lesson)
-    ImageView mIvIconLesson;
-    @BindView(R.id.iv_icon_institution)
-    ImageView mIvIconInstitution;
+    //    @BindView(R.id.iv_text_vip)
+//    ImageView mIvTextVip;
+//    @BindView(R.id.iv_icon_vip)
+//    ImageView mIvIconVip;
+//    @BindView(R.id.iv_icon_play)
+//    ImageView mIvIconPlay;
+//    @BindView(R.id.iv_icon_video)
+//    ImageView mIvIconVideo;
+//    @BindView(R.id.iv_icon_group)
+//    ImageView mIvIconGroup;
+//    @BindView(R.id.iv_icon_lesson)
+//    ImageView mIvIconLesson;
+//    @BindView(R.id.iv_icon_institution)
+//    ImageView mIvIconInstitution;
     @BindView(R.id.iv_institution)
     ImageView mIvInstitution;
     @BindView(R.id.tv_institution)
@@ -144,9 +147,10 @@ public class MeFragment extends BaseFragment {
     RelativeLayout mRlCollect;
     @BindView(R.id.rlRecorder)
     RelativeLayout mRlRecorder;
-
+    @BindView(R.id.llPermission)
+    LinearLayout llPermission;
     private Context context;
-
+    private LinearLayout.LayoutParams layoutParams;
     public static MeFragment newInstance() {
         MeFragment fragment = new MeFragment();
         Bundle args = new Bundle();
@@ -177,6 +181,10 @@ public class MeFragment extends BaseFragment {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        int width = getResources().getDimensionPixelSize(R.dimen.me_fragment_permission_width);
+        int marginLeft = getResources().getDimensionPixelSize(R.dimen.me_fragment_permission_margin);
+        layoutParams = new LinearLayout.LayoutParams(width, width);
+        layoutParams.setMargins(marginLeft, 0, 0, 0);
         return view;
     }
 
@@ -418,14 +426,32 @@ public class MeFragment extends BaseFragment {
 //                mRlLive.setVisibility(View.VISIBLE);
                 rlHomePage.setVisibility(View.VISIBLE);
             }
-            mIvTextVip.setSelected(user.getIs_teacher() != 0);
-            mIvIconVip.setSelected(user.getIs_teacher() != 0);
-            mIvIconPlay.setSelected(user.getIs_teacher() != 0);
-            mIvIconVideo.setSelected(user.getIs_teacher() != 0);
-            mIvIconGroup.setSelected(user.getIs_teacher() != 0);
-            mIvIconLesson.setSelected(user.getIs_teacher() != 0);
-            mIvIconInstitution.setSelected(user.getIs_teacher() != 0);
-            mIvInstitution.setSelected(user.getIs_teacher() != 0);
+            List<Permission> mPermissionList = user.getPermission_list();
+            ImageView imageView = null;
+            if (mPermissionList != null && mPermissionList.size() > 0) {
+                llPermission.removeAllViews();
+                mLlJurisdiction.setVisibility(View.VISIBLE);
+                for (int i = 0; i < mPermissionList.size(); i++) {
+                    Permission mPermission = mPermissionList.get(i);
+                    if (mPermission.getIs_own() != 0) {
+                        imageView = new ImageView(getActivity());
+                        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                        ImageDisplayUtil.displayImage(getActivity(), imageView, mPermission.getIcon());
+                        imageView.setLayoutParams(layoutParams);
+                        llPermission.addView(imageView);
+                    }
+                }
+            } else {
+                mLlJurisdiction.setVisibility(View.INVISIBLE);
+                llPermission.removeAllViews();
+            }
+//            mIvTextVip.setSelected(user.getIs_teacher() != 0);
+//            mIvIconVip.setSelected(user.getIs_teacher() != 0);
+//            mIvIconPlay.setSelected(user.getIs_teacher() != 0);
+//            mIvIconVideo.setSelected(user.getIs_teacher() != 0);
+//            mIvIconGroup.setSelected(user.getIs_teacher() != 0);
+//            mIvIconLesson.setSelected(user.getIs_teacher() != 0);
+//            mIvIconInstitution.setSelected(user.getIs_teacher() != 0);
             mTvAppointmentTip.setText(String.valueOf(user.getAppointment_count()));
             mTvLiveTip.setText(String.valueOf(user.getLive_wait_count()));
         }

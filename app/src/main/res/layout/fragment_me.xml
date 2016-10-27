@@ -181,6 +181,13 @@
                             android:textColor="@color/colorWhite"
                             android:textSize="12sp" />
 
+                        <LinearLayout
+                            android:id="@+id/llPermission"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"></LinearLayout>
+<!--
+
                         <ImageView
                             android:id="@+id/iv_text_vip"
                             android:layout_width="24dp"
@@ -236,6 +243,7 @@
                             android:layout_marginLeft="@dimen/me_icon_left"
                             android:scaleType="center"
                             android:src="@drawable/selector_icon_institution" />
+-->
 
                     </LinearLayout>
 
