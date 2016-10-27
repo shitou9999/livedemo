@@ -4,6 +4,13 @@ import android.content.Context;
 import android.os.Build;
 
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import tv.kuainiu.command.http.core.OKHttpCallBackListener;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -15,12 +22,6 @@ import tv.kuainiu.utils.AppUtils;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.SecurityUtils;
 import tv.kuainiu.utils.StringUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -71,7 +72,7 @@ public class UserHttpRequest {
 
             @Override
             public void onNull(int code) {
-                EventBus.getDefault().post(new UserEvent(Constant.ERROR, "没有找到用户信息,请检查您的账号再重试", new User()));
+                EventBus.getDefault().post(new UserEvent(Constant.ERROR, "没有找到该用户信息,请检查您的账后重试", new User()));
             }
         });
     }

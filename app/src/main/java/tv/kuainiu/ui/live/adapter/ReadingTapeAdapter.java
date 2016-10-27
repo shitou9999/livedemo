@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
-import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
@@ -235,7 +234,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ImageDisplayUtil.displayImage(mContext, holder.civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
         if (type == ZHI_BO) {
             holder.ivLiveIng.setVisibility(View.VISIBLE);
-            holder.mTvLiveing.setText("直播中");
+            holder.mTvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg(), "直播"));
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             holder.tvAppointment.setVisibility(View.GONE);
             holder.rlState.setVisibility(View.GONE);
@@ -243,19 +242,24 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.rlState.setVisibility(View.GONE);
             if (type == MY_LIVE) {
                 holder.rlState.setVisibility(View.VISIBLE);
-                switch (liveItem.getLive_status()) {
-                    case Constans.LIVE_END://直播结束
-                        holder.rlState.setBackgroundColor(Color.parseColor("#88000000"));
-                        holder.tvState.setText("直播结束");
+                switch (liveItem.getStatus()) {
+                    case -1://审核未通过
+                        holder.rlState.setBackgroundColor(Color.parseColor("#66000000"));
+                        holder.tvState.setText("审核未通过");
                         break;
 
-                    case Constans.LIVE_ING://直播中
-                        holder.rlState.setBackgroundColor(Color.parseColor("#88F83848"));
-                        holder.tvState.setText("直播中");
+                    case 1://等待直播中
+                        if (liveItem.getLive_status() != 2) {
+                            holder.rlState.setBackgroundColor(Color.parseColor("#66F83848"));
+                            holder.tvState.setText("等待直播中");
+                        } else {
+                            holder.rlState.setVisibility(View.GONE);
+                        }
+
                         break;
-                    default:
-                        holder.rlState.setBackgroundColor(Color.parseColor("#88F5A623"));
-                        holder.tvState.setText("未直播");
+                    default://0 等待审核
+                        holder.rlState.setBackgroundColor(Color.parseColor("#66F5A623"));
+                        holder.tvState.setText("等待审核");
                         break;
                 }
             }

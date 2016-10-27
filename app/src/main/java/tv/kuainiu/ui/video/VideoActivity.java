@@ -679,7 +679,7 @@ public class VideoActivity extends BaseActivity implements
         } else {
             tvFollowButton.setText("已关注");
         }
-        tvIntroduce.setText(StringUtils.replaceNullToEmpty(teacherInfo.getIntroduce()));//介绍
+        tvIntroduce.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getDescription()));//介绍
     }
 
     private void getNews() {

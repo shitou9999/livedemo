@@ -22,8 +22,8 @@
         <ProgressBar
             android:id="@+id/bufferProgressBar"
             style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true" />
 
         <!--      <include layout="@layout/ad_layout" />
@@ -142,10 +142,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:maxHeight="10dp"
-                        android:minHeight="5dp"
-                        android:progressDrawable="@drawable/seekbar_style"></SeekBar>
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <TextView
@@ -226,7 +223,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -251,8 +249,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:paddingBottom="@dimen/activity_horizontal_margin"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:paddingRight="@dimen/activity_horizontal_margin">
 
@@ -332,7 +328,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
+                    android:layout_height="1dp"
                     android:background="@color/colorGrey220" />
 
                 <include layout="@layout/include_teacher_info" />
@@ -342,8 +338,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:text="介绍"
+                android:padding="10dp"
+                android:text="视屏介绍"
                 android:textSize="@dimen/text_size_large" />
 
             <TextView
@@ -351,8 +347,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/activity_horizontal_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:padding="10dp"
                 android:textSize="@dimen/text_size_small"
                 tools:text="曾任某环境好的艰苦实践的时刻" />
 

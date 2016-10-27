@@ -40,7 +40,7 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/net" />
+                        tools:src="@mipmap/net" />
 
                     <LinearLayout
                         android:id="@+id/llLiningTitle"

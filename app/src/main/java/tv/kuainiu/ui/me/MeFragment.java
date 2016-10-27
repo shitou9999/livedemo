@@ -408,6 +408,7 @@ public class MeFragment extends BaseFragment {
             mBtnPublish.setVisibility(View.INVISIBLE);
             mTvLiveTip.setText("");
             mTvAppointmentTip.setText("");
+            mLlJurisdiction.setVisibility(View.INVISIBLE);
         } else {
             displayAvatar(user.getAvatar());
             mTvMePhone.setText(StringUtils.getX(user.getPhone()));
@@ -433,13 +434,13 @@ public class MeFragment extends BaseFragment {
                 mLlJurisdiction.setVisibility(View.VISIBLE);
                 for (int i = 0; i < mPermissionList.size(); i++) {
                     Permission mPermission = mPermissionList.get(i);
-                    if (mPermission.getIs_own() != 0) {
+//                    if (mPermission.getIs_own() != 0) {
                         imageView = new ImageView(getActivity());
                         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                         ImageDisplayUtil.displayImage(getActivity(), imageView, mPermission.getIcon());
                         imageView.setLayoutParams(layoutParams);
                         llPermission.addView(imageView);
-                    }
+//                    }
                 }
             } else {
                 mLlJurisdiction.setVisibility(View.INVISIBLE);

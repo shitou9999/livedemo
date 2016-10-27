@@ -36,7 +36,6 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
-import tv.kuainiu.utils.CheckCodePicker;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.SMSUtils;
@@ -49,15 +48,24 @@ import tv.kuainiu.utils.WeakHandler;
  * 注册
  */
 public class Register1Activity extends AbsSMSPermissionActivity implements View.OnClickListener {
-    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
-    @BindView(R.id.tv_region_name) TextView mTvRegion;
-    @BindView(R.id.et_region) EditText mEtRegion;
-    @BindView(R.id.et_account) EditText mEtAccount;
-    @BindView(R.id.et_check_code) EditText mEtCheckCode;
-    @BindView(R.id.et_password1) EditText mEtPassword1;
-    @BindView(R.id.et_password2) EditText mEtPassword2;
-    @BindView(R.id.btn_push_check_code) Button mBtnPushCheckCode;
-    @BindView(R.id.btn_register) Button mBtnRegister;
+    @BindView(R.id.ll_region_selector)
+    LinearLayout mRlRegionSelector;
+    @BindView(R.id.tv_region_name)
+    TextView mTvRegion;
+    @BindView(R.id.et_region)
+    EditText mEtRegion;
+    @BindView(R.id.et_account)
+    EditText mEtAccount;
+    @BindView(R.id.et_check_code)
+    EditText mEtCheckCode;
+    @BindView(R.id.et_password1)
+    EditText mEtPassword1;
+    @BindView(R.id.et_password2)
+    EditText mEtPassword2;
+    @BindView(R.id.btn_push_check_code)
+    Button mBtnPushCheckCode;
+    @BindView(R.id.btn_register)
+    Button mBtnRegister;
 
     private MyCountDownTimer mDownTimer;
 
@@ -91,13 +99,13 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     }
 
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
-
 
 
     /**
@@ -126,7 +134,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
 
     Map<String, Region> mRegionMap;
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
     }
 
@@ -145,7 +154,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
 
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (mRegionMap != null) {
                     if (s.length() > 0) {
                         boolean has = mRegionMap.containsKey(s.toString());
@@ -207,20 +217,22 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
                     DebugUtils.showToast(this, Constant.AREA_CODE_ERROR);
                     return;
                 }
-                if ("86".equals(region)) {
-                    CheckCodePicker.selectorCheckCode(this, new CheckCodePicker.IDialogButtonOnClickListener() {
-                        @Override public void message() {
-                            sendMessage();
-                        }
-
-                        @Override public void call() {
-                            sendVoiceCode();
-                        }
-                    });
-
-                } else {
-                    sendMessage();
-                }
+                //TODO 屏蔽了语音验证码
+//                if ("86".equals(region)) {
+//                    CheckCodePicker.selectorCheckCode(this, new CheckCodePicker.IDialogButtonOnClickListener() {
+//                        @Override public void message() {
+//                            sendMessage();
+//                        }
+//
+//                        @Override public void call() {
+//                            sendVoiceCode();
+//                        }
+//                    });
+//
+//                } else {
+//                    sendMessage();
+//                }
+                sendMessage();
                 break;
             case R.id.btn_register:
                 if (checkFormIsCorrect()) {
@@ -431,7 +443,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     }
 
 
-    @Override protected void awarded() {
+    @Override
+    protected void awarded() {
         new SMSUtils(Register1Activity.this, new MyHandle(this));
     }
 

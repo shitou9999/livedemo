@@ -248,6 +248,13 @@
             android:name=".ui.activity.PicturePreviewActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.google.zxing.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.me.LoginByQcActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"

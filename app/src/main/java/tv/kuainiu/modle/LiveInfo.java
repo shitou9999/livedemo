@@ -52,7 +52,7 @@ public class LiveInfo {
     private int is_follow;
     private int support;
     private int support_num;
-    private String status;
+    private int status;
     private String permission;
     private String avatar;
     private long start_datetime;
@@ -199,11 +199,11 @@ public class LiveInfo {
         this.support = support;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

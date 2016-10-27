@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.google.zxing.CaptureActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -210,15 +211,26 @@ public class HomeFragment extends BaseFragment {
     HotPonit mHotPoint2;
     View vSupport;
 
-    @OnClick(R.id.ivMessage)
-    public void onClick() {
-        Intent messageIntent = new Intent();
-        messageIntent.setClass(getActivity(), MessageSystemActivity.class);
-        startActivity(messageIntent);
+    @OnClick({R.id.ivMessage, R.id.ivQRCode})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivMessage:
+                Intent messageIntent = new Intent();
+                messageIntent.setClass(getActivity(), MessageSystemActivity.class);
+                startActivity(messageIntent);
+                break;
+            case R.id.ivQRCode:
+                Intent qrIntent = new Intent();
+                qrIntent.setClass(getActivity(), CaptureActivity.class);
+                startActivity(qrIntent);
+                break;
+        }
+
     }
 
     LiveInfo appointmentLiveInfo;
     TextView tvAppointment;
+
     class itemClick implements OnItemClickListener {
 
         @Override
@@ -229,8 +241,8 @@ public class HomeFragment extends BaseFragment {
             TeacherZoneDynamicsInfo newsInfo = mHotPoint == null ? null : mHotPoint.getNews_info();
             switch (v.getId()) {
                 case tv_next_time://预约
-                    appointmentLiveInfo= (LiveInfo) v.getTag();
-                    tvAppointment= (TextView) v;
+                    appointmentLiveInfo = (LiveInfo) v.getTag();
+                    tvAppointment = (TextView) v;
                     appointment(appointmentLiveInfo);
                     break;
                 case tv_follow_button://点关注
@@ -251,10 +263,7 @@ public class HomeFragment extends BaseFragment {
                     vSupport = v;
                     mHotPoint2 = (HotPonit) v.getTag();
                     mTvHotPointSupport = (TextView) v.getTag(R.id.tv_hot_point_support);
-                    if (!MyApplication.isLogin()) {
-                        showLoginTip();
-                        return;
-                    } else {
+                    if (mHotPoint2 != null) {
                         if (mHotPoint2.getIs_support() == Constant.FAVOURED) {
                             vSupport.setSelected(true);
                             ToastUtils.showToast(getActivity(), "已经点过赞了");
@@ -304,6 +313,7 @@ public class HomeFragment extends BaseFragment {
 
         }
     }
+
     private void appointment(LiveInfo liveInfo) {
         if (liveInfo == null) {
             return;
@@ -314,6 +324,7 @@ public class HomeFragment extends BaseFragment {
             AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
         }
     }
+
     private void dataBind() {
         if (mHomeAdapter == null) {
             mHomeAdapter = new HomeAdapter(getActivity());
@@ -492,7 +503,7 @@ public class HomeFragment extends BaseFragment {
                         JSONObject object = new JSONObject(json);
                         LiveInfo tempLiveItem = new DataConverter<LiveInfo>().JsonToObject(object.optString("info"), LiveInfo.class);
 
-                        if (tempLiveItem != null ) {
+                        if (tempLiveItem != null) {
                             mLiveItemList.clear();
                             loading = false;
                             int size = mLiveItemList.size();

@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     true);
         }
         PreferencesUtils.putBoolean(this, Constant.IS_FIRST_OPENED_APP, false);
-
     }
 
     @Override

@@ -204,6 +204,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private static final int EFFECTIVE_READING_TIME = 7000;
     private MyCountDownTimer mDownTimer;
     private boolean isReaded = false;
+    private String shareUrl;
 
     public static void intoNewIntent(Context context, String id, String catId) {
         Intent intent = new Intent(context, PostZoneActivity.class);
@@ -585,7 +586,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.tv_share:
-                ShareUtils.showShare(ShareUtils.ARTICLE, this, mPostTitle, mPostDescription, mPostThumb, mArticleUrl, null);
+                ShareUtils.showShare(ShareUtils.ARTICLE, this, mPostTitle, mPostDescription, mPostThumb, shareUrl, null);
                 break;
 
             case R.id.tv_collect:
@@ -811,12 +812,12 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 mCurCommentCount = info.optInt("comment_num");
                 String catName = info.optString("catname");
                 // 文章简述
-                mPostDescription = info.optString("description");
-                mPostThumb = info.optString("thumb");
-                mPostTitle = info.optString("title");
+                mPostDescription = StringUtils.replaceNullToEmpty(info.optString("description"));
+                mPostThumb = StringUtils.replaceNullToEmpty(info.optString("thumb"));
+                mPostTitle = StringUtils.replaceNullToEmpty(info.optString("title"));
 
                 tbv_title.setText(catName);
-
+                shareUrl =StringUtils.replaceNullToEmpty(mDetailsEntity.getUrl());
                 bindViewForCollect();
                 bindViewForFavour();
                 mTvComment.setText(StringUtils.getDecimal2(mCurCommentCount, Constant.TEN_THOUSAND,

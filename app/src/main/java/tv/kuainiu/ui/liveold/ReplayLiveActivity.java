@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -261,7 +262,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     private int mTouchAction;
     private int mSurfaceYDisplayRange;
     private float mTouchY, mTouchX, mVol;
-
+    private PowerManager.WakeLock wakeLock;
     private boolean mIsLocked = false;
     private boolean mShowing;
     //Volume
@@ -301,6 +302,8 @@ public class ReplayLiveActivity extends BaseActivity implements
         layoutParamsFrameLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height / 3 * 2);
         layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
         ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
+        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
+                .newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "time");
     }
 
     private void registerBroadcast() {
@@ -1493,6 +1496,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        wakeLock.acquire();
         if (isPrepared) {
             player.start();
         }
@@ -1501,6 +1505,9 @@ public class ReplayLiveActivity extends BaseActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (wakeLock.isHeld()) {
+            wakeLock.release();
+        }
         if (isPrepared) {
             player.pause();
         }
