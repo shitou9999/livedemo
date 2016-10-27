@@ -55,7 +55,7 @@
                     android:layout_width="@dimen/live_tab_height"
                     android:layout_height="match_parent"
                     android:scaleType="center"
-                    android:src="@mipmap/del_little_red_btn" />
+                    android:src="@drawable/down_arrow"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -68,8 +68,9 @@
                     android:layout_width="@dimen/live_tab_height"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
+                    android:background="@color/white_color"
                     android:scaleType="center"
-                    android:src="@mipmap/del_little_red_btn" />
+                    android:src="@drawable/up_arrow" />
 
 
                 <TextView

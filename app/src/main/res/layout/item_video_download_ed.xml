@@ -56,22 +56,36 @@
 
         <ImageView
             android:id="@+id/iv_cover"
-            android:layout_width="120dp"
+            android:layout_width="100dp"
             android:layout_height="80dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_toEndOf="@id/rl_check"
             android:layout_toRightOf="@id/rl_check"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher"
             />
 
         <TextView
-            android:id="@+id/tv_title"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_toEndOf="@id/iv_cover"
+        android:layout_toRightOf="@id/iv_cover"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.2"
+        android:maxLines="2"
+        android:textColor="@color/colorGrey800"
+        android:textSize="@dimen/text_size_micro"
+        tools:text="sasdasdasdasdafgdfgdsdfsfs.mp4"/>
+        <TextView
+            android:id="@+id/tv_teacherName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
+            android:layout_below="@+id/tv_title"
             android:layout_toEndOf="@id/iv_cover"
             android:layout_toRightOf="@id/iv_cover"
             android:ellipsize="end"
@@ -80,7 +94,6 @@
             android:textColor="@color/colorGrey800"
             android:textSize="@dimen/text_size_micro"
             tools:text="sasdasdasdasdafgdfgdsdfsfs.mp4"/>
-
         <TextView
             android:id="@+id/tv_video_size"
             android:layout_width="wrap_content"

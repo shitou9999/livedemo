@@ -11,14 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:background="#000000" >
+        android:background="#000000">
 
         <SurfaceView
             android:id="@+id/playerSurfaceView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" >
-        </SurfaceView>
+            android:layout_centerInParent="true"></SurfaceView>
 
         <ProgressBar
             android:id="@+id/bufferProgressBar"
@@ -27,9 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-  <!--      <include layout="@layout/ad_layout" />
+        <!--      <include layout="@layout/ad_layout" />
 
-        <include layout="@layout/ad_pause_layout" />-->
+              <include layout="@layout/ad_pause_layout" />-->
 
         <LinearLayout
             android:id="@+id/playerTopLayout"
@@ -37,8 +36,7 @@
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_gravity="top"
-            android:background="#80000000"
-           >
+            android:background="#80000000">
 
             <ImageView
                 android:id="@+id/backPlayList"
@@ -62,17 +60,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:gravity="right" >
+                android:gravity="right">
 
-           <!--     <Button
-                    android:id="@+id/subtitleBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5dp"
-                    android:text="@string/subtitle"
-                    android:textColor="#FFFFFF"
-                    android:visibility="gone" />-->
+                <!--     <Button
+                         android:id="@+id/subtitleBtn"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:layout_gravity="center_vertical"
+                         android:layout_marginRight="5dp"
+                         android:text="@string/subtitle"
+                         android:textColor="#FFFFFF"
+                         android:visibility="gone" />-->
 
                 <Button
                     android:id="@+id/definitionBtn"
@@ -80,9 +78,9 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
+                    android:background="@null"
                     android:text="@string/definition"
                     android:textColor="#FFFFFF"
-                    android:background="@null"
                     android:visibility="gone" />
 
                 <!-- 倍速播放选择 -->
@@ -93,9 +91,9 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
+                    android:background="@null"
                     android:text="@string/speed"
                     android:textColor="#FFFFFF"
-                    android:background="@null"
                     android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
@@ -106,13 +104,12 @@
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:background="#80000000"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="5" >
+                android:layout_weight="5">
 
                 <ImageView
                     android:id="@+id/btnPlay"
@@ -121,8 +118,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/btn_pause" >
-                </ImageView>
+                    android:src="@drawable/btn_pause"></ImageView>
 
                 <TextView
                     android:id="@+id/playDuration"
@@ -139,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/videoDuration"
-                    android:layout_toRightOf="@+id/playDuration" >
+                    android:layout_toRightOf="@+id/playDuration">
 
                     <SeekBar
                         android:id="@+id/skbProgress"
@@ -149,8 +145,7 @@
                         android:layout_weight="1"
                         android:maxHeight="10dp"
                         android:minHeight="5dp"
-                        android:progressDrawable="@drawable/seekbar_style" >
-                    </SeekBar>
+                        android:progressDrawable="@drawable/seekbar_style"></SeekBar>
                 </LinearLayout>
 
                 <TextView
@@ -178,11 +173,11 @@
                 android:layout_height="40dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@null"
                 android:gravity="center"
                 android:text="@string/screensize"
-                android:background="@null"
                 android:textColor="#FFFFFF"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -198,7 +193,7 @@
             android:background="#80000000"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <tv.kuainiu.widget.cc.VerticalSeekBar
                 android:id="@+id/volumeSeekBar"
@@ -215,22 +210,23 @@
                 android:src="@drawable/volume" />
         </LinearLayout>
 
-    <!-- 字幕   <TextView
-            android:id="@+id/subtitleText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="60dp"
-            android:gravity="center_horizontal"
-            android:textColor="#FFFFFF" />-->
+        <!-- 字幕   <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="60dp"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFF" />-->
     </RelativeLayout>
 
     <ScrollView
         android:id="@+id/svBelow"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -301,8 +297,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:gravity="center"
                         android:drawableTop="@drawable/selector_video_suport_number"
+                        android:gravity="center"
                         android:text="点赞" />
 
                     <TextView
@@ -379,7 +375,9 @@
         </LinearLayout>
     </ScrollView>
 
-    <include layout="@layout/include_comments_text_input" />
+    <include
+        layout="@layout/include_comments_text_input"
+        android:visibility="invisible" />
 </LinearLayout>
 
 

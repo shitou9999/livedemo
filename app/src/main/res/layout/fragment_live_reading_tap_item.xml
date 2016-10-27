@@ -26,6 +26,7 @@
 
         <include layout="@layout/include_liveing" />
 
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,9 +47,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/selector_bg_blue2"
+                android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:gravity="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 tools:text="王丽" />
@@ -76,7 +77,22 @@
                 tools:text="波段交易，稳健获利" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/rlState"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:background="#88F83848"
+            >
 
+            <TextView
+                android:id="@+id/tvState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="直播中"
+                android:textColor="@color/white_color" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -92,12 +108,11 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:background="@drawable/selector_bg_appointment"
-            android:textColor="@drawable/selector_bg_appointment_text"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="预约"
-             />
+            android:textColor="@drawable/selector_bg_appointment_text" />
 
         <TextView
             android:id="@+id/tvTitle"

@@ -29,7 +29,7 @@ public class Appointment {
     private String end_date;
     private TeacherInfo teacher_info;
     private int subscribe_num;
-    private int start_datetime;
+    private long start_datetime;
     private String live_id;
     private int live_status;
     private String live_msg;
@@ -99,11 +99,11 @@ public class Appointment {
         this.subscribe_num = subscribe_num;
     }
 
-    public int getStart_datetime() {
+    public long getStart_datetime() {
         return start_datetime;
     }
 
-    public void setStart_datetime(int start_datetime) {
+    public void setStart_datetime(long start_datetime) {
         this.start_datetime = start_datetime;
     }
 

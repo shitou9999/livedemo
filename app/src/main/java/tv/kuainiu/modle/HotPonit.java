@@ -9,7 +9,7 @@ private String nickname;//"曾国良",
     private String id;//"9",
     private String user_id;//"2",
     private String description;//"A股评论：成交量4549亿元，1，万科A在8月16日随出货式漲停走票后在25日補8月12日跳空缺口时作龙回首观察，昨天以61万手強锁涨停",
-    private String support_num;//"56",
+    private int support_num;//"56",
     private String news_id;//"13",
     private long create_date;//"1473482663",
     private String[] tag_list;// ["新1", "金子", "大涨"],
@@ -61,11 +61,11 @@ private String nickname;//"曾国良",
         this.description = description;
     }
 
-    public String getSupport_num() {
+    public int getSupport_num() {
         return support_num;
     }
 
-    public void setSupport_num(String support_num) {
+    public void setSupport_num(int support_num) {
         this.support_num = support_num;
     }
 

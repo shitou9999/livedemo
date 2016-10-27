@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import tv.kuainiu.R;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.utils.StringUtils;
 
 /**
@@ -45,23 +47,38 @@ public class PickArticleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder mViewHolder = null;
+        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.view_item, parent, false);
-            mViewHolder=new ViewHolder();
-            mViewHolder.tv_head_top = (TextView) convertView.findViewById(R.id.tv_head_top);
-            mViewHolder.tv_city = (TextView) convertView.findViewById(R.id.tv_city);
-            mViewHolder.tv_head_top.setVisibility(View.GONE);
+                    .inflate(R.layout.pick_article_item, parent, false);
+            mViewHolder = new ViewHolder();
+            mViewHolder.tv_article_name = (TextView) convertView.findViewById(R.id.tv_article_name);
+            mViewHolder.ivType = (ImageView) convertView.findViewById(R.id.ivType);
             convertView.setTag(convertView);
         } else {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
-        mViewHolder.tv_city.setText(StringUtils.replaceNullToEmpty(getItem(position).getNews_title()));
+
+        mViewHolder.tv_article_name.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
+        switch (teacherZoneDynamicsInfo.getType()) {
+            case Constant.NEWS_TYPE_VIDEO:
+                mViewHolder.ivType.setImageResource(R.mipmap.play_pre);
+                break;
+//            case Constant.NEWS_TYPE_VOICE:
+//                mViewHolder.ivType.setImageResource(R.mipmap.play_pre);
+//                break;
+            case Constant.NEWS_TYPE_LIVE:
+                mViewHolder.ivType.setImageResource(R.mipmap.video_pre);
+                break;
+            default:
+                mViewHolder.ivType.setImageResource(R.mipmap.text_pre);
+                break;
+        }
         return convertView;
     }
 
     static class ViewHolder {
-        TextView tv_head_top;
-        TextView tv_city;
+        TextView tv_article_name;
+        ImageView ivType;
     }
 }

@@ -389,13 +389,13 @@ public class PublishVoiceActivity extends BaseActivity {
         title = etTitle.getText().toString();
 //        content = etContent.getText().toString();
 
-        if (TextUtils.isEmpty(thumb)) {
-            flag = false;
-            tvError.setText("请选择缩略图");
-            ToastUtils.showToast(this, "请选择缩略图");
-        } else {
-            tvError.setText("");
-        }
+//        if (TextUtils.isEmpty(thumb)) {
+//            flag = false;
+//            tvError.setText("请选择缩略图");
+//            ToastUtils.showToast(this, "请选择缩略图");
+//        } else {
+//            tvError.setText("");
+//        }
         if (TextUtils.isEmpty(title)) {
             flag = false;
             etTitle.setError("标题不能为空");
@@ -771,7 +771,7 @@ public class PublishVoiceActivity extends BaseActivity {
             tvTime.setText(String.valueOf(mTime) + '"');
             Log.i("record_test", "录音成功");
             TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo = new TeacherZoneDynamicsInfo();
-            mTeacherZoneDynamicsInfo.setType(String.valueOf(Constans.TYPE_AUDIO));
+            mTeacherZoneDynamicsInfo.setType(Constans.TYPE_AUDIO);
             mTeacherZoneDynamicsInfo.setNews_voice_url(mSoundDataFilePath);
             mTeacherZoneDynamicsInfo.setNews_title(String.valueOf(mTime) + '"');
             listTeacherZoneDynamicsInfo.clear();

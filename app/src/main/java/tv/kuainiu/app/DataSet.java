@@ -38,6 +38,8 @@ public class DataSet {
             public void onCreate(SQLiteDatabase db) {
                 String sql = "CREATE TABLE IF NOT EXISTS downloadinfo(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "Reserve VERCHAR, " +
+                        "teacherName VERCHAR, " +
                         "firstImage VERCHAR, " +
                         "newId VERCHAR, " +
                         "videoId VERCHAR, " +
@@ -67,6 +69,7 @@ public class DataSet {
                 db.execSQL(videoPositionSql);
 
             }
+
         };
 
 //		uploadInfoMap = new HashMap<String, UploadInfo>();
@@ -185,6 +188,7 @@ public class DataSet {
 
             for (DownloadInfo downloadInfo : downloadInfoMap.values()) {
                 ContentValues values = new ContentValues();
+                values.put("Reserve", downloadInfo.getReserve());
                 values.put("firstImage", downloadInfo.getFirstImage());
                 values.put("name", downloadInfo.getName());
                 values.put("newId", downloadInfo.getNewId());
@@ -263,6 +267,8 @@ public class DataSet {
         try {
             if(db.isOpen()) {
                 ContentValues values = new ContentValues();
+                values.put("Reserve", downloadInfo.getReserve());
+                values.put("teacherName", downloadInfo.getTeacherName());
                 values.put("firstImage", downloadInfo.getFirstImage());
                 values.put("name", downloadInfo.getName());
                 values.put("newId", downloadInfo.getNewId());
@@ -299,6 +305,8 @@ public class DataSet {
         }
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put("Reserve", downloadInfo.getReserve());
+        values.put("teacherName", downloadInfo.getTeacherName());
         values.put("firstImage", downloadInfo.getFirstImage());
         values.put("name", downloadInfo.getName());
         values.put("newId", downloadInfo.getNewId());
@@ -329,6 +337,8 @@ public class DataSet {
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date createTime = formater.parse(cursor.getString(cursor.getColumnIndex("createTime")));
         DownloadInfo downloadInfo = new DownloadInfo(
+                cursor.getString(cursor.getColumnIndex("Reserve")),
+                cursor.getString(cursor.getColumnIndex("teacherName")),
                 cursor.getString(cursor.getColumnIndex("firstImage")),
                 cursor.getString(cursor.getColumnIndex("name")),
                 cursor.getString(cursor.getColumnIndex("newId")),

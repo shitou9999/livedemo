@@ -45,7 +45,7 @@ import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.ToastUtils;
 
-import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_LIVE;
+import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_PLAN;
 
 /**
  * 我的直播
@@ -142,7 +142,7 @@ public class MyLivePlanFragment extends BaseFragment {
         mLayoutManager = new CustomLinearLayoutManager(getActivity());
         rvReadingTap.setLayoutManager(mLayoutManager);
 
-        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), MY_LIVE);
+        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), MY_PLAN);
         rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }

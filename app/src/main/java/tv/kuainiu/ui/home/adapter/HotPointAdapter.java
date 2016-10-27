@@ -57,7 +57,7 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
         holder.mTvTeacherName.setText(StringUtils.replaceNullToEmpty(mHotPoint.getTeacher_info()==null?"":mHotPoint.getTeacher_info().getNickname(),mHotPoint.getNickname()));
         holder.mTvHotPointContent.setText(StringUtils.replaceNullToEmpty(mHotPoint.getDescription()));
         ImageDisplayUtil.displayImage(mContext, holder.mCivAvatar, StringUtils.replaceNullToEmpty(mHotPoint.getTeacher_info()==null?"":mHotPoint.getTeacher_info().getAvatar(),mHotPoint.getAvatar()), R.mipmap.default_avatar);
-        holder.mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%s)", StringUtils.replaceNullToEmpty(mHotPoint.getSupport_num(), "0")));
+        holder.mTvHotPointSupport.setText(String.format(Locale.CHINA, "(%d)", mHotPoint.getSupport_num()));
         if (mHotPoint.getTag_list() != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.fragment_home_item_hot_point_flag_item,//只能有一个定义了id的TextView
                     mHotPoint.getTag_list());//data既可以是数组，也可以是List集合

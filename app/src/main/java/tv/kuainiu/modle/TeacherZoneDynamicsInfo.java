@@ -23,11 +23,11 @@ public class TeacherZoneDynamicsInfo implements Serializable {
     private String news_catname;
     private String news_thumb;
     private long news_inputtime;
-    private String type;
+    private int type;
     private String news_title;
     private String news_video_id;
     private String news_voice_url;
-    private int news_voice_time;
+    private String news_voice_time;
 
     public String getId() {
         return id;
@@ -77,11 +77,11 @@ public class TeacherZoneDynamicsInfo implements Serializable {
         this.news_inputtime = news_inputtime;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -109,11 +109,11 @@ public class TeacherZoneDynamicsInfo implements Serializable {
         this.news_voice_url = news_voice_url;
     }
 
-    public int getNews_voice_time() {
+    public String getNews_voice_time() {
         return news_voice_time;
     }
 
-    public void setNews_voice_time(int news_voice_time) {
+    public void setNews_voice_time(String news_voice_time) {
         this.news_voice_time = news_voice_time;
     }
 }

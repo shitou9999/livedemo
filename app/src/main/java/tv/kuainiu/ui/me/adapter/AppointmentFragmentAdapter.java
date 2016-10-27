@@ -70,8 +70,9 @@ public class AppointmentFragmentAdapter extends BaseSwipeAdapter {
         ImageDisplayUtil.displayImage(context, ci_avatar, StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getAvatar()), R.mipmap.default_avatar);
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getNickname()));
         tvTheme.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getSlogan()));
-        tv_live_time.setText(DateUtil.getDurationStringOriginal("MM-dd HH:ss", itemData.getStart_datetime()));
+        tv_live_time.setText(DateUtil.getDurationStringOriginal("MM-dd HH:mm", itemData.getStart_datetime()));
         tvLiveState.setText(StringUtils.replaceNullToEmpty(itemData.getLive_msg()));
+        tv_live_flag.setText("直播");
         switch (itemData.getLive_status()) {
             case Constans.LIVE_END://直播结束
                 tvLiveState.setBackgroundColor(context.getResources().getColor(R.color.colorGrey900));

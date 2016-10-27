@@ -1,6 +1,7 @@
 package tv.kuainiu.ui.live.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
@@ -55,6 +57,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int LIVE_ITEM = 4;
     public static final int ZHI_BO = 1;
     public static final int MY_LIVE = 3;
+    public static final int MY_PLAN = 4;
     public static final int YU_YUE = 2;
     List<Integer> types = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
@@ -235,8 +238,28 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.mTvLiveing.setText("直播中");
             holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             holder.tvAppointment.setVisibility(View.GONE);
+            holder.rlState.setVisibility(View.GONE);
         } else {
+            holder.rlState.setVisibility(View.GONE);
             if (type == MY_LIVE) {
+                holder.rlState.setVisibility(View.VISIBLE);
+                switch (liveItem.getLive_status()) {
+                    case Constans.LIVE_END://直播结束
+                        holder.rlState.setBackgroundColor(Color.parseColor("#88000000"));
+                        holder.tvState.setText("直播结束");
+                        break;
+
+                    case Constans.LIVE_ING://直播中
+                        holder.rlState.setBackgroundColor(Color.parseColor("#88F83848"));
+                        holder.tvState.setText("直播中");
+                        break;
+                    default:
+                        holder.rlState.setBackgroundColor(Color.parseColor("#88F5A623"));
+                        holder.tvState.setText("未直播");
+                        break;
+                }
+            }
+            if (type == MY_LIVE || type == MY_PLAN) {
                 holder.tvAppointment.setVisibility(View.GONE);
                 holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
             } else {
@@ -389,6 +412,10 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView tvAppointment;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
+        @BindView(R.id.rlState)
+        RelativeLayout rlState;
+        @BindView(R.id.tvState)
+        TextView tvState;
 
         public ViewHolder(View itemView) {
             super(itemView);

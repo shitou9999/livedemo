@@ -13,11 +13,14 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.utils.DateUtil;
+import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.StringUtils;
 
 /**
@@ -52,6 +55,13 @@ public class MyLiveHistoryFragmentAdapter extends RecyclerView.Adapter<MyLiveHis
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final LiveInfo itemData = listData.get(position);
+
+        ImageDisplayUtil.displayImage(mContext, holder.ci_avatar, StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getAvatar()), R.mipmap.default_avatar);
+        holder.tvTeacherName.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getNickname()));
+        holder.tvTheme.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getSlogan()));
+        holder.tv_live_time.setText(DateUtil.getDurationString("MM-dd HH:mm", itemData.getStart_datetime()));
+        holder.tv_live_flag.setText("回看");
+
         holder.tvLiveState.setText(StringUtils.replaceNullToEmpty(itemData.getLive_msg()));
         switch (itemData.getLive_status()) {
             case Constans.LIVE_END://直播结束
@@ -84,8 +94,18 @@ public class MyLiveHistoryFragmentAdapter extends RecyclerView.Adapter<MyLiveHis
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ci_avatar)
+        CircleImageView ci_avatar;
         @BindView(R.id.tvLiveState)
         TextView tvLiveState;
+        @BindView(R.id.tvTeacherName)
+        TextView tvTeacherName;
+        @BindView(R.id.tvTheme)
+        TextView tvTheme;
+        @BindView(R.id.tv_live_time)
+        TextView tv_live_time;
+        @BindView(R.id.tv_live_flag)
+        TextView tv_live_flag;
         @BindView(R.id.tvLiveDescription)
         TextView tvLiveDescription;
         @BindView(R.id.vLine)
@@ -96,6 +116,7 @@ public class MyLiveHistoryFragmentAdapter extends RecyclerView.Adapter<MyLiveHis
         TextView tvState;
         @BindView(R.id.rl_item)
         RelativeLayout rlItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

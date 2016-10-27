@@ -135,8 +135,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBaseFragments.clear();
         mBaseFragments.add(HomeFragment.newInstance(0));
         mBaseFragments.add(LiveMainFragment.newInstance());
-        mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(TeachersFragment.newInstance());
+        mBaseFragments.add(FriendsMainFragment.newInstance());
         mBaseFragments.add(MeFragment.newInstance());
 
         mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
@@ -148,8 +148,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void switchFragment(int position) {
         ll_main_home.setSelected(position == 0);
         ll_main_live.setSelected(position == 1);
-        ll_main_friends.setSelected(position == 2);
-        ll_main_teacher.setSelected(position == 3);
+        ll_main_teacher.setSelected(position == 2);
+        ll_main_friends.setSelected(position == 3);
         ll_main_me.setSelected(position == 4);
         mVpMain.setCurrentItem(position, false);
     }
@@ -164,14 +164,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.ll_main_live:
                 switchFragment(1);
                 break;
-            case R.id.ll_main_friends:
+            case R.id.ll_main_teacher:
                 switchFragment(2);
                 break;
-
-            case R.id.ll_main_teacher:
+            case R.id.ll_main_friends:
                 switchFragment(3);
                 break;
-
             case R.id.ll_main_me:
                 switchFragment(4);
                 break;
@@ -248,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case switch_teacher_fragment:
-                switchFragment(3);
+                switchFragment(2);
                 break;
         }
     }

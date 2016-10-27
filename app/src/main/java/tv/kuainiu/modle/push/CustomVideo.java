@@ -27,7 +27,7 @@ public class CustomVideo {
 
     private String id;
     private String cat_id;
-    private String type;
+    private int type;
     private String title;
     private String thumb;
     private String url;
@@ -60,11 +60,11 @@ public class CustomVideo {
         this.cat_id = cat_id;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

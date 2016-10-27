@@ -1295,11 +1295,15 @@ public class ReplayLiveActivity extends BaseActivity implements
 
 
     private void hideEditTextSoftInput(EditText editText) {
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        if(imm!=null && editText!=null) {
+            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
     }
 
     private void hideKeyBoardEditTextSoftInput() {
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        if(imm!=null) {
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     public static class MyHandle extends WeakHandler<ReplayLiveActivity> {
@@ -1403,7 +1407,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                 break;
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
-                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mTeacherInfo.getLive_info().getSupport_num() + 1));
+                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞",mLiveInfo.getSupport_num() + 1));
                     tv_live_teacher_zan.setSelected(true);
                     ToastUtils.showToast(this, "点赞成功");
                 } else if (Constant.HAS_SUCCEED == event.getCode()) {

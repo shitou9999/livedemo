@@ -58,7 +58,7 @@ public class PostParentLayout extends RelativeLayout {
     public void setPostType(TeacherZoneDynamicsInfo teacherZoneDynamicsInfo) {
         this.teacherZoneDynamicsInfo = teacherZoneDynamicsInfo;
         if (this.teacherZoneDynamicsInfo != null) {
-            mPostType = Integer.parseInt(this.teacherZoneDynamicsInfo.getType());
+            mPostType = this.teacherZoneDynamicsInfo.getType();
             setVisibility(View.VISIBLE);
             loadPostView();
         } else {
@@ -186,7 +186,7 @@ public class PostParentLayout extends RelativeLayout {
                 final ImageView ivPlayVoice = (ImageView) view.findViewById(R.id.ivPlay);
                 final ImageView ivVoiceBg = (ImageView) view.findViewById(R.id.ivVoiceBg);
                 TextView tvVideoLength = (TextView) view.findViewById(R.id.tvVideoLength);
-                tvVideoLength.setText(String.format(Locale.CHINA, "%d\"", teacherZoneDynamicsInfo.getNews_voice_time()));
+                tvVideoLength.setText(String.format(Locale.CHINA, "%s\"", teacherZoneDynamicsInfo.getNews_voice_time()));
                 ivPlayVoice.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {

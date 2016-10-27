@@ -18,6 +18,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.app.Constans;
 import tv.kuainiu.modle.Appointment;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
@@ -57,9 +58,7 @@ public class AppointmentHistoryFragmentAdapter extends BaseSwipeAdapter {
         TextView tvTeacherName = (TextView) convertView.findViewById(R.id.tvTeacherName);
         TextView tvTheme = (TextView) convertView.findViewById(R.id.tvTheme);
         TextView tv_live_time = (TextView) convertView.findViewById(R.id.tv_live_time);
-        tv_live_time.setVisibility(View.GONE);
         TextView tv_live_flag = (TextView) convertView.findViewById(R.id.tv_live_flag);
-        tv_live_flag.setVisibility(View.GONE);
         TextView tvLiveState = (TextView) convertView.findViewById(R.id.tvLiveState);
         TextView tvLiveDescription = (TextView) convertView.findViewById(R.id.tvLiveDescription);
         TextView tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
@@ -70,7 +69,8 @@ public class AppointmentHistoryFragmentAdapter extends BaseSwipeAdapter {
         ImageDisplayUtil.displayImage(context, ci_avatar, StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getAvatar()), R.mipmap.default_avatar);
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getNickname()));
         tvTheme.setText(StringUtils.replaceNullToEmpty(itemData.getTeacher_info().getSlogan()));
-//        tv_live_time.setText(StringUtils.replaceNullToEmpty(itemData.getStart_date()));
+        tv_live_time.setText(DateUtil.getDurationString("MM-dd HH:mm", itemData.getStart_datetime()));
+        tv_live_flag.setText("回放");
         tvLiveState.setText(StringUtils.replaceNullToEmpty(itemData.getLive_msg()));
         switch (itemData.getLive_status()) {
             case Constans.LIVE_END://直播结束

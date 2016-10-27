@@ -46,8 +46,8 @@
                         android:id="@+id/iv_back2"
                         android:layout_width="@dimen/live_bar_height"
                         android:layout_height="match_parent"
-                        android:scaleType="center"
-                        android:src="@mipmap/back_icon" />
+                        android:scaleType="centerInside"
+                        android:src="@drawable/selector_btn_back" />
 
                     <ImageView
                         android:id="@+id/iv_share2"
@@ -265,6 +265,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
+                    android:padding="10dp"
                     android:layout_marginBottom="@dimen/live_tab_height"
                     android:gravity="left|top" />
                 <!--

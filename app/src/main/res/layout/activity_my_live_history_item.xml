@@ -6,11 +6,96 @@
     android:layout_height="wrap_content"
     android:background="@drawable/selector_option_normal"
     android:padding="@dimen/small_margin">
+    <RelativeLayout
+        android:id="@+id/rl_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ci_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_avatar" />
+
+        <ImageView
+            android:id="@+id/ivIsVip"
+            style="@style/view_invisibility"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/vip_ic" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvTeacherName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/rl_avatar"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/colorBlue500"
+        android:textSize="@dimen/text_size_small"
+        tools:text="王丽" />
+
+    <TextView
+        android:id="@+id/tvTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTeacherName"
+        android:layout_below="@+id/tvTeacherName"
+        android:textColor="@color/colorGrey333333"
+        android:textSize="@dimen/text_size_small"
+        tools:text="波段交易" />
+
+
+    <TextView
+        android:id="@+id/tv_live_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tvTeacherName"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/colorGrey333333"
+        tools:text="2016-08-10 08:55" />
+
+    <TextView
+        android:id="@+id/tv_live_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tvTheme"
+        android:layout_below="@+id/tv_live_time"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:text="回放"
+        android:textColor="@color/colorGrey333333" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:layout_below="@+id/rl_avatar"
         android:background="@color/colorGrey200"
         android:orientation="horizontal">
 
@@ -19,10 +104,10 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center"
-            android:background="@color/colorRed500"
+            android:background="@color/colorGrey333333"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            tools:text="直播中" />
+            tools:text="回放" />
 
         <TextView
             android:id="@+id/tvLiveDescription"

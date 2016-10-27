@@ -86,7 +86,6 @@ import tv.kuainiu.command.http.CollectionMessageHttpUtil;
 import tv.kuainiu.command.http.CommentHttpUtil;
 import tv.kuainiu.command.http.SupportHttpUtil;
 import tv.kuainiu.command.http.TeacherHttpUtil;
-import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
@@ -181,6 +180,7 @@ public class VideoActivity extends BaseActivity implements
     private String news_id = "";
     private String cat_id = "";
     private String video_name = "";
+    private String teacher_name = "";
     private VideoDetail mVideoDetail = null;
     private List<CommentItem> listCommentItem = new ArrayList<>();
     private BaseActivity activity;
@@ -272,7 +272,7 @@ public class VideoActivity extends BaseActivity implements
      */
     public static void intoNewIntent(Context context, String news_id, String video_id, String cat_id, String video_name) {
         Intent intent = new Intent(context, VideoActivity.class);
-        intent.putExtra(NEWS_ID,news_id);
+        intent.putExtra(NEWS_ID, news_id);
         intent.putExtra(VIDEO_ID, video_id);
         intent.putExtra(CAT_ID, cat_id);
         intent.putExtra(VIDEO_NAME, video_name);
@@ -307,7 +307,7 @@ public class VideoActivity extends BaseActivity implements
 
                         title = videoId + "-" + definition;
                         if (DataSet.hasDownloadInfo(title)) {
-                            Toast.makeText(context, "文件已存在", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "该视频已下载过，请勿重复下载", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -332,7 +332,7 @@ public class VideoActivity extends BaseActivity implements
                         downloaderHashMap.put(title, downloader);
                         //缩略图
                         String thumb = mVideoDetail == null ? "" : mVideoDetail.getThumb();
-                        DataSet.addDownloadInfo(new DownloadInfo(thumb, video_name, news_id, videoId, cat_id, title, 0, null, Downloader.WAIT, new Date(), definition));
+                        DataSet.addDownloadInfo(new DownloadInfo("", teacher_name, thumb, video_name, news_id, videoId, cat_id, title, 0, null, Downloader.WAIT, new Date(), definition));
 
                         definitionDialog.dismiss();
                         Toast.makeText(context, "文件已加入下载队列", Toast.LENGTH_SHORT).show();
@@ -566,10 +566,12 @@ public class VideoActivity extends BaseActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvDown:
-                //视频下载
-                downloader = new Downloader(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY);
-                downloader.setOnProcessDefinitionListener(onProcessDefinitionListener);
-                downloader.getDefinitionMap();
+                if (mVideoDetail != null) {
+                    //视频下载
+                    downloader = new Downloader(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY);
+                    downloader.setOnProcessDefinitionListener(onProcessDefinitionListener);
+                    downloader.getDefinitionMap();
+                }
                 break;
             case R.id.tvCollection:
                 if (!MyApplication.isLogin()) {
@@ -634,6 +636,15 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void dataBind() {
+        if (mVideoDetail != null) {
+            rlBelow.setVisibility(View.VISIBLE);
+            rlComment.setVisibility(View.VISIBLE);
+        } else {
+            rlBelow.setVisibility(View.INVISIBLE);
+            rlComment.setVisibility(View.INVISIBLE);
+            return;
+        }
+        video_name = StringUtils.replaceNullToEmpty(mVideoDetail.getTitle());
         tvTiltle.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getTitle()));
         tvDescripion.setText(StringUtils.replaceNullToEmpty(mVideoDetail.getCatname()));//栏目
 
@@ -656,6 +667,7 @@ public class VideoActivity extends BaseActivity implements
         if (teacherInfo == null) {
             return;
         }
+        teacher_name = teacherInfo.getNickname();
         ImageDisplayUtil.displayImage(this, ciAvatar, StringUtils.replaceNullToEmpty(teacherInfo.getAvatar()), R.mipmap.default_avatar);
         tvTheme.setText(StringUtils.replaceNullToEmpty(teacherInfo.getSlogan()));
         tvTeacherName.setText(StringUtils.replaceNullToEmpty(teacherInfo.getNickname()));
@@ -674,11 +686,11 @@ public class VideoActivity extends BaseActivity implements
         Map<String, Object> map = new HashMap<>();
         map.put("id", news_id);
         map.put("user_id", MyApplication.isLogin() ? MyApplication.getUser().getUser_id() : "");
-        OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_DETAILS + ParamUtil.getParamForGet(map), Action.video_details, CacheConfig.getCacheConfig());
+        OKHttpUtils.getInstance().syncGet(this, Api.VIDEO_OR_POST_DETAILS + ParamUtil.getParamForGet(map), Action.video_details);
     }
 
     private void getHotCommentList() {
-        CommentHttpUtil.hotComment(this, "1", cat_id, news_id, "", 1,Action.comment_list_hot_video);
+        CommentHttpUtil.hotComment(this, "1", cat_id, news_id, "", 1, Action.comment_list_hot_video);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1011,11 +1023,11 @@ public class VideoActivity extends BaseActivity implements
             if (isPlaying == null || isPlaying.booleanValue()) {
 //                player.pause();
                 playOp.setImageResource(R.drawable.btn_play);
-                currentPosition=0;
+                currentPosition = 0;
             }
         }
 
-        if (currentPosition >=0) {
+        if (currentPosition >= 0) {
             player.seekTo(currentPosition);
         } else {
             if (lastPlayPosition > 0) {

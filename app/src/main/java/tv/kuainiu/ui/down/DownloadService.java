@@ -36,7 +36,6 @@ import tv.kuainiu.utils.ParamsUtil;
  * @author CC视频
  */
 public class DownloadService extends Service {
-
     private final int NOTIFY_ID = 10;
     private final String TAG = "tv.kuainiu.download.DownloadService";
 

@@ -63,22 +63,6 @@
 
 
             <LinearLayout
-                android:id="@+id/ll_main_friends"
-                style="@style/MainTabLinearLayoutStyle">
-
-                <ImageView
-                    android:id="@+id/iv_main_friends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/selector_main_firends" />
-
-                <TextView
-                    android:id="@+id/tv_main_friends"
-                    style="@style/AppTheme.MainTabRadioButtonStyle"
-                    android:text="@string/tab_main_friends" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/ll_main_teacher"
                 style="@style/MainTabLinearLayoutStyle">
 
@@ -92,6 +76,22 @@
                     android:id="@+id/tv_main_teacher"
                     style="@style/AppTheme.MainTabRadioButtonStyle"
                     android:text="@string/tab_main_teacher" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_main_friends"
+                style="@style/MainTabLinearLayoutStyle">
+
+                <ImageView
+                    android:id="@+id/iv_main_friends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/selector_main_firends" />
+
+                <TextView
+                    android:id="@+id/tv_main_friends"
+                    style="@style/AppTheme.MainTabRadioButtonStyle"
+                    android:text="@string/tab_main_friends" />
             </LinearLayout>
 
             <LinearLayout
@@ -120,7 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_above="@+id/ll_main"
-            android:background="@color/colorGrey200" />
+            android:background="@color/colorGrey400" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

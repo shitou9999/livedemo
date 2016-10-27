@@ -315,7 +315,7 @@ public class TeacherZoneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         news_info.setNews_inputtime(info.getInputtime());
         news_info.setNews_id(info.getId());
         holder.mPostParentLayout.setPostType(news_info);
-        switch (Integer.parseInt(info.getType())) {
+        switch (info.getType()) {
             case 1:
 //                ImageDisplayUtils.display(mContext, R.drawable.temp1, holder.mIvFriendsTemp);
                 holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);

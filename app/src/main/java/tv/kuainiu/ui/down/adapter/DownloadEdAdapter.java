@@ -30,6 +30,7 @@ import tv.kuainiu.modle.DownloadInfo;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
+import tv.kuainiu.utils.StringUtils;
 
 /**
  * @author nanck on 2016/5/6.
@@ -56,13 +57,22 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.download_ed_swipe)
         SwipeLayout swipeLayout;
-        @BindView(R.id.rl_major) RelativeLayout rlMajor;
-        @BindView(R.id.ll_delete) LinearLayout llDelete;
-        @BindView(R.id.iv_cover) ImageView imageCover;
-        @BindView(R.id.rl_check) RelativeLayout rlCheck;
-        @BindView(R.id.iv_check) ImageView imageCheck;
-        @BindView(R.id.tv_title) TextView textTitle;
-        @BindView(R.id.tv_video_size) TextView textVideoSize;
+        @BindView(R.id.rl_major)
+        RelativeLayout rlMajor;
+        @BindView(R.id.ll_delete)
+        LinearLayout llDelete;
+        @BindView(R.id.iv_cover)
+        ImageView imageCover;
+        @BindView(R.id.rl_check)
+        RelativeLayout rlCheck;
+        @BindView(R.id.iv_check)
+        ImageView imageCheck;
+        @BindView(R.id.tv_title)
+        TextView textTitle;
+        @BindView(R.id.tv_teacherName)
+        TextView tvTeacherName;
+        @BindView(R.id.tv_video_size)
+        TextView textVideoSize;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -102,7 +112,8 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
         mSelectedListener = selectedListener;
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return mDownloadInfos == null ? 0 : mDownloadInfos.size();
     }
 
@@ -136,23 +147,27 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
         }
 
         ImageDisplayUtil.displayImage(mContext, holder.imageCover, info.getFirstImage(), R.mipmap.ic_def_error);
-        holder.textTitle.setText(info.getName());
+        holder.textTitle.setText(StringUtils.replaceNullToEmpty(info.getName()));
+        holder.tvTeacherName.setText(StringUtils.replaceNullToEmpty(info.getTeacherName()));
         holder.textVideoSize.setText(info.getProgressText());
 
 
         holder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
-            @Override public void onStartOpen(SwipeLayout layout) {
+            @Override
+            public void onStartOpen(SwipeLayout layout) {
                 List<Integer> openItems = mItemManger.getOpenItems();
                 if (openItems != null && openItems.size() > 0) {
                     mItemManger.closeItem(openItems.get(0));
                 }
             }
 
-            @Override public void onOpen(SwipeLayout layout) {
+            @Override
+            public void onOpen(SwipeLayout layout) {
                 setItemStatus(LEFT_SLIDE);
             }
 
-            @Override public void onClose(SwipeLayout layout) {
+            @Override
+            public void onClose(SwipeLayout layout) {
                 setItemStatus(NORMAL);
             }
         });
@@ -162,8 +177,8 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
             public void onClick(View view) {
                 DataSet.removeDownloadInfo(info.getTitle());
 
-                File file = new File(Environment.getExternalStorageDirectory()+"/"+ ConfigUtil.DOWNLOAD_DIR, info.getTitle()+".mp4");
-                if(file.exists()){
+                File file = new File(Environment.getExternalStorageDirectory() + "/" + ConfigUtil.DOWNLOAD_DIR, info.getTitle() + ".mp4");
+                if (file.exists()) {
                     file.delete();
                 }
                 mItemManger.removeShownLayouts(holder.swipeLayout);
@@ -179,11 +194,13 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
     }
 
 
-    @Override public int getSwipeLayoutResourceId(int position) {
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
         return R.id.download_ed_swipe;
     }
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         int position = (int) v.getTag(R.id.rl_check);
         DownloadInfo info = (DownloadInfo) v.getTag(R.id.iv_check);
         if (info == null) {
@@ -192,7 +209,7 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
         DebugUtils.dd("Current Item Status click : " + mItemStatus);
         switch (mItemStatus) {
             case NORMAL:
-                VideoActivity.intoNewIntent(mContext,info.getNewId(),info.getVideoId(),info.getCatId(),info.getName());
+                VideoActivity.intoNewIntent(mContext, info.getNewId(), info.getVideoId(), info.getCatId(), info.getName());
                 break;
 
             case LEFT_SLIDE:

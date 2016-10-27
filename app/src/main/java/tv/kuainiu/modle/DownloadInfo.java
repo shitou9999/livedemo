@@ -7,6 +7,8 @@ import java.util.Date;
 public class DownloadInfo {
 
     private int id;
+    private String Reserve;//预留字段
+    private String teacherName;
     private String firstImage;
     private String newId;
     private String name;
@@ -26,7 +28,9 @@ public class DownloadInfo {
 
     private int definition;
 
-    public DownloadInfo(String firstImage,String name,String newId,String videoId, String catId, String title, int progress, String progressText, int status, Date createTime) {
+    public DownloadInfo(String Reserve,String teacherName, String firstImage, String name, String newId, String videoId, String catId, String title, int progress, String progressText, int status, Date createTime) {
+        this.Reserve = Reserve;
+        this.teacherName = teacherName;
         this.firstImage = firstImage;
         this.name = name;
         this.newId = newId;
@@ -40,8 +44,8 @@ public class DownloadInfo {
         this.definition = -1;
     }
 
-    public DownloadInfo(String firstImage,String name,String newId,String videoId, String catId, String title, int progress, String progressText, int status, Date createTime, int definition) {
-        this(firstImage,name,newId,videoId, catId, title, progress, progressText, status, createTime);
+    public DownloadInfo(String Reserve,String teacherName, String firstImage, String name, String newId, String videoId, String catId, String title, int progress, String progressText, int status, Date createTime, int definition) {
+        this(Reserve,teacherName, firstImage, name, newId, videoId, catId, title, progress, progressText, status, createTime);
         this.definition = definition;
     }
 
@@ -51,6 +55,22 @@ public class DownloadInfo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getReserve() {
+        return Reserve;
+    }
+
+    public void setReserve(String reserve) {
+        Reserve = reserve;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public String getFirstImage() {
