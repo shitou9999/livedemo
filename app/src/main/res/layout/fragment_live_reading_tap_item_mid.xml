@@ -29,8 +29,10 @@
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/iv_right"
         android:background="@drawable/selector_bg_appointment"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:textColor="@drawable/selector_bg_appointment_text"
         android:textSize="12sp"
         tools:text="预约" />

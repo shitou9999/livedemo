@@ -303,7 +303,7 @@ public class ReplayLiveActivity extends BaseActivity implements
         layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
         ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "time");
+                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
     }
 
     private void registerBroadcast() {

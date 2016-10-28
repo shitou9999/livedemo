@@ -267,7 +267,6 @@ public class PerfectPersonalActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
-
     @Override protected void onDestroy() {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {

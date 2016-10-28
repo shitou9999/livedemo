@@ -21,11 +21,11 @@ import butterknife.ButterKnife;
 import tv.kuainiu.R;
 import tv.kuainiu.command.dao.AreaDao;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.ui.me.adapter.SimpleAreaAdapter;
 import tv.kuainiu.modle.Area;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.me.adapter.SimpleAreaAdapter;
 import tv.kuainiu.utils.DebugUtils;
 
 /**
@@ -33,7 +33,6 @@ import tv.kuainiu.utils.DebugUtils;
  */
 public class ChooseRegionActivity extends BaseActivity {
     public static final String ARG_AREA = "param_area";
-    public static final String ARG_LEVEL = "param_level";
     @BindView(R.id.lv_region) ListView mListView;
     @BindView(R.id.tv_title) TextView mTitle;
 
@@ -95,13 +94,13 @@ public class ChooseRegionActivity extends BaseActivity {
 
 
     @Override protected void onDestroy() {
-        if (mCurList != null && !mCurList.isEmpty()) {
-            mCurList.clear();
-            mCurList = null;
-        }
+
         updateResultString();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+        if (mCurList != null && mCurList.size()>0) {
+            mCurList.clear();
         }
         super.onDestroy();
     }
@@ -124,7 +123,7 @@ public class ChooseRegionActivity extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Area area = mAdapter == null ? null : mAdapter.getItem(position);
+                Area area = mCurList == null ? null : mCurList.get(position);
                 if (area == null) {
                     return;
                 }
@@ -139,7 +138,6 @@ public class ChooseRegionActivity extends BaseActivity {
             }
         });
     }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HttpEvent event) {
         if (event.getAction() == Action.choose_city) {

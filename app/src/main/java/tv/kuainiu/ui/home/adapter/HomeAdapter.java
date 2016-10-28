@@ -303,7 +303,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     mTvNextTime.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (mOnItemClickListener == null) {
+                            if (mOnItemClickListener != null) {
                                 mOnItemClickListener.onClick(v);
                             }
                         }

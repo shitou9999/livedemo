@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -273,7 +274,7 @@ public class PublishVoiceActivity extends BaseActivity {
      */
     public void initSoundData() {
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "time");
+                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
         dataPath = Environment.getExternalStorageDirectory() + "/" + ConfigUtil.DOWNLOAD_DIR + "/Sounds/";
         File folder = new File(dataPath);
         if (!folder.exists()) {

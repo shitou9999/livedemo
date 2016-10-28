@@ -68,8 +68,6 @@ import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
-import static tv.kuainiu.R.id.tv_follow_button;
-import static tv.kuainiu.R.id.tv_next_time;
 import static tv.kuainiu.modle.cons.Action.hot_point;
 
 /**
@@ -84,9 +82,7 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.ivMessage)
     ImageView ivMessage;
 
-    private int mParentPosition;
     private HomeAdapter mHomeAdapter;
-
     private List<Banner> mBannerList = new ArrayList<>();
     public List<LiveInfo> mLiveItemList = new ArrayList<>();
     private List<HotPonit> mHotPonitList = new ArrayList<>();
@@ -96,14 +92,12 @@ public class HomeFragment extends BaseFragment {
     private boolean loading = false;
     RecyclerView.OnScrollListener loadMoreListener;
     CustomLinearLayoutManager mLayoutManager;
-    private boolean isShowLoginTip;
 
     public static HomeFragment newInstance(int parentPosition) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, parentPosition);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -111,10 +105,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParentPosition = getArguments().getInt(ARG_POSITION);
-        }
-
     }
 
 
@@ -235,17 +225,22 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onClick(View v) {
-
-            HotPonit mHotPoint = (HotPonit) v.getTag();
+            Object obj = v.getTag();
+            HotPonit mHotPoint=null;
+            if(obj instanceof  HotPonit) {
+                mHotPoint= (HotPonit)obj;
+            }
+            if(obj instanceof  LiveInfo) {
+                appointmentLiveInfo = (LiveInfo) v.getTag();
+            }
             LiveInfo liveItem = mHotPoint == null ? null : mHotPoint.getLive_info();
             TeacherZoneDynamicsInfo newsInfo = mHotPoint == null ? null : mHotPoint.getNews_info();
             switch (v.getId()) {
-                case tv_next_time://预约
-                    appointmentLiveInfo = (LiveInfo) v.getTag();
+                case R.id.tv_next_time://预约
                     tvAppointment = (TextView) v;
                     appointment(appointmentLiveInfo);
                     break;
-                case tv_follow_button://点关注
+                case R.id.tv_follow_button://点关注
                     if (!MyApplication.isLogin()) {
                         showLoginTip();
                         return;

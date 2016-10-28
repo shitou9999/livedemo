@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -264,7 +265,7 @@ public class VideoActivity extends BaseActivity implements
      * 视频清晰度
      */
     HashMap<Integer, String> hm;
-
+    private PowerManager.WakeLock wakeLock;
     /**
      * @param context
      * @param video_id 视频文章id
@@ -404,6 +405,8 @@ public class VideoActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
+        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
+                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
         activity = this;
         context = getApplicationContext();
         receiver = new DownloadedReceiver();
@@ -435,6 +438,7 @@ public class VideoActivity extends BaseActivity implements
             initNetworkTimerTask();
         }
     }
+
 
     private void initNetworkTimerTask() {
         networkInfoTimerTask = new TimerTask() {
@@ -1531,6 +1535,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void onResume() {
+        wakeLock.acquire();
         if (isFreeze) {
             isFreeze = false;
             if (isPrepared) {
@@ -1548,6 +1553,9 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void onPause() {
+        if (wakeLock.isHeld()) {
+            wakeLock.release();
+        }
         if (isPrepared) {
             // 如果播放器prepare完成，则对播放器进行暂停操作，并记录状态
             if (player.isPlaying()) {
