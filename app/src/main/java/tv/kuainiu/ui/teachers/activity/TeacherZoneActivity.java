@@ -100,7 +100,9 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
     TextView tvLiningTitle;
     @BindView(R.id.llLiningTitle)
     LinearLayout llLiningTitle;
-    private String[] tabNames = new String[]{"动态", "观点", "解盘", "直播计划", "直播回看"};
+    @BindView(R.id.tvTags)
+    TextView tvTags;
+    private String[] tabNames = new String[]{"动态", "博文观点", "解盘视频", "直播计划", "直播回看"};
     int selectedIndex = 0;
     private String teacherid = "";
     private String user_id = "";
@@ -131,6 +133,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
         initData();
         initFragment();
         vpTeacherZone.setAdapter(new TabMajorFragment.SimpleViewPager(getSupportFragmentManager(), mBaseFragments, tabNames));
+        vpTeacherZone.setOffscreenPageLimit(mBaseFragments.size() - 1);
         tabFragmentMajor.setupWithViewPager(vpTeacherZone);
     }
 
@@ -202,6 +205,14 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
         }
         tvFollowButton.setSelected(teacherInfo.getIs_follow() != 0);
         ivIsVip.setVisibility(View.VISIBLE);
+        String tags = "";
+        String[] tagArray = teacherInfo.getTag_list();
+        if (tagArray != null && tagArray.length > 0) {
+            for (int i = 0; i < tagArray.length; i++) {
+                tags += tagArray[i] + "　";
+            }
+        }
+        tvTags.setText(tags);
     }
 
 

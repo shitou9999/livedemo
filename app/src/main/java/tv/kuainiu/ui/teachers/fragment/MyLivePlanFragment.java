@@ -28,9 +28,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.dao.LiveSubscribeDao;
 import tv.kuainiu.command.http.Api;
+import tv.kuainiu.command.http.AppointmentRequestUtil;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
@@ -43,6 +45,7 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
 import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_PLAN;
@@ -134,7 +137,9 @@ public class MyLivePlanFragment extends BaseFragment {
         initListener();
         initData();
     }
-
+    TextView tvAppointment;
+    int position = -1;
+    LiveInfo liveInfo;
     private void initView() {
         context = getActivity();
 
@@ -143,6 +148,30 @@ public class MyLivePlanFragment extends BaseFragment {
         rvReadingTap.setLayoutManager(mLayoutManager);
 
         mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), MY_PLAN);
+        mReadingTapeAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.tvAppointment:
+                        if (!MyApplication.isLogin()) {
+                            showLoginTip();
+                            return;
+                        }
+                        tvAppointment = (TextView) v;
+                        liveInfo = (LiveInfo) v.getTag();
+                        position = (int) v.getTag(R.id.tvAppointment);
+                        if (liveInfo != null) {
+                            if (liveInfo.getIs_appointment() == 0) {
+                                AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getTeacher_info().getLive_roomid(), Action.add_live_appointment);
+                            } else {
+                                AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
+                            }
+                        }
+                        break;
+                }
+
+            }
+        });
         rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }
@@ -236,6 +265,37 @@ public class MyLivePlanFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case add_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (tvAppointment != null) {
+                        tvAppointment.setSelected(true);
+                        tvAppointment.setText(Constant.UN_APPOINTMENT_REMINDER);
+                        liveInfo.setIs_appointment(1);
+                        if (position > -1 && position < mLiveItemList.size()) {
+                            mLiveItemList.get(position).setIs_appointment(1);
+                        }
+
+                        tvAppointment.setTag(liveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "预约失败"));
+                }
+                break;
+            case del_live_appointment:
+                if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
+                    if (tvAppointment != null) {
+                        tvAppointment.setSelected(false);
+                        tvAppointment.setText(Constant.APPOINTMENT_REMINDER);
+                        liveInfo.setIs_appointment(0);
+                        if (position > -1 && position < mLiveItemList.size()) {
+                            mLiveItemList.get(position).setIs_appointment(0);
+                        }
+                        tvAppointment.setTag(liveInfo);
+                    }
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消预约失败"));
+                }
+                break;
             case my_live_list:
                 if (page == 1) {
                     mLiveItemList.clear();

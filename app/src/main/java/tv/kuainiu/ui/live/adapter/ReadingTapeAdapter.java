@@ -241,6 +241,8 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else {
             holder.rlState.setVisibility(View.GONE);
             if (type == MY_LIVE) {
+                holder.tvAppointment.setVisibility(View.GONE);
+                holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
                 holder.rlState.setVisibility(View.VISIBLE);
                 switch (liveItem.getStatus()) {
                     case -1://审核未通过
@@ -262,11 +264,10 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         holder.tvState.setText("等待审核");
                         break;
                 }
-            }
-            if (type == MY_LIVE || type == MY_PLAN) {
-                holder.tvAppointment.setVisibility(View.GONE);
+            }else if (type == MY_PLAN) {
+                holder.tvAppointment.setVisibility(View.VISIBLE);
                 holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
-            } else {
+            }else {
                 holder.tvAppointment.setVisibility(View.VISIBLE);
                 holder.mTvLiveing.setText("开始时间");
             }

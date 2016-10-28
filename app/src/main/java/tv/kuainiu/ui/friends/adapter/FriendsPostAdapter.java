@@ -123,7 +123,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
 
         }
         holder.mTvFriendsPostType.setText(tagString);
-        holder.mTvFriendsPostTime.setText(DateUtil.toTimestampForString("MM-dd HH:mm", info.getCreate_date()));
+        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString2("MM-dd HH:mm", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
@@ -177,6 +177,14 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             }
         });
         holder.mCivFriendsPostHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (info.getTeacher_info() != null) {
+                    TeacherZoneActivity.intoNewIntent(mContext, info.getTeacher_info().getId());
+                }
+            }
+        });
+        holder.mTvFriendsPostNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (info.getTeacher_info() != null) {
@@ -273,6 +281,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             }
         });
         holder.exgv_appraisal_pic.setVisibility(View.GONE);
+
     }
 
     /*private void dataLive(ViewHolder holder, int position) {

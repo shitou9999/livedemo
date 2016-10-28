@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
@@ -13,7 +12,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:padding="0dp">
 
             <LinearLayout
                 android:id="@+id/fl_tab_frag"
@@ -27,32 +28,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:background="@color/colorRed500"
-                    android:paddingTop="@dimen/activity_vertical_margin">
+                    >
 
                     <ImageView
                         android:id="@+id/ivSetting"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                        android:layout_marginStart="@dimen/activity_horizontal_margin"
-                        android:padding="5dp"
+                        android:layout_width="?actionBarSize"
+                        android:layout_height="?actionBarSize"
+                        android:layout_alignParentLeft="true"
+                        android:padding="14dp"
                         android:src="@drawable/selector_setting" />
 
                     <ImageView
                         android:id="@+id/ivMessage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
+                        android:layout_width="?actionBarSize"
+                        android:layout_height="?actionBarSize"
                         android:layout_alignParentRight="true"
-                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:layout_marginRight="@dimen/activity_horizontal_margin"
-                        android:padding="8dp"
+                        android:padding="17dp"
                         android:src="@drawable/selector_message" />
 
                     <RelativeLayout
                         android:id="@+id/rl_avatar"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
+                        android:layout_below="@+id/ivSetting"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin">
 
@@ -65,10 +63,9 @@
                             android:scaleType="centerCrop"
                             app:civ_border_color="@color/colorCircleImageViewborder"
                             app:civ_border_width="@dimen/widthCircleImageViewborder"
-                            tools:src="@mipmap/net" />
+                            tools:src="@mipmap/default_avatar" />
 
                         <ImageView
-                            style="@style/view_invisibility"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:layout_alignParentBottom="true"
@@ -76,7 +73,7 @@
                             android:layout_marginBottom="5dp"
                             android:layout_marginRight="5dp"
                             android:scaleType="centerInside"
-                            android:src="@mipmap/vip_ic" />
+                            android:src="@mipmap/vip_pre" />
                     </RelativeLayout>
 
                     <TextView
@@ -253,6 +250,7 @@
                         android:layout_height="match_parent"
                         android:layout_above="@+id/llJurisdiction"
                         android:layout_below="@+id/ivSetting"
+                        android:visibility="gone"
                         android:background="@color/colorRed500">
 
                         <TextView

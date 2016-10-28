@@ -83,8 +83,6 @@ public class MeFragment extends BaseFragment {
     CircleImageView ci_avatar;
     @BindView(R.id.tv_me_phone)
     TextView mTvMePhone;
-    @BindView(R.id.tv_me_home)
-    TextView tv_me_home;
     @BindView(R.id.tvFans)
     TextView tvFans;
     //    @BindView(R.id.iv_text_vip)
@@ -131,8 +129,6 @@ public class MeFragment extends BaseFragment {
     TextView mTvAppointmentTip;
     @BindView(R.id.rl_appointment)
     RelativeLayout mRlAppointment;
-    @BindView(R.id.fl_tab_frag)
-    LinearLayout mFlTabFrag;
     @BindView(R.id.llJurisdiction)
     LinearLayout mLlJurisdiction;
     @BindView(R.id.btnPublish)
@@ -219,7 +215,7 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish, R.id.ivMessage, R.id.tv_me_home})
+            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish, R.id.ivMessage})
     public void onClick(View view) {
 
         switch (view.getId()) {

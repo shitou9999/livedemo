@@ -61,7 +61,7 @@ public class PublishPanelLayout extends RelativeLayout {
         ButterKnife.bind(this, view);
     }
 
-    @OnClick({R.id.ll_publish_dynamic, R.id.ll_publish_voice, R.id.ll_publish_article, R.id.ll_publish_video, R.id.ivClose})
+    @OnClick({R.id.vBlank, R.id.ll_publish_dynamic, R.id.ll_publish_voice, R.id.ll_publish_article, R.id.ll_publish_video, R.id.ivClose})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_publish_dynamic:
@@ -80,6 +80,7 @@ public class PublishPanelLayout extends RelativeLayout {
                 Intent publishVideoActivityIntent = new Intent(context, PublishVideoActivity.class);
                 context.startActivity(publishVideoActivityIntent);
                 break;
+            case R.id.vBlank:
             case R.id.ivClose:
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(this);
                 if (behavior != null) {

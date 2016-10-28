@@ -628,6 +628,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
 
                 CommentItem commentItem = new CommentItem();
                 commentItem.setParent_comment_id(mTempCommentID);
+                commentItem.setAvatar(MyApplication.getUser()==null?Constant.DEFAULT_AVATAR:MyApplication.getUser().getAvatar());
                 commentItem.setId(subCommentItem.getComment_data_id());
 
                 commentItem.setNickname(subCommentItem.getComment_info().getUser_name());
@@ -656,7 +657,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 if (MODE_ARTICLE == mMode) {
                     if (0 == mPage) {
                         mAllCommentList.addFirst(commentItem);
-                        mRvComments.smoothScrollToPosition(2 + hotLength - 1);
+                        mRvComments.smoothScrollToPosition(2 + hotLength );
                         mPostCommentListAdapter.notifyItemInserted(2 + hotLength - 1);
                     } else {
                         if (Constant.BASE_TRUE == subCommentItem.getComment_info().getIs_teacher()) {

@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/rl_top_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
 
@@ -35,7 +35,6 @@
 
             <ImageView
                 android:id="@+id/ivIsVip"
-                style="@style/view_invisibility"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_alignParentBottom="true"
@@ -43,7 +42,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="5dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/vip_ic" />
+                android:src="@mipmap/vip_pre" />
         </RelativeLayout>
 
         <TextView
@@ -62,7 +61,7 @@
             android:layout_height="16dp"
             android:layout_alignLeft="@+id/tvTheme"
             android:layout_below="@+id/tvTheme"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/selector_bg_blue2"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"

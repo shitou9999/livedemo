@@ -30,13 +30,13 @@
     </style>
     <!-- 首页 Tab RadioButton 样式-->
     <style name="AppTheme.MainTabRadioButtonStyle">
-        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingTop">4dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">@drawable/selector_tab_main_text</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
     <!-- PublishPanel 样式-->
     <style name="PublishPanelLinearLayoutStyle">

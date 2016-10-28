@@ -206,7 +206,20 @@ public class DateUtil {
         }
         return date;
     }
-
+    public static String getDurationString2(String dateFormat, long value) {
+        Duration duration = DateUtil.millise(toJava(value));
+        long day = Math.abs(duration.getStandardDays());
+        long hour = Math.abs(duration.getStandardHours());
+        long minutes = Math.abs(duration.getStandardMinutes());
+        long seconds = Math.abs(duration.getStandardSeconds());
+        String date;
+        if (day < 1) {
+            date = DateUtil.toTimestampForString("HH:mm", value);
+        } else {
+            date = DateUtil.toTimestampForString(dateFormat, value);
+        }
+        return date;
+    }
     public static String getDurationStringOriginal(String dateFormat, long value) {
         String date = DateUtil.toTimestampForString(dateFormat, value);
         return date;

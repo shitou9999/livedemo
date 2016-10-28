@@ -36,7 +36,7 @@
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
                 android:visibility="invisible"
-                android:src="@mipmap/vip_ic" />
+                android:src="@mipmap/vip_pre" />
         </RelativeLayout>
 
         <TextView
