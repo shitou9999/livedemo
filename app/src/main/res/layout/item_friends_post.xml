@@ -19,9 +19,9 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="08:23"
-        android:textColor="@color/colorWhite"
-        android:textSize="12sp"
-        tools:background="@color/colorGrey700" />
+        android:textColor="#dbdbdb"
+        android:textSize="10sp"
+        tools:background="@color/colorGrey666666" />
 
     <LinearLayout
         android:id="@+id/ll_friends_post_time"
@@ -50,18 +50,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_friends_post_head"
-                    android:layout_width="@dimen/CircleImageViewHeight"
-                    android:layout_height="@dimen/CircleImageViewHeight"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    app:civ_border_color="@color/colorCircleImageViewborder"
-                    app:civ_border_width="@dimen/widthCircleImageViewborder"
-                    app:paddingEnd="2dp"
-                    app:paddingStart="2dp"
-                    tools:src="@mipmap/ic_launcher" />
-
                 <TextView
                     android:id="@+id/tv_friends_post_nickname"
                     android:layout_width="wrap_content"
@@ -79,15 +67,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:src="@mipmap/feyzin_btn" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_friends_post_head"
+                    android:layout_width="@dimen/CircleImageViewHeight"
+                    android:layout_height="@dimen/CircleImageViewHeight"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/colorCircleImageViewborder"
+                    app:civ_border_width="@dimen/widthCircleImageViewborder"
+                    app:paddingEnd="2dp"
+                    android:layout_centerVertical="true"
+                    app:paddingStart="2dp"
+                    tools:src="@mipmap/ic_launcher"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_friends_post_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:lineSpacingMultiplier="1.1"
                 android:text="@string/value_friends_post_content"
                 android:textColor="@color/colorGrey333333" />
 
@@ -149,6 +154,7 @@
                     android:drawableStart="@drawable/selector_suport"
                     android:gravity="center_vertical"
                     android:text="(458)"
+                    android:textSize="12sp"
                     android:textColor="@color/colorGrey450" />
 
                 <TextView

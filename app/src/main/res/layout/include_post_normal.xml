@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="50dp"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/ivThumb"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="66dp"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
     <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/colorGrey300">
 
@@ -24,10 +24,10 @@
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
             android:maxLines="2"
-            android:minLines="2"
             android:paddingEnd="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:lineSpacingMultiplier="1.1"
             android:paddingStart="8dp"
             android:text="可见，Linux中Input子系统对输入设备信息的捕获可以说是Android事件来源的老祖宗"
             android:textColor="@color/colorGrey800" />

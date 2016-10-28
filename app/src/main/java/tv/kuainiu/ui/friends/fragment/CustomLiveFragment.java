@@ -215,7 +215,7 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (liveInfo != null) {
                         tvAppointment.setSelected(true);
-                        tvAppointment.setText("预约");
+                        tvAppointment.setText("取消");
                         liveInfo.setIs_appointment(1);
                         tvAppointment.setTag(liveInfo);
                     }

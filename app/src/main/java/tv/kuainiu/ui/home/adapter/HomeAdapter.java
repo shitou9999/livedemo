@@ -27,6 +27,7 @@ import tv.kuainiu.modle.Banner;
 import tv.kuainiu.modle.HotPonit;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.NewsItem;
+import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.WebActivity;
 import tv.kuainiu.ui.adapter.ViewPagerAdapter;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
@@ -298,7 +299,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     mTvNextTime.setText("直播中");
                     break;
                 case Constans.LiVE_UN_START:
-                    mTvNextTime.setText("预约");
+                    if (liveInfo.getIs_appointment() == 0) {
+                        mTvNextTime.setText(Constant.APPOINTMENT_REMINDER);
+                    } else {
+                        mTvNextTime.setText(Constant.UN_APPOINTMENT_REMINDER);
+                    }
                     mTvNextTime.setTag(liveInfo);
                     mTvNextTime.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -323,19 +328,19 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int currentPosition = position - types.size();
         if (currentPosition > -1 && currentPosition < mNewList.size()) {
             final NewsItem newsItem = mNewList.get(currentPosition);
-            final String videoId = newsItem.getUpVideoId();
+            final String videoId = newsItem.getVideo_id();
             //绑定新闻Item
             holder.mTvNewTitle.setText(StringUtils.replaceNullToEmpty(newsItem.getTitle()));
-            holder.tvTeacherName.setText(StringUtils.replaceNullToEmpty(newsItem.getDaoshi_name()));
+            holder.tvTeacherName.setText(StringUtils.replaceNullToEmpty(newsItem.getNickname()));
             holder.tvDate.setText(DateUtil.getTimeString_MM_dd(newsItem.getInputtime()));
             ImageDisplayUtil.displayImage(mContext, holder.mIvNewIamge, StringUtils.replaceNullToEmpty(newsItem.getThumb()));
             holder.rootview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (TextUtils.isEmpty(videoId)) {
-                        PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId());
-                    } else {
-                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(), newsItem.getCatId(), StringUtils.replaceNullToEmpty(newsItem.getTitle()));
+                    if (newsItem.getType()==Constant.NEWS_TYPE_ARTICLE) {
+                        PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCat_id());
+                    } else if (newsItem.getType()==Constant.NEWS_TYPE_VIDEO){
+                        VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getVideo_id(), newsItem.getCat_id(), StringUtils.replaceNullToEmpty(newsItem.getTitle()));
                     }
                 }
             });

@@ -105,7 +105,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (!(this instanceof MainActivity) &&!(this instanceof PerfectPersonalActivity) && !(this instanceof ChooseRegionActivity) && EventBus.getDefault().isRegistered(this)) {
+        if (!(this instanceof MainActivity) && !(this instanceof PerfectPersonalActivity) && !(this instanceof ChooseRegionActivity) && EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
         MobclickAgent.onPause(this);
@@ -362,6 +362,49 @@ public class BaseActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             LogUtils.e(TAG, "is_support", e);
+        }
+    }
+
+    boolean isGoOn = false;
+
+    public void tipIsKeepWatchVideo() {
+        //如果设置没有设置允许在非wifi下观看视频或直播则提示用户
+        if (!PreferencesUtils.getBoolean(this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false) && !NetUtils.isMobileNetwork(this)) {
+            try {
+
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
+                        .setTitle(this.getString(R.string.prompt))
+                        .setMessage("当前网路为非WiFi环境，是否继续观看")
+                        .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                isGoOn = false;
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("继续观看", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                isGoOn = true;
+                                dialog.dismiss();
+
+                            }
+                        });
+
+                mBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (!isGoOn) {
+                            finish();
+                        }
+                    }
+                });
+                if (this != null) {
+                    mBuilder.create().show();
+                }
+            } catch (Exception e) {
+                LogUtils.e(TAG, "is_support", e);
+            }
         }
     }
 }

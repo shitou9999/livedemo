@@ -273,7 +273,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvAppointment.setTag(liveItem);
             holder.tvAppointment.setTag(R.id.tvAppointment, position);
             holder.tvAppointment.setSelected(liveItem.getIs_appointment() != 0);
-            holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? "预约" : "预约");
+            holder.tvAppointment.setText(liveItem.getIs_appointment() == 0 ? Constant.APPOINTMENT_REMINDER : Constant.UN_APPOINTMENT_REMINDER);
             holder.tvAppointment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

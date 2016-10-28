@@ -198,7 +198,7 @@ public class LivePreviewFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (tvAppointment != null) {
                         tvAppointment.setSelected(true);
-                        tvAppointment.setText("预约");
+                        tvAppointment.setText(Constant.UN_APPOINTMENT_REMINDER);
                         liveInfo.setIs_appointment(1);
                         if (position > -1 && position < mLiveItemList.size()) {
                             mLiveItemList.get(position).setIs_appointment(1);
@@ -214,7 +214,7 @@ public class LivePreviewFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (tvAppointment != null) {
                         tvAppointment.setSelected(false);
-                        tvAppointment.setText("预约");
+                        tvAppointment.setText(Constant.APPOINTMENT_REMINDER);
                         liveInfo.setIs_appointment(0);
                         if (position > -1 && position < mLiveItemList.size()) {
                             mLiveItemList.get(position).setIs_appointment(0);

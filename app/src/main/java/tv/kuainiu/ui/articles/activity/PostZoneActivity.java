@@ -318,6 +318,13 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 mTVFollowButton.setText(getString(R.string.follow_new));
                 break;
         }
+        mArticleUrl = Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent();
+        if (mArticleUrl.contains("?")) {
+            mArticleUrl += "&appVersion=1.1.5";
+        } else {
+            mArticleUrl += "?appVersion=1.1.5";
+        }
+        loadUrl();
     }
 
     private void registerBroadcast() {
@@ -829,13 +836,6 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 // log
                 DebugUtils.dd("request url : " + Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent());
 
-                mArticleUrl = Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent();
-                if (mArticleUrl.contains("?")) {
-                    mArticleUrl += "&appVersion=1.1.5";
-                } else {
-                    mArticleUrl += "?appVersion=1.1.5";
-                }
-                loadUrl();
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }

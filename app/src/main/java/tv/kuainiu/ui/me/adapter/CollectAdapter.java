@@ -91,15 +91,15 @@ public class CollectAdapter extends BaseSwipeAdapter {
         final NewsItem newsItem = getItem(position);
         if (!(context instanceof CollectActivity)) {
             tv_flag.setVisibility(View.VISIBLE);
-            if ("10".equals(newsItem.getCatId())) {
-                tv_flag.setText(StringUtils.replaceNullToEmpty(newsItem.getJpType()));
+            if ("10".equals(newsItem.getCat_id())) {
+                tv_flag.setText(StringUtils.replaceNullToEmpty(newsItem.getType()));
             } else {
                 tv_flag.setText(StringUtils.replaceNullToEmpty(newsItem.getCatname()));
             }
         } else {
             tv_flag.setVisibility(View.GONE);
         }
-        tv_timeBefore.setText(StringUtils.replaceNullToEmpty(DateUtil.getDurationString(DateUtil.toJava(newsItem.getUpdatetime()))));
+        tv_timeBefore.setText(StringUtils.replaceNullToEmpty(DateUtil.getDurationString(DateUtil.toJava(newsItem.getInputtime()))));
         tv_describe.setText(StringUtils.replaceNullToEmpty(newsItem.getTitle()));
         ImageDisplayUtil.displayImage(context, iv_photo, newsItem.getThumb());
         tv_delete.setOnClickListener(new View.OnClickListener() {
@@ -163,13 +163,14 @@ public class CollectAdapter extends BaseSwipeAdapter {
         }
         //跳转
         Intent i = new Intent();
-        if (TextUtils.isEmpty(newsItem.getVideodm()) && TextUtils.isEmpty(newsItem.getUpVideoId())) {
+        if (TextUtils.isEmpty(newsItem.getVideo_id())) {
             i.setClass(context, PostZoneActivity.class);
             i.putExtra(Constant.KEY_ID, newsItem.getId());
-            i.putExtra(Constant.KEY_CATID, newsItem.getCatId());
+            i.putExtra(Constant.KEY_CATID, newsItem.getCat_id());
             i.putExtra(Constant.KEY_CATNAME, newsItem.getCatname());
+            context.startActivity(i);
         } else {
-            VideoActivity.intoNewIntent(context,newsItem.getId(),newsItem.getUpVideoId(),newsItem.getCatId(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
+            VideoActivity.intoNewIntent(context,newsItem.getId(),newsItem.getVideo_id(),newsItem.getCat_id(),StringUtils.replaceNullToEmpty(newsItem.getTitle()));
 //            i.setClass(context, VideoActivity.class);
 //            i.putExtra(Constant.KEY_ID, newsItem.getId());
 //            i.putExtra(Constant.KEY_CATID, newsItem.getCatId());
@@ -180,6 +181,6 @@ public class CollectAdapter extends BaseSwipeAdapter {
 //                i.putExtra(Constant.KEY_VIDEO_ID, newsItem.getUpVideoId());
 //            }
         }
-        context.startActivity(i);
+
     }
 }

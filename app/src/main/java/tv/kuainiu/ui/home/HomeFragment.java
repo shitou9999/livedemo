@@ -292,7 +292,7 @@ public class HomeFragment extends BaseFragment {
                                     LiveParameter liveParameter = new LiveParameter();
                                     liveParameter.setLiveId(liveItem.getId());
                                     liveParameter.setLiveTitle(liveItem.getTitle());
-                                    liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                                    liveParameter.setRoomId(liveItem.getLive_roomid());
                                     liveParameter.setTeacherId(liveItem.getTeacher_id());
                                     if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
                                         PlayLiveActivity.intoNewIntent(getActivity(), liveParameter);
@@ -350,7 +350,7 @@ public class HomeFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (appointmentLiveInfo != null) {
                         tvAppointment.setSelected(true);
-                        tvAppointment.setText("预约");
+                        tvAppointment.setText(Constant.UN_APPOINTMENT_REMINDER);
                         appointmentLiveInfo.setIs_appointment(1);
                         tvAppointment.setTag(appointmentLiveInfo);
                     }
@@ -363,7 +363,7 @@ public class HomeFragment extends BaseFragment {
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {
                     if (appointmentLiveInfo != null) {
                         tvAppointment.setSelected(false);
-                        tvAppointment.setText("预约");
+                        tvAppointment.setText(Constant.APPOINTMENT_REMINDER);
                         appointmentLiveInfo.setIs_appointment(0);
                         tvAppointment.setTag(appointmentLiveInfo);
 

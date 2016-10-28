@@ -2,7 +2,6 @@ package tv.kuainiu.ui.articles.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,10 +19,7 @@ import tv.kuainiu.modle.NewsItem;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
-import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtil;
-import tv.kuainiu.utils.StringUtils;
-import tv.kuainiu.utils.TextColorUtil;
 
 /**
  * @author nanck on 2016/3/31.
@@ -59,40 +55,40 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         NewsItem newsItem = mNewsList.get(position);
         holder.itemView.setTag(newsItem);
         ImageDisplayUtil.displayImage(mContext, holder.ivPhoto, newsItem.getThumb(), R.mipmap.ic_def_error);
-        holder.textName.setText(newsItem.getDaoshi_name());
+        holder.textName.setText(newsItem.getNickname());
         holder.textDescribe.setText(newsItem.getTitle());
 
         // 设置解盘类型
-        String flag = newsItem.getJpType();
-        if (TextUtils.isEmpty(flag) || "请选择".equals(flag)) {
-            holder.textFlag.setVisibility(View.INVISIBLE);
-        } else {
-            holder.textFlag.setVisibility(View.VISIBLE);
-            holder.textFlag.setText(newsItem.getJpType());
-        }
+//        String flag = newsItem.getType();
+//        if (TextUtils.isEmpty(flag) || "请选择".equals(flag)) {
+//            holder.textFlag.setVisibility(View.INVISIBLE);
+//        } else {
+//            holder.textFlag.setVisibility(View.VISIBLE);
+//            holder.textFlag.setText(newsItem.getType());
+//        }
 
-        if (!TextUtils.isEmpty(newsItem.getUpVideoId())) {
-            String text = StringUtils.getDecimal(newsItem.getViews(), Constant.TEN_THOUSAND, "万次播放", "次播放");
-            holder.textViewCount.setText(text);
-        } else {
-            holder.textViewCount.setVisibility(View.INVISIBLE);
-        }
+//        if (!TextUtils.isEmpty(newsItem.getVideo_id())) {
+//            String text = StringUtils.getDecimal(newsItem.getViews(), Constant.TEN_THOUSAND, "万次播放", "次播放");
+//            holder.textViewCount.setText(text);
+//        } else {
+//            holder.textViewCount.setVisibility(View.INVISIBLE);
+//        }
 
-        int color = TextColorUtil.getBackgroundColorForJpType(flag);
-        holder.textFlag.setBackgroundColor(color);
-        // 设置时间
-        long updateTime = newsItem.getUpdatetime();
-        holder.textTimeBefore.setText(DateUtil.getDurationString(DateUtil.toJava(updateTime)));
+//        int color = TextColorUtil.getBackgroundColorForJpType(flag);
+//        holder.textFlag.setBackgroundColor(color);
+//        // 设置时间
+//        long updateTime = newsItem.getInputtime();
+//        holder.textTimeBefore.setText(DateUtil.getDurationString(DateUtil.toJava(updateTime)));
     }
 
 
     @Override public void onClick(View v) {
         final NewsItem newsItem = (NewsItem) v.getTag();
-        final String videoId = newsItem.getUpVideoId();
-        if (TextUtils.isEmpty(videoId)) {
-            PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCatId());
-        } else {
-            VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getUpVideoId(),newsItem.getCatId(),newsItem.getTitle());
+        final int type = newsItem.getType();
+        if (type== Constant.NEWS_TYPE_ARTICLE) {
+            PostZoneActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getCat_id());
+        } else if (type== Constant.NEWS_TYPE_VIDEO){
+            VideoActivity.intoNewIntent(mContext, newsItem.getId(), newsItem.getVideo_id(),newsItem.getVideo_id(),newsItem.getTitle());
         }
     }
 

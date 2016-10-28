@@ -112,6 +112,7 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.MediaUtil;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.ParamsUtil;
+import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
@@ -406,7 +407,7 @@ public class VideoActivity extends BaseActivity implements
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
+                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
         activity = this;
         context = getApplicationContext();
         receiver = new DownloadedReceiver();
@@ -437,6 +438,7 @@ public class VideoActivity extends BaseActivity implements
         if (!isLocalPlay) {
             initNetworkTimerTask();
         }
+
     }
 
 
@@ -858,7 +860,6 @@ public class VideoActivity extends BaseActivity implements
         player.setOnVideoSizeChangedListener(this);
         player.setOnInfoListener(this);
 
-
         isLocalPlay = getIntent().getBooleanExtra("isLocalPlay", false);
         try {
 
@@ -866,8 +867,9 @@ public class VideoActivity extends BaseActivity implements
                 lastPlayPosition = DataSet.getVideoPosition(videoId);
                 player.setVideoPlayInfo(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY, this);
                 // 设置默认清晰度
-                player.setDefaultDefinition(DWMediaPlayer.NORMAL_DEFINITION);
-
+                int value = PreferencesUtils.getInt(this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
+                player.setDefaultDefinition(value);
+                tipIsKeepWatchVideo();
             } else {// 播放本地已下载视频
 
                 if (android.os.Environment.MEDIA_MOUNTED.equals(Environment

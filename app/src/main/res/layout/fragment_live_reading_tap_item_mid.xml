@@ -28,14 +28,14 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/iv_right"
-        android:background="@drawable/selector_bg_appointment"
+        android:background="@drawable/selector_follow_button_bg"
+        android:textColor="@drawable/selector_follow_button_text_color"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:textColor="@drawable/selector_bg_appointment_text"
         android:textSize="12sp"
-        tools:text="预约" />
+        tools:text="预约提醒" />
 
     <RelativeLayout
         android:id="@+id/rl_avatar"

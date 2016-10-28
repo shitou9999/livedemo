@@ -304,7 +304,8 @@ public class PlayLiveActivity extends BaseActivity implements
         layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
         ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
+                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
+        tipIsKeepWatchVideo();
     }
 
     private void registerBroadcast() {

@@ -40,7 +40,7 @@ public class PreferencesUtils {
 		throw new UnsupportedOperationException("cannot be instantiated");
 	}
 
-	public static String PREFERENCE_NAME = "com.iguxuan";
+	public static String PREFERENCE_NAME = "tv.kuainiu";
 
 	/**
 	 * put string preferences

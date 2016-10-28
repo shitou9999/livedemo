@@ -43,7 +43,7 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
             ButterKnife.bind(this, view);
 
             list.clear();
-            MyHeader header = new MyHeader("牛人观点", "#ff0000");
+            MyHeader header = new MyHeader("牛人快讯", "#ff0000");
             list.add(header);
             header = new MyHeader("解盘视频", "#ff0000");
             list.add(header);

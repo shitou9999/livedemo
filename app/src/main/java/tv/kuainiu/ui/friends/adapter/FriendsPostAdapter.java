@@ -123,7 +123,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
 
         }
         holder.mTvFriendsPostType.setText(tagString);
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("MM-dd HH:mm", info.getCreate_date()));
+        holder.mTvFriendsPostTime.setText(DateUtil.toTimestampForString("MM-dd HH:mm", info.getCreate_date()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = info.getNews_info();
@@ -217,7 +217,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         holder.mTvFriendsPostType.setText(StringUtils.replaceNullToEmpty(info.getCatname()));
         String ct = mContext.getString(R.string.value_comment_count, StringUtils.replaceNullToEmpty(info.getComment_num(), "0"));
         holder.mTvFriendsPostComment.setText(ct);
-        holder.mTvFriendsPostTime.setText(DateUtil.getDurationString("MM-dd HH:mm", info.getInputtime()));
+        holder.mTvFriendsPostTime.setText(DateUtil.toTimestampForString("MM-dd HH:mm", info.getInputtime()));
         String lt = mContext.getString(R.string.value_comment_like, StringUtils.replaceNullToEmpty(info.getSupport_num(), "0"));
         holder.mTvFriendsPostLike.setText(lt);
         TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();

@@ -126,12 +126,19 @@ public class PostParentLayout extends RelativeLayout {
                         break;
                     case Constans.LiVE_UN_START:
                         tvState2.setText("");
+                        tvState2.append(StringUtils.replaceNullToEmpty(liveInfo.getLive_msg(), "直播计划"));
+                        tvState2.append("\n");
                         tvState2.append(DateUtil.formatDate(liveInfo.getStart_date(), "yyyy-MM-dd HH:mm:ss", "MM-dd"));
                         tvState2.append("\n");
                         tvState2.append(DateUtil.formatDate(liveInfo.getStart_date(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvState2.setBackgroundColor(Color.RED);
                         vLine.setBackgroundColor(Color.RED);
                         tvAppointment.setSelected(liveInfo.getIs_appointment() != 0);
+                        if (liveInfo.getIs_appointment() != 0) {
+                            tvAppointment.setText("取消");
+                        } else {
+                            tvAppointment.setText("预约");
+                        }
                         tvAppointment.setVisibility(View.VISIBLE);
                         tvAppointment.setTag(liveInfo);
                         tvAppointment.setOnClickListener(new OnClickListener() {

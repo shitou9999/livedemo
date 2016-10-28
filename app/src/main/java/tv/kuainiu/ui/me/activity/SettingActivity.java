@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -43,24 +42,34 @@ import static tv.kuainiu.app.Constans.APP_DOWN_URL;
  * 设置
  */
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
-    @BindView(R.id.switch_allow_notWifi) SwitchView mSwitchView;
+    @BindView(R.id.switch_allow_notWifi)
+    SwitchView mSwitchView;
     //    @BindView(R.id.rl_settingAllowWifi) RelativeLayout mRlAllowWifi;
-    @BindView(R.id.rl_settingSharpness) RelativeLayout mRlGuideSharpness;
-    @BindView(R.id.rl_settingGuidePage) RelativeLayout mRlGuidePage;
-    @BindView(R.id.rl_settingFeedback) RelativeLayout mRlFeedback;
-    @BindView(R.id.rl_settingScore) RelativeLayout mRlScore;
-    @BindView(R.id.rl_settingShareApp) RelativeLayout mRlShareApp;
-    @BindView(R.id.rl_settingAboutMe) RelativeLayout mRlAboutMe;
-    @BindView(R.id.rl_settingCheckUpdate) RelativeLayout mRlCheckUpdate;
-    @BindView(R.id.rl_clear_caech) RelativeLayout rl_clear_caech;
-    @BindView(R.id.tv_settingSharpness) TextView mTvSharpness;
-    @BindView(R.id.tv_version_state) TextView tv_version_state;
-    @BindView(R.id.tv_caech_size) TextView tv_caech_size;
+    @BindView(R.id.rl_settingSharpness)
+    RelativeLayout mRlGuideSharpness;
+    @BindView(R.id.rl_settingGuidePage)
+    RelativeLayout mRlGuidePage;
+    @BindView(R.id.rl_settingFeedback)
+    RelativeLayout mRlFeedback;
+    @BindView(R.id.rl_settingScore)
+    RelativeLayout mRlScore;
+    @BindView(R.id.rl_settingShareApp)
+    RelativeLayout mRlShareApp;
+    @BindView(R.id.rl_settingAboutMe)
+    RelativeLayout mRlAboutMe;
+    @BindView(R.id.rl_settingCheckUpdate)
+    RelativeLayout mRlCheckUpdate;
+    @BindView(R.id.rl_clear_caech)
+    RelativeLayout rl_clear_caech;
+    @BindView(R.id.tv_settingSharpness)
+    TextView mTvSharpness;
+    @BindView(R.id.tv_version_state)
+    TextView tv_version_state;
+    @BindView(R.id.tv_caech_size)
+    TextView tv_caech_size;
 
     private SelectSharpnessPopupWindow menuWindow;
 
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
     private boolean isUpdate = false;
 
     @Override
@@ -98,7 +107,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void toggleToOff(View view) {
                 mSwitchView.toggleSwitch(false);
-                mEditor.putBoolean(Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false);
+                PreferencesUtils.putBoolean(SettingActivity.this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false);
             }
         });
     }
@@ -157,12 +166,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 初始化版本号
      */
     private void initData() {
-        mSharedPreferences = getSharedPreferences(Constant.CONFIG_FILE_NAME, Context.MODE_PRIVATE);
-        mEditor = mSharedPreferences.edit();
-        boolean allowNotWifiCache = mSharedPreferences.getBoolean(Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false);
-        if (allowNotWifiCache) {
-            mSwitchView.toggleSwitch(true);
-        }
+        boolean allowNotWifiCache = PreferencesUtils.getBoolean(this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false);
+        mSwitchView.toggleSwitch(allowNotWifiCache);
         initSharpnessText();
         if (PreferencesUtils.getInt(this, UpdateManager.SERVER_VERSION_CODE, 0) > PreferencesUtils.getInt(this, UpdateManager.CURRENT_VERSION_CODE, 0)) {
             tv_version_state.setText("新版本" + PreferencesUtils.getString(this, UpdateManager.SERVER_VERSION_NAME) + "，立即更新");
@@ -209,13 +214,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 mSwitchView.toggleSwitch(false);
+                PreferencesUtils.putBoolean(SettingActivity.this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false);
             }
         });
         builder.setPositiveButton("允许", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                mEditor.putBoolean(Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, true);
+                PreferencesUtils.putBoolean(SettingActivity.this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, true);
                 mSwitchView.toggleSwitch(true);
             }
         });
@@ -227,7 +233,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 选择视频清晰度
      */
     private void initSharpnessText() {
-        int value = mSharedPreferences.getInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
+
+        int value = PreferencesUtils.getInt(SettingActivity.this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
         switch (value) {
             case Constant.VIDEO_SHARPNESS_STANDARD:
                 mTvSharpness.setText("清晰");
@@ -242,15 +249,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    @Override
-    protected void onPause() {
-        if (null != mEditor) {
-            mEditor.apply();
-        }
-        super.onPause();
-    }
-
-
     //为弹出窗口实现监听类
     private View.OnClickListener itemsOnClick = new View.OnClickListener() {
         @Override
@@ -259,17 +257,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             switch (v.getId()) {
                 // 流畅(标清)
                 case R.id.btn_standard:
-                    mEditor.putInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
+                    PreferencesUtils.putInt(SettingActivity.this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
                     mTvSharpness.setText("清晰");
                     break;
                 // 高清
                 case R.id.btn_high:
-                    mEditor.putInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_HIGH);
+                    PreferencesUtils.putInt(SettingActivity.this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_HIGH);
                     mTvSharpness.setText("高清");
                     break;
                 // 超清
                 case R.id.btn_super:
-                    mEditor.putInt(Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_SUPER);
+                    PreferencesUtils.putInt(SettingActivity.this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_SUPER);
                     mTvSharpness.setText("超清");
                     break;
                 // 取消

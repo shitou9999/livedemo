@@ -6,47 +6,42 @@ import java.io.Serializable;
  *
  */
 public class NewsItem implements Serializable {
+
     /**
-     * id : 3075
-     * cat_id : 10
-     * title : 毛鹏皓解盘——政策护盘，操盘标的 2016-01-06
-     * thumb : http://img.iguxuan.com/statics/images/gx/slt/MaoPengHao.jpg
-     * daoshi : 6
-     * description : 政策护盘，操盘标的人民币继续贬值，是否是国家经济走软露疲态？板块的不可思议的上涨趋势，即是预计，又旁人惊奇，让我们把握操盘操作技巧。
-     * url : /html/2016/jp_0106/3075.html
-     * jpType : 晚盘
-     * inputtime : 1452078451
-     * updatetime : 1452510747
-     * upVideoId : 05714ecace07be1bf03402459217bcac_0
-     * videodm :
-     * catname : 解盘
-     * daoshi_name : 毛鹏皓
-     * views : 7338
+     * id : 13
+     * cat_id : 5
+     * type : 1
+     * title : 主力将利用缺口大举拿货
+     * thumb : http://kuainiu.oss-cn-shanghai.aliyuncs.com/uploadfile/20160914001.jpg
+     * url : http://139.224.1.41/v1/news/show_news?id=13
+     * user_id : 2
+     * description : 金子大涨的描述
+     * inputtime : 1473482864
+     * video_id :
+     * support_num : 5
+     * comment_num : 3
+     * catname : 股指期货
+     * nickname : 蛋哥
+     * avatar : http://img.kuainiu.tv/uploadfile/avatar/201610/2_31504.jpg
+     * is_support : 0
      */
+
     private String id;
     private String cat_id;
+    private int type;
     private String title;
     private String thumb;
-    private String daoshi;
-    private String description;
     private String url;
-    private String jpType;
+    private String user_id;
+    private String description;
     private long inputtime;
-    private long updatetime;
-    private String upVideoId;
-    private String videodm;
+    private String video_id;
+    private String support_num;
+    private String comment_num;
     private String catname;
-    private String daoshi_name;
-    private int views;
-    private int stopPosition;
-
-    public int getStopPosition() {
-        return stopPosition;
-    }
-
-    public void setStopPosition(int stopPosition) {
-        this.stopPosition = stopPosition;
-    }
+    private String nickname;
+    private String avatar;
+    private int is_support;
 
     public String getId() {
         return id;
@@ -56,12 +51,20 @@ public class NewsItem implements Serializable {
         this.id = id;
     }
 
-    public String getCatId() {
+    public String getCat_id() {
         return cat_id;
     }
 
-    public void setCatId(String catid) {
-        this.cat_id = catid;
+    public void setCat_id(String cat_id) {
+        this.cat_id = cat_id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -80,12 +83,20 @@ public class NewsItem implements Serializable {
         this.thumb = thumb;
     }
 
-    public String getDaoshi() {
-        return daoshi;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDaoshi(String daoshi) {
-        this.daoshi = daoshi;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getDescription() {
@@ -96,22 +107,6 @@ public class NewsItem implements Serializable {
         this.description = description;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getJpType() {
-        return jpType;
-    }
-
-    public void setJpType(String jpType) {
-        this.jpType = jpType;
-    }
-
     public long getInputtime() {
         return inputtime;
     }
@@ -120,28 +115,28 @@ public class NewsItem implements Serializable {
         this.inputtime = inputtime;
     }
 
-    public long getUpdatetime() {
-        return updatetime;
+    public String getVideo_id() {
+        return video_id;
     }
 
-    public void setUpdatetime(long updatetime) {
-        this.updatetime = updatetime;
+    public void setVideo_id(String video_id) {
+        this.video_id = video_id;
     }
 
-    public String getUpVideoId() {
-        return upVideoId;
+    public String getSupport_num() {
+        return support_num;
     }
 
-    public void setUpVideoId(String upVideoId) {
-        this.upVideoId = upVideoId;
+    public void setSupport_num(String support_num) {
+        this.support_num = support_num;
     }
 
-    public String getVideodm() {
-        return videodm;
+    public String getComment_num() {
+        return comment_num;
     }
 
-    public void setVideodm(String videodm) {
-        this.videodm = videodm;
+    public void setComment_num(String comment_num) {
+        this.comment_num = comment_num;
     }
 
     public String getCatname() {
@@ -152,41 +147,28 @@ public class NewsItem implements Serializable {
         this.catname = catname;
     }
 
-    public String getDaoshi_name() {
-        return daoshi_name;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setDaoshi_name(String daoshi_name) {
-        this.daoshi_name = daoshi_name;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public int getViews() {
-        return views;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setViews(int views) {
-        this.views = views;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    @Override public String toString() {
-        return "NewsItem{" +
-                "cat_id='" + cat_id + '\'' +
-                ", id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", thumb='" + thumb + '\'' +
-                ", daoshi='" + daoshi + '\'' +
-                ", description='" + description + '\'' +
-                ", url='" + url + '\'' +
-                ", jpType='" + jpType + '\'' +
-                ", inputtime=" + inputtime +
-                ", updatetime=" + updatetime +
-                ", upVideoId='" + upVideoId + '\'' +
-                ", videodm='" + videodm + '\'' +
-                ", catname='" + catname + '\'' +
-                ", daoshi_name='" + daoshi_name + '\'' +
-                ", views=" + views +
-                ", stopPosition=" + stopPosition +
-                '}';
+    public int getIs_support() {
+        return is_support;
+    }
+
+    public void setIs_support(int is_support) {
+        this.is_support = is_support;
     }
 }
 

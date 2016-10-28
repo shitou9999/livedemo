@@ -287,5 +287,7 @@ public class Constant {
     public static final String CONNECT_TIME = "connect_time";
     public static final String DEFAULT_AVATAR = "http://img.kuainiu.tv/uploadfile/avatar/default2.png";
     public static final String DEFAULT_LOGO = "http://img.kuainiu.tv/uploadfile/avatar/default2.png";
+    public static final String APPOINTMENT_REMINDER = "预约提醒";
+    public static final String UN_APPOINTMENT_REMINDER = "取消提醒";
 
 }

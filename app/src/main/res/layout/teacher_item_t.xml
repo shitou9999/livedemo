@@ -6,8 +6,8 @@
     android:layout_height="80dp"
     android:background="@drawable/selector_option_normal"
     android:paddingLeft="10dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
     android:paddingRight="10dp">
 
     <ImageView
@@ -27,7 +27,6 @@
         android:layout_toRightOf="@+id/iv_teacher_item_photo"
         android:gravity="center"
         android:textColor="@color/colorTeacherName"
-        android:textSize="@dimen/text_size_large"
         tools:text="张三丰" />
 
     <TextView
@@ -55,6 +54,7 @@
         android:layout_toLeftOf="@+id/tv_follow_button"
         android:gravity="center"
         android:textSize="@dimen/text_size_micro"
+        android:textColor="@color/colorGrey666666"
         tools:text="2222个粉丝" />
 
     <TextView
@@ -63,9 +63,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_name"
         android:layout_below="@+id/tv_name"
-        android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:singleLine="true"
+        android:textSize="14sp"
+        android:textColor="@color/colorGrey333333"
         tools:text="新奇特表现亮眼，多维布局共成长" />
 
     <TextView
@@ -77,6 +78,8 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:singleLine="true"
+        android:textSize="10sp"
+        android:textColor="@color/colorGrey400"
         tools:text="标签 " />
 
     <LinearLayout
