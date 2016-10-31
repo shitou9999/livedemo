@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Message;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -259,7 +258,7 @@ public class PlayLiveActivity extends BaseActivity implements
     private int mTouchAction;
     private int mSurfaceYDisplayRange;
     private float mTouchY, mTouchX, mVol;
-    private PowerManager.WakeLock wakeLock;
+//    private PowerManager.WakeLock wakeLock;
     private boolean mIsLocked = false;
     private boolean mShowing;
     //Volume
@@ -303,8 +302,8 @@ public class PlayLiveActivity extends BaseActivity implements
         layoutParamsFrameLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height / 3 * 2);
         layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
         ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
-        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
+//        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
+//                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
         tipIsKeepWatchVideo();
     }
 
@@ -1886,7 +1885,8 @@ public class PlayLiveActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        wakeLock.acquire();
+//        wakeLock.acquire();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (isOnPause && !isSurfaceDestroyed && isLoginSuccess) {
             initAndStartLivePlay();
         }
@@ -1898,9 +1898,10 @@ public class PlayLiveActivity extends BaseActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        if (wakeLock.isHeld()) {
+//            wakeLock.release();
+//        }
         if (player != null && player.isPlaying()) {
             player.pause();
         }

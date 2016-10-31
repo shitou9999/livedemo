@@ -12,5 +12,5 @@ public class Constans {
     public static final int LIVE_ING = 2;    //直播中
     public static final int LIVE_END = 1;    //直播结束
     public static final String LOGO_IMAGE_PATH = "http://www.mob.com/static/app/icon/1474963911.jpeg";    //直播结束
-    public static final String APP_DOWN_URL = "http://www.kauiniu.tv";    //直播结束
+    public static final String APP_DOWN_URL = "http://app.kuainiu.tv/";
 }

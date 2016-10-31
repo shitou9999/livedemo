@@ -49,6 +49,7 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
@@ -90,10 +91,19 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         }
     }
 
+    View view;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -107,7 +117,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         adapter = new FriendsPostAdapter(context, isTeacher);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
-
+        initData();
         return view;
     }
 
@@ -115,7 +125,17 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     public void onResume() {
         super.onResume();
         LogUtils.e("CustomViewPointFragment", "onResume");
-        initData();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
+        if (mMediaPlayUtil.isPlaying()) {
+            mMediaPlayUtil.stop();
+            mMediaPlayUtil.getPlayBtn().setSelected(false);
+        }
     }
 
     private void initData() {

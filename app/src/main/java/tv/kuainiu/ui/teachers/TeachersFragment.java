@@ -60,11 +60,15 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
     private static final String ARG_COLOR = "ARG_COLOR";
     private static final String ARG_CONTENT = "ARG_CONTENT";
 
-    @BindView(R.id.tbv_title) TitleBarView tbv_title;
+    @BindView(R.id.tbv_title)
+    TitleBarView tbv_title;
 
-    @BindView(R.id.recyclerView) RecyclerView mRvItems;
-    @BindView(R.id.err_layout) NetErrAddLoadView mErrView;
-    @BindView(R.id.srlRefresh) SwipeRefreshLayout mSrlRefresh;
+    @BindView(R.id.recyclerView)
+    RecyclerView mRvItems;
+    @BindView(R.id.err_layout)
+    NetErrAddLoadView mErrView;
+    @BindView(R.id.srlRefresh)
+    SwipeRefreshLayout mSrlRefresh;
 
     private TeacherListAdapter mAdapter;
     private CustomLinearLayoutManager mLayoutManager;
@@ -116,10 +120,11 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
             initView();
             initHttp();
             registerBroadcast();
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
 
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -204,7 +209,8 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
         //
         // 下拉刷新
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 page = 1;
                 initHttp();
             }
@@ -360,7 +366,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                     tempTeacher.is_follow = Constant.FOLLOWED;
                     mAdapter.resetFollowCheckBox(tempCheckBox, tempTextViewCount, tempTeacher);
                     updateUserFollowCount(ADD);
-                    EventBus.getDefault().post(new EmptyEvent(Action.live_teacher_need_refresh));
+//                    EventBus.getDefault().post(new EmptyEvent(Action.live_teacher_need_refresh));
                 }
             } else {
                 DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
@@ -379,7 +385,7 @@ public class TeachersFragment extends BaseFragment implements TeacherListAdapter
                     tempTeacher.is_follow = Constant.UNFOLLOW;
                     mAdapter.resetFollowCheckBox(tempCheckBox, tempTextViewCount, tempTeacher);
                     updateUserFollowCount(DEL);
-                    EventBus.getDefault().post(new EmptyEvent(Action.live_teacher_need_refresh));
+//                    EventBus.getDefault().post(new EmptyEvent(Action.live_teacher_need_refresh));
                 }
             } else {
                 DebugUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "取消关注失败"));

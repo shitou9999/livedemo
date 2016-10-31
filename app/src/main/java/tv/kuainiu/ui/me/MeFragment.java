@@ -3,7 +3,6 @@ package tv.kuainiu.ui.me;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ import tv.kuainiu.modle.Permission;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.ui.down.activity.DownloadActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.me.activity.CollectActivity;
@@ -145,8 +145,11 @@ public class MeFragment extends BaseFragment {
     RelativeLayout mRlRecorder;
     @BindView(R.id.llPermission)
     LinearLayout llPermission;
+    @BindView(R.id.ivIsVip)
+    ImageView ivIsVip;
     private Context context;
     private LinearLayout.LayoutParams layoutParams;
+
     public static MeFragment newInstance() {
         MeFragment fragment = new MeFragment();
         Bundle args = new Bundle();
@@ -169,10 +172,11 @@ public class MeFragment extends BaseFragment {
             ButterKnife.bind(this, view);
             context = getActivity();
             initView();
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -304,21 +308,9 @@ public class MeFragment extends BaseFragment {
 //                Intent intentDynamicActivity = new Intent();
 //                intentDynamicActivity.setClass(getActivity(), PublishDynamicActivity.class);
 //                startActivity(intentDynamicActivity);
-                intro();
+                ((MainActivity) getActivity()).intro();
 
                 break;
-        }
-    }
-
-    /**
-     * 控制发布面板的显示与隐藏
-     */
-    public void intro() {
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(view.findViewById(R.id.ppl_publish_panel));
-        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        } else {
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
@@ -375,6 +367,7 @@ public class MeFragment extends BaseFragment {
                 bindDataForView(MyApplication.getUser());
                 break;
             case fetch_userinfo:
+                srlRefresh.setRefreshing(false);
                 if (Constant.SUCCEED == event.getCode()) {
                     DebugUtils.dd(event.getData().toString());
                     String json = event.getData().optString("data");
@@ -405,6 +398,7 @@ public class MeFragment extends BaseFragment {
             mTvLiveTip.setText("");
             mTvAppointmentTip.setText("");
             mLlJurisdiction.setVisibility(View.INVISIBLE);
+            ivIsVip.setVisibility(View.INVISIBLE);
         } else {
             displayAvatar(user.getAvatar());
             mTvMePhone.setText(StringUtils.getX(user.getPhone()));
@@ -418,10 +412,12 @@ public class MeFragment extends BaseFragment {
                 mBtnPublish.setVisibility(View.INVISIBLE);
 //                mRlLive.setVisibility(View.GONE);
                 rlHomePage.setVisibility(View.GONE);
+                ivIsVip.setVisibility(View.INVISIBLE);
             } else {
                 mBtnPublish.setVisibility(View.VISIBLE);
 //                mRlLive.setVisibility(View.VISIBLE);
                 rlHomePage.setVisibility(View.VISIBLE);
+                ivIsVip.setVisibility(View.VISIBLE);
             }
             List<Permission> mPermissionList = user.getPermission_list();
             ImageView imageView = null;
@@ -431,11 +427,11 @@ public class MeFragment extends BaseFragment {
                 for (int i = 0; i < mPermissionList.size(); i++) {
                     Permission mPermission = mPermissionList.get(i);
 //                    if (mPermission.getIs_own() != 0) {
-                        imageView = new ImageView(getActivity());
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                        ImageDisplayUtil.displayImage(getActivity(), imageView, mPermission.getIcon());
-                        imageView.setLayoutParams(layoutParams);
-                        llPermission.addView(imageView);
+                    imageView = new ImageView(getActivity());
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                    ImageDisplayUtil.displayImage(getActivity(), imageView, mPermission.getIcon());
+                    imageView.setLayoutParams(layoutParams);
+                    llPermission.addView(imageView);
 //                    }
                 }
             } else {
@@ -461,7 +457,6 @@ public class MeFragment extends BaseFragment {
         } else {
             mTvFollowCount.setText(StringUtils.getDecimal(user.getFollow_count(), Constant.TEN_THOUSAND, "万", ""));
         }
-        srlRefresh.setRefreshing(false);
     }
 
     private void displayAvatar(String imagePath) {

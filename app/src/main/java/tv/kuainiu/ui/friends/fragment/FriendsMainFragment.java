@@ -24,9 +24,12 @@ import tv.kuainiu.widget.MyHeader;
  */
 public class FriendsMainFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "FriendsMainFragment";
-    @BindView(R.id.rl_fragment_live_main_top_actionBar) HeaderTabView mHeaderTabView;
-    @BindView(R.id.ll_fragment_friends_main_news_info) LinearLayout mLlFragmentFriendsMainNewsInfo;
-    @BindView(R.id.vp_fragment_friends_main) ViewPager mViewPager;
+    @BindView(R.id.rl_fragment_live_main_top_actionBar)
+    HeaderTabView mHeaderTabView;
+    @BindView(R.id.ll_fragment_friends_main_news_info)
+    LinearLayout mLlFragmentFriendsMainNewsInfo;
+    @BindView(R.id.vp_fragment_friends_main)
+    ViewPager mViewPager;
     private List<MyHeader> list = new ArrayList<>();
 
     public static FriendsMainFragment newInstance() {
@@ -36,7 +39,8 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
         return fragment;
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_friends_main, container, false);
@@ -51,7 +55,8 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
 //        list.add(header);
             mHeaderTabView.setData(list);
             mHeaderTabView.setCheckListen(new HeaderTabView.ICheckListen() {
-                @Override public void checked(int index) {
+                @Override
+                public void checked(int index) {
                     mViewPager.setCurrentItem(index);
                 }
             });
@@ -65,25 +70,28 @@ public class FriendsMainFragment extends BaseFragment implements View.OnClickLis
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 }
 
-                @Override public void onPageSelected(int position) {
+                @Override
+                public void onPageSelected(int position) {
                     mHeaderTabView.setChecked(position);
                 }
 
-                @Override public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
                 }
             });
-        }
-
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
         return view;
     }
 
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             default:
                 break;

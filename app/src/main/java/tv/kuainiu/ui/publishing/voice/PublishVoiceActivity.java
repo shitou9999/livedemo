@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -194,6 +193,7 @@ public class PublishVoiceActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         initView();
+        mMediaPlayUtil=MediaPlayUtil.getInstance();
         initData();
         initSoundData();
     }
@@ -274,7 +274,7 @@ public class PublishVoiceActivity extends BaseActivity {
      */
     public void initSoundData() {
         wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "time");
+                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
         dataPath = Environment.getExternalStorageDirectory() + "/" + ConfigUtil.DOWNLOAD_DIR + "/Sounds/";
         File folder = new File(dataPath);
         if (!folder.exists()) {
@@ -310,7 +310,6 @@ public class PublishVoiceActivity extends BaseActivity {
     }
 
     private void dataBindVoice() {
-        if (mPublicVoiceAdapter == null) {
             mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
             elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
             mPublicVoiceAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
@@ -323,9 +322,6 @@ public class PublishVoiceActivity extends BaseActivity {
                     mPublicVoiceAdapter.notifyDataSetChanged();
                 }
             });
-        } else {
-            mPublicVoiceAdapter.notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -401,6 +397,10 @@ public class PublishVoiceActivity extends BaseActivity {
             flag = false;
             etTitle.setError("标题不能为空");
         }
+        if (TextUtils.isEmpty(cat_id)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择栏目");
+        }
         if (TextUtils.isEmpty(voice)) {
             flag = false;
             ToastUtils.showToast(this, "请先录音");
@@ -461,6 +461,11 @@ public class PublishVoiceActivity extends BaseActivity {
                         }.getType());
 
                         if (listTemp != null && listTemp.size() > 0) {
+                            mCategroyList.clear();
+                            Categroy categroy = new Categroy();
+                            categroy.setCatname("请选择");
+                            categroy.setId("");
+                            mCategroyList.add(categroy);
                             mCategroyList.addAll(listTemp);
                             dataBindView();
                         } else {
@@ -589,6 +594,14 @@ public class PublishVoiceActivity extends BaseActivity {
         byte[] bytes = baos.toByteArray();
 //        photo.recycle();
         return bytes;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mMediaPlayUtil.isPlaying()){
+            mMediaPlayUtil.stop();
+        }
     }
 
     @Override
@@ -754,6 +767,8 @@ public class PublishVoiceActivity extends BaseActivity {
         ivVoiceBtn.setImageDrawable(getResources().getDrawable(R.drawable.selector_publish_voice_icon));
         recordingHint.setText("按住说话");
         rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorBlue50));
+        listTeacherZoneDynamicsInfo.clear();
+        dataBindVoice();
     }
 
     /**
@@ -774,7 +789,7 @@ public class PublishVoiceActivity extends BaseActivity {
             TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo = new TeacherZoneDynamicsInfo();
             mTeacherZoneDynamicsInfo.setType(Constans.TYPE_AUDIO);
             mTeacherZoneDynamicsInfo.setNews_voice_url(mSoundDataFilePath);
-            mTeacherZoneDynamicsInfo.setNews_title(String.valueOf(mTime) + '"');
+            mTeacherZoneDynamicsInfo.setNews_voice_time(String.valueOf(mTime) + '"');
             listTeacherZoneDynamicsInfo.clear();
             listTeacherZoneDynamicsInfo.add(mTeacherZoneDynamicsInfo);
             dataBindVoice();

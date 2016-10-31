@@ -164,7 +164,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
         map.put("teacher_id", teacherid);
         map.put("live_type", "1");
         map.put("page", String.valueOf(1));
-        OKHttpUtils.getInstance().syncGet(this, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list);
+        OKHttpUtils.getInstance().syncGet(this, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list_teacher_zone);
     }
 
     @OnClick({R.id.tv_follow_button})
@@ -267,7 +267,7 @@ public class TeacherZoneActivity extends BaseActivity implements OnItemClickList
                     DebugUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "关注失败"));
                 }
                 break;
-            case my_live_list:
+            case my_live_list_teacher_zone:
                 mLiveItemList.clear();
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");

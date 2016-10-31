@@ -79,11 +79,18 @@ public class MyLiveHistoryFragment extends BaseFragment {
             teacherId = getArguments().getString(TEACHER_ID);
         }
     }
-
+    View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_live_history, container, false);
+        if(view==null) {
+            view = inflater.inflate(R.layout.fragment_my_live_history, container, false);
+        }else{
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }

@@ -117,10 +117,11 @@ public class HomeFragment extends BaseFragment {
             initView();
             dataBind();
             initData();
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -226,17 +227,21 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onClick(View v) {
             Object obj = v.getTag();
-            HotPonit mHotPoint=null;
-            if(obj instanceof  HotPonit) {
-                mHotPoint= (HotPonit)obj;
+            HotPonit mHotPoint = null;
+            if (obj instanceof HotPonit) {
+                mHotPoint = (HotPonit) obj;
             }
-            if(obj instanceof  LiveInfo) {
+            if (obj instanceof LiveInfo) {
                 appointmentLiveInfo = (LiveInfo) v.getTag();
             }
             LiveInfo liveItem = mHotPoint == null ? null : mHotPoint.getLive_info();
             TeacherZoneDynamicsInfo newsInfo = mHotPoint == null ? null : mHotPoint.getNews_info();
             switch (v.getId()) {
                 case R.id.tv_next_time://预约
+                    if (!MyApplication.isLogin()) {
+                        showLoginTip();
+                        return;
+                    }
                     tvAppointment = (TextView) v;
                     appointment(appointmentLiveInfo);
                     break;
@@ -314,7 +319,7 @@ public class HomeFragment extends BaseFragment {
             return;
         }
         if (liveInfo.getIs_appointment() == 0) {
-            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getLive_roomid(), Action.add_live_appointment);
+            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getTeacher_info() == null ? "" : liveInfo.getTeacher_info().getLive_roomid(), Action.add_live_appointment);
         } else {
             AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
         }

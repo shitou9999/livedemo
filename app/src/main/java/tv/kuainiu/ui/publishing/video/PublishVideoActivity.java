@@ -387,7 +387,6 @@ public class PublishVideoActivity extends BaseActivity {
         title = etTitle.getText().toString();
         content = etContent.getText().toString();
         dynamics_desc = etDynamicsDesc.getText().toString();
-
         if (TextUtils.isEmpty(thumb)) {
             flag = false;
             tvError.setText("请选择缩略图");
@@ -398,16 +397,25 @@ public class PublishVideoActivity extends BaseActivity {
         if (TextUtils.isEmpty(title)) {
             flag = false;
             etTitle.setError("标题不能为空");
+            etTitle.findFocus();
         }
         if (TextUtils.isEmpty(content)) {
-            flag = false;
             etContent.setError("文章内容不能为空");
+            if (flag) {
+                etContent.findFocus();
+            }
+            flag = false;
+
         } else {
             etContent.setError(null);
         }
         start_date = tvLiveStartTime.getText().toString();
         date = tvLiveStartTime.getTag() == null ? "" : tvLiveStartTime.getTag().toString();
         end_date = tvLiveEndTime.getText().toString();
+        if (TextUtils.isEmpty(cat_id)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择栏目");
+        }
         if (TextUtils.isEmpty(end_date) && TextUtils.isEmpty(start_date)) {
             flag = false;
             ToastUtils.showToast(this, "请选择开始和结束时间");
@@ -425,8 +433,12 @@ public class PublishVideoActivity extends BaseActivity {
 
         if (!"0".equals(synchro_dynamics)) {
             if (TextUtils.isEmpty(dynamics_desc)) {
-                flag = false;
                 etDynamicsDesc.setError("动态内容不能为空");
+                if (flag) {
+                    etDynamicsDesc.findFocus();
+                }
+                flag = false;
+
             } else {
                 etDynamicsDesc.setError(null);
             }
@@ -519,6 +531,10 @@ public class PublishVideoActivity extends BaseActivity {
 
                         if (listTemp != null && listTemp.size() > 0) {
                             mCategroyList.clear();
+                            Categroy categroy = new Categroy();
+                            categroy.setCatname("请选择");
+                            categroy.setId("");
+                            mCategroyList.add(categroy);
                             mCategroyList.addAll(listTemp);
                             dataBindView();
                         } else {

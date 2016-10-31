@@ -184,6 +184,7 @@ public class Api {
      */
     public static final String add_news = "publish/add_news";
     public static final String add_live = "publish/add_live";
+    public static final String del_live = "publish/del_live";
     /**
      * 3.5 添加直播预约  live/add_live_appointment（v1）
      * <p>

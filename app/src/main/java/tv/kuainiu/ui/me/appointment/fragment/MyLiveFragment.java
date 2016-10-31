@@ -1,16 +1,20 @@
 package tv.kuainiu.ui.me.appointment.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
+import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.app.Theme;
 import tv.kuainiu.command.dao.LiveSubscribeDao;
 import tv.kuainiu.command.http.Api;
@@ -38,14 +43,12 @@ import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
-import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.ui.me.adapter.MyLiveFragmentAdapter;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
-
-import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_LIVE;
 
 /**
  * 我的直播
@@ -59,11 +62,12 @@ public class MyLiveFragment extends BaseFragment {
     @BindView(R.id.srlRefresh)
     SwipeRefreshLayout srlRefresh;
     @BindView(R.id.rvReadingTap)
-    RecyclerView rvReadingTap;
-    CustomLinearLayoutManager mLayoutManager;
+    ListView rvReadingTap;
+    //    CustomLinearLayoutManager mLayoutManager;
     private String teacherId;
-    private ReadingTapeAdapter mReadingTapeAdapter;
+    //    private ReadingTapeAdapter mReadingTapeAdapter;
     private int page = 1;
+    private MyLiveFragmentAdapter myLiveFragmentAdapter;
     private boolean loading = false;
     public List<LiveInfo> mLiveItemList = new ArrayList<>();
     private Context context;
@@ -112,13 +116,14 @@ public class MyLiveFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (view == null) {
-        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
-//        }
-//        ViewGroup viewgroup = (ViewGroup) view.getParent();
-//        if (viewgroup != null) {
-//            viewgroup.removeView(view);
-//        }
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_my_live, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -139,11 +144,11 @@ public class MyLiveFragment extends BaseFragment {
         context = getActivity();
 
         srlRefresh.setColorSchemeColors(Theme.getLoadingColor());
-        mLayoutManager = new CustomLinearLayoutManager(getActivity());
-        rvReadingTap.setLayoutManager(mLayoutManager);
+//        mLayoutManager = new CustomLinearLayoutManager(getActivity());
+//        rvReadingTap.setLayoutManager(mLayoutManager);
 
-        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), MY_LIVE);
-        rvReadingTap.setAdapter(mReadingTapeAdapter);
+//        mReadingTapeAdapter = new ReadingTapeAdapter(getActivity(), MY_LIVE);
+//        rvReadingTap.setAdapter(mReadingTapeAdapter);
 
     }
 
@@ -154,7 +159,7 @@ public class MyLiveFragment extends BaseFragment {
 
     private void getData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("user_id",MyApplication.getUser()==null?"": MyApplication.getUser().getUser_id());
+        map.put("user_id", MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id());
         map.put("teacher_id", teacherId);
         map.put("live_type", "3");
         map.put("has_living", "1");
@@ -170,30 +175,47 @@ public class MyLiveFragment extends BaseFragment {
                 getData();
             }
         });
-        rvReadingTap.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvReadingTap.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) //向下滚动
-                {
-                    int visibleItemCount = mLayoutManager.getChildCount();
-                    int totalItemCount = mLayoutManager.getItemCount();
-                    int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        loading = true;
-                        page += 1;
-                        getData();
-                    }
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (!loading && visibleItemCount + firstVisibleItem == totalItemCount - 1) {
+                    loading = true;
+                    page += 1;
+                    getData();
                 }
             }
         });
+//        rvReadingTap.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (dy > 0) //向下滚动
+//                {
+//                    int visibleItemCount = mLayoutManager.getChildCount();
+//                    int totalItemCount = mLayoutManager.getItemCount();
+//                    int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+//
+//                    if (!loading && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+//                        loading = true;
+//                        page += 1;
+//                        getData();
+//                    }
+//                }
+//            }
+//        });
     }
+
+    private LiveInfo deleteLiveInfo;
 
     private void dataLiveListBind(int size) {
         if (mLiveItemList.size() > 0) {
@@ -230,13 +252,56 @@ public class MyLiveFragment extends BaseFragment {
         } else {
             rlCountdown.setVisibility(View.GONE);
         }
-        mReadingTapeAdapter.setLiveListList(mLiveItemList);
-        mReadingTapeAdapter.notifyDataSetChanged();
+        if (myLiveFragmentAdapter == null) {
+            myLiveFragmentAdapter = new MyLiveFragmentAdapter(getActivity(), mLiveItemList, new ISwipeDeleteItemClickListening() {
+                @Override
+                public void delete(SwipeLayout swipeLayout, int position, Object object) {
+                    //删除
+                    deleteLiveInfo = (LiveInfo) object;
+                    deleteLive(swipeLayout, deleteLiveInfo);
+                }
+            });
+            rvReadingTap.setAdapter(myLiveFragmentAdapter);
+        } else {
+            myLiveFragmentAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void deleteLive(SwipeLayout swipeLayout, final LiveInfo liveInfo) {
+        swipeLayout.close(true);
+        if (liveInfo == null) {
+            return;
+        }
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity())
+                .setTitle("是否删除该直播计划？")
+                .setMessage(StringUtils.replaceNullToEmpty(liveInfo.getTitle()))
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("id", liveInfo.getId());
+                        OKHttpUtils.getInstance().post(getActivity(), Api.del_live, ParamUtil.getParam(map), Action.del_live);
+                        dialog.dismiss();
+                    }
+                });
+        mBuilder.create().show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
+            case del_live:
+                if (deleteLiveInfo != null) {
+                    mLiveItemList.remove(deleteLiveInfo);
+                    dataLiveListBind(0);
+                }
+                break;
             case my_live_list:
                 if (page == 1) {
                     mLiveItemList.clear();

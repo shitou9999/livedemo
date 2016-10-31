@@ -45,7 +45,7 @@ import tv.kuainiu.widget.tagview.TagView;
 public class PickTagsActivity extends BaseActivity {
 
 
-    public final static int MAX_SELECT_NUMBER = 5;
+    public final static int MAX_SELECT_NUMBER = 3;
     public final static String SELECTED_LIST = "selectedList";
     public final static String NEW_LIST = "new_List";
     @BindView(R.id.tbv_title)

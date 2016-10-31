@@ -44,6 +44,7 @@ import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.activity.ChooseRegionActivity;
+import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.me.activity.PerfectPersonalActivity;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
@@ -56,6 +57,7 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 /**
  * Created by jack on 2016/9/7.
@@ -67,6 +69,8 @@ public class BaseActivity extends AppCompatActivity {
     public static final int CLIENT_INIT_MINUTE = 5;
     public static int initClientNumbers = 0;
     public boolean isUpLoadRegistrationID = false;
+    private boolean isShowLoginTip;
+    private AppCompatActivity appCompatActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class BaseActivity extends AppCompatActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
+        appCompatActivity=this;
     }
 
     @Override
@@ -369,7 +373,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void tipIsKeepWatchVideo() {
         //如果设置没有设置允许在非wifi下观看视频或直播则提示用户
-        if (!PreferencesUtils.getBoolean(this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false) && !NetUtils.isMobileNetwork(this)) {
+        if (PreferencesUtils.getBoolean(this, Constant.CONFIG_KEY_NOTWIFI_DOWNLOAD, false) && !NetUtils.isMobileNetwork(this)) {
             try {
 
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(this)
@@ -406,5 +410,31 @@ public class BaseActivity extends AppCompatActivity {
                 LogUtils.e(TAG, "is_support", e);
             }
         }
+    }
+
+    public void showLoginTip() {
+        if (isShowLoginTip) {
+            return;
+        }
+        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(this);
+        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
+            @Override
+            public void onCancel(DialogInterface dialog, int which) {
+
+            }
+
+            @Override
+            public void onLogin(DialogInterface dialog, int which) {
+                Intent intent = new Intent(appCompatActivity, LoginActivity.class);
+                startActivity(intent);
+                isShowLoginTip = true;
+            }
+
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowLoginTip = false;
+            }
+        });
+        loginPromptDialog.show();
     }
 }

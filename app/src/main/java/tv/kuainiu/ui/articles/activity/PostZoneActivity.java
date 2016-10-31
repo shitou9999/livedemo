@@ -801,6 +801,7 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private void getContent(HttpEvent event) {
 //        if (Action.post_details == event.getAction()) {
         LoadingProgressDialog.stopProgressDialog();
+        mContentFrameLayout.setRefreshing(false);
         setButtonEnabled(0 == event.getCode());
         if (Constant.SUCCEED == event.getCode()) {
             String json = event.getData().optString("data");
@@ -831,13 +832,11 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                         String.format(Locale.CHINA, "评论(%d万)", mCurCommentCount), String.format(Locale.CHINA, "评论(%d)", mCurCommentCount)));
 //
                 bindTopNavigation(mDetailsEntity);
-
-
                 // log
                 DebugUtils.dd("request url : " + Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent());
-
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
+
             }
         }
     }

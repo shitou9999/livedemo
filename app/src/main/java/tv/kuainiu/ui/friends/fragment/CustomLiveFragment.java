@@ -96,10 +96,11 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -124,6 +125,7 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
     View ivSupport;
     TextView tvAppointment;
     LiveInfo liveInfo;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -145,12 +147,13 @@ public class CustomLiveFragment extends BaseFragment implements OnItemClickListe
                 break;
         }
     }
+
     private void appointment(LiveInfo liveInfo) {
         if (liveInfo == null) {
             return;
         }
         if (liveInfo.getIs_appointment() == 0) {
-            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(),liveInfo.getLive_roomid(), Action.add_live_appointment);
+            AppointmentRequestUtil.addAppointment(getActivity(), liveInfo.getTeacher_id(), liveInfo.getId(), liveInfo.getLive_roomid(), Action.add_live_appointment);
         } else {
             AppointmentRequestUtil.deleteAppointment(getActivity(), liveInfo.getId(), Action.del_live_appointment);
         }

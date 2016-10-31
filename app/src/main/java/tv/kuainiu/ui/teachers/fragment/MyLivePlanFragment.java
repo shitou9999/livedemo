@@ -115,14 +115,19 @@ public class MyLivePlanFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (view == null) {
-        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
-//        }
-//        ViewGroup viewgroup = (ViewGroup) view.getParent();
-//        if (viewgroup != null) {
-//            viewgroup.removeView(view);
-//        }
-        ButterKnife.bind(this, view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+            ButterKnife.bind(this, view);
+            initView();
+            initListener();
+            initData();
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
+
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -133,13 +138,13 @@ public class MyLivePlanFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        initView();
-        initListener();
-        initData();
+
     }
+
     TextView tvAppointment;
     int position = -1;
     LiveInfo liveInfo;
+
     private void initView() {
         context = getActivity();
 
@@ -183,7 +188,7 @@ public class MyLivePlanFragment extends BaseFragment {
 
     private void getData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("user_id",MyApplication.getUser()==null?"": MyApplication.getUser().getUser_id());
+        map.put("user_id", MyApplication.getUser() == null ? "" : MyApplication.getUser().getUser_id());
         map.put("teacher_id", teacherId);
         map.put("live_type", "3");
         map.put("page", String.valueOf(page));

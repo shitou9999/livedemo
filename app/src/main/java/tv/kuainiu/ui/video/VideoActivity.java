@@ -25,7 +25,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.PowerManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -100,7 +99,6 @@ import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.down.DownloadService;
-import tv.kuainiu.ui.me.activity.LoginActivity;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
 import tv.kuainiu.umeng.UMEventManager;
 import tv.kuainiu.utils.CustomLinearLayoutManager;
@@ -118,7 +116,6 @@ import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.cc.PopMenu;
 import tv.kuainiu.widget.cc.VerticalSeekBar;
-import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
@@ -266,7 +263,7 @@ public class VideoActivity extends BaseActivity implements
      * 视频清晰度
      */
     HashMap<Integer, String> hm;
-    private PowerManager.WakeLock wakeLock;
+
     /**
      * @param context
      * @param video_id 视频文章id
@@ -406,8 +403,7 @@ public class VideoActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
-        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
-                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
+
         activity = this;
         context = getApplicationContext();
         receiver = new DownloadedReceiver();
@@ -572,6 +568,10 @@ public class VideoActivity extends BaseActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvDown:
+                if (MyApplication.getUser() == null) {
+                    showLoginTip();
+                    return;
+                }
                 if (mVideoDetail != null) {
                     //视频下载
                     downloader = new Downloader(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY);
@@ -613,6 +613,10 @@ public class VideoActivity extends BaseActivity implements
                 CommentListActivity.intoNewIntent(this, PostCommentListFragment.MODE_ARTICLE, news_id, cat_id);
                 break;
             case R.id.tv_follow_button:
+                if (MyApplication.getUser() == null) {
+                    showLoginTip();
+                    return;
+                }
                 addFollow(mVideoDetail.getTeacher_info().getIs_follow(), mVideoDetail.getTeacher_info().getId());
                 break;
         }
@@ -864,12 +868,12 @@ public class VideoActivity extends BaseActivity implements
         try {
 
             if (!isLocalPlay) {// 播放线上视频
+                tipIsKeepWatchVideo();
                 lastPlayPosition = DataSet.getVideoPosition(videoId);
                 player.setVideoPlayInfo(videoId, ConfigUtil.USERID, ConfigUtil.API_KEY, this);
                 // 设置默认清晰度
                 int value = PreferencesUtils.getInt(this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
                 player.setDefaultDefinition(value);
-                tipIsKeepWatchVideo();
             } else {// 播放本地已下载视频
 
                 if (android.os.Environment.MEDIA_MOUNTED.equals(Environment
@@ -1537,7 +1541,8 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void onResume() {
-        wakeLock.acquire();
+        super.onResume();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (isFreeze) {
             isFreeze = false;
             if (isPrepared) {
@@ -1548,16 +1553,14 @@ public class VideoActivity extends BaseActivity implements
                 player.start();
             }
         }
-        super.onResume();
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
+        super.onPause();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (isPrepared) {
             // 如果播放器prepare完成，则对播放器进行暂停操作，并记录状态
             if (player.isPlaying()) {
@@ -1570,8 +1573,6 @@ public class VideoActivity extends BaseActivity implements
             // 如果播放器没有prepare完成，则设置isFreeze为true
             isFreeze = true;
         }
-
-        super.onPause();
     }
 
     @Override
@@ -1649,31 +1650,5 @@ public class VideoActivity extends BaseActivity implements
         }
 
         setSurfaceViewLayout();
-    }
-
-    private void showLoginTip() {
-        if (isShowLoginTip) {
-            return;
-        }
-        LoginPromptDialog loginPromptDialog = new LoginPromptDialog(VideoActivity.this);
-        loginPromptDialog.setCallBack(new LoginPromptDialog.CallBack() {
-            @Override
-            public void onCancel(DialogInterface dialog, int which) {
-
-            }
-
-            @Override
-            public void onLogin(DialogInterface dialog, int which) {
-                Intent intent = new Intent(VideoActivity.this, LoginActivity.class);
-                VideoActivity.this.startActivity(intent);
-                isShowLoginTip = true;
-            }
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isShowLoginTip = false;
-            }
-        });
-        loginPromptDialog.show();
     }
 }

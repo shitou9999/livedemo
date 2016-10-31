@@ -122,7 +122,11 @@
             android:layout_above="@+id/ll_main"
             android:background="@color/colorGrey400" />
     </RelativeLayout>
-
+    <tv.kuainiu.widget.PublishPanelLayout
+        android:id="@+id/ppl_publish_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior" />
 </android.support.design.widget.CoordinatorLayout>
 
 

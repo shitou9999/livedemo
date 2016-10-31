@@ -46,17 +46,19 @@ public class LiveMainFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        if (view == null) {
-        view = inflater.inflate(R.layout.fragment_live_main, container, false);
-        ButterKnife.bind(this, view);
-        initView();
-        initData();
-        initListener();
-//        }
-//        ViewGroup viewgroup = (ViewGroup) view.getParent();
-//        if (viewgroup != null) {
-//            viewgroup.removeView(view);
-//        }
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_main, container, false);
+            ButterKnife.bind(this, view);
+            initView();
+            initData();
+            initListener();
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
+
 //        view = inflater.inflate(R.layout.fragment_live_main, container, false);
 //        ButterKnife.bind(this, view);
 //        initView();

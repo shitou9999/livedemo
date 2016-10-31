@@ -27,6 +27,7 @@ import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.ImageDisplayUtils;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.PostParentLayout;
@@ -181,6 +182,8 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             public void onClick(View v) {
                 if (info.getTeacher_info() != null) {
                     TeacherZoneActivity.intoNewIntent(mContext, info.getTeacher_info().getId());
+                }else {
+                    LogUtils.i("hjhkklj",info.toString());
                 }
             }
         });
@@ -218,7 +221,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     }
 
     private void dataVideo(ViewHolder holder, int position) {
-       final CustomVideo info = customVideoList.get(position);
+        final CustomVideo info = customVideoList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
         holder.mTvFriendsPostContent.setText(StringUtils.replaceNullToEmpty(info.getDescription()));
@@ -233,6 +236,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         news_info.setNews_video_id(info.getVideo_id());
         news_info.setNews_title(info.getTitle());
         news_info.setNews_catid(info.getCat_id());
+        news_info.setNews_thumb(info.getThumb());
         news_info.setNews_inputtime(info.getInputtime());
         news_info.setNews_id(info.getId());
         holder.mPostParentLayout.setPostType(news_info);

@@ -65,11 +65,18 @@ public class AppointmentHistoryFragment extends BaseFragment {
     }
 
     private Appointment mAppointment;
-
+    View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_appointment, container, false);
+        if(view==null) {
+            view = inflater.inflate(R.layout.fragment_appointment, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }

@@ -131,6 +131,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         for (int i = 0; i < mBannerList.size(); i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item2, null);
             ImageView ivIamge = (ImageView) view.findViewById(R.id.ivIamge);
+            TextView tvLiveing = (TextView) view.findViewById(R.id.tvLiveing);
             TextView tvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);
             RelativeLayout rl_avatar = (RelativeLayout) view.findViewById(R.id.rl_avatar);//头像
             CircleImageView civ_avatar = (CircleImageView) view.findViewById(R.id.civ_avatar);//头像
@@ -148,6 +149,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //绑定中间直播信息
             final LiveInfo liveItem = mBannerList.get(i);
             ImageDisplayUtil.displayImage(mContext, ivIamge, liveItem.getThumb());
+            tvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
             tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
@@ -264,10 +266,10 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         holder.tvState.setText("等待审核");
                         break;
                 }
-            }else if (type == MY_PLAN) {
+            } else if (type == MY_PLAN) {
                 holder.tvAppointment.setVisibility(View.VISIBLE);
                 holder.mTvLiveing.setText(String.format(Locale.CHINA, "%s人预约", StringUtils.getDecimal(liveItem.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
-            }else {
+            } else {
                 holder.tvAppointment.setVisibility(View.VISIBLE);
                 holder.mTvLiveing.setText("开始时间");
             }
@@ -394,7 +396,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(ivIamge)
         ImageView mIvIamge;
         @BindView(R.id.ivIsVip)

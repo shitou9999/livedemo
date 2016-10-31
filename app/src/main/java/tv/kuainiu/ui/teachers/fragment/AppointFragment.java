@@ -86,11 +86,18 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
         super.onCreate(savedInstanceState);
 
     }
-
+    View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        if(view==null) {
+            view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        }else{
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }

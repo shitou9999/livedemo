@@ -1,6 +1,7 @@
 package tv.kuainiu.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -49,6 +50,7 @@ import tv.kuainiu.utils.AppUtils;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.JpushUtil;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.widget.NoSlideViewPager;
@@ -151,6 +153,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_main_friends.setSelected(position == 3);
         ll_main_me.setSelected(position == 4);
         mVpMain.setCurrentItem(position, false);
+        if(position!=3){
+            MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
+            if (mMediaPlayUtil.isPlaying()) {
+                mMediaPlayUtil.stop();
+                mMediaPlayUtil.getPlayBtn().setSelected(false);
+            }
+        }
     }
 
     @OnClick({R.id.ll_main_home, R.id.ll_main_live, R.id.ll_main_friends, R.id.ll_main_teacher, R.id.ll_main_me})
@@ -272,6 +281,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+    /**
+     * 控制发布面板的显示与隐藏
+     */
+    public void intro() {
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.ppl_publish_panel));
+        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
     }
 
     @Override

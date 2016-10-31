@@ -33,6 +33,8 @@ import tv.kuainiu.modle.Appointment;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
+import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.adapter.AppointmentFragmentAdapter;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.StringUtils;
@@ -63,11 +65,19 @@ public class AppointmentFragment extends BaseFragment {
     }
 
     private Appointment mAppointment;
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_appointment, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_appointment, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -116,7 +126,14 @@ public class AppointmentFragment extends BaseFragment {
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Appointment liveItem = listData.get(position);
+                LiveParameter liveParameter = new LiveParameter();
+                liveParameter.setLiveId(liveItem.getId());
+                liveParameter.setLiveTitle(liveItem.getTitle());
+                liveParameter.setRoomId(liveItem.getTeacher_info().getLive_roomid());
+                liveParameter.setTeacherId(liveItem.getTeacher_info().getId());
+                liveParameter.setCcid(liveItem.getPlayback_id());
+                PlayLiveActivity.intoNewIntent(getActivity(), liveParameter);
             }
         });
     }

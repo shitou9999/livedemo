@@ -630,10 +630,7 @@ public class PostCommentListFragment extends BaseFragment implements View.OnClic
                 commentItem.setParent_comment_id(mTempCommentID);
                 commentItem.setAvatar(MyApplication.getUser()==null?Constant.DEFAULT_AVATAR:MyApplication.getUser().getAvatar());
                 commentItem.setId(subCommentItem.getComment_data_id());
-
                 commentItem.setNickname(subCommentItem.getComment_info().getUser_name());
-                commentItem.setAvatar(subCommentItem.getComment_info().getDefault_avatar());
-
                 commentItem.setIs_support(0);
                 commentItem.setSupport(0);
 

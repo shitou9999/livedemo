@@ -201,6 +201,7 @@ public enum Action {
     live_appointment_list_history,   // 预约历史
     my_live_list_history,   // 我的直播历史
     my_live_list,   // 我的直播
+    my_live_list_teacher_zone,   // 我的直播
     del_system_msg,   // 删除系统消息
     live_teacher_info,   // 直播老师信息
     custom_teacher_list,   // 圈子老师
@@ -209,4 +210,5 @@ public enum Action {
     home_bannar,   // 老师专区-接盘
     fetchLiveInfo,   //获取直播间信息
     self_check_permission,   //获取直播间信息
+    del_live,   //获取直播间信息
 }

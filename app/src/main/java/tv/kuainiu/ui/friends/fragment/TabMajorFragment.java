@@ -98,10 +98,11 @@ public class TabMajorFragment extends BaseFragment {
 //        mSwitchCompat.setTextOff("");
 //
 //        mSwitchCompat.setTextColor(Color.RED);
-        }
-        ViewGroup viewgroup = (ViewGroup) view.getParent();
-        if (viewgroup != null) {
-            viewgroup.removeView(view);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
         }
         return view;
     }

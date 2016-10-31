@@ -76,26 +76,28 @@ public class LivePreviewFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (view == null) {
-        view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
-//        }
-//        ViewGroup viewgroup = (ViewGroup) view.getParent();
-//        if (viewgroup != null) {
-//            viewgroup.removeView(view);
-//        }
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_live_reading_tap, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         ButterKnife.bind(this, view);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        initView();
+        initListener();
+        initData();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        initView();
-        initListener();
-        initData();
+
         LogUtils.e("LogUtils", "onStart");
     }
 

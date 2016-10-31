@@ -29,11 +29,10 @@ import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
-import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.utils.CheckCodePicker;
 import tv.kuainiu.utils.DebugUtils;
 
 
@@ -45,11 +44,16 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
     public static final int MESSAGE = 0x1;
     public static final int VOICE = 0x2;
 
-    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
-    @BindView(R.id.et_region) EditText mEtRegionCode;
-    @BindView(R.id.et_account) EditText mEtAccount;
-    @BindView(R.id.tv_region_name) TextView mTvRegionName;
-    @BindView(R.id.button_submit) Button mBtnNextStep;
+    @BindView(R.id.ll_region_selector)
+    LinearLayout mRlRegionSelector;
+    @BindView(R.id.et_region)
+    EditText mEtRegionCode;
+    @BindView(R.id.et_account)
+    EditText mEtAccount;
+    @BindView(R.id.tv_region_name)
+    TextView mTvRegionName;
+    @BindView(R.id.button_submit)
+    Button mBtnNextStep;
 
     private String mRegionCode;
     private String mPhoneNumber;
@@ -64,7 +68,8 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
 
-        @Override public void afterTextChanged(Editable s) {
+        @Override
+        public void afterTextChanged(Editable s) {
             if (mRegionMap != null) {
                 if (s.length() > 0) {
                     boolean has = mRegionMap.containsKey(s.toString());
@@ -131,15 +136,15 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
     }
 
 
-
-  protected void initListener() {
+    protected void initListener() {
         mRlRegionSelector.setOnClickListener(this);
         mBtnNextStep.setOnClickListener(this);
         mEtRegionCode.addTextChangedListener(mEditRegionCodeTextWatcher);
     }
 
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
         mEtAccount.requestFocus();
     }
@@ -162,7 +167,8 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
     }
 
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_region_selector:
                 Intent intent = new Intent(MessageLoginOneActivity.this, RegionSelectionActivity.class);
@@ -187,24 +193,25 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
                     DebugUtils.showToast(this, "请输入手机号");
                     return;
                 }
-
-                if ("86".equals(mRegionCode)) {
-                    CheckCodePicker.selectorCheckCode(this, new CheckCodePicker.IDialogButtonOnClickListener() {
-                        @Override public void message() {
-                            sendMessage();
-                            mBtnNextStep.setEnabled(false);
-                        }
-
-                        @Override public void call() {
-                            sendVoice();
-                            mBtnNextStep.setEnabled(false);
-                        }
-                    });
-
-                } else {
-                    sendMessage();
-                    mBtnNextStep.setEnabled(false);
-                }
+//TODO 待语音验证码切换成功后开放语音验证码
+                sendMessage();
+//                if ("86".equals(mRegionCode)) {
+//                    CheckCodePicker.selectorCheckCode(this, new CheckCodePicker.IDialogButtonOnClickListener() {
+//                        @Override public void message() {
+//                            sendMessage();
+//                            mBtnNextStep.setEnabled(false);
+//                        }
+//
+//                        @Override public void call() {
+//                            sendVoice();
+//                            mBtnNextStep.setEnabled(false);
+//                        }
+//                    });
+//
+//                } else {
+//                    sendMessage();
+//                    mBtnNextStep.setEnabled(false);
+//                }
                 break;
 
             default:
@@ -287,6 +294,7 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
             }
         }
     }
+
     @Override
     protected void onDestroy() {
         if (EventBus.getDefault().isRegistered(this)) {

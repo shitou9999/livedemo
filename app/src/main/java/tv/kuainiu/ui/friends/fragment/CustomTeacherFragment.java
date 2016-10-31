@@ -48,6 +48,7 @@ import tv.kuainiu.utils.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
+import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
 
@@ -77,11 +78,19 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
         return fragment;
     }
 
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
+        } else {
+            ViewGroup viewgroup = (ViewGroup) view.getParent();
+            if (viewgroup != null) {
+                viewgroup.removeView(view);
+            }
+        }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -92,16 +101,18 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context,false);
+        adapter = new FriendsPostAdapter(context, false);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         initData();
         return view;
     }
+
     private void initData() {
-        page=1;
+        page = 1;
         fetchTeacherDynamicsList();
     }
+
     private void initListener() {
         mSrlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -139,11 +150,12 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
     View ivSupport;
     TextView tvAppointment;
     LiveInfo liveInfo;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivSupport:
-                ivSupport=v;
+                ivSupport = v;
                 teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
                 mTvFriendsPostLike = (TextView) v.getTag(R.id.tv_friends_post_like);
                 SupportHttpUtil.supportDynamics(getActivity(), String.valueOf(teacherZoneDynamics.getId()), Action.SUPPORT_DYNAMICS_teacher);
@@ -160,6 +172,7 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
                 break;
         }
     }
+
     private void appointment(LiveInfo liveInfo) {
         if (liveInfo == null) {
             return;
@@ -185,6 +198,7 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
 //        adapter.notifyItemRangeInserted(size, teacherZoneDynamicsList.size());
         adapter.notifyDataSetChanged();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(EmptyEvent event) {
         switch (event.getAction()) {
@@ -193,6 +207,7 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
                 break;
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
@@ -249,7 +264,7 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
-                            Log.e("jsonObject",jsonObject.toString());
+                            Log.e("jsonObject", jsonObject.toString());
                             List<TeacherZoneDynamics> tempTeacherZoneDynamicsList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
                             }.getType());
                             if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {
@@ -272,5 +287,12 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
         }
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
+        if (mMediaPlayUtil.isPlaying()) {
+            mMediaPlayUtil.stop();
+        }
+    }
 }

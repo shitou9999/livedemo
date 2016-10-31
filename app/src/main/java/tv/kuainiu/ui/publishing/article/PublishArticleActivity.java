@@ -324,6 +324,10 @@ public class PublishArticleActivity extends BaseActivity {
         } else {
             etContent.setError(null);
         }
+        if (TextUtils.isEmpty(cat_id)) {
+            flag = false;
+            ToastUtils.showToast(this, "请选择栏目");
+        }
         if (!"0".equals(synchro_dynamics)) {
             if (TextUtils.isEmpty(dynamics_desc)) {
                 flag = false;
@@ -387,6 +391,11 @@ public class PublishArticleActivity extends BaseActivity {
                         }.getType());
 
                         if (listTemp != null && listTemp.size() > 0) {
+                            mCategroyList.clear();
+                            Categroy categroy = new Categroy();
+                            categroy.setCatname("请选择");
+                            categroy.setId("");
+                            mCategroyList.add(categroy);
                             mCategroyList.addAll(listTemp);
                             dataBindView();
                         } else {

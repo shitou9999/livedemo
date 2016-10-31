@@ -118,7 +118,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
-                    android:text="同步动态直播"
+                    android:text="同步动态消息"
                     android:textColor="@color/publishTextColor" />
 
                 <android.support.v7.widget.SwitchCompat

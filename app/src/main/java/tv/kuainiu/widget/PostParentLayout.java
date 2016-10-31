@@ -2,6 +2,7 @@ package tv.kuainiu.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -200,17 +201,26 @@ public class PostParentLayout extends RelativeLayout {
                         if (!TextUtils.isEmpty(teacherZoneDynamicsInfo.getNews_voice_url())) {
                             try {
                                 MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
+                                mMediaPlayUtil.setPlayBtn(ivPlayVoice);
                                 if (mMediaPlayUtil.isPlaying()) {
-                                    view.setSelected(true);
+                                    view.setSelected(false);
 //                                    Glide.with(mContext).load(R.drawable.audio_gif).centerCrop().into(ivVoiceBg);
                                     mMediaPlayUtil.stop();
                                     //停止动画
                                 } else {
-                                    view.setSelected(false);
+                                    view.setSelected(true);
 //                                    Glide.with(mContext).load(R.drawable.audio_ic).centerCrop().into(ivVoiceBg);
                                     mMediaPlayUtil.play(teacherZoneDynamicsInfo.getNews_voice_url());
                                     //开始动画
                                 }
+                                mMediaPlayUtil.setPlayOnCompleteListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        if (MediaPlayUtil.getInstance().getPlayBtn() != null) {
+                                            MediaPlayUtil.getInstance().getPlayBtn().setSelected(false);
+                                        }
+                                    }
+                                });
 
                             } catch (Exception e) {
                                 ivPlayVoice.setSelected(false);
