@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,6 +55,8 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
     TextView mTvRegionName;
     @BindView(R.id.button_submit)
     Button mBtnNextStep;
+    @BindView(R.id.ivClearText)
+    ImageView ivClearText;
 
     private String mRegionCode;
     private String mPhoneNumber;
@@ -137,6 +140,7 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
 
 
     protected void initListener() {
+        ivClearText.setOnClickListener(this);
         mRlRegionSelector.setOnClickListener(this);
         mBtnNextStep.setOnClickListener(this);
         mEtRegionCode.addTextChangedListener(mEditRegionCodeTextWatcher);
@@ -170,6 +174,9 @@ public class MessageLoginOneActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivClearText:
+                mEtAccount.setText("");
+                break;
             case R.id.ll_region_selector:
                 Intent intent = new Intent(MessageLoginOneActivity.this, RegionSelectionActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);

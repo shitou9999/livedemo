@@ -40,10 +40,15 @@ public class PublishPickTimeLayout extends RelativeLayout {
     private Context context;
     private View view;
     int year = 0;
+    int curYear = 0;
     int month = 0;
+    int curMonth = 0;
     int day = 0;
+    int curDay = 0;
     int hour = 0;
+    int curHour = 0;
     int minute = 0;
+    int curMinute = 0;
     boolean isRunnian = false;
     private TextView textView;
 
@@ -76,11 +81,16 @@ public class PublishPickTimeLayout extends RelativeLayout {
     private void initData() {
         Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
+        curYear = year;
         isRunnian();
-        month = c.get(Calendar.MONTH)+1;
+        month = c.get(Calendar.MONTH) + 1;
+        curMonth = month;
         day = c.get(Calendar.DAY_OF_MONTH);
+        curDay = day;
         hour = c.get(Calendar.HOUR_OF_DAY);
+        curHour = hour;
         minute = c.get(Calendar.MINUTE);
+        curMinute = minute;
         NumberPicker.Formatter mFormatter = new NumberPicker.Formatter() {
             @Override
             public String format(int value) {
@@ -101,12 +111,20 @@ public class PublishPickTimeLayout extends RelativeLayout {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 year = newVal;
+                if (year == curYear) {
+                    numberPickerMonth.setMinValue(curMonth);
+                } else {
+                    numberPickerMonth.setMinValue(1);
+                    numberPickerDay.setMinValue(1);
+                    numberPickerHour.setMinValue(0);
+                    numberPickerMin.setMinValue(0);
+                }
                 isRunnian();
                 setDayMax();
             }
         });
 
-        numberPickerMonth.setMinValue(1);
+        numberPickerMonth.setMinValue(curMonth);
         numberPickerMonth.setFormatter(mFormatter2);
         numberPickerMonth.setMaxValue(12);
         numberPickerMonth.setValue(month);
@@ -118,7 +136,7 @@ public class PublishPickTimeLayout extends RelativeLayout {
             }
         });
 
-        numberPickerDay.setMinValue(1);
+        numberPickerDay.setMinValue(curDay);
         numberPickerDay.setFormatter(mFormatter2);
         setDayMax();
 
@@ -127,10 +145,22 @@ public class PublishPickTimeLayout extends RelativeLayout {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 day = newVal;
+                if (month == curMonth && day == curDay) {
+                    if (curMinute + 30 < 60) {
+                        numberPickerHour.setMinValue(curHour);
+                        numberPickerMin.setMinValue(curMinute + 30);
+                    } else {
+                        numberPickerHour.setMinValue(curHour + 1 >= 24 ? 0 : curHour + 1);
+                        numberPickerMin.setMinValue(curMinute - 30);
+                    }
+                } else {
+                    numberPickerHour.setMinValue(0);
+                    numberPickerMin.setMinValue(0);
+                }
             }
         });
 
-        numberPickerHour.setMinValue(0);
+        numberPickerHour.setMinValue(curHour);
         numberPickerHour.setFormatter(mFormatter2);
         numberPickerHour.setMaxValue(23);
         numberPickerHour.setValue(hour);
@@ -138,10 +168,29 @@ public class PublishPickTimeLayout extends RelativeLayout {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 hour = newVal;
+                if (year==curYear && month == curMonth && day == curDay && hour == curHour) {
+                    if (curMinute + 30 < 60) {
+                        numberPickerHour.setMinValue(curHour);
+                        numberPickerHour.setValue(curHour);
+                        numberPickerMin.setMinValue(curMinute + 30);
+                        numberPickerMin.setValue(curMinute + 30);
+                    } else {
+                        if(curHour + 1 >= 24){
+                            numberPickerDay.setMinValue(curDay + 1);
+                            numberPickerDay.setValue(curDay + 1);
+                        }
+                        numberPickerHour.setMinValue(curHour + 1 >= 24 ? 0 : curHour + 1);
+                        numberPickerHour.setValue(curHour + 1 >= 24 ? 0 : curHour + 1);
+                        numberPickerMin.setMinValue(curMinute - 30);
+                        numberPickerMin.setValue(curMinute - 30);
+                    }
+                } else {
+                    numberPickerMin.setMinValue(0);
+                }
             }
         });
 
-        numberPickerMin.setMinValue(0);
+        numberPickerMin.setMinValue(curMinute);
         numberPickerMin.setFormatter(mFormatter2);
         numberPickerMin.setMaxValue(59);
         numberPickerMin.setValue(minute);
@@ -151,9 +200,37 @@ public class PublishPickTimeLayout extends RelativeLayout {
                 minute = newVal;
             }
         });
+        if (year==curYear && month == curMonth && day == curDay) {
+            if (curMinute + 30 < 60) {
+                numberPickerHour.setMinValue(curHour);
+                numberPickerHour.setValue(curHour);
+                numberPickerMin.setMinValue(curMinute + 30);
+                numberPickerMin.setValue(curMinute + 30);
+            } else {
+                if(curHour + 1 >= 24){
+                    numberPickerDay.setMinValue(curDay + 1);
+                    numberPickerDay.setValue(curDay + 1);
+                }
+
+                numberPickerHour.setMinValue(curHour + 1 >= 24 ? 0 : curHour + 1);
+                numberPickerHour.setValue(curHour + 1 >= 24 ? 0 : curHour + 1);
+                numberPickerMin.setMinValue(curMinute - 30);
+                numberPickerMin.setValue(curMinute - 30);
+            }
+        } else {
+            numberPickerHour.setMinValue(0);
+            numberPickerMin.setMinValue(0);
+        }
     }
 
     private void setDayMax() {
+        if (year == curYear && month == curMonth) {
+            numberPickerDay.setMinValue(curDay);
+        } else {
+            numberPickerDay.setMinValue(1);
+            numberPickerHour.setMinValue(0);
+            numberPickerMin.setMinValue(0);
+        }
         if (isRunnian && month == 2) {
             numberPickerDay.setMaxValue(29);
         } else if (month == 2) {
@@ -175,7 +252,7 @@ public class PublishPickTimeLayout extends RelativeLayout {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvSure:
-                if(textView==null){
+                if (textView == null) {
                     return;
                 }
                 textView.setText(String.format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, 0));

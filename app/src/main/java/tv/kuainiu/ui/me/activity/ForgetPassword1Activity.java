@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,11 +47,18 @@ import tv.kuainiu.utils.NetUtils;
  * 找回密码第一步
  */
 public class ForgetPassword1Activity extends BaseActivity implements View.OnClickListener {
-    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
-    @BindView(R.id.et_region_code) EditText mEtRegionCode;
-    @BindView(R.id.tv_region_name) TextView mTvRegionName;
-    @BindView(R.id.et_account) EditText mEtAccount;
-    @BindView(R.id.btn_submit) Button mBtnSubmit;
+    @BindView(R.id.ll_region_selector)
+    LinearLayout mRlRegionSelector;
+    @BindView(R.id.et_region_code)
+    EditText mEtRegionCode;
+    @BindView(R.id.tv_region_name)
+    TextView mTvRegionName;
+    @BindView(R.id.et_account)
+    EditText mEtAccount;
+    @BindView(R.id.btn_submit)
+    Button mBtnSubmit;
+    @BindView(R.id.ivClearText)
+    ImageView ivClearText;
 
     private MyCountDownTimer mDownTimer;
     private String account;
@@ -136,6 +144,7 @@ public class ForgetPassword1Activity extends BaseActivity implements View.OnClic
 
     protected void initListener() {
         mBtnSubmit.setOnClickListener(this);
+        ivClearText.setOnClickListener(this);
         mRlRegionSelector.setOnClickListener(this);
 //        mLlRegionCodeGroup.setOnClickListener(this);
 
@@ -160,7 +169,8 @@ public class ForgetPassword1Activity extends BaseActivity implements View.OnClic
 //                }
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (mRegionMap != null) {
                     if (s.length() > 0) {
                         boolean has = mRegionMap.containsKey(s.toString());
@@ -185,7 +195,8 @@ public class ForgetPassword1Activity extends BaseActivity implements View.OnClic
 
 
         mEtRegionCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View v, boolean hasFocus) {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     String account = mEtAccount.getText().toString().trim();
                     if (account.length() > 0 && !MatcherUtils.matcher("[0-9]*", account)) {
@@ -221,6 +232,9 @@ public class ForgetPassword1Activity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivClearText:
+                mEtAccount.setText("");
+                break;
             case R.id.btn_submit:
                 String area = mEtRegionCode.getText().toString().trim();
                 account = mEtAccount.getText().toString().trim();

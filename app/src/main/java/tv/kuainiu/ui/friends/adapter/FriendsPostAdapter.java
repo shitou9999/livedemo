@@ -107,7 +107,7 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         }
     }
 
-    private void dataViewPoint(ViewHolder holder, int position) {
+    private void dataViewPoint(final ViewHolder holder, int position) {
         final TeacherZoneDynamics info = teacherZoneDynamicsList.get(position);
         ImageDisplayUtils.display(mContext, StringUtils.replaceNullToEmpty(info.getAvatar()), holder.mCivFriendsPostHead, R.mipmap.default_avatar);
         holder.mTvFriendsPostNickname.setText(StringUtils.replaceNullToEmpty(info.getNickname()));
@@ -164,6 +164,23 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             public void onClick(View view) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(view);
+                   /* float startX = holder.ivSupport.getPivotX();
+                    float startY = holder.ivSupport.getPivotY();
+
+                    float endX = holder.mTvFriendsPostLike.getPivotX();
+                    float endY = holder.mTvFriendsPostLike.getPivotY();
+                    float midX = 0;
+                    float midY = 0;
+                    midX = (startX - endX) / 2;
+                    midY = (endY - startY) / 2 + startY;
+//                    path.quadTo(midX, midY, endX, endY);
+                    ViewPath2 path = new ViewPath2(); //保存View的移动路径
+                    path.moveTo(0, 0);
+                    path.quadTo(0, 0, -100,150);
+                    ObjectAnimator anim = ObjectAnimator.ofObject(new ViewObj(holder.ivSupport), "fabLoc", new ViewPathEvaluator(), path.getPoints().toArray());
+                    anim.setInterpolator(new AccelerateInterpolator());
+                    anim.setDuration(100);
+                    anim.start();*/
                 }
             }
         });

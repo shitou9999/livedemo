@@ -69,7 +69,12 @@
                     android:hint="@string/hint_input_phoneNumber"
                     android:inputType="phone"
                     android:nextFocusDown="@id/et_password"/>
-
+                <ImageView
+                    android:id="@+id/ivClearText"
+                    android:layout_width="@dimen/def_option_height"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_tag_close" />
             </LinearLayout>
             <View style="@style/default_divider"/>
 

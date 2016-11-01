@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,7 +67,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     Button mBtnPushCheckCode;
     @BindView(R.id.btn_register)
     Button mBtnRegister;
-
+    @BindView(R.id.ivClearText)
+    ImageView ivClearText;
     private MyCountDownTimer mDownTimer;
 
     @Override
@@ -142,6 +144,7 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     protected void initListener() {
         mBtnPushCheckCode.setOnClickListener(this);
         mBtnRegister.setOnClickListener(this);
+        ivClearText.setOnClickListener(this);
         mRlRegionSelector.setOnClickListener(this);
 
         mEtRegion.addTextChangedListener(new TextWatcher() {
@@ -197,6 +200,9 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivClearText:
+                mEtAccount.setText("");
+                break;
             case R.id.btn_push_check_code:
 
                 String region = mEtRegion.getText().toString();

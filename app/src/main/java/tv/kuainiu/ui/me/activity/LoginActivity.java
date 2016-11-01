@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,10 +41,10 @@ import tv.kuainiu.event.UserEvent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
-import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.KeyBoardUtil;
 import tv.kuainiu.utils.NetUtils;
@@ -63,21 +64,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //    private static final int MSG_AUTH_ERROR = 4;
 //    private static final int MSG_AUTH_COMPLETE = 5;
 
-    @BindView(android.R.id.content) FrameLayout mFlRoot;
-    @BindView(R.id.ll_region_selector) LinearLayout mRlRegionSelector;
-    @BindView(R.id.tv_region_name) TextView mTvRegion;
-    @BindView(R.id.tv_forget_password) TextView mTvForgetPassword;
-    @BindView(R.id.tv_message_login) TextView mTvMessageLogin;
-    @BindView(R.id.et_region) EditText mEtRegion;
-    @BindView(R.id.et_account) EditText mEtAccount;
-    @BindView(R.id.et_password) EditText mEtPassword;
-    @BindView(R.id.btn_login) Button mBtnLogin;
-    @BindView(R.id.imageButton_weibo) ImageButton mImageButtonWeibo;
-    @BindView(R.id.imageButton_wechat) ImageButton mImageButtonWechat;
-    @BindView(R.id.imageButton_qq) ImageButton mImageButtonQQ;
-    @BindView(R.id.tbv_title) TitleBarView mTbvTitle;
-    @BindView(R.id.tvRegister) TextView tvRegister;
-
+    @BindView(android.R.id.content)
+    FrameLayout mFlRoot;
+    @BindView(R.id.ll_region_selector)
+    LinearLayout mRlRegionSelector;
+    @BindView(R.id.tv_region_name)
+    TextView mTvRegion;
+    @BindView(R.id.tv_forget_password)
+    TextView mTvForgetPassword;
+    @BindView(R.id.tv_message_login)
+    TextView mTvMessageLogin;
+    @BindView(R.id.et_region)
+    EditText mEtRegion;
+    @BindView(R.id.et_account)
+    EditText mEtAccount;
+    @BindView(R.id.et_password)
+    EditText mEtPassword;
+    @BindView(R.id.btn_login)
+    Button mBtnLogin;
+    @BindView(R.id.imageButton_weibo)
+    ImageButton mImageButtonWeibo;
+    @BindView(R.id.imageButton_wechat)
+    ImageButton mImageButtonWechat;
+    @BindView(R.id.imageButton_qq)
+    ImageButton mImageButtonQQ;
+    @BindView(R.id.tbv_title)
+    TitleBarView mTbvTitle;
+    @BindView(R.id.tvRegister)
+    TextView tvRegister;
+    @BindView(R.id.ivClearText)
+    ImageView ivClearText;
     private boolean isKeyboardShown;
     private Map<String, Region> mRegionMap;
 
@@ -137,7 +153,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
         Intent data = getIntent();
         if (null != data) {
@@ -158,6 +175,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mImageButtonWechat.setOnClickListener(this);
         mImageButtonQQ.setOnClickListener(this);
         mRlRegionSelector.setOnClickListener(this);
+        ivClearText.setOnClickListener(this);
 
         mEtPassword.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -180,7 +198,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (mRegionMap != null) {
                     if (s.length() > 0) {
                         boolean has = mRegionMap.containsKey(s.toString());
@@ -217,8 +236,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivClearText:
+                mEtAccount.setText("");
+                break;
             case R.id.btn_login:
                 login();
                 break;
@@ -292,7 +315,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             snackbar.show();
             new Handler().postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     finish();
                 }
             }, 1000);

@@ -51,12 +51,20 @@
 
                 <EditText
                     android:id="@+id/et_account"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     style="@style/base_edit_style"
                     android:digits="0123456789"
                     android:hint="@string/hint_input_phoneNumber"
                     android:inputType="phone"
                     android:maxLength="11"
                     />
+                <ImageView
+                    android:id="@+id/ivClearText"
+                    android:layout_width="@dimen/def_option_height"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_tag_close" />
             </LinearLayout>
 
             <View

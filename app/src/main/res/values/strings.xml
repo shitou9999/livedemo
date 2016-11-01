@@ -80,6 +80,7 @@
     <string name="hint_password">密码至少6位数</string>
     <string name="hint_password_affirm">请再次确认密码</string>
     <string name="hint_input_phoneNumber">请输入手机号码</string>
+    <string name="hint_input_phoneNumber2">请输入手机号码或绑定的邮箱</string>
     <string name="hint_input_password">请输入密码</string>
     <string name="hint_input_check_code">请输入验证码</string>
     <string name="hint_phoneNumber">手机号</string>

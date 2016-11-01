@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SwitchCompat;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
@@ -172,6 +173,7 @@ public class PublishArticleActivity extends BaseActivity {
     }
 
     private void initView() {
+        etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2000)});
         tbvTitle.setOnClickListening(new TitleBarView.OnClickListening() {
             @Override
             public void leftClick() {
