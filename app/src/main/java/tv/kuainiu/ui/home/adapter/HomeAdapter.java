@@ -304,6 +304,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     } else {
                         mTvNextTime.setText(Constant.UN_APPOINTMENT_REMINDER);
                     }
+                    mTvNextTime.setSelected(liveInfo.getIs_appointment() != 0);
                     mTvNextTime.setTag(liveInfo);
                     mTvNextTime.setOnClickListener(new View.OnClickListener() {
                         @Override

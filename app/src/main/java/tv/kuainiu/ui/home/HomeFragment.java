@@ -272,6 +272,7 @@ public class HomeFragment extends BaseFragment {
                         }
                     }
                     break;
+                case R.id.tv_teacher_name:
                 case R.id.civ_avatar://点击头像
                     if (mHotPoint != null && mHotPoint.getTeacher_info() != null) {
                         TeacherZoneActivity.intoNewIntent(getActivity(), mHotPoint.getTeacher_info().getId());

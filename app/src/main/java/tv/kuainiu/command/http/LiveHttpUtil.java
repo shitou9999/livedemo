@@ -50,6 +50,7 @@ public class LiveHttpUtil {
         Map<String, Object> map = new HashMap<>();
         map.put("type", type);
         map.put("page", String.valueOf(page));
+        map.put("user_id", MyApplication.getUser()==null?"":MyApplication.getUser().getUser_id());
 //        OKHttpUtils.getInstance().syncGet(context, Api.LIVE_INDEX + ParamUtil.getParamForGet(map), action, CacheConfig.getCacheConfig());
         OKHttpUtils.getInstance().syncGet(context, Api.index_recom_live + ParamUtil.getParamForGet(map), action);
     }

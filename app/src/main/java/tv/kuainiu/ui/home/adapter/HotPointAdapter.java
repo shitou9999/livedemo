@@ -83,6 +83,7 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
                 break;
         }
         holder.mTvHotPointContent.setTag(mHotPoint);
+        holder.mTvTeacherName.setTag(mHotPoint);
         holder.mCivAvatar.setTag(mHotPoint);
         holder.mCivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +94,14 @@ public class HotPointAdapter extends RecyclerView.Adapter<HotPointAdapter.HotPoi
             }
         });
         holder.mTvHotPointContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onClick(v);
+                }
+            }
+        });
+        holder.mTvTeacherName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {

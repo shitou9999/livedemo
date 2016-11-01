@@ -318,13 +318,6 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 mTVFollowButton.setText(getString(R.string.follow_new));
                 break;
         }
-        mArticleUrl = Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent();
-        if (mArticleUrl.contains("?")) {
-            mArticleUrl += "&appVersion=1.1.5";
-        } else {
-            mArticleUrl += "?appVersion=1.1.5";
-        }
-        loadUrl();
     }
 
     private void registerBroadcast() {
@@ -801,7 +794,6 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
     private void getContent(HttpEvent event) {
 //        if (Action.post_details == event.getAction()) {
         LoadingProgressDialog.stopProgressDialog();
-        mContentFrameLayout.setRefreshing(false);
         setButtonEnabled(0 == event.getCode());
         if (Constant.SUCCEED == event.getCode()) {
             String json = event.getData().optString("data");
@@ -834,9 +826,16 @@ public class PostZoneActivity extends BaseActivity implements OnClickListener {
                 bindTopNavigation(mDetailsEntity);
                 // log
                 DebugUtils.dd("request url : " + Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent());
+
+                mArticleUrl = Api.TEST_DNS_API_HOST + "/news/show_news" + prepareParamFetchContent();
+                if (mArticleUrl.contains("?")) {
+                    mArticleUrl += "&appVersion=1.1.5";
+                } else {
+                    mArticleUrl += "?appVersion=1.1.5";
+                }
+                loadUrl();
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
-
             }
         }
     }

@@ -150,12 +150,11 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final LiveInfo liveItem = mBannerList.get(i);
             ImageDisplayUtil.displayImage(mContext, ivIamge, liveItem.getThumb());
             tvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
-            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
             ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
             mTvState.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
             mTvTime.setText(DateUtil.formatDate(liveItem.getStart_date()) + "-" + DateUtil.formatDate(liveItem.getEnd_date()));//时间
-            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getView_num(), Constant.TEN_THOUSAND, "万", "")));
             ivIamge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -237,7 +236,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (type == ZHI_BO) {
             holder.ivLiveIng.setVisibility(View.VISIBLE);
             holder.mTvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg(), "直播"));
-            holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getOnline_num(), Constant.TEN_THOUSAND, "万", "")));
+            holder.mTvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getView_num(), Constant.TEN_THOUSAND, "万", "")));
             holder.tvAppointment.setVisibility(View.GONE);
             holder.rlState.setVisibility(View.GONE);
         } else {
