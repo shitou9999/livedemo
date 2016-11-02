@@ -44,6 +44,7 @@
                         android:background="@drawable/selector_edit_bg"
                         android:hint="请输入自定义标签"
                         android:padding="5dp"
+                        android:maxLength="@integer/tag_length"
                         android:textSize="14sp" />
 
                     <TextView

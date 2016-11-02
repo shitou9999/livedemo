@@ -86,13 +86,15 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
         super.onCreate(savedInstanceState);
 
     }
+
     View view;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(view==null) {
+        if (view == null) {
             view = inflater.inflate(R.layout.fragment_friends_tab, container, false);
-        }else{
+        } else {
             ViewGroup viewgroup = (ViewGroup) view.getParent();
             if (viewgroup != null) {
                 viewgroup.removeView(view);
@@ -173,6 +175,7 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
 //                mTvFriendsPostComment = (TextView) v.getTag(R.id.tv_friends_post_comment);
                 customVideo = (CustomVideo) v.getTag();
                 CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(customVideo.getId()), "");
+                customVideo = null;
                 break;
         }
     }
@@ -210,10 +213,7 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
                 initData();
                 break;
             case video_favour:
-                if (customVideo != null) {
-                    favour(event);
-                    customVideo = null;
-                }
+                favour(event);
                 break;
             case teacher_zone_appoint:
                 LogUtils.e("teacher_zone", "_appoint");
@@ -223,14 +223,20 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void favour(HttpEvent event) {
-        if (SUCCEED == event.getCode()) {
-            ivSupport.setVisibility(View.INVISIBLE);
-            DebugUtils.showToast(getActivity(), event.getMsg());
-            mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
-        } else if (-2 == event.getCode()) {
-            DebugUtils.showToastResponse(getActivity(), "已支持过");
-        } else {
-            DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+        if (customVideo != null) {
+            if (SUCCEED == event.getCode()) {
+                ivSupport.setVisibility(View.INVISIBLE);
+                DebugUtils.showToast(getActivity(), event.getMsg());
+                mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
+                mTvFriendsPostLike.setSelected(true);
+            } else if (-2 == event.getCode()) {
+                ivSupport.setVisibility(View.INVISIBLE);
+                mTvFriendsPostLike.setSelected(true);
+                DebugUtils.showToastResponse(getActivity(), "已支持过");
+            } else {
+                DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+            }
+            customVideo=null;
         }
     }
 

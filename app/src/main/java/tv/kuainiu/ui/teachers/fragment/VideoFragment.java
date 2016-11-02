@@ -216,10 +216,7 @@ public class VideoFragment extends BaseFragment implements OnItemClickListener {
                 initData();
                 break;
             case video_favour:
-                if (customVideo != null) {
-                    favour(event);
-                    customVideo = null;
-                }
+                favour(event);
                 break;
             case teacher_zone_jiepan:
                 LogUtils.e("teacher_zone","_jiepan");
@@ -229,14 +226,20 @@ public class VideoFragment extends BaseFragment implements OnItemClickListener {
     }
 
     private void favour(HttpEvent event) {
-        if (SUCCEED == event.getCode()) {
-            ivSupport.setVisibility(View.INVISIBLE);
-            DebugUtils.showToast(getActivity(), event.getMsg());
-            mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
-        } else if (-2 == event.getCode()) {
-            DebugUtils.showToastResponse(getActivity(), "已支持过");
-        } else {
-            DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+        if(customVideo!=null) {
+            if (SUCCEED == event.getCode()) {
+                ivSupport.setVisibility(View.INVISIBLE);
+                DebugUtils.showToast(getActivity(), event.getMsg());
+                mTvFriendsPostLike.setText(String.format(Locale.CHINA, "(%d)", customVideo.getSupport_num() + 1));
+                mTvFriendsPostLike.setSelected(true);
+            } else if (-2 == event.getCode()) {
+                ivSupport.setVisibility(View.INVISIBLE);
+                mTvFriendsPostLike.setSelected(true);
+                DebugUtils.showToastResponse(getActivity(), "已支持过");
+            } else {
+                DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
+            }
+            customVideo = null;
         }
     }
 

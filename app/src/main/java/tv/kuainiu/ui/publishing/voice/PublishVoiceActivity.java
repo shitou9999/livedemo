@@ -93,6 +93,7 @@ public class PublishVoiceActivity extends BaseActivity {
      * 请求相机权限
      */
     private static final int CAMERA_REQUEST_CODE = 110;
+    private static final int RECORD_AUDIO_REQUEST_CODE = 111;
     public static final int REQUSET_TAG_CODE = 0;
     /**
      * 相册选图
@@ -193,7 +194,7 @@ public class PublishVoiceActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         initView();
-        mMediaPlayUtil=MediaPlayUtil.getInstance();
+        mMediaPlayUtil = MediaPlayUtil.getInstance();
         initData();
         initSoundData();
     }
@@ -210,6 +211,12 @@ public class PublishVoiceActivity extends BaseActivity {
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     private void initView() {
@@ -310,18 +317,18 @@ public class PublishVoiceActivity extends BaseActivity {
     }
 
     private void dataBindVoice() {
-            mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
-            elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
-            mPublicVoiceAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
-                @Override
-                public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
-                    listTeacherZoneDynamicsInfo.remove(newsItem);
-                    deleteSoundFileUnSend();
-                    voice = "";
-                    swipeLayout.close(true);
-                    mPublicVoiceAdapter.notifyDataSetChanged();
-                }
-            });
+        mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
+        elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
+        mPublicVoiceAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
+            @Override
+            public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
+                listTeacherZoneDynamicsInfo.remove(newsItem);
+                deleteSoundFileUnSend();
+                voice = "";
+                swipeLayout.close(true);
+                mPublicVoiceAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -360,19 +367,6 @@ public class PublishVoiceActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                takeCapture();
-            } else {
-                new PermissionDialog(this)
-                        .show(R.string.permission_tip_dialog_message_camera);
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 
     /**
      * 数据验证
@@ -599,7 +593,7 @@ public class PublishVoiceActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(mMediaPlayUtil.isPlaying()){
+        if (mMediaPlayUtil.isPlaying()) {
             mMediaPlayUtil.stop();
         }
     }
@@ -637,6 +631,27 @@ public class PublishVoiceActivity extends BaseActivity {
         }
     };
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takeCapture();
+            } else {
+                new PermissionDialog(this)
+                        .show(R.string.permission_tip_dialog_message_camera);
+            }
+        } else if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takeCapture();
+            } else {
+                new PermissionDialog(this)
+                        .show(R.string.permission_tip_dialog_message_record_audio);
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     /**
      * 录音的触摸监听
      */
@@ -647,39 +662,45 @@ public class PublishVoiceActivity extends BaseActivity {
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    downY = motionEvent.getY();
-                    recordingHint.setText("录制中...");
-                    deleteSoundFileUnSend();//删除上一次录制（如果有上次录音文件）没有上传的录音
-                    mSoundDataFilePath = dataPath + StringUtils.getRandomFileName();
+                    if (!PermissionManager.checkPermission(PublishVoiceActivity.this,
+                            Manifest.permission.RECORD_AUDIO)) {
+                        isCanceled = true;
+                        ActivityCompat.requestPermissions(PublishVoiceActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
 
-                    // TODO 防止开权限后崩溃
-                    if (mRecorder != null) {
-                        mRecorder.reset();
                     } else {
-                        mRecorder = new MediaRecorder();
-                    }
-                    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
-                    mRecorder.setOutputFile(mSoundDataFilePath);
-                    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                    try {
-                        mRecorder.prepare();
-                        mRecorder.start();
-                        wakeLock.acquire();
-                        isCanceled = false;
-                        mStartTime = System.currentTimeMillis();
-                        tvTime.setText("0" + '"');
-                        updateMicStatus();
-                        // TODO 开启定时器
-                        mHandler.postDelayed(runnable, 1000);
-                        rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorRedVoice));
-                    } catch (Exception e) {
-                        if (wakeLock.isHeld()) {
-                            wakeLock.release();
-                        }
-                        Log.i("recoder", "prepare() failed-Exception-" + e.toString());
-                    }
+                        downY = motionEvent.getY();
+                        recordingHint.setText("录制中...");
+                        deleteSoundFileUnSend();//删除上一次录制（如果有上次录音文件）没有上传的录音
+                        mSoundDataFilePath = dataPath + StringUtils.getRandomFileName();
 
+                        // TODO 防止开权限后崩溃
+                        if (mRecorder != null) {
+                            mRecorder.reset();
+                        } else {
+                            mRecorder = new MediaRecorder();
+                        }
+                        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
+                        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                        mRecorder.setOutputFile(mSoundDataFilePath);
+                        try {
+                            mRecorder.prepare();
+                            mRecorder.start();
+                            wakeLock.acquire();
+                            isCanceled = false;
+                            mStartTime = System.currentTimeMillis();
+                            tvTime.setText("0" + '"');
+                            updateMicStatus();
+                            // TODO 开启定时器
+                            mHandler.postDelayed(runnable, 1000);
+                            rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorRedVoice));
+                        } catch (Exception e) {
+                            if (wakeLock.isHeld()) {
+                                wakeLock.release();
+                            }
+                            Log.i("recoder", "prepare() failed-Exception-" + e.toString());
+                        }
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorBlue50));

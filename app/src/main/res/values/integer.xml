@@ -3,4 +3,5 @@
     <integer name="nickname_length">16</integer>
     <integer name="title_length">40</integer>
     <integer name="content_length">140</integer>
+    <integer name="tag_length">7</integer>
 </resources>

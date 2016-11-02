@@ -34,6 +34,7 @@
     <!--<string name="permission_tip_dialog_message_nor">在设置-应用-快牛直播-权限中开启%s权限，以正常使用%s等功能</string>-->
     <string name="permission_tip_dialog_message_sms">本APP使用短信权限为您自动填写验证码。拒绝该权限不会影响本APP的正常使用。点击授权&#8212;&#8212;不再询问可屏蔽该消息。</string>
     <string name="permission_tip_dialog_message_camera">请在设置-快牛直播-权限中开启相机权限，以正常使用拍照、扫描二维码等功能。</string>
+    <string name="permission_tip_dialog_message_record_audio">请在设置-快牛直播-权限中开启录音权限。</string>
     <string name="permission_tip_dialog_message_storage">本APP使用存储空间权限缓存数据、下载视频、记录应用日志。\n请在设置-快牛直播-权限中开启存储空间权限。</string>
     <string name="permission_tip_dialog_message_phone">本APP使用电话权限确定唯一的设备ID，以保证推送功能正常使用、方便直接拨打快牛TV客服电话。不会拨打其他号码或终止通话。\n请在设置-快牛直播-权限中开启电话权限。</string>
 
