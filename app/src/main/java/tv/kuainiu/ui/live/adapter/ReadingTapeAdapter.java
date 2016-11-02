@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import tv.kuainiu.R;
+import tv.kuainiu.app.Constans;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
 import tv.kuainiu.modle.cons.Constant;
@@ -132,6 +133,7 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item2, null);
             ImageView ivIamge = (ImageView) view.findViewById(R.id.ivIamge);
             TextView tvLiveing = (TextView) view.findViewById(R.id.tvLiveing);
+            ImageView ivLiveIng = (ImageView) view.findViewById(R.id.ivLiveIng);
             TextView tvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);
             RelativeLayout rl_avatar = (RelativeLayout) view.findViewById(R.id.rl_avatar);//头像
             CircleImageView civ_avatar = (CircleImageView) view.findViewById(R.id.civ_avatar);//头像
@@ -149,12 +151,22 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //绑定中间直播信息
             final LiveInfo liveItem = mBannerList.get(i);
             ImageDisplayUtil.displayImage(mContext, ivIamge, liveItem.getThumb());
-            tvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
-            ImageDisplayUtil.displayImage(mContext, civ_avatar, liveItem.getTeacher_info().getAvatar(), R.mipmap.default_avatar);
+            ImageDisplayUtil.displayImage(mContext, civ_avatar,liveItem.getTeacher_info()==null?Constant.DEFAULT_AVATAR:liveItem.getTeacher_info().getAvatar());
+            tvLiveing.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg(), "直播时间"));
+
+            if (liveItem.getLive_status() == Constans.LiVE_UN_START) {
+                tvLiveingNumber.setText("");
+                tvLiveingNumber.append(DateUtil.formatDate(liveItem.getStart_date(), "yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm"));
+                ivLiveIng.setVisibility(View.GONE);
+            } else {
+                tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getView_num(), Constant.TEN_THOUSAND, "万", "")));
+                ivLiveIng.setVisibility(View.VISIBLE);
+            }
+
             mTvTitle.setText(StringUtils.replaceNullToEmpty(liveItem.getTitle()));
             mTvState.setText(StringUtils.replaceNullToEmpty(liveItem.getLive_msg()));
             mTvTime.setText(DateUtil.formatDate(liveItem.getStart_date()) + "-" + DateUtil.formatDate(liveItem.getEnd_date()));//时间
-            tvLiveingNumber.setText(String.format(Locale.CHINA, "%s", StringUtils.getDecimal(liveItem.getView_num(), Constant.TEN_THOUSAND, "万", "")));
+
             ivIamge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -211,7 +223,6 @@ public class ReadingTapeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO 完善直播参数传递
                     LiveInfo liveItem = (LiveInfo) view.getTag();
                     if (TextUtils.isEmpty(liveItem.getPlayback_id())) {
                         clickPlayLive(liveItem);

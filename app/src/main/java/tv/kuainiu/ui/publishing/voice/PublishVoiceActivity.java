@@ -184,6 +184,7 @@ public class PublishVoiceActivity extends BaseActivity {
     private PowerManager.WakeLock wakeLock;
     private PublicDynamicAdapter mPublicVoiceAdapter;
     List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
+    private boolean isHaveRecordingPermissions = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -434,6 +435,7 @@ public class PublishVoiceActivity extends BaseActivity {
         map.put("voice", voice);  // 声音必传     声音文件
         map.put("synchro_dynamics", synchro_dynamics);  // 可选     是否同步动态     1是0否
         map.put("dynamics_desc", dynamics_desc);  // 同步动态时必传     动态描述文字
+        map.put("voice_time", String.valueOf(mTime));  // 录音时间
         if (!isSubmiting) {
             isSubmiting = true;
             OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_vioce);
@@ -641,9 +643,7 @@ public class PublishVoiceActivity extends BaseActivity {
                         .show(R.string.permission_tip_dialog_message_camera);
             }
         } else if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                takeCapture();
-            } else {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 new PermissionDialog(this)
                         .show(R.string.permission_tip_dialog_message_record_audio);
             }
@@ -664,10 +664,11 @@ public class PublishVoiceActivity extends BaseActivity {
                 case MotionEvent.ACTION_DOWN:
                     if (!PermissionManager.checkPermission(PublishVoiceActivity.this,
                             Manifest.permission.RECORD_AUDIO)) {
-                        isCanceled = true;
+                        isHaveRecordingPermissions = false;
                         ActivityCompat.requestPermissions(PublishVoiceActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
 
                     } else {
+                        isHaveRecordingPermissions = true;
                         downY = motionEvent.getY();
                         recordingHint.setText("录制中...");
                         deleteSoundFileUnSend();//删除上一次录制（如果有上次录音文件）没有上传的录音
@@ -703,6 +704,9 @@ public class PublishVoiceActivity extends BaseActivity {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    if (!isHaveRecordingPermissions) {
+                        return true;
+                    }
                     rlVoicePanel.setBackgroundColor(getResources().getColor(R.color.colorBlue50));
                     if (wakeLock.isHeld()) {
                         wakeLock.release();
@@ -729,6 +733,9 @@ public class PublishVoiceActivity extends BaseActivity {
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL: // 首次开权限时会走这里，录音取消
+                    if (!isHaveRecordingPermissions) {
+                        return true;
+                    }
                     Log.i("record_test", "权限影响录音录音");
                     if (wakeLock.isHeld()) {
                         wakeLock.release();
@@ -747,6 +754,9 @@ public class PublishVoiceActivity extends BaseActivity {
                     break;
 
                 case MotionEvent.ACTION_MOVE: // 滑动手指
+                    if (!isHaveRecordingPermissions) {
+                        return true;
+                    }
                     float moveY = motionEvent.getY();
                     if (downY - moveY > 100) {
                         isCanceled = true;
@@ -767,10 +777,10 @@ public class PublishVoiceActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (wakeLock.isHeld()) {
+        if (isHaveRecordingPermissions && wakeLock.isHeld()) {
             wakeLock.release();
         }
-        if (mRecorder != null) {
+        if (isHaveRecordingPermissions && mRecorder != null) {
             mHandler2.removeCallbacks(mupdateMicStatusTimer);
             mHandler.removeCallbacks(runnable);
             mRecorder.stop();
@@ -796,6 +806,9 @@ public class PublishVoiceActivity extends BaseActivity {
      * 结束录音
      */
     public void stopRecord() {
+        if (!isHaveRecordingPermissions) {
+            return;
+        }
         if (mTime < 1) {
             deleteSoundFileUnSend();
             isCanceled = true;
@@ -810,16 +823,18 @@ public class PublishVoiceActivity extends BaseActivity {
             TeacherZoneDynamicsInfo mTeacherZoneDynamicsInfo = new TeacherZoneDynamicsInfo();
             mTeacherZoneDynamicsInfo.setType(Constans.TYPE_AUDIO);
             mTeacherZoneDynamicsInfo.setNews_voice_url(mSoundDataFilePath);
-            mTeacherZoneDynamicsInfo.setNews_voice_time(String.valueOf(mTime) + '"');
+            mTeacherZoneDynamicsInfo.setNews_voice_time(String.valueOf(mTime));
             listTeacherZoneDynamicsInfo.clear();
             listTeacherZoneDynamicsInfo.add(mTeacherZoneDynamicsInfo);
             dataBindVoice();
         }
         //mRecorder.setOnErrorListener(null);
         try {
+            if (mRecorder != null) {
 //            mRecorder.reset();
-            mRecorder.stop();
-            mRecorder.release();
+                mRecorder.stop();
+                mRecorder.release();
+            }
         } catch (Exception e) {
             tvTime.setText("0" + '"');
             ToastUtils.showToast(PublishVoiceActivity.this, "录音发生错误,请重新录音");

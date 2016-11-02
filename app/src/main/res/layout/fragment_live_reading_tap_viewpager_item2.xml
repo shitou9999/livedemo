@@ -71,7 +71,6 @@
                 tools:src="@mipmap/net" />
 
             <ImageView
-                style="@style/view_invisibility"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_alignParentBottom="true"
@@ -79,7 +78,8 @@
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/vip_ic" />
+                android:visibility="invisible"
+                android:src="@mipmap/vip_pre" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tv_state"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_state"
                 android:gravity="center_vertical"
                 android:textColor="@color/colorGrey450"
