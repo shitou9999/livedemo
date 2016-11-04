@@ -333,4 +333,7 @@
     <string name="temp_about_content">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;快牛直播聚合资深商务牛人，为您创建价值资讯空间，线上点播，直播，同步查看数据分析，多维度分析揭秘，多视角透析行情；快牛直播，让价值讯息传递变得更简单！</string>
     <string name="appointment_reminder">预约提醒</string>
     <string name="unppointment_reminder">预约提醒</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

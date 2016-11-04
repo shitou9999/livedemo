@@ -75,17 +75,17 @@
                     android:id="@+id/civ_friends_post_head"
                     android:layout_width="@dimen/CircleImageViewHeight"
                     android:layout_height="@dimen/CircleImageViewHeight"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/colorCircleImageViewborder"
                     app:civ_border_width="@dimen/widthCircleImageViewborder"
                     app:paddingEnd="2dp"
-                    android:layout_centerVertical="true"
                     app:paddingStart="2dp"
-                    tools:src="@mipmap/ic_launcher"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    tools:src="@mipmap/ic_launcher" />
             </RelativeLayout>
 
             <TextView
@@ -123,43 +123,15 @@
             <!--android:contentDescription="@null"-->
             <!--tools:src="@drawable/temp1"/>-->
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/activity_vertical_margin">
-
-
-                <TextView
-                    android:id="@+id/tv_friends_post_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:drawableLeft="@mipmap/review_ic"
-                    android:drawablePadding="4dp"
-                    android:drawableStart="@mipmap/review_ic"
-                    android:text="(88)"
-                    android:textColor="@color/colorGrey450" />
-
-                <TextView
-                    android:id="@+id/tv_friends_post_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/tv_friends_post_comment"
-                    android:layout_toStartOf="@id/tv_friends_post_comment"
-                    android:drawableLeft="@drawable/selector_suport"
-                    android:drawablePadding="4dp"
-                    android:drawableStart="@drawable/selector_suport"
-                    android:gravity="center_vertical"
-                    android:text="(458)"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorGrey450" />
-
                 <TextView
                     android:id="@+id/tv_friends_post_type"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginRight="10dp"
@@ -168,7 +140,43 @@
                     android:textColor="@color/colorGrey450"
                     android:textSize="12sp"
                     tools:text="模块名称" />
-            </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_friends_post_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/selector_suport"
+                    android:drawablePadding="4dp"
+                    android:drawableStart="@drawable/selector_suport"
+                    android:gravity="center_vertical"
+                    android:text="(458)"
+                    android:textColor="@color/colorGrey450"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_friends_post_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_toLeftOf="@+id/ivDelete"
+                    android:drawableLeft="@mipmap/review_ic"
+                    android:drawablePadding="4dp"
+                    android:drawableStart="@mipmap/review_ic"
+                    android:text="(88)"
+                    android:textColor="@color/colorGrey450"
+                    android:textSize="12sp"/>
+                <ImageView
+                    android:id="@+id/ivDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/selector_tag_close"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
 
 
             <View

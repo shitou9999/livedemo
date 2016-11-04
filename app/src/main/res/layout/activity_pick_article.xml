@@ -18,11 +18,40 @@
             app:mytitle="选择博文观点/视频"
             app:right_visibility="invisible" />
 
-        <ListView
-            android:id="@+id/lvArticleList"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorGrey450" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_fragment_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@color/colorAmber550"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/colorAmber550"
+                app:tabTextAppearance="@android:style/TextAppearance.Small"
+                app:tabTextColor="@color/colorGrey600" />
+
+
+        </RelativeLayout>
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/nvp_fragment_major"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:listSelector="@drawable/selector_option_normal"
-           />
+            android:layout_height="match_parent" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -25,7 +25,7 @@ android {
         versionName "1.0.0"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a','armeabi64-v8a','x86'
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi64-v8a', 'x86'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
 
@@ -92,50 +92,22 @@ android {
 dependencies {
 
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
-
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
 
 //    compile 'com.android.support:support-v4:24.1.0'
 //    compile 'com.android.support:appcompat-v7:24.1.0'
 //    compile 'com.android.support:design:24.1.0'
     //    compile 'com.android.support:cardview-v7:24.1.0'
-    compile 'com.jakewharton:butterknife:8.2.1'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'io.reactivex:rxjava:1.1.10'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'in.srain.cube:ultra-ptr:1.0.11'
-    compile 'joda-time:joda-time:2.9.3'
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
-    compile 'com.github.chrisbanes.photoview:library:1.2.4'
-    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'cn.jiguang:jpush:2.1.8'
     // 此处以SDK 2.1.8版本为例
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
-    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.6.3'
-    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.6.3'
-//    # Other ABIs: optional
+    //    # Other ABIs: optional
 //    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.6.3'
-    compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.6.3'
-    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.6.3'
-//    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.6.3'
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.6.3'
 
 //    # ExoPlayer as IMediaPlayer: optional, experimental
 //    compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.6.3'
 
-    compile 'com.umeng.analytics:analytics:5.6.4'
-//    compile files('libs/jikmediaplayer.jar')
+    //    compile files('libs/jikmediaplayer.jar')
 //    compile files('libs/jikmediawidget.jar')
     compile files('libs/CCSDK.jar')
     compile files('libs/dwsdk_1021.jar')
@@ -144,9 +116,6 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     //https://github.com/ongakuer/CircleIndicator
-    compile 'me.relex:circleindicator:1.2.1@aar'
-    compile 'com.bigkoo:quicksidebar:1.0.1'
-    compile 'com.synnapps:carouselview:0.0.7'
     compile project(':WheelPicker')
     compile project(':loading-more-view')
     compile project(':swipe-refresh-layout')
@@ -162,9 +131,39 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.7.jar')
     compile files('libs/ShareSDK-Wechat-Favorite-2.7.7.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.7.jar')
+    compile files('libs/zxing-3.1.1.jar')
+
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'io.reactivex:rxjava:1.1.10'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile 'joda-time:joda-time:2.9.3'
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'com.github.chrisbanes.photoview:library:1.2.4'
+    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'cn.jiguang:jpush:2.1.8'
+    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.6.3'
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.6.3'
+    compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.6.3'
+    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.6.3'
+    compile 'com.umeng.analytics:analytics:5.6.4'
+    compile 'me.relex:circleindicator:1.2.1@aar'
+    compile 'com.bigkoo:quicksidebar:1.0.1'
+    compile 'com.synnapps:carouselview:0.0.7'
     compile 'com.baidu.mobstat:mtj-sdk:latest.integration'
     compile 'com.android.support:multidex:1.0.0'
     compile 'top.zibin:Luban:1.0.9'
-    compile files('libs/zxing-3.1.1.jar')
-
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 }

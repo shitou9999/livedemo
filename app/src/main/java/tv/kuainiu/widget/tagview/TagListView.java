@@ -25,6 +25,7 @@ public class TagListView extends FlowLayout implements OnClickListener {
     private OnTagCheckedChangedListener mOnTagCheckedChangedListener;
     private OnTagClickListener mOnTagClickListener;
     private int mTagViewBackgroundResId;
+    private int mTagViewBackgroundCheckedResId;
     private int mTagViewTextColorResId;
     private final List<Tag> mTags = new ArrayList<Tag>();
 
@@ -90,8 +91,12 @@ public class TagListView extends FlowLayout implements OnClickListener {
             localTagView.setBackgroundResource(mTagViewBackgroundResId);
         }
         if (t.isChecked()) {
-            mTagViewBackgroundResId = R.drawable.tag_checked_pressed;
-            localTagView.setBackgroundResource(mTagViewBackgroundResId);
+            if (mTagViewBackgroundCheckedResId <= 0) {
+                mTagViewBackgroundResId = R.drawable.tag_checked_pressed;
+                localTagView.setBackgroundResource(mTagViewBackgroundResId);
+            } else {
+                localTagView.setBackgroundResource(mTagViewBackgroundCheckedResId);
+            }
         } else {
             mTagViewBackgroundResId = R.drawable.tag_checked_normal;
             localTagView.setBackgroundResource(mTagViewBackgroundResId);
@@ -187,6 +192,10 @@ public class TagListView extends FlowLayout implements OnClickListener {
 
     public void setTagViewBackgroundRes(int res) {
         mTagViewBackgroundResId = res;
+    }
+
+    public void setTagViewBackgroundCheckedRes(int res) {
+        mTagViewBackgroundCheckedResId = res;
     }
 
     public void setTagViewTextColorRes(int res) {

@@ -101,7 +101,7 @@ public class CustomTeacherFragment extends BaseFragment implements OnItemClickLi
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context, false);
+        adapter = new FriendsPostAdapter(context, false,"");
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         initData();

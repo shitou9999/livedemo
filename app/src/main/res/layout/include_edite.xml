@@ -10,23 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:maxLength="@integer/content_length"
-        android:minLines="3"
         android:background="@color/translate"
         android:gravity="start"
-        android:text=""
         android:hint="请输入内容（必填）"
-        android:textSize="14sp"
+        android:inputType="textMultiLine"
+        android:maxLength="@integer/content_length"
+        android:minLines="3"
+        android:text=""
         android:textColorHint="@color/publishTextColor"
-        android:inputType="textMultiLine"/>
+        android:textSize="14sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginRight="1px"
         android:layout_marginBottom="1px"
         android:layout_marginLeft="1px"
+        android:layout_marginRight="1px"
         android:background="@color/colorGreyPublish"
+        android:visibility="gone"
         android:paddingLeft="10dp">
 
         <TextView
@@ -34,26 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="还可以输入10个字" android:visibility="invisible"/>
-
-        <TextView
-            android:id="@+id/btnFlag"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingRight="10dp"
-            android:text="标签"
-            android:textColor="@color/colorBlue500"
-            android:textSize="18sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/btnFlag"
-            android:text="插入:"
-            android:textColor="@color/colorGreyPublishText" />
+            android:text="还可以输入10个字"
+            android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

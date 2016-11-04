@@ -104,7 +104,7 @@ public class CustomVideoFragment extends BaseFragment implements OnItemClickList
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context,isTeacher);
+        adapter = new FriendsPostAdapter(context,isTeacher,"");
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         initData();

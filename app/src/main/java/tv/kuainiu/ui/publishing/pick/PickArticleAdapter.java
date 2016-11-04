@@ -11,8 +11,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import tv.kuainiu.R;
-import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.push.CustomVideo;
+import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.StringUtils;
 
 /**
@@ -21,22 +22,22 @@ import tv.kuainiu.utils.StringUtils;
 
 public class PickArticleAdapter extends BaseAdapter {
     private Context context;
-    private List<TeacherZoneDynamicsInfo> list;
+    private List<CustomVideo> customVideoList;
     private View view;
 
-    public PickArticleAdapter(Context context, List<TeacherZoneDynamicsInfo> list) {
+    public PickArticleAdapter(Context context, List<CustomVideo> list) {
         this.context = context;
-        this.list = list;
+        this.customVideoList = list;
     }
 
     @Override
     public int getCount() {
-        return list == null ? 0 : list.size();
+        return customVideoList == null ? 0 : customVideoList.size();
     }
 
     @Override
-    public TeacherZoneDynamicsInfo getItem(int position) {
-        return list.get(position);
+    public CustomVideo getItem(int position) {
+        return customVideoList.get(position);
     }
 
     @Override
@@ -47,31 +48,32 @@ public class PickArticleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder mViewHolder = null;
-        TeacherZoneDynamicsInfo teacherZoneDynamicsInfo = getItem(position);
+        CustomVideo teacherZoneDynamicsInfo = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.pick_article_item, parent, false);
             mViewHolder = new ViewHolder();
             mViewHolder.tv_article_name = (TextView) convertView.findViewById(R.id.tv_article_name);
+            mViewHolder.tv_article_date = (TextView) convertView.findViewById(R.id.tv_article_date);
             mViewHolder.ivType = (ImageView) convertView.findViewById(R.id.ivType);
             convertView.setTag(convertView);
         } else {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
-
-        mViewHolder.tv_article_name.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getNews_title()));
+        mViewHolder.tv_article_date.setText(DateUtil.getTimeString_MM_dd(teacherZoneDynamicsInfo.getInputtime()));
+        mViewHolder.tv_article_name.setText(StringUtils.replaceNullToEmpty(teacherZoneDynamicsInfo.getTitle()));
         switch (teacherZoneDynamicsInfo.getType()) {
             case Constant.NEWS_TYPE_VIDEO:
-                mViewHolder.ivType.setImageResource(R.mipmap.play_pre);
+                mViewHolder.ivType.setImageResource(R.drawable.movie_btn);
                 break;
 //            case Constant.NEWS_TYPE_VOICE:
 //                mViewHolder.ivType.setImageResource(R.mipmap.play_pre);
 //                break;
             case Constant.NEWS_TYPE_LIVE:
-                mViewHolder.ivType.setImageResource(R.mipmap.video_pre);
+                mViewHolder.ivType.setImageResource(R.drawable.movie_btn);
                 break;
             default:
-                mViewHolder.ivType.setImageResource(R.mipmap.text_pre);
+                mViewHolder.ivType.setImageResource(R.drawable.word_btn);
                 break;
         }
         return convertView;
@@ -79,6 +81,7 @@ public class PickArticleAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView tv_article_name;
+        TextView tv_article_date;
         ImageView ivType;
     }
 }

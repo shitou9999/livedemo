@@ -16,20 +16,14 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,8 +62,8 @@ import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
-import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
+import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.PROGRAM;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
 public class PublishArticleActivity extends BaseActivity {
@@ -115,8 +109,8 @@ public class PublishArticleActivity extends BaseActivity {
     TextView btnFlag;
     @BindView(R.id.tagListView)
     TagListView tagListView;
-    @BindView(R.id.spCategory)
-    Spinner spCategory;
+    @BindView(R.id.tagCategoryListView)
+    TagListView tagCategoryListView;
     @BindView(R.id.sw_dynamic)
     SwitchCompat swDynamic;
     @BindView(R.id.tvInputWordLimit2)
@@ -144,6 +138,7 @@ public class PublishArticleActivity extends BaseActivity {
     private boolean isSubmiting = false;
 
     private SelectPicPopupWindow menuWindow;      // 头像弹出框
+    private Tag programTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +149,6 @@ public class PublishArticleActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         initView();
-        initData();
 
     }
 
@@ -162,7 +156,7 @@ public class PublishArticleActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
-                PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
+                PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
                 break;
             case R.id.ivAddCover://选择缩图
                 menuWindow = new SelectPicPopupWindow(this, itemsOnClick);
@@ -200,7 +194,17 @@ public class PublishArticleActivity extends BaseActivity {
                 llDynamicContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
+        tagCategoryListView.setDeleteMode(true);
+        tagCategoryListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_pressed);
+        tagCategoryListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                programTag = null;
+                tagCategoryListView.removeTag(tag);
+            }
+        });
         tagListView.setDeleteMode(true);
+        tagListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_blue_pressed);
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
@@ -208,42 +212,18 @@ public class PublishArticleActivity extends BaseActivity {
                 tagListView.removeTag(tag);
             }
         });
-        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                cat_id = mCategroyList.get(pos).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                cat_id = mCategroyList.get(0).getId();
-            }
-        });
     }
 
-
-    private void initData() {
-        OKHttpUtils.getInstance().syncGet(this, Api.get_cats, Action.get_cats);
-    }
 
     private void dataBind() {
         tagListView.setTags(mTags);
+        tagCategoryListView.removeAllViews();
+        if (programTag != null) {
+            programTag.setChecked(true);
+            tagCategoryListView.addTag(programTag);
+        }
     }
 
-    private void dataBindView() {
-        if (mCategroyList.size() > 0) {
-            cat_id = mCategroyList.get(0).getId();
-            arryCategroy = new String[mCategroyList.size()];
-        }
-        for (int i = 0; i < mCategroyList.size(); i++) {
-            arryCategroy[i] = mCategroyList.get(i).getCatname();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arryCategroy);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
-        spCategory.setAdapter(adapter);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -272,6 +252,7 @@ public class PublishArticleActivity extends BaseActivity {
                     if (data != null) {
                         mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
                         mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
+                        programTag = (Tag) data.getExtras().getSerializable(PROGRAM);
                         dataBind();
                     }
                 }
@@ -325,6 +306,11 @@ public class PublishArticleActivity extends BaseActivity {
             etContent.setError("文章内容不能为空");
         } else {
             etContent.setError(null);
+        }
+        if (programTag != null) {
+            cat_id = String.valueOf(programTag.getId());
+        }else{
+            cat_id="";
         }
         if (TextUtils.isEmpty(cat_id)) {
             flag = false;
@@ -383,34 +369,6 @@ public class PublishArticleActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
-            case get_cats:
-                if (SUCCEED == event.getCode()) {
-                    try {
-                        JsonParser parser = new JsonParser();
-                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
-                        JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
-                        List<Categroy> listTemp = new Gson().fromJson(json, new TypeToken<List<Categroy>>() {
-                        }.getType());
-
-                        if (listTemp != null && listTemp.size() > 0) {
-                            mCategroyList.clear();
-                            Categroy categroy = new Categroy();
-                            categroy.setCatname("请选择");
-                            categroy.setId("");
-                            mCategroyList.add(categroy);
-                            mCategroyList.addAll(listTemp);
-                            dataBindView();
-                        } else {
-                            ToastUtils.showToast(PublishArticleActivity.this, "未获取到文章栏目信息");
-                        }
-                    } catch (Exception e) {
-                        LogUtils.e(TAG, "获取到文章信息解析异常", e);
-                        ToastUtils.showToast(PublishArticleActivity.this, "获取到文章栏目信息解析异常");
-                    }
-                } else {
-                    ToastUtils.showToast(PublishArticleActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
-                }
-                break;
             case add_news_article:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {

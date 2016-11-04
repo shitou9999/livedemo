@@ -1,9 +1,12 @@
 package tv.kuainiu.modle.push;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by jack on 2016/9/23.
  */
-public class CustomVideo {
+public class CustomVideo implements Parcelable {
 
     /**
      * id : 19
@@ -187,4 +190,67 @@ public class CustomVideo {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.cat_id);
+        dest.writeInt(this.type);
+        dest.writeString(this.title);
+        dest.writeString(this.thumb);
+        dest.writeString(this.url);
+        dest.writeString(this.user_id);
+        dest.writeString(this.description);
+        dest.writeLong(this.inputtime);
+        dest.writeString(this.video_id);
+        dest.writeInt(this.support_num);
+        dest.writeInt(this.is_support);
+        dest.writeString(this.comment_num);
+        dest.writeString(this.view_num);
+        dest.writeString(this.is_official);
+        dest.writeString(this.catname);
+        dest.writeString(this.nickname);
+        dest.writeString(this.avatar);
+    }
+
+    public CustomVideo() {
+    }
+
+    protected CustomVideo(Parcel in) {
+        this.id = in.readString();
+        this.cat_id = in.readString();
+        this.type = in.readInt();
+        this.title = in.readString();
+        this.thumb = in.readString();
+        this.url = in.readString();
+        this.user_id = in.readString();
+        this.description = in.readString();
+        this.inputtime = in.readLong();
+        this.video_id = in.readString();
+        this.support_num = in.readInt();
+        this.is_support = in.readInt();
+        this.comment_num = in.readString();
+        this.view_num = in.readString();
+        this.is_official = in.readString();
+        this.catname = in.readString();
+        this.nickname = in.readString();
+        this.avatar = in.readString();
+    }
+
+    public static final Parcelable.Creator<CustomVideo> CREATOR = new Parcelable.Creator<CustomVideo>() {
+        @Override
+        public CustomVideo createFromParcel(Parcel source) {
+            return new CustomVideo(source);
+        }
+
+        @Override
+        public CustomVideo[] newArray(int size) {
+            return new CustomVideo[size];
+        }
+    };
 }

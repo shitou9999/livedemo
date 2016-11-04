@@ -1,4 +1,4 @@
-package tv.kuainiu.ui.publishing.dynamic;
+package tv.kuainiu.ui.publishing.voice;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import java.util.List;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ISwipeDeleteItemClickListening;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
-import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.PostParentLayout;
 
@@ -22,13 +21,13 @@ import tv.kuainiu.widget.PostParentLayout;
  * Created by jack on 2016/4/28.
  * 收藏
  */
-public class PublicDynamicAdapter extends BaseSwipeAdapter {
+public class PublicVoiceAdapter extends BaseSwipeAdapter {
     private Context context;
-    private List<CustomVideo> listTeacherZoneDynamicsInfo;
+    private List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo;
     private ISwipeDeleteItemClickListening iDeleteItemClickListener;
     private boolean isEdit = false;
 
-    public PublicDynamicAdapter(Context context, List<CustomVideo> listTeacherZoneDynamicsInfo) {
+    public PublicVoiceAdapter(Context context, List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo) {
         this.context = context;
         this.listTeacherZoneDynamicsInfo = listTeacherZoneDynamicsInfo;
     }
@@ -56,23 +55,15 @@ public class PublicDynamicAdapter extends BaseSwipeAdapter {
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipe);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 
-        final CustomVideo info = getItem(position);
-        TeacherZoneDynamicsInfo news_info = new TeacherZoneDynamicsInfo();
-        news_info.setType(info.getType());
-        news_info.setNews_video_id(info.getVideo_id());
-        news_info.setNews_title(info.getTitle());
-        news_info.setNews_catid(info.getCat_id());
-        news_info.setNews_thumb(info.getThumb());
-        news_info.setNews_inputtime(info.getInputtime());
-        news_info.setNews_id(info.getId());
-        pplPublishDynamic.setPostType(news_info);
+        final TeacherZoneDynamicsInfo newsItem = getItem(position);
+        pplPublishDynamic.setPostType(newsItem);
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (iDeleteItemClickListener != null) {
-                    iDeleteItemClickListener.delete(swipeLayout, position, info);
+                    iDeleteItemClickListener.delete(swipeLayout, position, newsItem);
                 } else {
-                    LogUtils.e("CollectAdapter", "删除接口不能为null");
+                    LogUtils.e("EnshrineAdapter", "删除接口不能为null");
                 }
             }
         });
@@ -84,14 +75,12 @@ public class PublicDynamicAdapter extends BaseSwipeAdapter {
     }
 
     @Override
-    public CustomVideo getItem(int position) {
-        return  listTeacherZoneDynamicsInfo.get(position);
+    public TeacherZoneDynamicsInfo getItem(int position) {
+        return listTeacherZoneDynamicsInfo != null ? listTeacherZoneDynamicsInfo.get(position) : null;
     }
 
     @Override
     public long getItemId(int position) {
         return position;
     }
-
-
 }

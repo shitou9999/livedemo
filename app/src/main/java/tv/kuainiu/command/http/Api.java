@@ -230,6 +230,10 @@ public class Api {
     //直播详情
     public static final String live_info = "live/live_info";
     public static final String self_check_permission = "cc/self_check_permission";
+//    删除动态
+    public static final String del_dynamics = "publish/del_dynamics";
+//    1.1.1 删除文章/视频   v1/publish/del_news
+    public static final String del_news = "publish/del_news";
 
 
 }

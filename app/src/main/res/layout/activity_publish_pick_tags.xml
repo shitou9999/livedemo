@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_color"
+    android:background="@color/colorGreyPublish"
     android:orientation="vertical">
 
     <tv.kuainiu.widget.TitleBarView
@@ -31,43 +31,96 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorGreyPublish"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:background="@color/white_color"
+                    android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/et_add_tag"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/selector_edit_bg"
-                        android:hint="请输入自定义标签"
-                        android:padding="5dp"
-                        android:maxLength="@integer/tag_length"
-                        android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tvSubmit"
+                        android:id="@+id/tvCategory"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:gravity="center"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:text="提交" />
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="分类"
+                        android:textColor="@color/colorGrey333333" />
+
+                    <tv.kuainiu.widget.tagview.TagListView
+                        android:id="@+id/tagCategroyListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/common_margin"
+                        android:paddingLeft="@dimen/common_margin"
+                        android:paddingRight="@dimen/common_margin"
+                        android:paddingTop="16.0dip"
+                        app:horizontalSpacing="@dimen/tag_horizontal_spacing"
+                        app:orientation="horizontal"
+                        app:verticalSpacing="@dimen/tag_vertical_spacing" />
                 </LinearLayout>
 
-                <tv.kuainiu.widget.tagview.TagListView
-                    android:id="@+id/tagListView"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorGrey400"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorGrey400"/>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/common_margin"
-                    android:paddingLeft="@dimen/common_margin"
-                    android:paddingRight="@dimen/common_margin"
-                    android:paddingTop="16.0dip"
-                    app:horizontalSpacing="@dimen/tag_horizontal_spacing"
-                    app:orientation="horizontal"
-                    app:verticalSpacing="@dimen/tag_vertical_spacing" />
+                    android:background="@color/white_color"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <EditText
+                            android:id="@+id/et_add_tag"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_edit_bg"
+                            android:hint="请输入自定义标签"
+                            android:maxLength="@integer/tag_length"
+                            android:padding="5dp"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvSubmit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="提交" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvTags"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="标签"
+                        android:textColor="@color/colorGrey333333" />
+
+                    <tv.kuainiu.widget.tagview.TagListView
+                        android:id="@+id/tagListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/common_margin"
+                        android:paddingLeft="@dimen/common_margin"
+                        android:paddingRight="@dimen/common_margin"
+                        android:paddingTop="16.0dip"
+                        app:horizontalSpacing="@dimen/tag_horizontal_spacing"
+                        app:orientation="horizontal"
+                        app:verticalSpacing="@dimen/tag_vertical_spacing" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

@@ -75,6 +75,7 @@ import tv.kuainiu.widget.tagview.TagView;
 import static tv.kuainiu.R.id.etDynamics_desc;
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
+import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.PROGRAM;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
 public class PublishVideoActivity extends BaseActivity {
@@ -112,10 +113,6 @@ public class PublishVideoActivity extends BaseActivity {
     TextView tvError;
     @BindView(R.id.etTitle)
     EditText etTitle;
-    @BindView(R.id.tvCategory)
-    TextView tvCategory;
-    @BindView(R.id.spCategory)
-    Spinner spCategory;
     @BindView(R.id.spPermissions)
     Spinner spPermissions;
 
@@ -131,6 +128,8 @@ public class PublishVideoActivity extends BaseActivity {
     TextView btnFlag;
     @BindView(R.id.tagListView)
     TagListView tagListView;
+    @BindView(R.id.tagCategoryListView)
+    TagListView tagCategoryListView;
     @BindView(R.id.sw_dynamic)
     SwitchCompat swDynamic;
     @BindView(etDynamics_desc)
@@ -143,6 +142,7 @@ public class PublishVideoActivity extends BaseActivity {
     PublishPickTimeLayout pptTime;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
+    Tag programTag;
     private List<Categroy> mCategroyList = new ArrayList<>();
     private List<Permissions> mPermissionsList = new ArrayList<>();
     private String[] arryCategroy;
@@ -188,7 +188,7 @@ public class PublishVideoActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
-                PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
+                PickTagsActivity.intoNewActivity(this, "live", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
                 break;
             case R.id.ivAddCover://选择缩图
                 menuWindow = new SelectPicPopupWindow(this, itemsOnClick);
@@ -246,7 +246,17 @@ public class PublishVideoActivity extends BaseActivity {
                 llDynamicContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
+        tagCategoryListView.setDeleteMode(true);
+        tagCategoryListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_pressed);
+        tagCategoryListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                programTag = null;
+                tagCategoryListView.removeTag(tag);
+            }
+        });
         tagListView.setDeleteMode(true);
+        tagListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_blue_pressed);
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
@@ -254,18 +264,18 @@ public class PublishVideoActivity extends BaseActivity {
                 tagListView.removeTag(tag);
             }
         });
-        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                cat_id = mCategroyList.get(pos).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                cat_id = mCategroyList.get(0).getId();
-            }
-        });
+//        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view,
+//                                       int pos, long id) {
+//                cat_id = mCategroyList.get(pos).getId();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                cat_id = mCategroyList.get(0).getId();
+//            }
+//        });
         spPermissions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -285,26 +295,31 @@ public class PublishVideoActivity extends BaseActivity {
         anchor = MyApplication.getUser().getNickname();
         teacher_id = MyApplication.getUser().getUser_id();
 
-        OKHttpUtils.getInstance().syncGet(this, Api.get_cats + ParamUtil.getParamForGet("class", "live"), Action.get_cats);
+//        OKHttpUtils.getInstance().syncGet(this, Api.get_cats + ParamUtil.getParamForGet("class", "live"), Action.get_cats);
         OKHttpUtils.getInstance().syncGet(this, Api.live_permissions, Action.live_permissions);
     }
 
     private void dataBind() {
         tagListView.setTags(mTags);
+        tagCategoryListView.removeAllViews();
+        if (programTag != null) {
+            programTag.setChecked(true);
+            tagCategoryListView.addTag(programTag);
+        }
     }
 
     private void dataBindView() {
-        if (mCategroyList.size() > 0) {
-            cat_id = mCategroyList.get(0).getId();
-            arryCategroy = new String[mCategroyList.size()];
-        }
-        for (int i = 0; i < mCategroyList.size(); i++) {
-            arryCategroy[i] = mCategroyList.get(i).getCatname();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arryCategroy);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
-        spCategory.setAdapter(adapter);
+////        if (mCategroyList.size() > 0) {
+////            cat_id = mCategroyList.get(0).getId();
+////            arryCategroy = new String[mCategroyList.size()];
+////        }
+//        for (int i = 0; i < mCategroyList.size(); i++) {
+//            arryCategroy[i] = mCategroyList.get(i).getCatname();
+//        }
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arryCategroy);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        //绑定 Adapter到控件
+//        spCategory.setAdapter(adapter);
     }
 
     private void dataBindPermission() {
@@ -348,6 +363,7 @@ public class PublishVideoActivity extends BaseActivity {
                     if (data != null) {
                         mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
                         mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
+                        programTag = (Tag) data.getExtras().getSerializable(PROGRAM);
                         dataBind();
                     }
                 }
@@ -412,6 +428,11 @@ public class PublishVideoActivity extends BaseActivity {
         start_date = tvLiveStartTime.getText().toString();
         date = tvLiveStartTime.getTag() == null ? "" : tvLiveStartTime.getTag().toString();
         end_date = tvLiveEndTime.getText().toString();
+        if (programTag != null) {
+            cat_id = String.valueOf(programTag.getId());
+        } else {
+            cat_id = "";
+        }
         if (TextUtils.isEmpty(cat_id)) {
             flag = false;
             ToastUtils.showToast(this, "请选择栏目");
@@ -520,34 +541,34 @@ public class PublishVideoActivity extends BaseActivity {
                     ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到权限信息失败"));
                 }
                 break;
-            case get_cats:
-                if (SUCCEED == event.getCode()) {
-                    try {
-                        JsonParser parser = new JsonParser();
-                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
-                        JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
-                        List<Categroy> listTemp = new Gson().fromJson(json, new TypeToken<List<Categroy>>() {
-                        }.getType());
-
-                        if (listTemp != null && listTemp.size() > 0) {
-                            mCategroyList.clear();
-                            Categroy categroy = new Categroy();
-                            categroy.setCatname("请选择");
-                            categroy.setId("");
-                            mCategroyList.add(categroy);
-                            mCategroyList.addAll(listTemp);
-                            dataBindView();
-                        } else {
-                            ToastUtils.showToast(PublishVideoActivity.this, "未获取到文章栏目信息");
-                        }
-                    } catch (Exception e) {
-                        LogUtils.e(TAG, "获取到文章信息解析异常", e);
-                        ToastUtils.showToast(PublishVideoActivity.this, "获取到文章栏目信息解析异常");
-                    }
-                } else {
-                    ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
-                }
-                break;
+//            case get_cats:
+//                if (SUCCEED == event.getCode()) {
+//                    try {
+//                        JsonParser parser = new JsonParser();
+//                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
+//                        JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
+//                        List<Categroy> listTemp = new Gson().fromJson(json, new TypeToken<List<Categroy>>() {
+//                        }.getType());
+//
+//                        if (listTemp != null && listTemp.size() > 0) {
+//                            mCategroyList.clear();
+//                            Categroy categroy = new Categroy();
+//                            categroy.setCatname("请选择");
+//                            categroy.setId("");
+//                            mCategroyList.add(categroy);
+//                            mCategroyList.addAll(listTemp);
+//                            dataBindView();
+//                        } else {
+//                            ToastUtils.showToast(PublishVideoActivity.this, "未获取到文章栏目信息");
+//                        }
+//                    } catch (Exception e) {
+//                        LogUtils.e(TAG, "获取到文章信息解析异常", e);
+//                        ToastUtils.showToast(PublishVideoActivity.this, "获取到文章栏目信息解析异常");
+//                    }
+//                } else {
+//                    ToastUtils.showToast(PublishVideoActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
+//                }
+//                break;
             case add_news_live:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {

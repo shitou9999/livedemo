@@ -210,5 +210,7 @@ public enum Action {
     home_bannar,   // 老师专区-接盘
     fetchLiveInfo,   //获取直播间信息
     self_check_permission,   //获取直播间信息
-    del_live,   //获取直播间信息
+    del_live,   //删除直播
+    del_dynamics,   //删除动态
+    del_news,   //删除文章/视频
 }

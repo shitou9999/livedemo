@@ -3,18 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/selector_option_normal"
+    android:padding="10dp"
     android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/tv_article_name"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/def_option_height"
-        android:layout_weight="1"
-        android:background="@drawable/selector_option_normal"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        tools:text="Aardvark" />
 
     <ImageView
         android:id="@+id/ivType"
@@ -22,6 +13,28 @@
         android:layout_height="@dimen/def_option_height"
         android:gravity="center_vertical"
         android:scaleType="center"
-        android:src="@mipmap/text_pre"
-        android:padding="10dp" />
+        android:src="@drawable/word_btn_pre" />
+
+    <TextView
+        android:id="@+id/tv_article_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        tools:text="Aardvark\niiiiii" />
+
+    <TextView
+        android:id="@+id/tv_article_date"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/def_option_height"
+        android:background="@drawable/selector_option_normal"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        tools:text="10-28" />
 </LinearLayout>

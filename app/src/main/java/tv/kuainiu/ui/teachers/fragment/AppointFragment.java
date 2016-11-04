@@ -1,9 +1,11 @@
 package tv.kuainiu.ui.teachers.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +116,7 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO, isTeacher);
+        adapter = new FriendsPostAdapter(context, FriendsPostAdapter.CUSTOM_VIDEO, isTeacher,teacherId);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         initData();
@@ -177,6 +179,28 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
                 CommentListActivity.intoNewIntent(getActivity(), PostCommentListFragment.MODE_DYNAMIC, String.valueOf(customVideo.getId()), "");
                 customVideo = null;
                 break;
+            case R.id.ivDelete:
+                customVideo = (CustomVideo) v.getTag();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity())
+                        .setTitle("是否删除该观点？")
+                        .setMessage(StringUtils.replaceNullToEmpty(customVideo.getTitle()))
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Map<String, String> map = new HashMap<>();
+                                map.put("id", String.valueOf(customVideo.getId()));
+                                OKHttpUtils.getInstance().post(getActivity(), Api.del_news, ParamUtil.getParam(map), Action.del_news);
+                                dialog.dismiss();
+                            }
+                        });
+                mBuilder.create().show();
+                break;
         }
     }
 
@@ -219,6 +243,18 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
                 LogUtils.e("teacher_zone", "_appoint");
                 data(event);
                 break;
+            case del_news:
+                if (customVideo != null) {
+                    if (SUCCEED == event.getCode()) {
+                        customVideoList.remove(customVideo);
+                        adapter.notifyDataSetChanged();
+                        ToastUtils.showToast(getActivity(), "删除成功");
+                    } else {
+                        ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "删除观点失败"));
+                    }
+                    customVideo = null;
+                }
+                break;
         }
     }
 
@@ -236,7 +272,7 @@ public class AppointFragment extends BaseFragment implements OnItemClickListener
             } else {
                 DebugUtils.showToastResponse(getActivity(), "点赞失败,请稍后重试");
             }
-            customVideo=null;
+            customVideo = null;
         }
     }
 

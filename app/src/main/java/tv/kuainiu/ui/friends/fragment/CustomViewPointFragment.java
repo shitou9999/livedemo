@@ -1,9 +1,11 @@
 package tv.kuainiu.ui.friends.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -114,7 +116,7 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSrlRefresh.setColorSchemeColors(Theme.getLoadingColor());
         mRecyclerView.addOnScrollListener(loadMoreListener);
-        adapter = new FriendsPostAdapter(context, isTeacher);
+        adapter = new FriendsPostAdapter(context, isTeacher, teacherId);
         adapter.setOnClick(this);
         mRecyclerView.setAdapter(adapter);
         initData();
@@ -185,6 +187,28 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivDelete:
+                teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity())
+                        .setTitle("是否删除该动态？")
+                        .setMessage(StringUtils.replaceNullToEmpty(teacherZoneDynamics.getDescription()))
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Map<String, String> map = new HashMap<>();
+                                map.put("id", String.valueOf(teacherZoneDynamics.getId()));
+                                OKHttpUtils.getInstance().post(getActivity(), Api.del_dynamics, ParamUtil.getParam(map), Action.del_dynamics);
+                                dialog.dismiss();
+                            }
+                        });
+                mBuilder.create().show();
+                break;
             case R.id.ivSupport:
                 ivSupport = v;
                 teacherZoneDynamics = (TeacherZoneDynamics) v.getTag();
@@ -250,6 +274,15 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
             case off_line:
             case login:
                 initData();
+                break;
+            case del_dynamics:
+                if (Constant.SUCCEED == event.getCode()) {
+                    teacherZoneDynamicsList.remove(teacherZoneDynamics);
+                    adapter.notifyDataSetChanged();
+                    ToastUtils.showToast(getActivity(), "删除成功");
+                } else {
+                    ToastUtils.showToast(getActivity(), StringUtils.replaceNullToEmpty(event.getMsg(), "删除动态失败"));
+                }
                 break;
             case add_live_appointment:
                 if (Constant.SUCCEED == event.getCode() || Constant.HAS_SUCCEED == event.getCode()) {

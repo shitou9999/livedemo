@@ -22,21 +22,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,12 +52,10 @@ import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.Categroy;
 import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
-import tv.kuainiu.ui.publishing.dynamic.PublicDynamicAdapter;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
@@ -83,8 +73,8 @@ import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
 import static tv.kuainiu.R.id.elv_friends_post_group;
-import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
+import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.PROGRAM;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
 public class PublishVoiceActivity extends BaseActivity {
@@ -127,10 +117,12 @@ public class PublishVoiceActivity extends BaseActivity {
 //    TextView tvInputWordLimit;
     @BindView(R.id.btnFlag)
     TextView btnFlag;
+    @BindView(R.id.tagCategoryListView)
+    TagListView tagCategoryListView;
     @BindView(R.id.tagListView)
     TagListView tagListView;
-    @BindView(R.id.spCategory)
-    Spinner spCategory;
+//    @BindView(R.id.spCategory)
+//    Spinner spCategory;
 
     //话筒的图片
     @BindView(R.id.ivVoiceBtn)
@@ -147,8 +139,8 @@ public class PublishVoiceActivity extends BaseActivity {
     RelativeLayout rlVoicePanel;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
-    private List<Categroy> mCategroyList = new ArrayList<>();
-    private String[] arryCategroy;
+//    private List<Categroy> mCategroyList = new ArrayList<>();
+//    private String[] arryCategroy;
 
     private String type = "3";//     必传     发布类型 1文章 2视频 3声音
     private String synchro_wb = "1";    //可选      是否同步微博     1是 0否
@@ -182,9 +174,10 @@ public class PublishVoiceActivity extends BaseActivity {
     private long mEndTime;
     private int mTime;
     private PowerManager.WakeLock wakeLock;
-    private PublicDynamicAdapter mPublicVoiceAdapter;
+    private PublicVoiceAdapter mPublicVoiceAdapter;
     List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
     private boolean isHaveRecordingPermissions = false;
+    private Tag programTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +189,6 @@ public class PublishVoiceActivity extends BaseActivity {
         }
         initView();
         mMediaPlayUtil = MediaPlayUtil.getInstance();
-        initData();
         initSoundData();
     }
 
@@ -204,7 +196,7 @@ public class PublishVoiceActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
-                PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);
+                PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
                 break;
             case R.id.ivAddCover://选择缩图
                 menuWindow = new SelectPicPopupWindow(this, itemsOnClick);
@@ -241,7 +233,17 @@ public class PublishVoiceActivity extends BaseActivity {
 
             }
         });
+        tagCategoryListView.setDeleteMode(true);
+        tagCategoryListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_pressed);
+        tagCategoryListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                programTag = null;
+                tagCategoryListView.removeTag(tag);
+            }
+        });
         tagListView.setDeleteMode(true);
+        tagListView.setTagViewBackgroundCheckedRes(R.drawable.tag_checked_blue_pressed);
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override
             public void onTagClick(TagView tagView, Tag tag) {
@@ -249,18 +251,7 @@ public class PublishVoiceActivity extends BaseActivity {
                 tagListView.removeTag(tag);
             }
         });
-        spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                cat_id = mCategroyList.get(pos).getId();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                cat_id = mCategroyList.get(0).getId();
-            }
-        });
         // 动画资源文件,用于录制语音时
         micImages = new Drawable[]{
                 getResources().getDrawable(R.mipmap.record1),
@@ -272,10 +263,6 @@ public class PublishVoiceActivity extends BaseActivity {
         ivVoiceBtn.setOnTouchListener(new VoiceTouch());
     }
 
-
-    private void initData() {
-        OKHttpUtils.getInstance().syncGet(this, Api.get_cats, Action.get_cats);
-    }
 
     /**
      * 录音存放路径
@@ -301,29 +288,22 @@ public class PublishVoiceActivity extends BaseActivity {
 
     private void dataBind() {
         tagListView.setTags(mTags);
+
+        tagCategoryListView.removeAllViews();
+        if (programTag != null) {
+            programTag.setChecked(true);
+            tagCategoryListView.addTag(programTag);
+        }
     }
 
-    private void dataBindView() {
-        if (mCategroyList.size() > 0) {
-            cat_id = mCategroyList.get(0).getId();
-            arryCategroy = new String[mCategroyList.size()];
-        }
-        for (int i = 0; i < mCategroyList.size(); i++) {
-            arryCategroy[i] = mCategroyList.get(i).getCatname();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arryCategroy);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //绑定 Adapter到控件
-        spCategory.setAdapter(adapter);
-    }
 
     private void dataBindVoice() {
-        mPublicVoiceAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
+        mPublicVoiceAdapter = new PublicVoiceAdapter(this, listTeacherZoneDynamicsInfo);
         elvFriendsPostGroup.setAdapter(mPublicVoiceAdapter);
         mPublicVoiceAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
             @Override
-            public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
-                listTeacherZoneDynamicsInfo.remove(newsItem);
+            public void delete(SwipeLayout swipeLayout, int position, Object object) {
+                listTeacherZoneDynamicsInfo.remove(object);
                 deleteSoundFileUnSend();
                 voice = "";
                 swipeLayout.close(true);
@@ -359,6 +339,7 @@ public class PublishVoiceActivity extends BaseActivity {
                     if (data != null) {
                         mTags = (List<Tag>) data.getExtras().getSerializable(SELECTED_LIST);
                         mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
+                        programTag = (Tag) data.getExtras().getSerializable(PROGRAM);
                         dataBind();
                     }
                 }
@@ -391,6 +372,9 @@ public class PublishVoiceActivity extends BaseActivity {
         if (TextUtils.isEmpty(title)) {
             flag = false;
             etTitle.setError("标题不能为空");
+        }
+        if (programTag != null) {
+            cat_id = String.valueOf(programTag.getId());
         }
         if (TextUtils.isEmpty(cat_id)) {
             flag = false;
@@ -447,34 +431,6 @@ public class PublishVoiceActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
-            case get_cats:
-                if (SUCCEED == event.getCode()) {
-                    try {
-                        JsonParser parser = new JsonParser();
-                        JsonObject tempJson = (JsonObject) parser.parse(event.getData().toString());
-                        JsonArray json = tempJson.getAsJsonObject("data").getAsJsonArray("list");
-                        List<Categroy> listTemp = new Gson().fromJson(json, new TypeToken<List<Categroy>>() {
-                        }.getType());
-
-                        if (listTemp != null && listTemp.size() > 0) {
-                            mCategroyList.clear();
-                            Categroy categroy = new Categroy();
-                            categroy.setCatname("请选择");
-                            categroy.setId("");
-                            mCategroyList.add(categroy);
-                            mCategroyList.addAll(listTemp);
-                            dataBindView();
-                        } else {
-                            ToastUtils.showToast(PublishVoiceActivity.this, "未获取到文章栏目信息");
-                        }
-                    } catch (Exception e) {
-                        LogUtils.e(TAG, "获取到文章信息解析异常", e);
-                        ToastUtils.showToast(PublishVoiceActivity.this, "获取到文章栏目信息解析异常");
-                    }
-                } else {
-                    ToastUtils.showToast(PublishVoiceActivity.this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取到文章栏目信息失败"));
-                }
-                break;
             case add_news_vioce:
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {

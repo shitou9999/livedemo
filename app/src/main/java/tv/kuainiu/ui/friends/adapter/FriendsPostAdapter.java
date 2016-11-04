@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.modle.LiveInfo;
@@ -44,16 +45,19 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
     private int type = CUSTOM_VIEW_POINT;
     private OnItemClickListener onItemClickListener;
     private boolean isTeacher = false;
+    private String teacherId;
 
-    public FriendsPostAdapter(Activity context, boolean isTeacher) {
+    public FriendsPostAdapter(Activity context, boolean isTeacher, String teacherId) {
         mContext = context;
         this.isTeacher = isTeacher;
+        this.teacherId = teacherId;
     }
 
-    public FriendsPostAdapter(Activity context, int type, boolean isTeacher) {
+    public FriendsPostAdapter(Activity context, int type, boolean isTeacher, String teacherId) {
         mContext = context;
         this.type = type;
         this.isTeacher = isTeacher;
+        this.teacherId = teacherId;
     }
 
     public void setOnClick(OnItemClickListener onItemClickListener) {
@@ -199,8 +203,8 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             public void onClick(View v) {
                 if (info.getTeacher_info() != null) {
                     TeacherZoneActivity.intoNewIntent(mContext, info.getTeacher_info().getId());
-                }else {
-                    LogUtils.i("hjhkklj",info.toString());
+                } else {
+                    LogUtils.i("hjhkklj", info.toString());
                 }
             }
         });
@@ -234,6 +238,24 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             }
         } else {
             holder.exgv_appraisal_pic.setVisibility(View.GONE);
+        }
+        if (isTeacher) {
+            if (MyApplication.isLogin() && MyApplication.getUser().getIs_teacher() != 0 && MyApplication.getUser().getUser_id().equals(teacherId)) {
+                holder.ivDelete.setTag(info);
+                holder.ivDelete.setVisibility(View.VISIBLE);
+                holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onClick(v);
+                        }
+                    }
+                });
+            } else {
+                holder.ivDelete.setVisibility(View.GONE);
+            }
+        } else {
+            holder.ivDelete.setVisibility(View.GONE);
         }
     }
 
@@ -302,7 +324,24 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             }
         });
         holder.exgv_appraisal_pic.setVisibility(View.GONE);
-
+        if (isTeacher) {
+            if (MyApplication.isLogin() && MyApplication.getUser().getIs_teacher() != 0 && MyApplication.getUser().getUser_id().equals(teacherId)) {
+                holder.ivDelete.setTag(info);
+                holder.ivDelete.setVisibility(View.VISIBLE);
+                holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.onClick(v);
+                        }
+                    }
+                });
+            } else {
+                holder.ivDelete.setVisibility(View.GONE);
+            }
+        } else {
+            holder.ivDelete.setVisibility(View.GONE);
+        }
     }
 
     /*private void dataLive(ViewHolder holder, int position) {
@@ -404,6 +443,8 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         ImageView ivSupport;
         @BindView(R.id.exgv_appraisal_pic)
         ExpandGridView exgv_appraisal_pic;
+        @BindView(R.id.ivDelete)
+        ImageView ivDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);

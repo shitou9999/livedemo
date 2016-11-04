@@ -255,7 +255,7 @@ public class PublishPickTimeLayout extends RelativeLayout {
                 if (textView == null) {
                     return;
                 }
-                textView.setText(String.format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, 0));
+                textView.setText(String.format("%d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, numberPickerMin.getValue(), 0));
                 textView.setTag(String.format("%d-%02d-%02d", year, month, day));
             case R.id.ivClose:
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(this);

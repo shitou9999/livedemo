@@ -32,9 +32,9 @@ import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
+import tv.kuainiu.modle.push.CustomVideo;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.SelectPictureActivity;
 import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
@@ -79,7 +79,7 @@ public class PublishDynamicActivity extends BaseActivity {
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private ArrayList<String> stList;// 用户上传图片的URL集合
     PublicDynamicAdapter mPublicDynamicAdapter;
-    List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
+    List<CustomVideo> listTeacherZoneDynamicsInfo = new ArrayList<>();
 
     private String news_id = "";//可选     引用的文章ID
     private String description = "";//必传     文字内容
@@ -209,7 +209,7 @@ public class PublishDynamicActivity extends BaseActivity {
         tag = "";
         tag_new = "";
         if (listTeacherZoneDynamicsInfo.size() > 0) {
-            news_id = listTeacherZoneDynamicsInfo.get(0).getNews_id();
+            news_id = listTeacherZoneDynamicsInfo.get(0).getId();
         }
         description = etContent.getText().toString();
         if (TextUtils.isEmpty(description)) {
@@ -312,10 +312,12 @@ public class PublishDynamicActivity extends BaseActivity {
             case REQUSET_ARTICLE_CODE:
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
-                        TeacherZoneDynamicsInfo newsItem = (TeacherZoneDynamicsInfo) data.getSerializableExtra(PickArticleActivity.NEWS_ITEM);
-                        listTeacherZoneDynamicsInfo.clear();
-                        listTeacherZoneDynamicsInfo.add(newsItem);
-                        dataArticleBind();
+                        CustomVideo newsItem = (CustomVideo) data.getParcelableExtra(PickArticleActivity.NEWS_ITEM);
+                        if (newsItem != null) {
+                            listTeacherZoneDynamicsInfo.clear();
+                            listTeacherZoneDynamicsInfo.add(newsItem);
+                            dataArticleBind();
+                        }
                     }
                 }
                 break;
@@ -341,19 +343,15 @@ public class PublishDynamicActivity extends BaseActivity {
     }
 
     private void dataArticleBind() {
-        if (mPublicDynamicAdapter == null) {
-            mPublicDynamicAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
-            elv_friends_post_group.setAdapter(mPublicDynamicAdapter);
-            mPublicDynamicAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
-                @Override
-                public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
-                    listTeacherZoneDynamicsInfo.remove(newsItem);
-                    mPublicDynamicAdapter.notifyDataSetChanged();
-                }
-            });
-        } else {
-            mPublicDynamicAdapter.notifyDataSetChanged();
-        }
+        mPublicDynamicAdapter = new PublicDynamicAdapter(this, listTeacherZoneDynamicsInfo);
+        elv_friends_post_group.setAdapter(mPublicDynamicAdapter);
+        mPublicDynamicAdapter.setIDeleteItemClickListener(new ISwipeDeleteItemClickListening() {
+            @Override
+            public void delete(SwipeLayout swipeLayout, int position, Object newsItem) {
+                listTeacherZoneDynamicsInfo.remove(newsItem);
+                mPublicDynamicAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

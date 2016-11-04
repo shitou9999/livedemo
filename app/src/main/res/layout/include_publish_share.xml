@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/ivShareQQ"
-        android:text="分享到：" />
+        android:text="分享：" />
 
     <ImageView
         android:id="@+id/ivShareQQ"
