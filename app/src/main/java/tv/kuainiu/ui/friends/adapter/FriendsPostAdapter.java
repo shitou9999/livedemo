@@ -1,7 +1,6 @@
 package tv.kuainiu.ui.friends.adapter;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -139,15 +138,15 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
             holder.mPostParentLayout.setPostType(teacherZoneDynamicsInfo);
         }
         holder.mPostParentLayout.setOnItemClickListener(onItemClickListener);
-        String startTime = DateUtil.getCurrentDate() + " 09:30:00";
+        String startTime = DateUtil.getCurrentDateYMD() + " 09:30:00";
         long startTimeL = DateUtil.getLongTimeFromStr(startTime, "yyyy-MM-dd HH:mm:ss");
-        String endTime = DateUtil.getCurrentDate() + " 15:00:00";
+        String endTime = DateUtil.getCurrentDateYMD() + " 15:00:00";
         long endTimeL = DateUtil.getLongTimeFromStr(endTime, "yyyy-MM-dd HH:mm:ss");
         if (DateUtil.toJava(info.getCreate_date()) < startTimeL || endTimeL < DateUtil.toJava(info.getCreate_date())) {
-            holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+            holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey666666));
             holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
         } else {
-            holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+            holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorRedTimeLine));
             holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
         }
 
@@ -280,15 +279,15 @@ public class FriendsPostAdapter extends RecyclerView.Adapter<FriendsPostAdapter.
         news_info.setNews_id(info.getId());
         holder.mPostParentLayout.setPostType(news_info);
         holder.mPostParentLayout.setOnItemClickListener(onItemClickListener);
-        String startTime = DateUtil.getCurrentDate() + " 09:30:00";
+        String startTime = DateUtil.getCurrentDateYMD() + " 09:30:00";
         long startTimeL = DateUtil.getLongTimeFromStr(startTime, "yyyy-MM-dd HH:mm:ss");
-        String endTime = DateUtil.getCurrentDate() + " 15:00:00";
+        String endTime = DateUtil.getCurrentDateYMD() + " 15:00:00";
         long endTimeL = DateUtil.getLongTimeFromStr(endTime, "yyyy-MM-dd HH:mm:ss");
         if (DateUtil.toJava(info.getInputtime()) < startTimeL || endTimeL < DateUtil.toJava(info.getInputtime())) {
-            holder.mViewFriendsPostLine.setBackgroundColor(Color.BLACK);
+            holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey666666));
             holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_red);
         } else {
-            holder.mViewFriendsPostLine.setBackgroundColor(Color.RED);
+            holder.mViewFriendsPostLine.setBackgroundColor(mContext.getResources().getColor(R.color.colorRedTimeLine));
             holder.mTvFriendsPostTime.setBackgroundResource(R.drawable.bg_friends_time_black);
         }
 

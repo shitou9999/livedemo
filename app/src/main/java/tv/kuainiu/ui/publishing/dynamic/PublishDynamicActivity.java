@@ -264,11 +264,14 @@ public class PublishDynamicActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.btnFlag, R.id.rlRelatedArticles})
+    @OnClick({R.id.btnFlag, R.id.iv_publish_video, R.id.iv_publish_article})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rlRelatedArticles:
-                PickArticleActivity.intoNewActivity(this, REQUSET_ARTICLE_CODE);
+            case R.id.iv_publish_video:
+                PickArticleActivity.intoNewActivity(this, REQUSET_ARTICLE_CODE, 1);
+                break;
+            case R.id.iv_publish_article:
+                PickArticleActivity.intoNewActivity(this, REQUSET_ARTICLE_CODE, 0);
                 break;
             case R.id.btnFlag:
                 PickTagsActivity.intoNewActivity(this, mTags, mNewTagList, REQUSET_TAG_CODE);

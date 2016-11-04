@@ -295,6 +295,14 @@ public class DateUtil {
     public static String getCurrentDate() {
         return getCurrentDate("yyyy-MM-dd HH:mm:ss");
     }
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    public static String getCurrentDateYMD() {
+        return getCurrentDate("yyyy-MM-dd");
+    }
 
     /**
      * 获取当前时间

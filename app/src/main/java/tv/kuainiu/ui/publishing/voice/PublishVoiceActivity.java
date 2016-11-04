@@ -5,21 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -34,7 +30,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +39,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
 import tv.kuainiu.app.Constans;
@@ -56,14 +53,17 @@ import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.activity.SelectPictureActivity;
+import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
-import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.FileUtils;
+import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.PermissionManager;
 import tv.kuainiu.utils.StringUtils;
-import tv.kuainiu.utils.TakePhotoActivity;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.ExpandListView;
 import tv.kuainiu.widget.PermissionDialog;
 import tv.kuainiu.widget.TitleBarView;
@@ -85,30 +85,17 @@ public class PublishVoiceActivity extends BaseActivity {
     private static final int CAMERA_REQUEST_CODE = 110;
     private static final int RECORD_AUDIO_REQUEST_CODE = 111;
     public static final int REQUSET_TAG_CODE = 0;
-    /**
-     * 相册选图
-     */
-    private static final int REQUEST_PICK = 3;
-    /**
-     * 拍照
-     */
-    private static final int REQUEST_TAKE = 1;
-    /**
-     * 图片裁切标记
-     */
-    private static final int REQUEST_CUTTING = 2;
+
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
-    @BindView(R.id.tvError)
-    TextView tvError;
     @BindView(R.id.ivShareSina)
     ImageView ivShareSina;
     @BindView(R.id.ivShareWeChat)
     ImageView ivShareWeChat;
     @BindView(R.id.ivShareQQ)
     ImageView ivShareQQ;
-    @BindView(R.id.ivAddCover)
-    ImageView ivAddCover;
+    @BindView(R.id.exgv_appraisal_pic)
+    ExpandGridView exgv_appraisal_pic;
     @BindView(R.id.etTitle)
     EditText etTitle;
     //    @BindView(R.id.et_content)
@@ -139,9 +126,7 @@ public class PublishVoiceActivity extends BaseActivity {
     RelativeLayout rlVoicePanel;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
-//    private List<Categroy> mCategroyList = new ArrayList<>();
-//    private String[] arryCategroy;
-
+    private ArrayList<String> stList;// 用户上传图片的URL集合
     private String type = "3";//     必传     发布类型 1文章 2视频 3声音
     private String synchro_wb = "1";    //可选      是否同步微博     1是 0否
 
@@ -178,6 +163,9 @@ public class PublishVoiceActivity extends BaseActivity {
     List<TeacherZoneDynamicsInfo> listTeacherZoneDynamicsInfo = new ArrayList<>();
     private boolean isHaveRecordingPermissions = false;
     private Tag programTag;
+    private UpLoadImageAdapter mUpLoadImageAdapter;
+    int j = 0;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,18 +178,16 @@ public class PublishVoiceActivity extends BaseActivity {
         initView();
         mMediaPlayUtil = MediaPlayUtil.getInstance();
         initSoundData();
+        getImageList(null);// 占位符
+        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1);
+        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover})
+    @OnClick({R.id.btnFlag})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
                 PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
-                break;
-            case R.id.ivAddCover://选择缩图
-                menuWindow = new SelectPicPopupWindow(this, itemsOnClick);
-                menuWindow.showAtLocation(PublishVoiceActivity.this.getWindow().getDecorView(),
-                        Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
         }
     }
@@ -222,10 +208,29 @@ public class PublishVoiceActivity extends BaseActivity {
 
             @Override
             public void rightClick() {
-                if (!dataVerify()) {
-                    return;
+                if (!isSubmiting) {
+                    isSubmiting = true;
+
+                    LoadingProgressDialog.startProgressDialog("正在发布", PublishVoiceActivity.this);
+                    if (!dataVerify()) {
+                        isSubmiting = false;
+                        LoadingProgressDialog.stopProgressDialog();
+                        return;
+                    }
+                    j = stList == null ? 0 : stList.size();
+                    LogUtils.e(TAG, "j0=" + j);
+                    if (j > 1) {
+
+                        if (stList.contains(Constant.UPLOADIMAGE)) {
+                            j--;
+                            LogUtils.e(TAG, "j1=" + j);
+                        }
+                        i = 0;
+                        press();
+                    } else {
+                        submitData();
+                    }
                 }
-                submitData();
             }
 
             @Override
@@ -263,6 +268,49 @@ public class PublishVoiceActivity extends BaseActivity {
         ivVoiceBtn.setOnTouchListener(new VoiceTouch());
     }
 
+    private void press() {
+        String path = stList.get(i).replace("file://", "");
+        LogUtils.e(TAG, "path=" + path);
+        Luban.get(PublishVoiceActivity.this)
+                .load(new File(path))                     //传人要压缩的图片
+                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                .setCompressListener(new OnCompressListener() { //设置回调
+
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        LogUtils.e(TAG, "file=" + file.getPath());
+                        byte[] mByte = FileUtils.fileToBytes(file);
+                        if (mByte != null) {
+                            thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
+                        } else {
+                            LogUtils.e(TAG, "图片压转码异常");
+                        }
+                        i++;
+                        if (i == j) {
+                            submitData();
+                        } else {
+                            press();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 当压缩过去出现问题时调用
+                        LogUtils.e(TAG, "图片压缩错误", e);
+                        i++;
+                        if (i == j) {
+                            submitData();
+                        } else {
+                            press();
+                        }
+                    }
+                }).launch();    //启动压缩
+    }
+
 
     /**
      * 录音存放路径
@@ -286,6 +334,25 @@ public class PublishVoiceActivity extends BaseActivity {
         mMediaPlayUtil = MediaPlayUtil.getInstance();
     }
 
+    /**
+     * 获取上传图片数据
+     *
+     * @param list
+     * @return
+     */
+    private ArrayList<String> getImageList(List<String> list) {
+        stList = new ArrayList<String>();
+        if (list != null && list.size() > 0) {
+            stList.addAll(list);
+        }
+        // 占位符
+        if (Constant.UPLOAD_IMAGE_MAX_NUMBER > stList.size()) {
+            stList.add(Constant.UPLOADIMAGE);
+        }
+
+        return stList;
+    }
+
     private void dataBind() {
         tagListView.setTags(mTags);
 
@@ -305,6 +372,7 @@ public class PublishVoiceActivity extends BaseActivity {
             public void delete(SwipeLayout swipeLayout, int position, Object object) {
                 listTeacherZoneDynamicsInfo.remove(object);
                 deleteSoundFileUnSend();
+                initVoice();
                 voice = "";
                 swipeLayout.close(true);
                 mPublicVoiceAdapter.notifyDataSetChanged();
@@ -316,24 +384,6 @@ public class PublishVoiceActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_PICK:// 直接从相册获取
-                if (data != null) {
-                    try {
-                        startPhotoZoom(data.getData());
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();// 用户点击取消操作
-                    }
-                }
-                break;
-            case REQUEST_TAKE:// 调用相机拍照
-                if (data != null) {
-                    File temp = new File(data.getStringExtra(TakePhotoActivity.IMAGE_PATH));
-                    startPhotoZoom(Uri.fromFile(temp));
-                }
-                break;
-            case REQUEST_CUTTING:// 取得裁剪后的图片
-                setPicToView(data);
-                break;
             case REQUSET_TAG_CODE:
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
@@ -341,6 +391,24 @@ public class PublishVoiceActivity extends BaseActivity {
                         mNewTagList = (List<Tag>) data.getExtras().getSerializable(NEW_LIST);
                         programTag = (Tag) data.getExtras().getSerializable(PROGRAM);
                         dataBind();
+                    }
+                }
+                break;
+            case Constant.SELECT_PICTURE:
+                if (resultCode == RESULT_OK && data != null) {
+                    if (data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE) != null) {
+                        stList = getImageList(data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE));
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1);
+                        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
+                    }
+                }
+                break;
+            case Constant.PICTURE_PREVIEW:// 图片预览
+                if (resultCode == RESULT_OK && data != null) {
+                    if (data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY) != null) {
+                        stList = getImageList(data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY));
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1);
+                        exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
                 break;
@@ -420,22 +488,20 @@ public class PublishVoiceActivity extends BaseActivity {
         map.put("synchro_dynamics", synchro_dynamics);  // 可选     是否同步动态     1是0否
         map.put("dynamics_desc", dynamics_desc);  // 同步动态时必传     动态描述文字
         map.put("voice_time", String.valueOf(mTime));  // 录音时间
-        if (!isSubmiting) {
-            isSubmiting = true;
-            OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_vioce);
+        OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_vioce);
         }
-
-    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHttpEvent(HttpEvent event) {
         switch (event.getAction()) {
             case add_news_vioce:
+                LoadingProgressDialog.stopProgressDialog();
                 isSubmiting = false;
                 if (event.getCode() == Constant.SUCCEED) {
                     ToastUtils.showToast(this, "发布语音直播成功");
                     deleteSoundFileUnSend();
+                    initVoice();
                     finish();
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "发布语音直播失败"));
@@ -444,109 +510,6 @@ public class PublishVoiceActivity extends BaseActivity {
         }
     }
 
-    private View.OnClickListener itemsOnClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            menuWindow.dismiss();
-            switch (v.getId()) {
-                // 拍照
-                case R.id.takePhotoBtn:
-                    if (!PermissionManager.checkPermission(PublishVoiceActivity.this,
-                            Manifest.permission.CAMERA)) {
-                        ActivityCompat.requestPermissions(PublishVoiceActivity.this,
-                                new String[]{Manifest.permission.CAMERA},
-                                CAMERA_REQUEST_CODE);
-                    } else {
-                        takeCapture();
-                    }
-                    break;
-                // 相册选择图片
-                case R.id.pickPhotoBtn:
-                    try {
-                        Intent pickIntent = new Intent(Intent.ACTION_PICK, null);
-                        pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                        startActivityForResult(pickIntent, REQUEST_PICK);
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                        DebugUtils.dd("at 11 从相册选择......给我一个权限");
-                    }
-                    break;
-
-            }
-        }
-    };
-
-    private void takeCapture() {
-        try {
-            Intent takeIntent = new Intent(this, TakePhotoActivity.class);
-            // 指定调用相机拍照后的照片存储的路径
-//            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-//                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));
-            startActivityForResult(takeIntent, REQUEST_TAKE);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 裁剪图片方法实现
-     *
-     * @param uri
-     */
-    public void startPhotoZoom(Uri uri) {
-        if (uri == null) {
-            return;
-        }
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        // crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
-        intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 16);
-        intent.putExtra("aspectY", 9);
-        intent.putExtra("outputX", 320);
-        intent.putExtra("outputY", 180);
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-//                    Uri.fromFile(new File(getExternalCacheDir(), IMAGE_FILE_NAME)));
-//            intent.putExtra("return-data", false);
-//        } else {
-//            intent.putExtra("return-data", true);
-//        }
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, REQUEST_CUTTING);
-    }
-
-    /**
-     * 保存裁剪之后的图片数据
-     *
-     * @param picdata
-     */
-    private void setPicToView(Intent picdata) {
-        if (picdata == null) return;
-        Bundle extras = picdata.getExtras();
-        if (extras != null) {
-            // 取得SDCard图片路径做显示
-            bitmap = extras.getParcelable("data");
-            if (null == bitmap) return;
-            Drawable drawable = new BitmapDrawable(null, bitmap);
-            ivAddCover.setImageDrawable(drawable);
-            thumb = Base64.encodeToString(toImageForBin(bitmap), Base64.DEFAULT);
-            if (!TextUtils.isEmpty(thumb)) {
-                tvError.setText("");
-            }
-        }
-    }
-
-    private byte[] toImageForBin(Bitmap photo) {
-
-        int size = photo.getWidth() * photo.getHeight() * 4;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
-        photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-        byte[] bytes = baos.toByteArray();
-//        photo.recycle();
-        return bytes;
-    }
 
     @Override
     protected void onStop() {
@@ -593,7 +556,7 @@ public class PublishVoiceActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                takeCapture();
+//                takeCapture();
             } else {
                 new PermissionDialog(this)
                         .show(R.string.permission_tip_dialog_message_camera);

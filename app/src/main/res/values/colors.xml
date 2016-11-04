@@ -17,6 +17,7 @@
     <color name="colorRedVoice">#FFE8E8</color>
     <color name="colorRed500">#F44336</color>
     <color name="colorRed800">#C62828</color>
+    <color name="colorRedTimeLine">#EE0D0D</color>
     <color name="colorRed900">#B71C1C</color>
     <!-- Amber 琥珀色 -->
     <color name="colorAmber300">#FFD54F</color>

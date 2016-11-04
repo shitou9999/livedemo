@@ -28,6 +28,7 @@ import tv.kuainiu.widget.TitleBarView;
 
 public class PickArticleActivity extends BaseActivity {
     public static final String NEWS_ITEM = "NEWSITEM";
+    public static final String SELECTED_INDEX = "selectedIndex";
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     List<TeacherZoneDynamicsInfo> listArticleList = new ArrayList<>();
@@ -38,9 +39,11 @@ public class PickArticleActivity extends BaseActivity {
     ViewPager nvpFragmentMajor;
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
     private static final String[] titles = {"博文观点", "视频解盘"};
+    private int selectedIndex = 0;
 
-    public static void intoNewActivity(BaseActivity context, int requestCode) {
+    public static void intoNewActivity(BaseActivity context, int requestCode, int selectedIndex) {
         Intent intent = new Intent(context, PickArticleActivity.class);
+        intent.putExtra(SELECTED_INDEX, selectedIndex);
         context.startActivityForResult(intent, requestCode);
     }
 
@@ -49,11 +52,13 @@ public class PickArticleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_article);
         ButterKnife.bind(this);
+        selectedIndex = getIntent().getIntExtra(SELECTED_INDEX, 0);
         initFragment();
         nvpFragmentMajor.setAdapter(new TabMajorFragment.SimpleViewPager(getSupportFragmentManager(), mBaseFragments, titles));
         tabFragmentMajor.setupWithViewPager(nvpFragmentMajor);
         tabFragmentMajor.setTabTextColors(Color.parseColor("#757575"), Color.parseColor(Theme.getCommonColor()));
         tabFragmentMajor.setSelectedTabIndicatorColor(Color.parseColor(Theme.getCommonColor()));
+        nvpFragmentMajor.setCurrentItem(selectedIndex, false);
     }
 
 

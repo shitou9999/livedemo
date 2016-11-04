@@ -22,15 +22,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <include
                 layout="@layout/include_publish_share"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
             <include
                 layout="@layout/include_edite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp" />
+
+            <tv.kuainiu.widget.ExpandGridView
+                android:id="@+id/exgv_appraisal_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:columnWidth="100dp"
+                android:horizontalSpacing="5dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="3"
+                android:verticalSpacing="5dp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
@@ -52,12 +66,13 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tvChoose"
                     android:gravity="center"
-                    android:text="栏目/标签"
+                    android:text="标签"
                     android:textColor="@color/colorBlue500"
                     android:textSize="18sp" />
 
 
             </RelativeLayout>
+
             <tv.kuainiu.widget.tagview.TagListView
                 android:id="@+id/tagListView"
                 android:layout_width="match_parent"
@@ -69,23 +84,13 @@
                 app:horizontalSpacing="@dimen/tag_horizontal_spacing"
                 app:orientation="horizontal"
                 app:verticalSpacing="@dimen/tag_vertical_spacing" />
-            <tv.kuainiu.widget.ExpandGridView
-                android:id="@+id/exgv_appraisal_pic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnWidth="100dp"
-                android:horizontalSpacing="5dp"
-                android:verticalSpacing="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:listSelector="@android:color/transparent"
-                android:numColumns="3"/>
+
             <RelativeLayout
                 android:id="@+id/rlRelatedArticles"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/colorGreyPublish"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/colorGreyPublish"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
@@ -93,16 +98,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="引用博文观点/视频" />
+                    android:textColor="@color/colorGrey333333"
+                    android:text="引用我的" />
 
-                <TextView
+                <ImageView
+                    android:id="@+id/iv_publish_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="+"
-                    android:textColor="@color/colorGreyPublishText" />
+                    android:src="@drawable/selector_publish_movie" />
+
+                <ImageView
+                    android:id="@+id/iv_publish_article"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/iv_publish_video"
+                    android:src="@drawable/selector_publish_word" />
+
             </RelativeLayout>
 
             <tv.kuainiu.widget.ExpandListView

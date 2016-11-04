@@ -12,7 +12,7 @@
         android:layout_width="@dimen/def_option_height"
         android:layout_height="@dimen/def_option_height"
         android:gravity="center_vertical"
-        android:scaleType="center"
+        android:scaleType="centerInside"
         android:src="@drawable/word_btn_pre" />
 
     <TextView
