@@ -144,7 +144,7 @@
                 <TextView
                     android:id="@+id/tv_friends_post_like"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:drawableLeft="@drawable/selector_suport"
                     android:drawablePadding="4dp"
                     android:drawableStart="@drawable/selector_suport"
@@ -156,7 +156,7 @@
                 <TextView
                     android:id="@+id/tv_friends_post_comment"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_toLeftOf="@+id/ivDelete"
@@ -164,17 +164,17 @@
                     android:drawablePadding="4dp"
                     android:drawableStart="@mipmap/review_ic"
                     android:text="(88)"
+                    android:gravity="center_vertical"
                     android:textColor="@color/colorGrey450"
                     android:textSize="12sp"/>
                 <ImageView
                     android:id="@+id/ivDelete"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:paddingRight="5dp"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/selector_tag_close"
-                    android:visibility="gone"
+                    android:src="@drawable/selector_del_btn"
                     />
             </LinearLayout>
 
