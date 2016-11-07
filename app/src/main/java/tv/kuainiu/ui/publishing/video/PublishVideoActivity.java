@@ -243,7 +243,7 @@ public class PublishVideoActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 synchro_dynamics = isChecked ? "1" : "0";
-                llDynamicContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                llDynamicContent.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
             }
         });
         tagCategoryListView.setDeleteMode(true);

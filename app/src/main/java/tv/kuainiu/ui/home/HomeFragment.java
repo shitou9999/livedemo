@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -81,7 +82,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvReadingTap;
     @BindView(R.id.ivMessage)
     ImageView ivMessage;
-
+    @BindView(R.id.rlHead)
+    RelativeLayout rlHead;
     private HomeAdapter mHomeAdapter;
     private List<Banner> mBannerList = new ArrayList<>();
     public List<LiveInfo> mLiveItemList = new ArrayList<>();
@@ -181,7 +183,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) //向下滚动
+                if (dy > 0) //向上滚动
                 {
                     int visibleItemCount = mLayoutManager.getChildCount();
                     int totalItemCount = mLayoutManager.getItemCount();
@@ -192,6 +194,11 @@ public class HomeFragment extends BaseFragment {
                         NewsPage += 1;
                         getNews();
                     }
+                    if (dy > 5) {
+                        rlHead.setVisibility(View.GONE);
+                    }
+                } else if (dy < -5) {
+                    rlHead.setVisibility(View.VISIBLE);
                 }
             }
         };

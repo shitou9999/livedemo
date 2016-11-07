@@ -30,7 +30,7 @@
         android:maxLines="2"
         android:minLines="2"
         android:textColor="@color/colorGrey333333"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="@dimen/text_size_small"
         tools:text="直播下周调整能否结束" />
 
     <TextView
