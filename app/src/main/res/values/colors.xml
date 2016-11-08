@@ -116,4 +116,12 @@
     <color name="viewfinder_laser">#ffcc0000</color>
     <!-- Android standard ICS color -->
     <!-- end zxing -->
+
+    <color name="edit_black">#636363</color>
+    <color name="edit_blue">#12B3DF</color>
+    <color name="edit_gray">#D0D0D0</color>
+    <color name="edit_green">#44C77B</color>
+    <color name="edit_purple">#B066E1</color>
+    <color name="edit_red">#FE593D</color>
+    <color name="edit_yellow">#FCAC23</color>
 </resources>

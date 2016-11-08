@@ -6,6 +6,8 @@ import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -95,6 +97,9 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             DebugUtils.w(TAG, "----执行应用初始化缺少必要的权限----");
         }
         //CC直播网络请求日志
+        ImageLoaderConfiguration configuration = ImageLoaderConfiguration
+                .createDefault(this);
+        ImageLoader.getInstance().init(configuration);
 
     }
 

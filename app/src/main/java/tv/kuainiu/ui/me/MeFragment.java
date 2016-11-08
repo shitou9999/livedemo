@@ -40,6 +40,7 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.ui.down.activity.DownloadActivity;
+import tv.kuainiu.ui.edit.EditActivity;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.me.activity.CollectActivity;
 import tv.kuainiu.ui.me.activity.FollowActivity;
@@ -48,7 +49,6 @@ import tv.kuainiu.ui.me.activity.PersonalActivity;
 import tv.kuainiu.ui.me.activity.SettingActivity;
 import tv.kuainiu.ui.me.appointment.AppointmentActivity;
 import tv.kuainiu.ui.me.appointment.MyLiveActivity;
-import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
@@ -231,9 +231,12 @@ public class MeFragment extends BaseFragment {
                 TeacherZoneActivity.intoNewIntent(getActivity(), MyApplication.getUser().getUser_id());
                 break;
             case R.id.ivMessage:
-                Intent messageIntent = new Intent();
-                messageIntent.setClass(getActivity(), MessageSystemActivity.class);
-                startActivity(messageIntent);
+//                Intent messageIntent = new Intent();
+//                messageIntent.setClass(getActivity(), MessageSystemActivity.class);
+//                startActivity(messageIntent);
+                Intent intentDynamicActivity = new Intent();
+                intentDynamicActivity.setClass(getActivity(), EditActivity.class);
+                startActivity(intentDynamicActivity);
                 break;
             case R.id.tv_me_phone:
             case R.id.tv_me_name:
@@ -305,11 +308,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(intentSettingActivity);
                 break;
             case R.id.btnPublish:
-//                Intent intentDynamicActivity = new Intent();
-//                intentDynamicActivity.setClass(getActivity(), EditActivity.class);
-//                startActivity(intentDynamicActivity);
                 ((MainActivity) getActivity()).intro();
-
                 break;
         }
     }

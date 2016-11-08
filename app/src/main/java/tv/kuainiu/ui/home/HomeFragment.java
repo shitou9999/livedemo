@@ -194,7 +194,7 @@ public class HomeFragment extends BaseFragment {
                         NewsPage += 1;
                         getNews();
                     }
-                    if (dy > 5) {
+                    if (dy > 20) {
                         rlHead.setVisibility(View.GONE);
                     }
                 } else if (dy < -5) {

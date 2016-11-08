@@ -1,11 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.commonsware.cwac.richedit.RichEditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/editor"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="top|left"
-    android:inputType="textMultiLine">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <requestFocus />
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存" />
 
-</com.commonsware.cwac.richedit.RichEditText>
+    <ScrollView
+        android:id="@+id/svScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <tv.kuainiu.widget.editview.InterceptLinearLayout
+            android:id="@+id/line_intercept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <tv.kuainiu.widget.editview.RichTextEditor
+                android:id="@+id/richText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView26"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+        </tv.kuainiu.widget.editview.InterceptLinearLayout>
+    </ScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/toolsImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/ivBlack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="center"
+                android:src="@drawable/edit_shape_black" />
+
+            <ImageView
+                android:id="@+id/ivGray"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_gray" />
+
+            <ImageView
+                android:id="@+id/ivRed"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_red" />
+
+            <ImageView
+                android:id="@+id/ivYellow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_yellow" />
+
+            <ImageView
+                android:id="@+id/ivGreen"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_green" />
+
+            <ImageView
+                android:id="@+id/ivBlue"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_blue" />
+
+            <ImageView
+                android:id="@+id/ivPurple"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/edit_shape_purple" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/insert_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:padding="15dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/insert_image"></ImageButton>
+            <ImageButton
+                android:id="@+id/bold"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_format_bold"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/italic"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_format_italic"
+                android:visibility="gone"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/underline"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_format_underline"
+                android:visibility="gone"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/strikethrough"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_format_strikethrough"
+                android:visibility="gone"></ImageButton>
+
+
+            <ImageButton
+                android:id="@+id/quote"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+
+                android:src="@drawable/ic_format_quote"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/link"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+
+                android:src="@drawable/ic_insert_link"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/textColor"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:padding="15dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/bg_color"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/clear"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_format_clear"
+                android:visibility="gone"></ImageButton>
+
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+</LinearLayout>
