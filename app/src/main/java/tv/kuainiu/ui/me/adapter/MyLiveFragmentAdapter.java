@@ -80,7 +80,7 @@ public class MyLiveFragmentAdapter extends BaseSwipeAdapter {
                 holder.tvState.setText("审核未通过");
                 break;
 
-            case 1://等待直播中
+            case 99://等待直播中
                 if (liveItem.getLive_status() != 2) {
                     holder.rlState.setBackgroundColor(Color.parseColor("#66F83848"));
                     holder.tvState.setText("等待直播中");

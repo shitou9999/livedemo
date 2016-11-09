@@ -25,6 +25,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
@@ -41,6 +42,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tv.kuainiu.R;
+import tv.kuainiu.utils.LogUtils;
 
 public class KnifeText extends EditText implements TextWatcher {
     public static final int FORMAT_BOLD = 0x01;
@@ -69,6 +71,8 @@ public class KnifeText extends EditText implements TextWatcher {
 
     private SpannableStringBuilder inputBefore;
     private Editable inputLast;
+    public static int currentColor = 0;
+    public static boolean currentBold = false;
 
     public KnifeText(Context context) {
         super(context);
@@ -125,25 +129,60 @@ public class KnifeText extends EditText implements TextWatcher {
 
     // StyleSpan ===================================================================================
 
+    /**
+     * 加粗
+     *
+     * @param valid
+     */
     public void bold(boolean valid) {
+        bold(valid, getSelectionStart(), getSelectionEnd());
+    }
+
+    public void bold(boolean valid, int start, int end) {
+        currentBold = valid;
         if (valid) {
-            styleValid(Typeface.BOLD, getSelectionStart(), getSelectionEnd());
+            styleValid(Typeface.BOLD, start, end);
         } else {
-            styleInvalid(Typeface.BOLD, getSelectionStart(), getSelectionEnd());
+            styleInvalid(Typeface.BOLD, start, end);
         }
     }
 
-    public void color(int color, boolean valid) {
-        int mColor = color;
-        if (valid) {
-            mColor = mColor == 0 ? Color.RED : mColor;
-            getEditableText().setSpan(new ForegroundColorSpan(mColor), getSelectionStart(), getSelectionEnd(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        } else {
-            mColor = mColor == 0 ? Color.BLACK : mColor;
-            getEditableText().setSpan(new ForegroundColorSpan(mColor), getSelectionStart(), getSelectionEnd(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    /**
+     * 设置颜色
+     *
+     * @param color 颜色值
+     */
+    public void color(int color) {
+        color(color, getSelectionStart(), getSelectionEnd());
+    }
+
+    public void color(int color, int start, int end) {
+        currentColor = color;
+        currentColor = currentColor == 0 ? getResources().getColor(R.color.edit_black) : currentColor;
+        if (start >= end) {
+            return;
+        }
+        try {
+            getEditableText().setSpan(new ForegroundColorSpan(currentColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } catch (IndexOutOfBoundsException e) {
+            LogUtils.e("ForegroundColorSpan", e.getMessage(), e);
         }
     }
 
+    /**
+     * 设置字体大小
+     *
+     * @param dimens
+     */
+    public void textSize(int dimens) {
+        getEditableText().setSpan(new AbsoluteSizeSpan(dimens, true), getSelectionStart(), getSelectionEnd(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    /**
+     * 斜体
+     *
+     * @param valid
+     */
     public void italic(boolean valid) {
         if (valid) {
             styleValid(Typeface.ITALIC, getSelectionStart(), getSelectionEnd());
@@ -152,6 +191,13 @@ public class KnifeText extends EditText implements TextWatcher {
         }
     }
 
+    /**
+     * 设置文字样式StyleSpan
+     *
+     * @param style
+     * @param start
+     * @param end
+     */
     protected void styleValid(int style, int start, int end) {
         switch (style) {
             case Typeface.NORMAL:
@@ -166,10 +212,20 @@ public class KnifeText extends EditText implements TextWatcher {
         if (start >= end) {
             return;
         }
-
-        getEditableText().setSpan(new StyleSpan(style), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        try {
+            getEditableText().setSpan(new StyleSpan(style), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } catch (IndexOutOfBoundsException e) {
+            LogUtils.e("StyleSpan", e.getMessage(), e);
+        }
     }
 
+    /**
+     * 清除对应的字体样式StyleSpan
+     *
+     * @param style
+     * @param start
+     * @param end
+     */
     protected void styleInvalid(int style, int start, int end) {
         switch (style) {
             case Typeface.NORMAL:
@@ -208,6 +264,14 @@ public class KnifeText extends EditText implements TextWatcher {
         }
     }
 
+    /**
+     * 判断选中文字是否使用文字样式
+     *
+     * @param style
+     * @param start
+     * @param end
+     * @return
+     */
     protected boolean containStyle(int style, int start, int end) {
         switch (style) {
             case Typeface.NORMAL:
@@ -251,6 +315,11 @@ public class KnifeText extends EditText implements TextWatcher {
 
     // UnderlineSpan ===============================================================================
 
+    /**
+     * 下划线
+     *
+     * @param valid
+     */
     public void underline(boolean valid) {
         if (valid) {
             underlineValid(getSelectionStart(), getSelectionEnd());
@@ -561,7 +630,7 @@ public class KnifeText extends EditText implements TextWatcher {
             }
 
             if (quoteStart < quoteEnd) {
-                getEditableText().setSpan(new KnifeQuoteSpan(quoteColor, quoteStripeWidth, quoteGapWidth), quoteStart, quoteEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                getEditableText().setSpan(new QuoteSpan(0xffbdbdbd), quoteStart, quoteEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
@@ -723,13 +792,17 @@ public class KnifeText extends EditText implements TextWatcher {
         if (!historyEnable || historyWorking) {
             return;
         }
-
         inputBefore = new SpannableStringBuilder(text);
     }
 
     @Override
     public void onTextChanged(CharSequence text, int start, int before, int count) {
         // DO NOTHING HERE
+        LogUtils.e("onTextChanged", "start=" + start + ";before=" + before + ";count=" + count);
+        if (count > 0 && before == 0) {
+            color(currentColor, start, start + count);
+            bold(currentBold, start, start + count);
+        }
     }
 
     @Override

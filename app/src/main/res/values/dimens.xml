@@ -127,5 +127,9 @@
     <dimen name="CircleImageViewHeight">36dp</dimen>
 
     <dimen name="richtextedit_padding_top">0dp</dimen>
+    <dimen name="richtextedit_color_width">30dp</dimen>
+    <dimen name="richtextedit_padding_colorBig">0dp</dimen>
+    <dimen name="richtextedit_padding_colorNormal">5dp</dimen>
+
 
 </resources>

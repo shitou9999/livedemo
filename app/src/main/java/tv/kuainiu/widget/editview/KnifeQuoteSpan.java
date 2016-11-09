@@ -25,7 +25,7 @@ import android.text.style.QuoteSpan;
 public class KnifeQuoteSpan extends QuoteSpan {
     private static final int DEFAULT_STRIPE_WIDTH = 2;
     private static final int DEFAULT_GAP_WIDTH = 2;
-    private static final int DEFAULT_COLOR = 0xff0000ff;
+    private static final int DEFAULT_COLOR = 0xffbdbdbd;
 
     private int quoteColor;
     private int quoteStripeWidth;
@@ -35,21 +35,6 @@ public class KnifeQuoteSpan extends QuoteSpan {
         this.quoteColor = quoteColor != 0 ? quoteColor : DEFAULT_COLOR;
         this.quoteStripeWidth = quoteStripeWidth != 0 ? quoteStripeWidth : DEFAULT_STRIPE_WIDTH;
         this.quoteGapWidth = quoteGapWidth != 0 ? quoteGapWidth : DEFAULT_GAP_WIDTH;
-    }
-
-    public KnifeQuoteSpan(Parcel src) {
-        super(src);
-        this.quoteColor = src.readInt();
-        this.quoteStripeWidth = src.readInt();
-        this.quoteGapWidth = src.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(quoteColor);
-        dest.writeInt(quoteStripeWidth);
-        dest.writeInt(quoteGapWidth);
     }
 
     @Override
@@ -72,4 +57,35 @@ public class KnifeQuoteSpan extends QuoteSpan {
         p.setStyle(style);
         p.setColor(color);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.quoteColor);
+        dest.writeInt(this.quoteStripeWidth);
+        dest.writeInt(this.quoteGapWidth);
+    }
+
+    protected KnifeQuoteSpan(Parcel in) {
+        super(in);
+        this.quoteColor = in.readInt();
+        this.quoteStripeWidth = in.readInt();
+        this.quoteGapWidth = in.readInt();
+    }
+
+    public static final Creator<KnifeQuoteSpan> CREATOR = new Creator<KnifeQuoteSpan>() {
+        @Override
+        public KnifeQuoteSpan createFromParcel(Parcel source) {
+            return new KnifeQuoteSpan(source);
+        }
+
+        @Override
+        public KnifeQuoteSpan[] newArray(int size) {
+            return new KnifeQuoteSpan[size];
+        }
+    };
 }

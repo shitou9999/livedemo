@@ -4,27 +4,34 @@ package tv.kuainiu.ui.edit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.SelectPictureActivity;
 import tv.kuainiu.utils.LogUtils;
-import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.editview.EditData;
 import tv.kuainiu.widget.editview.HTMLDecoder;
 import tv.kuainiu.widget.editview.KnifeText;
@@ -59,48 +66,71 @@ public class EditActivity extends BaseActivity {
     ImageButton insertImage;
     @BindView(R.id.btnSave)
     Button btnSave;
-    @BindView(R.id.toolsImage)
-    HorizontalScrollView toolsImage;
+    @BindView(R.id.llColor)
+    LinearLayout toolsImage;
     @BindView(R.id.textColor)
     ImageButton textColor;
     @BindView(R.id.clear)
     ImageButton clear;
+    public static String result = "";
+    @BindView(R.id.ivBlack)
+    ImageView ivBlack;
+    @BindView(R.id.ivGray)
+    ImageView ivGray;
+    @BindView(R.id.ivRed)
+    ImageView ivRed;
+    @BindView(R.id.ivYellow)
+    ImageView ivYellow;
+    @BindView(R.id.ivGreen)
+    ImageView ivGreen;
+    @BindView(R.id.ivBlue)
+    ImageView ivBlue;
+    @BindView(R.id.ivPurple)
+    ImageView ivPurple;
+    private LinearLayout.LayoutParams bigLayoutParams;
+    private LinearLayout.LayoutParams nomarLayoutParams;
+    public View currentColorView = null;
+    private static int currentColorId = 0;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         ButterKnife.bind(this);
-        svScrollView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                richText.showKeyBoard();
-                ToastUtils.showToast(EditActivity.this, "ssd");
-            }
-        });
+        setImageViewShow(currentColorId);
     }
 
-    @OnClick({R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.ivBlack, R.id.ivGray, R.id.ivRed, R.id.ivYellow, R.id.ivGreen, R.id.ivBlue, R.id.ivPurple})
+    @OnClick({R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivUndo:
+                richText.getLastFocusEdit().undo();
+                break;
+            case R.id.ivRedo:
+                richText.getLastFocusEdit().redo();
+                break;
+            case R.id.ivFont:
+                tools.setVisibility(tools.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                toolsImage.setVisibility(View.GONE);
+                break;
             case R.id.btnSave:
                 List<EditData> dataList = richText.buildEditData();
-                StringBuffer stringBuffer = new StringBuffer("<html><head><meta charset=\"utf-8\"></head><body color =\"#636363\">");
+                StringBuffer stringBuffer = new StringBuffer("");
                 if (dataList.size() > 0) {
                     for (int i = 0; i < dataList.size(); i++) {
                         if (dataList.get(i).bitmap != null) {
-                            stringBuffer.append("<img  width=\"100%\" src=\"" + dataList.get(i).imagePath + "\"/>");
+                            stringBuffer.append("<img_kuainiu>" + Base64.encodeToString(toImageForBin(dataList.get(i).bitmap), Base64.DEFAULT) + "</img_kuainiu>");
                         } else {
                             stringBuffer.append(HTMLDecoder.decode(dataList.get(i).inputStr));
 
                         }
                     }
-                    stringBuffer.append("</body></html>");
                 }
-                LogUtils.e(TAG, stringBuffer.toString());
+                result = stringBuffer.toString().replace("<blockquote>", "<blockquote style=\"PADDING: 5px; MARGIN-LEFT: 5px; BORDER-LEFT: #BDBDBD 4px solid; MARGIN-RIGHT: 0px;background-color:#F1F1F1\">");
+                LogUtils.e(TAG, result);
                 break;
             case R.id.bold:
-                richText.getLastFocusEdit().bold(!richText.getLastFocusEdit().contains(KnifeText.FORMAT_BOLD));
+                bold.setSelected(!bold.isSelected());
+                richText.getLastFocusEdit().bold(bold.isSelected());
                 break;
             case R.id.italic:
                 richText.getLastFocusEdit().italic(!richText.getLastFocusEdit().contains(KnifeText.FORMAT_ITALIC));
@@ -126,41 +156,77 @@ public class EditActivity extends BaseActivity {
                 richText.getLastFocusEdit().clearFormats();
                 break;
             case R.id.textColor:
-                ctrlTextColor();
+                toolsImage.setVisibility(toolsImage.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
-            case R.id.ivBlack:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_black), true);
-                ctrlTextColor();
+            case R.id.rlBlack:
+                ctrlTextColor(R.color.edit_black);
                 break;
-            case R.id.ivGray:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_gray), true);
-                ctrlTextColor();
+            case R.id.rlGray:
+                ctrlTextColor(R.color.edit_gray);
                 break;
-            case R.id.ivRed:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_red), true);
-                ctrlTextColor();
+            case R.id.rlRed:
+                ctrlTextColor(R.color.edit_red);
                 break;
-            case R.id.ivYellow:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_yellow), true);
-                ctrlTextColor();
+            case R.id.rlYellow:
+                ctrlTextColor(R.color.edit_yellow);
                 break;
-            case R.id.ivGreen:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_green), true);
-                ctrlTextColor();
+            case R.id.rlGreen:
+                ctrlTextColor(R.color.edit_green);
                 break;
-            case R.id.ivBlue:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_blue), true);
-                ctrlTextColor();
+            case R.id.rlBlue:
+                ctrlTextColor(R.color.edit_blue);
                 break;
-            case R.id.ivPurple:
-                richText.getLastFocusEdit().color(getResources().getColor(R.color.edit_purple), true);
-                ctrlTextColor();
+            case R.id.rlPurple:
+                ctrlTextColor(R.color.edit_purple);
                 break;
         }
     }
 
-    private void ctrlTextColor() {
-        toolsImage.setVisibility(toolsImage.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+    private void ctrlTextColor(int colorId) {
+        if (colorId > 0) {
+            richText.getLastFocusEdit().color(getResources().getColor(colorId));
+            setImageViewShow(colorId);
+        }
+    }
+
+    private void setImageViewShow(int colorId) {
+        View v;
+        switch (colorId) {
+            case R.color.edit_gray:
+                v = ivGray;
+                break;
+            case R.color.edit_red:
+                v = ivRed;
+                break;
+            case R.color.edit_yellow:
+                v = ivYellow;
+                break;
+            case R.color.edit_green:
+                v = ivGreen;
+                break;
+            case R.color.edit_blue:
+                v = ivBlue;
+                break;
+            case R.color.edit_purple:
+                v = ivPurple;
+                break;
+            default:
+                v = ivBlack;
+                break;
+        }
+        int padding = getResources().getDimensionPixelSize(R.dimen.richtextedit_padding_colorNormal);
+        if (currentColorView != null) {
+            currentColorView.setPadding(padding, padding, padding, padding);
+            currentColorView.invalidate();
+        }
+        padding = getResources().getDimensionPixelSize(R.dimen.richtextedit_padding_colorBig);
+        currentColorView = v;
+        if (currentColorView != null) {
+            currentColorId = colorId;
+            currentColorView.setPadding(padding, padding, padding, padding);
+            currentColorView.invalidate();
+
+        }
     }
 
     private void showLinkDialog() {
@@ -212,17 +278,61 @@ public class EditActivity extends BaseActivity {
                         if (!Constant.UPLOADIMAGE.equals(stList.get(i))) {
                             String uri = stList.get(i).replace("file://", "");
                             LogUtils.e(TAG, "uri=" + uri);
-                            try {
-                                richText.insertImage(uri);
-                            } catch (Exception e) {
-                                LogUtils.e(TAG, e.getMessage(), e);
-                            }
+                            compress(uri);
+
                         }
                     }
                 }
 
             }
         }
+
     }
 
+    private void compress(String uri) {
+        if (TextUtils.isEmpty(uri)) {
+            return;
+        }
+        Luban.get(EditActivity.this)
+                .load(new File(uri))                     //传人要压缩的图片
+                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                .setCompressListener(new OnCompressListener() { //设置回调
+
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        LogUtils.e(TAG, "file=" + file.getPath());
+                        try {
+                            richText.insertImage(file.getPath());
+                        } catch (Exception e) {
+                            LogUtils.e(TAG, e.getMessage(), e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 当压缩过去出现问题时调用
+                        LogUtils.e(TAG, "图片压缩错误", e);
+                    }
+                }).launch();    //启动压缩
+    }
+
+    private byte[] toImageForBin(Bitmap photo) {
+
+        int size = photo.getWidth() * photo.getHeight() * 4;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
+        photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        byte[] bytes = baos.toByteArray();
+//        photo.recycle();
+        return bytes;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

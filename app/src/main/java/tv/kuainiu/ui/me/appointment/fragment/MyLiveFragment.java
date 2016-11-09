@@ -163,6 +163,7 @@ public class MyLiveFragment extends BaseFragment {
         map.put("teacher_id", teacherId);
         map.put("live_type", "3");
         map.put("has_living", "1");
+        map.put("is_self", "1");
         map.put("page", String.valueOf(page));
         OKHttpUtils.getInstance().syncGet(context, Api.my_live_list + ParamUtil.getParamForGet(map), Action.my_live_list);
     }

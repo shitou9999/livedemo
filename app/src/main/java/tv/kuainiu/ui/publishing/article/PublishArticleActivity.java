@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,8 +49,10 @@ import tv.kuainiu.modle.Categroy;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.edit.EditActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
 import tv.kuainiu.utils.StringUtils;
@@ -118,6 +121,12 @@ public class PublishArticleActivity extends BaseActivity {
     @BindView(R.id.llDynamicContent)
     LinearLayout llDynamicContent;
     Bitmap bitmap;
+    @BindView(R.id.btnContent)
+    Button btnContent;
+    @BindView(R.id.tvChoose)
+    TextView tvChoose;
+    @BindView(R.id.tvLive)
+    TextView tvLive;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private List<Categroy> mCategroyList = new ArrayList<>();
@@ -152,7 +161,7 @@ public class PublishArticleActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover})
+    @OnClick({R.id.btnFlag, R.id.ivAddCover, R.id.btnContent})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
@@ -162,6 +171,11 @@ public class PublishArticleActivity extends BaseActivity {
                 menuWindow = new SelectPicPopupWindow(this, itemsOnClick);
                 menuWindow.showAtLocation(PublishArticleActivity.this.getWindow().getDecorView(),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                break;
+            case R.id.btnContent:
+                Intent intentDynamicActivity = new Intent();
+                intentDynamicActivity.setClass(this, EditActivity.class);
+                startActivity(intentDynamicActivity);
                 break;
         }
     }
@@ -176,10 +190,16 @@ public class PublishArticleActivity extends BaseActivity {
 
             @Override
             public void rightClick() {
-                if (!dataVerify()) {
-                    return;
+                if (!isSubmiting) {
+                    isSubmiting = true;
+                    LoadingProgressDialog.startProgressDialog("正在发布", PublishArticleActivity.this);
+                    if (!dataVerify()) {
+                        isSubmiting = false;
+                        LoadingProgressDialog.stopProgressDialog();
+                        return;
+                    }
+                    submitData();
                 }
-                submitData();
             }
 
             @Override
@@ -212,6 +232,7 @@ public class PublishArticleActivity extends BaseActivity {
                 tagListView.removeTag(tag);
             }
         });
+
     }
 
 
@@ -287,7 +308,7 @@ public class PublishArticleActivity extends BaseActivity {
         content = "";    // 必传     内容体
         dynamics_desc = "";    //同步动态时必传     动态描述文字
         title = etTitle.getText().toString();
-        content = etContent.getText().toString();
+        content = EditActivity.result;
         dynamics_desc = etDynamics_desc.getText().toString();
 
         if (TextUtils.isEmpty(thumb)) {
@@ -309,8 +330,8 @@ public class PublishArticleActivity extends BaseActivity {
         }
         if (programTag != null) {
             cat_id = String.valueOf(programTag.getId());
-        }else{
-            cat_id="";
+        } else {
+            cat_id = "";
         }
         if (TextUtils.isEmpty(cat_id)) {
             flag = false;
@@ -358,10 +379,8 @@ public class PublishArticleActivity extends BaseActivity {
         map.put("description", "");// 可选      文章描述
         map.put("synchro_dynamics", synchro_dynamics);  //  可选     是否同步动态     1是0否
         map.put("dynamics_desc", dynamics_desc);//同步动态时必传     动态描述文字
-        if (!isSubmiting) {
-            isSubmiting = true;
-            OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_article);
-        }
+
+        OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_article);
 
     }
 
@@ -371,6 +390,7 @@ public class PublishArticleActivity extends BaseActivity {
         switch (event.getAction()) {
             case add_news_article:
                 isSubmiting = false;
+                LoadingProgressDialog.stopProgressDialog();
                 if (event.getCode() == Constant.SUCCEED) {
                     LogUtils.i(TAG, event.getData().toString());
                     ToastUtils.showToast(this, "发布文章成功");
@@ -548,4 +568,5 @@ public class PublishArticleActivity extends BaseActivity {
             bitmap.recycle();
         }
     }
+
 }
