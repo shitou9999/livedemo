@@ -6,7 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -257,9 +257,27 @@ public class RichTextEditor extends InterceptLinearLayout {
     }
 
     /**
+     * 插入文字
+     *
+     * @param text
+     */
+    public void insertText(Spanned text) {
+        View itemView = allLayout.getChildAt(allLayout.getChildCount() - 1);
+        if (itemView instanceof KnifeText) {
+            KnifeText item = (KnifeText) itemView;
+            if (item.getText() == null || item.getText().length() < 1) {
+                item.setText(text);
+                item.setSelection(item.getText().length());
+            } else {
+                addEditTextAtIndex(-1, text);
+            }
+        }
+    }
+
+    /**
      * 插入一张图片
      */
-    private void insertImage(Bitmap bitmap, String imagePath) {
+    public void insertImage(Bitmap bitmap, String imagePath) {
         CharSequence lastEditStr = lastFocusEdit.getText();
         int cursorIndex = lastFocusEdit.getSelectionStart();
         CharSequence editStr1 = lastEditStr.subSequence(0, cursorIndex);
@@ -300,7 +318,7 @@ public class RichTextEditor extends InterceptLinearLayout {
         KnifeText editText2 = createEditText("", getResources()
                 .getDimensionPixelSize(R.dimen.richtextedit_padding_top));
         editText2.setText(editStr);
-
+        editText2.setSelection(editStr.length());
         // 请注意此处，EditText添加、或删除不触动Transition动画
         allLayout.setLayoutTransition(null);
         allLayout.addView(editText2, index);
@@ -315,6 +333,9 @@ public class RichTextEditor extends InterceptLinearLayout {
         final RelativeLayout imageLayout = createImageLayout();
         DataImageView imageView = (DataImageView) imageLayout
                 .findViewById(R.id.edit_imageView);
+        ImageView colseImage = (ImageView) imageLayout
+                .findViewById(R.id.image_close);
+        colseImage.setVisibility(isIntercept() ? View.GONE : View.VISIBLE);
         imageView.setImageBitmap(bmp);
         imageView.setBitmap(bmp);
         imageView.setAbsolutePath(imagePath);
@@ -457,15 +478,15 @@ public class RichTextEditor extends InterceptLinearLayout {
     /**
      * 对外提供的接口, 生成编辑数据上传
      */
-    public List<EditData> buildEditData() {
-        List<EditData> dataList = new ArrayList<EditData>();
+    public ArrayList<EditData> buildEditData() {
+        ArrayList<EditData> dataList = new ArrayList<EditData>();
         int num = allLayout.getChildCount();
         for (int index = 0; index < num; index++) {
             View itemView = allLayout.getChildAt(index);
             EditData itemData = new EditData();
             if (itemView instanceof KnifeText) {
                 KnifeText item = (KnifeText) itemView;
-                itemData.inputStr = Html.toHtml(item.getText());
+                itemData.inputStr = item.getText();
             } else if (itemView instanceof RelativeLayout) {
                 DataImageView item = (DataImageView) itemView
                         .findViewById(R.id.edit_imageView);

@@ -305,7 +305,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(intentSettingActivity);
                 break;
             case R.id.btnPublish:
-                ((MainActivity) getActivity()).intro();
+                ((MainActivity) getActivity()).intro(false);
                 break;
         }
     }
@@ -361,6 +361,7 @@ public class MeFragment extends BaseFragment {
                 break;
             case off_line:
                 bindDataForView(MyApplication.getUser());
+                ((MainActivity) getActivity()).intro(true);
                 break;
             case fetch_userinfo:
                 srlRefresh.setRefreshing(false);

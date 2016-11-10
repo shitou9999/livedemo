@@ -13,7 +13,7 @@
         app:mytitle="观点博文"
         app:rightText="发布" />
 
-    <ScrollView
+    <tv.kuainiu.widget.tagview.ThroughScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -55,14 +55,26 @@
             <Button
                 android:id="@+id/btnContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="写内容" />
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/tag_checked_normal"
+                android:text="填写博文内容" />
 
-            <include
-                layout="@layout/include_edite"
+            <ScrollView
+                android:id="@+id/svScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
+                android:layout_height="100dp"
+                android:background="@color/white_color"
+                android:visibility="gone">
+
+                <tv.kuainiu.widget.editview.InterceptLinearLayout
+                    android:id="@+id/line_intercept"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical" />
+            </ScrollView>
 
             <include layout="@layout/include_choose_tag" />
 
@@ -158,5 +170,5 @@
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
-    </ScrollView>
+    </tv.kuainiu.widget.tagview.ThroughScrollView>
 </LinearLayout>

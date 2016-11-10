@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_main_friends.setSelected(position == 3);
         ll_main_me.setSelected(position == 4);
         mVpMain.setCurrentItem(position, false);
-        if(position!=3){
+        if (position != 3) {
             MediaPlayUtil mMediaPlayUtil = MediaPlayUtil.getInstance();
             if (mMediaPlayUtil.isPlaying()) {
                 mMediaPlayUtil.stop();
@@ -282,15 +282,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     /**
      * 控制发布面板的显示与隐藏
      */
-    public void intro() {
+    public void intro(boolean hide) {
         BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.ppl_publish_panel));
-        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+        if (hide) {
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         } else {
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
         }
     }
 

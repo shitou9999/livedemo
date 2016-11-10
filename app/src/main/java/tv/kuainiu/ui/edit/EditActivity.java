@@ -4,10 +4,9 @@ package tv.kuainiu.ui.edit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +40,7 @@ import tv.kuainiu.widget.editview.RichTextEditor;
  */
 
 public class EditActivity extends BaseActivity {
+    public static final String RICH_CONTENT = "rich_content";
     private final int REQUEST_CODE_PICK_IMAGE = 200;
     @BindView(R.id.richText)
     RichTextEditor richText;
@@ -72,7 +70,7 @@ public class EditActivity extends BaseActivity {
     ImageButton textColor;
     @BindView(R.id.clear)
     ImageButton clear;
-    public static String result = "";
+    public String result = "";
     @BindView(R.id.ivBlack)
     ImageView ivBlack;
     @BindView(R.id.ivGray)
@@ -91,12 +89,32 @@ public class EditActivity extends BaseActivity {
     private LinearLayout.LayoutParams nomarLayoutParams;
     public View currentColorView = null;
     private static int currentColorId = 0;
+    public static ArrayList<EditData> richContentDataList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         ButterKnife.bind(this);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+//        richContentDataList = (ArrayList<EditData>) getIntent().getSerializableExtra(RICH_CONTENT);
+        if (richContentDataList != null && richContentDataList.size() > 0) {
+            for (int i = 0; i < richContentDataList.size(); i++) {
+                if (!TextUtils.isEmpty(richContentDataList.get(i).imagePath)) {
+                    compress(richContentDataList.get(i).imagePath);
+                } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
+                    richText.insertText(richContentDataList.get(i).inputStr);
+                }
+            }
+        }
+    }
+
+    private void initView() {
         setImageViewShow(currentColorId);
+        bold.setSelected(KnifeText.currentBold == 1);
     }
 
     @OnClick({R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
@@ -113,24 +131,26 @@ public class EditActivity extends BaseActivity {
                 toolsImage.setVisibility(View.GONE);
                 break;
             case R.id.btnSave:
-                List<EditData> dataList = richText.buildEditData();
+                btnSave.setEnabled(false);
+                richContentDataList = richText.buildEditData();
+                setResult(RESULT_OK);
                 StringBuffer stringBuffer = new StringBuffer("");
-                if (dataList.size() > 0) {
-                    for (int i = 0; i < dataList.size(); i++) {
-                        if (dataList.get(i).bitmap != null) {
-                            stringBuffer.append("<img_kuainiu>" + Base64.encodeToString(toImageForBin(dataList.get(i).bitmap), Base64.DEFAULT) + "</img_kuainiu>");
+                if (richContentDataList.size() > 0) {
+                    for (int i = 0; i < richContentDataList.size(); i++) {
+                        if (richContentDataList.get(i).bitmap != null) {
+                            stringBuffer.append("<img_kuainiu>" + richContentDataList.get(i).imagePath + "</img_kuainiu>");
                         } else {
-                            stringBuffer.append(HTMLDecoder.decode(dataList.get(i).inputStr));
-
+                            stringBuffer.append(HTMLDecoder.decode(Html.toHtml(richContentDataList.get(i).inputStr)));
                         }
                     }
                 }
                 result = stringBuffer.toString().replace("<blockquote>", "<blockquote style=\"PADDING: 5px; MARGIN-LEFT: 5px; BORDER-LEFT: #BDBDBD 4px solid; MARGIN-RIGHT: 0px;background-color:#F1F1F1\">");
                 LogUtils.e(TAG, result);
+                finish();
                 break;
             case R.id.bold:
                 bold.setSelected(!bold.isSelected());
-                richText.getLastFocusEdit().bold(bold.isSelected());
+                richText.getLastFocusEdit().bold(bold.isSelected() ? 1 : 2);
                 break;
             case R.id.italic:
                 richText.getLastFocusEdit().italic(!richText.getLastFocusEdit().contains(KnifeText.FORMAT_ITALIC));
@@ -148,9 +168,9 @@ public class EditActivity extends BaseActivity {
                 showLinkDialog();
                 break;
             case R.id.insert_image:
-                Intent intent = new Intent(this, SelectPictureActivity.class);
-                intent.putExtra(SelectPictureActivity.OnlyOnePic, true);
-                startActivityForResult(intent, Constant.SELECT_PICTURE);
+                Intent intentSelectPictureActivity = new Intent(this, SelectPictureActivity.class);
+                intentSelectPictureActivity.putExtra(SelectPictureActivity.OnlyOnePic, true);
+                startActivityForResult(intentSelectPictureActivity, Constant.SELECT_PICTURE);
                 break;
             case R.id.clear:
                 richText.getLastFocusEdit().clearFormats();
@@ -289,7 +309,7 @@ public class EditActivity extends BaseActivity {
 
     }
 
-    private void compress(String uri) {
+    private void compress(final String uri) {
         if (TextUtils.isEmpty(uri)) {
             return;
         }
@@ -306,7 +326,7 @@ public class EditActivity extends BaseActivity {
                     public void onSuccess(File file) {
                         LogUtils.e(TAG, "file=" + file.getPath());
                         try {
-                            richText.insertImage(file.getPath());
+                            richText.insertImage(uri);
                         } catch (Exception e) {
                             LogUtils.e(TAG, e.getMessage(), e);
                         }
@@ -321,18 +341,9 @@ public class EditActivity extends BaseActivity {
                 }).launch();    //启动压缩
     }
 
-    private byte[] toImageForBin(Bitmap photo) {
-
-        int size = photo.getWidth() * photo.getHeight() * 4;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
-        photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-        byte[] bytes = baos.toByteArray();
-//        photo.recycle();
-        return bytes;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        richText.getLastFocusEdit().rest();
     }
 }

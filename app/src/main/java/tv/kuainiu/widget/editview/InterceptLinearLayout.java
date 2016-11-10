@@ -28,6 +28,10 @@ public class InterceptLinearLayout extends LinearLayout {
 		intercept = b;
 	}
 
+	public boolean isIntercept() {
+		return intercept;
+	}
+
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		if (intercept)

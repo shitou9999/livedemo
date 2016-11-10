@@ -72,7 +72,7 @@ public class KnifeText extends EditText implements TextWatcher {
     private SpannableStringBuilder inputBefore;
     private Editable inputLast;
     public static int currentColor = 0;
-    public static boolean currentBold = false;
+    public static int currentBold = 0;
 
     public KnifeText(Context context) {
         super(context);
@@ -114,6 +114,11 @@ public class KnifeText extends EditText implements TextWatcher {
         }
     }
 
+    public void rest() {
+        currentBold = 0;
+        currentColor = 0;
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -134,16 +139,18 @@ public class KnifeText extends EditText implements TextWatcher {
      *
      * @param valid
      */
-    public void bold(boolean valid) {
+    public void bold(int valid) {
         bold(valid, getSelectionStart(), getSelectionEnd());
     }
 
-    public void bold(boolean valid, int start, int end) {
+    public void bold(int valid, int start, int end) {
         currentBold = valid;
-        if (valid) {
-            styleValid(Typeface.BOLD, start, end);
-        } else {
-            styleInvalid(Typeface.BOLD, start, end);
+        if (currentBold != 0) {
+            if (currentBold == 1) {
+                styleValid(Typeface.BOLD, start, end);
+            } else {
+                styleInvalid(Typeface.BOLD, start, end);
+            }
         }
     }
 
@@ -162,8 +169,59 @@ public class KnifeText extends EditText implements TextWatcher {
         if (start >= end) {
             return;
         }
+        ForegroundColorSpan[] spans = getEditableText().getSpans(start, end, ForegroundColorSpan.class);
+        List<KnifePart> list = new ArrayList<>();
+
+        for (ForegroundColorSpan span : spans) {
+            list.add(new KnifePart(getEditableText().getSpanStart(span), getEditableText().getSpanEnd(span)));
+        }
+        if (list.size() > 0) {
+//            if (list.size() == 1) {
+//                KnifePart part = list.get(0);
+//                if (part.isValid()) {
+//                    if (part.getStart() > start) {
+//                        setTextColor(currentColor,start, part.getStart());
+//                    }
+//                    if (part.getEnd() < end) {
+//                        setTextColor(currentColor,part.getEnd(),end);
+//                    }
+//                }
+//            } else {
+//                KnifePart partFirst = list.get(0);
+//                if (partFirst.isValid()) {
+//                    if (partFirst.getStart() > start) {
+//                        setTextColor(currentColor,start, partFirst.getStart());
+//                    }
+//
+//                }
+//            }
+            for (KnifePart part : list) {
+                if (part.isValid()) {
+                    if (part.getStart() < start) {
+
+                        if (part.getEnd() <= end) {
+                            setTextColor(currentColor, start, part.getEnd());
+                        } else {
+                            setTextColor(currentColor, start,end);
+                        }
+
+                    } else {
+                        if (part.getEnd() <= end) {
+                            setTextColor(currentColor, part.getStart(), part.getEnd());
+                        } else {
+                            setTextColor(currentColor, part.getStart(), end);
+                        }
+                    }
+                }
+            }
+        }
+        setTextColor(currentColor,start, end);
+
+    }
+
+    private void setTextColor(int color,int start,int end) {
         try {
-            getEditableText().setSpan(new ForegroundColorSpan(currentColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            getEditableText().setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         } catch (IndexOutOfBoundsException e) {
             LogUtils.e("ForegroundColorSpan", e.getMessage(), e);
         }
@@ -800,9 +858,14 @@ public class KnifeText extends EditText implements TextWatcher {
         // DO NOTHING HERE
         LogUtils.e("onTextChanged", "start=" + start + ";before=" + before + ";count=" + count);
         if (count > 0 && before == 0) {
-            color(currentColor, start, start + count);
-            bold(currentBold, start, start + count);
+            if (currentColor != 0) {
+                color(currentColor, start, start + count);
+            }
+            if (currentBold != 0) {
+                bold(currentBold, start, start + count);
+            }
         }
+
     }
 
     @Override

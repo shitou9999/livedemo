@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SwitchCompat;
-import android.text.InputFilter;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -40,12 +41,13 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
 import tv.kuainiu.event.HttpEvent;
-import tv.kuainiu.modle.Categroy;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
@@ -61,10 +63,14 @@ import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.PermissionDialog;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.dialog.SelectPicPopupWindow;
+import tv.kuainiu.widget.editview.HTMLDecoder;
+import tv.kuainiu.widget.editview.InterceptLinearLayout;
+import tv.kuainiu.widget.editview.RichTextEditor;
 import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
+import static tv.kuainiu.ui.edit.EditActivity.richContentDataList;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.PROGRAM;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
@@ -88,6 +94,7 @@ public class PublishArticleActivity extends BaseActivity {
      * 图片裁切标记
      */
     private static final int REQUEST_CUTTING = 2;
+    private static final int WRITE_RICH_CONTENT = 4;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     @BindView(R.id.tvError)
@@ -102,12 +109,8 @@ public class PublishArticleActivity extends BaseActivity {
     ImageView ivAddCover;
     @BindView(R.id.etTitle)
     EditText etTitle;
-    @BindView(R.id.et_content)
-    EditText etContent;
     @BindView(R.id.etDynamics_desc)
     EditText etDynamics_desc;
-    @BindView(R.id.tvInputWordLimit)
-    TextView tvInputWordLimit;
     @BindView(R.id.btnFlag)
     TextView btnFlag;
     @BindView(R.id.tagListView)
@@ -127,11 +130,13 @@ public class PublishArticleActivity extends BaseActivity {
     TextView tvChoose;
     @BindView(R.id.tvLive)
     TextView tvLive;
+    RichTextEditor richText;
+    @BindView(R.id.line_intercept)
+    InterceptLinearLayout lineIntercept;
+    @BindView(R.id.svScrollView)
+    ScrollView svScrollView;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
-    private List<Categroy> mCategroyList = new ArrayList<>();
-    private String[] arryCategroy;
-
     private String type = "1";//     必传     发布类型 1文章 2视频 3声音
     private String synchro_wb = "1";    //可选      是否同步微博     1是 0否
 
@@ -148,6 +153,7 @@ public class PublishArticleActivity extends BaseActivity {
 
     private SelectPicPopupWindow menuWindow;      // 头像弹出框
     private Tag programTag;
+//    private ArrayList<EditData> richContentDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,13 +181,13 @@ public class PublishArticleActivity extends BaseActivity {
             case R.id.btnContent:
                 Intent intentDynamicActivity = new Intent();
                 intentDynamicActivity.setClass(this, EditActivity.class);
-                startActivity(intentDynamicActivity);
+                startActivityForResult(intentDynamicActivity, WRITE_RICH_CONTENT);
                 break;
         }
     }
 
     private void initView() {
-        etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2000)});
+        lineIntercept.setIntercept(true);
         tbvTitle.setOnClickListening(new TitleBarView.OnClickListening() {
             @Override
             public void leftClick() {
@@ -278,6 +284,28 @@ public class PublishArticleActivity extends BaseActivity {
                     }
                 }
                 break;
+            case WRITE_RICH_CONTENT:
+                if (resultCode == RESULT_OK) {
+                    if (richContentDataList != null && richContentDataList.size() > 0) {
+                        lineIntercept.removeAllViews();
+                        richText = new RichTextEditor(PublishArticleActivity.this);
+                        richText.setIntercept(true);
+                        lineIntercept.addView(richText);
+                        for (int i = 0; i < richContentDataList.size(); i++) {
+                            if (!TextUtils.isEmpty(richContentDataList.get(i).imagePath)) {
+                                compress(richContentDataList.get(i).imagePath);
+                            } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
+                                richText.insertText(richContentDataList.get(i).inputStr);
+                            }
+                        }
+                        svScrollView.setVisibility(View.VISIBLE);
+                    }else{
+                        svScrollView.setVisibility(View.GONE);
+                    }
+                }else{
+                    svScrollView.setVisibility(View.GONE);
+                }
+                break;
         }
 
 
@@ -308,7 +336,6 @@ public class PublishArticleActivity extends BaseActivity {
         content = "";    // 必传     内容体
         dynamics_desc = "";    //同步动态时必传     动态描述文字
         title = etTitle.getText().toString();
-        content = EditActivity.result;
         dynamics_desc = etDynamics_desc.getText().toString();
 
         if (TextUtils.isEmpty(thumb)) {
@@ -322,11 +349,24 @@ public class PublishArticleActivity extends BaseActivity {
             flag = false;
             etTitle.setError("标题不能为空");
         }
+        if (EditActivity.richContentDataList != null && EditActivity.richContentDataList.size() > 0) {
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < richContentDataList.size(); i++) {
+                if (richContentDataList.get(i).bitmap != null) {
+                    stringBuffer.append("<img_kuainiu>");
+                    stringBuffer.append(Base64.encodeToString(toImageForBin(richContentDataList.get(i).bitmap), Base64.DEFAULT));
+                    stringBuffer.append("</img_kuainiu>");
+                } else {
+                    stringBuffer.append(HTMLDecoder.decode(Html.toHtml(richContentDataList.get(i).inputStr)));
+                }
+            }
+            content = stringBuffer.toString().replace("<blockquote>", "<blockquote style=\"PADDING: 5px; MARGIN-LEFT: 5px; BORDER-LEFT: #BDBDBD 4px solid; MARGIN-RIGHT: 0px;background-color:#F1F1F1\">");
+        } else {
+            content = "";
+        }
         if (TextUtils.isEmpty(content)) {
             flag = false;
-            etContent.setError("文章内容不能为空");
-        } else {
-            etContent.setError(null);
+            ToastUtils.showToast(this, "文章内容不能为空");
         }
         if (programTag != null) {
             cat_id = String.valueOf(programTag.getId());
@@ -393,6 +433,7 @@ public class PublishArticleActivity extends BaseActivity {
                 LoadingProgressDialog.stopProgressDialog();
                 if (event.getCode() == Constant.SUCCEED) {
                     LogUtils.i(TAG, event.getData().toString());
+                    EditActivity.richContentDataList = null;
                     ToastUtils.showToast(this, "发布文章成功");
                    /* {
                         "data" : {
@@ -549,6 +590,38 @@ public class PublishArticleActivity extends BaseActivity {
                 tvError.setText("");
             }
         }
+    }
+
+    private void compress(final String uri) {
+        if (TextUtils.isEmpty(uri)) {
+            return;
+        }
+        Luban.get(PublishArticleActivity.this)
+                .load(new File(uri))                     //传人要压缩的图片
+                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                .setCompressListener(new OnCompressListener() { //设置回调
+
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        LogUtils.e(TAG, "file=" + file.getPath());
+                        try {
+                            richText.insertImage(uri);
+                        } catch (Exception e) {
+                            LogUtils.e(TAG, e.getMessage(), e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 当压缩过去出现问题时调用
+                        LogUtils.e(TAG, "图片压缩错误", e);
+                    }
+                }).launch();    //启动压缩
     }
 
     private byte[] toImageForBin(Bitmap photo) {
