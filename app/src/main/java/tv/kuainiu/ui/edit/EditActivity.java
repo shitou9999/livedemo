@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,8 @@ import tv.kuainiu.widget.editview.RichTextEditor;
 public class EditActivity extends BaseActivity {
     public static final String RICH_CONTENT = "rich_content";
     private final int REQUEST_CODE_PICK_IMAGE = 200;
+    @BindView(R.id.svScrollView)
+    ScrollView svScrollView;
     @BindView(R.id.richText)
     RichTextEditor richText;
     @BindView(R.id.bold)
@@ -59,8 +62,6 @@ public class EditActivity extends BaseActivity {
     ImageButton link;
     @BindView(R.id.tools)
     HorizontalScrollView tools;
-    @BindView(R.id.svScrollView)
-    ScrollView svScrollView;
     @BindView(R.id.insert_image)
     ImageButton insertImage;
     @BindView(R.id.btnSave)
@@ -112,17 +113,43 @@ public class EditActivity extends BaseActivity {
         }
     }
 
+    float x = 0;
+    float x2 = 0;
+    float y = 0;
+    float y2 = 0;
+
     private void initView() {
         setImageViewShow(currentColorId);
         bold.setSelected(KnifeText.currentBold == 1);
+        svScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x = event.getX();
+                        y = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        x2 = event.getX();
+                        y2 = event.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (Math.abs(y2 - y) < 5 && Math.abs(x2 - x) < 5) {
+                            richText.showKeyBoard();
+                        }
+
+                        break;
+                }
+
+                return false;
+            }
+        });
     }
 
-    @OnClick({R.id.svScrollView, R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
+    @OnClick({R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.svScrollView:
-                richText.showKeyBoard();
-                break;
             case R.id.ivUndo:
                 richText.getLastFocusEdit().undo();
                 break;

@@ -22,7 +22,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@color/colorGreyPublish"
+            android:paddingBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -179,22 +181,24 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/colorGrey400"/>
+                    android:background="@color/colorGrey400" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/colorGrey300"/>
+                    android:background="@color/colorGrey300" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/colorGrey400"/>
+                    android:background="@color/colorGrey400" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorGreyPublish"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:background="@color/colorGreyPublish">
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/tvLive"
