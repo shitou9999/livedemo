@@ -79,7 +79,7 @@ public class BaseActivity extends AppCompatActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        appCompatActivity=this;
+        appCompatActivity = this;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param code
      * @param context
      */
-    public static void initClientPost(int code, Context context) {
+    public void initClientPost(int code, Context context) {
 //        LogUtils.d("重新初始化", "BaseActivity 捕获code： " + code);
         String requestTime = PreferencesUtils.getString(context, CLIENT_INIT_TIME, DateUtil.getCurrentDate());
         //初始化大于5分钟后可再次初始化
@@ -165,7 +165,7 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public static void initApp(final Context context) {
+    private void initApp(final Context context) {
         MyApplication.setUser(null);
         EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
         DialogUtils.TipInitApp(context, "请点击按钮，初始化APP", new DialogUtils.IDialogButtonOnClickListener() {
@@ -183,20 +183,35 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
-    public static void offLine(final Context context) {
+    private void offLine(final Context context) {
         MyApplication.setUser(null);
         EventBus.getDefault().post(new HttpEvent(Action.off_line, Constant.SUCCEED));
-        DialogUtils.TipAccountConflict(context, "您的账号在其他设备上登陆.当前设备已下线", new DialogUtils.IDialogButtonOnClickListener() {
-            @Override
-            public void cancel() {
+        if (this instanceof MainActivity) {
+            DialogUtils.TipAccountConflictMainActivity(context, "您的账号在其他设备上登陆.当前设备已下线", new DialogUtils.IDialogButtonOnClickListener() {
+                @Override
+                public void cancel() {
 
-            }
+                }
 
-            @Override
-            public void sure() {
-                JPushInterface.clearAllNotifications(context);
-            }
-        });
+                @Override
+                public void sure() {
+                    JPushInterface.clearAllNotifications(context);
+                }
+            });
+        } else {
+            DialogUtils.TipAccountConflict(context, "您的账号在其他设备上登陆.当前设备已下线", new DialogUtils.IDialogButtonOnClickListener() {
+                @Override
+                public void cancel() {
+
+                }
+
+                @Override
+                public void sure() {
+                    JPushInterface.clearAllNotifications(context);
+                }
+            });
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -220,7 +235,6 @@ public class BaseActivity extends AppCompatActivity {
                 LogUtils.d("重新初始化", "BaseActivity 重新初始化成功，结果：" + event.getData().toString());
                 try {
                     String tempString = event.getData().optString("data");
-                    JSONObject object = new JSONObject(tempString);
                     InitInfo initInfo = new Gson().fromJson(tempString, InitInfo.class);
                     PreferencesUtils.putString(this, Constant.COURSE_URL, initInfo.getKe_url());
                     DebugUtils.dd("init info obj : " + initInfo.toString());
@@ -228,7 +242,7 @@ public class BaseActivity extends AppCompatActivity {
                     if (!TextUtils.isEmpty(privateKey)) {
                         MyApplication.setKey(privateKey);
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     LogUtils.e("重新初始化", "BaseActivity 重新初始化成功，但结果解析异常" + event.getMsg(), e);
                 }

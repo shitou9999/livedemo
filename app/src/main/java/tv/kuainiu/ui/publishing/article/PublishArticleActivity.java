@@ -41,8 +41,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -289,20 +287,21 @@ public class PublishArticleActivity extends BaseActivity {
                     if (richContentDataList != null && richContentDataList.size() > 0) {
                         lineIntercept.removeAllViews();
                         richText = new RichTextEditor(PublishArticleActivity.this);
-                        richText.setIntercept(true);
                         lineIntercept.addView(richText);
+                        richText.setIntercept(true);
+
                         for (int i = 0; i < richContentDataList.size(); i++) {
-                            if (!TextUtils.isEmpty(richContentDataList.get(i).imagePath)) {
-                                compress(richContentDataList.get(i).imagePath);
+                            if (richContentDataList.get(i).bitmap!=null) {
+                                richText.insertImage(richContentDataList.get(i).bitmap, richContentDataList.get(i).imagePath);
                             } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
                                 richText.insertText(richContentDataList.get(i).inputStr);
                             }
                         }
                         svScrollView.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         svScrollView.setVisibility(View.GONE);
                     }
-                }else{
+                } else {
                     svScrollView.setVisibility(View.GONE);
                 }
                 break;
@@ -361,6 +360,8 @@ public class PublishArticleActivity extends BaseActivity {
                 }
             }
             content = stringBuffer.toString().replace("<blockquote>", "<blockquote style=\"PADDING: 5px; MARGIN-LEFT: 5px; BORDER-LEFT: #BDBDBD 4px solid; MARGIN-RIGHT: 0px;background-color:#F1F1F1\">");
+            content = content.replace("<b>", "<strong>");
+            content = content.replace("</b>", "</strong>");
         } else {
             content = "";
         }
@@ -592,38 +593,6 @@ public class PublishArticleActivity extends BaseActivity {
         }
     }
 
-    private void compress(final String uri) {
-        if (TextUtils.isEmpty(uri)) {
-            return;
-        }
-        Luban.get(PublishArticleActivity.this)
-                .load(new File(uri))                     //传人要压缩的图片
-                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
-                .setCompressListener(new OnCompressListener() { //设置回调
-
-                    @Override
-                    public void onStart() {
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        LogUtils.e(TAG, "file=" + file.getPath());
-                        try {
-                            richText.insertImage(uri);
-                        } catch (Exception e) {
-                            LogUtils.e(TAG, e.getMessage(), e);
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        // 当压缩过去出现问题时调用
-                        LogUtils.e(TAG, "图片压缩错误", e);
-                    }
-                }).launch();    //启动压缩
-    }
-
     private byte[] toImageForBin(Bitmap photo) {
 
         int size = photo.getWidth() * photo.getHeight() * 4;
@@ -640,6 +609,7 @@ public class PublishArticleActivity extends BaseActivity {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
         }
+        EditActivity.richContentDataList = null;
     }
 
 }

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import tv.kuainiu.R;
+import tv.kuainiu.utils.ScreenUtils;
 
 /**
  * 这是一个富文本编辑器，给外部提供insertImage接口，添加的图片跟当前光标所在位置有关
@@ -236,7 +237,9 @@ public class RichTextEditor extends InterceptLinearLayout {
      * @param imagePath
      */
     public void insertImage(String imagePath) {
-        Bitmap bmp = getScaledBitmap(imagePath, getWidth());
+        int width = getWidth();
+        width = getWidth() == 0 ? ScreenUtils.getScreenWidth(context) : width;
+        Bitmap bmp = getScaledBitmap(imagePath, width);
         insertImage(bmp, imagePath);
     }
 
@@ -283,12 +286,15 @@ public class RichTextEditor extends InterceptLinearLayout {
         CharSequence editStr1 = lastEditStr.subSequence(0, cursorIndex);
         int lastEditIndex = allLayout.indexOfChild(lastFocusEdit);
         lastFocusEdit.setText(editStr1);
-        CharSequence editStr2 = lastEditStr.subSequence(cursorIndex, lastEditStr.length());
-        addEditTextAtIndex(lastEditIndex + 1, editStr2);
         addImageViewAtIndex(lastEditIndex + 1, bitmap, imagePath);
-        lastFocusEdit.requestFocus();
-        lastFocusEdit.setSelection(editStr1.length(), editStr1.length());
-        hideKeyBoard();
+        CharSequence editStr2 = lastEditStr.subSequence(cursorIndex, lastEditStr.length());
+        lastFocusEdit = addEditTextAtIndex(lastEditIndex + 2, editStr2);
+
+        if (!isIntercept()) {
+            lastFocusEdit.requestFocus();
+            lastFocusEdit.setSelection(editStr2.length(), editStr2.length());
+        }
+//        hideKeyBoard();
     }
 
     /**
@@ -314,7 +320,7 @@ public class RichTextEditor extends InterceptLinearLayout {
      * @param index   位置
      * @param editStr EditText显示的文字
      */
-    private void addEditTextAtIndex(final int index, CharSequence editStr) {
+    private KnifeText addEditTextAtIndex(final int index, CharSequence editStr) {
         KnifeText editText2 = createEditText("", getResources()
                 .getDimensionPixelSize(R.dimen.richtextedit_padding_top));
         editText2.setText(editStr);
@@ -323,6 +329,7 @@ public class RichTextEditor extends InterceptLinearLayout {
         allLayout.setLayoutTransition(null);
         allLayout.addView(editText2, index);
         allLayout.setLayoutTransition(mTransitioner); // remove之后恢复transition动画
+        return editText2;
     }
 
     /**
@@ -336,24 +343,28 @@ public class RichTextEditor extends InterceptLinearLayout {
         ImageView colseImage = (ImageView) imageLayout
                 .findViewById(R.id.image_close);
         colseImage.setVisibility(isIntercept() ? View.GONE : View.VISIBLE);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageBitmap(bmp);
         imageView.setBitmap(bmp);
         imageView.setAbsolutePath(imagePath);
 
         // 调整imageView的高度
 //        int imageHeight = getWidth() * bmp.getHeight() / bmp.getWidth();
-        int imageHeight = getWidth() * 9 / 16;
+        int width = getWidth();
+        width = width == 0 ? ScreenUtils.getScreenWidth(context) : width;
+        int imageHeight = width * 9 / 16;
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, imageHeight);
         imageView.setLayoutParams(lp);
 
         // onActivityResult无法触发动画，此处post处理
-        allLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                allLayout.addView(imageLayout, index);
-            }
-        }, 200);
+//        allLayout.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                allLayout.addView(imageLayout, index);
+//            }
+//        }, 200);
+        allLayout.addView(imageLayout, index);
     }
 
     /**

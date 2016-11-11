@@ -326,7 +326,7 @@
     <!--关于-->
     <!-- XXX: Remove or change this placeholder text -->
     <string name="title_activity_register1">Register1Activity</string>
-    <string name="company">北京玩控网络科技有限公司</string>
+    <string name="company">玩控网络科技有限公司</string>
     <string name="copyright_info">&#169;2016 kuianiu.tv.all rights reserved</string>
     <string name="hot_line">010&#8211;58295196</string>
     <string name="website">http://www.kuainiu.tv</string>

@@ -7,7 +7,7 @@ import android.graphics.Color;
  * Created by jack on 2016/9/6.
  */
 public class Theme {
-    private static String commonColor = "#FF0000";
+    private static String commonColor = "#F44336";//red500
     private static String commonNormalColor = "#616161";
 
     public static String getCommonColor() {

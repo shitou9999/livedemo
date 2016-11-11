@@ -31,7 +31,7 @@ import tv.kuainiu.utils.StringUtils;
 public class MyApplication extends android.support.multidex.MultiDexApplication {
     private static final String TAG = "MyApplication";
     private static User user;
-    public static final boolean IsDegbug = true;
+    public static final boolean IsDegbug = false;
     public static final String KEY_DEVICEID = "deviceid_key";
     /**
      * <p>

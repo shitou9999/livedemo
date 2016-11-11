@@ -8,18 +8,33 @@ import android.widget.TextView;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import tv.kuainiu.R;
+import tv.kuainiu.ui.MainActivity;
 
 /**
  * Created by jack on 2016/5/10.
  */
 public class DialogUtils {
     private static boolean isShowTipAccountConflict = false;
+    private static boolean isShowTipAccountConflict2 = false;
 
     public static void TipAccountConflict(Context context, String content, final IDialogButtonOnClickListener iDialogButtonOnClickListener) {
         if (isShowTipAccountConflict) {
             return;
         }
         isShowTipAccountConflict = true;
+        showOffLineTip(context, content, iDialogButtonOnClickListener);
+    }
+    public static void TipAccountConflictMainActivity(Context context, String content, final IDialogButtonOnClickListener iDialogButtonOnClickListener) {
+        if (MainActivity.isPause) {
+            return;
+        }
+        if (isShowTipAccountConflict) {
+            return;
+        }
+        showOffLineTip(context, content, iDialogButtonOnClickListener);
+    }
+
+    private static void showOffLineTip(Context context, String content, final IDialogButtonOnClickListener iDialogButtonOnClickListener) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
         dialogBuilder.withTitle(null).withMessage(null).withDialogColor(context.getResources().getColor(R.color.white_color)).isCancelableOnTouchOutside(false);
         dialogBuilder.setCustomView(R.layout.dialog_push_message, context);
@@ -48,12 +63,15 @@ public class DialogUtils {
             }
         });
         dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override public void onDismiss(DialogInterface dialog) {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
                 isShowTipAccountConflict = false;
             }
         });
         dialogBuilder.show();
     }
+
+
     public static void TipInitApp(Context context, String content, final IDialogButtonOnClickListener iDialogButtonOnClickListener) {
         if (isShowTipAccountConflict) {
             return;
@@ -86,7 +104,8 @@ public class DialogUtils {
             }
         });
         dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override public void onDismiss(DialogInterface dialog) {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
                 isShowTipAccountConflict = false;
             }
         });

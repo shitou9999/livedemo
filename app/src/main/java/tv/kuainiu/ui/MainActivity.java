@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private List<BaseFragment> mBaseFragments = new ArrayList<>();
     public static boolean isOpened = false;
+    public static boolean isPause = false;
     private long exitTime = 0;
     private long TIME = 2000;
 
@@ -115,6 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         requestInit();
+        isPause = false;
         MobclickAgent.onResume(this);
         if (Constant.IS_FIRIST) {
             SettingActivity.CheckAppUpdate(this);
@@ -297,6 +299,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isPause = true;
     }
 
     @Override

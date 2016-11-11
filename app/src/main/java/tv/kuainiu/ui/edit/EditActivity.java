@@ -28,6 +28,7 @@ import tv.kuainiu.R;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.SelectPictureActivity;
+import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.editview.EditData;
 import tv.kuainiu.widget.editview.HTMLDecoder;
@@ -100,11 +101,10 @@ public class EditActivity extends BaseActivity {
     }
 
     private void initData() {
-//        richContentDataList = (ArrayList<EditData>) getIntent().getSerializableExtra(RICH_CONTENT);
         if (richContentDataList != null && richContentDataList.size() > 0) {
             for (int i = 0; i < richContentDataList.size(); i++) {
-                if (!TextUtils.isEmpty(richContentDataList.get(i).imagePath)) {
-                    compress(richContentDataList.get(i).imagePath);
+                if (richContentDataList.get(i).bitmap != null) {
+                    richText.insertImage(richContentDataList.get(i).bitmap, richContentDataList.get(i).imagePath);
                 } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
                     richText.insertText(richContentDataList.get(i).inputStr);
                 }
@@ -117,9 +117,12 @@ public class EditActivity extends BaseActivity {
         bold.setSelected(KnifeText.currentBold == 1);
     }
 
-    @OnClick({R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
+    @OnClick({R.id.svScrollView, R.id.ivUndo, R.id.ivRedo, R.id.ivFont, R.id.btnSave, R.id.bold, R.id.italic, R.id.underline, R.id.strikethrough, R.id.quote, R.id.link, R.id.clear, R.id.textColor, R.id.insert_image, R.id.rlBlack, R.id.rlGray, R.id.rlRed, R.id.rlYellow, R.id.rlGreen, R.id.rlBlue, R.id.rlPurple})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.svScrollView:
+                richText.showKeyBoard();
+                break;
             case R.id.ivUndo:
                 richText.getLastFocusEdit().undo();
                 break;
@@ -146,6 +149,7 @@ public class EditActivity extends BaseActivity {
                 }
                 result = stringBuffer.toString().replace("<blockquote>", "<blockquote style=\"PADDING: 5px; MARGIN-LEFT: 5px; BORDER-LEFT: #BDBDBD 4px solid; MARGIN-RIGHT: 0px;background-color:#F1F1F1\">");
                 LogUtils.e(TAG, result);
+                richText.getLastFocusEdit().rest();
                 finish();
                 break;
             case R.id.bold:
@@ -313,6 +317,15 @@ public class EditActivity extends BaseActivity {
         if (TextUtils.isEmpty(uri)) {
             return;
         }
+        File file = new File(uri);
+        if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+            try {
+                richText.insertImage(file.getPath());
+            } catch (Exception e) {
+                LogUtils.e(TAG, e.getMessage(), e);
+            }
+            return;
+        }
         Luban.get(EditActivity.this)
                 .load(new File(uri))                     //传人要压缩的图片
                 .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
@@ -320,13 +333,15 @@ public class EditActivity extends BaseActivity {
 
                     @Override
                     public void onStart() {
+                        LoadingProgressDialog.startProgressDialog("图片加载中，请稍后", EditActivity.this);
                     }
 
                     @Override
                     public void onSuccess(File file) {
+                        LoadingProgressDialog.stopProgressDialog();
                         LogUtils.e(TAG, "file=" + file.getPath());
                         try {
-                            richText.insertImage(uri);
+                            richText.insertImage(file.getPath());
                         } catch (Exception e) {
                             LogUtils.e(TAG, e.getMessage(), e);
                         }
@@ -335,6 +350,7 @@ public class EditActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        LoadingProgressDialog.stopProgressDialog();
                         // 当压缩过去出现问题时调用
                         LogUtils.e(TAG, "图片压缩错误", e);
                     }
@@ -344,6 +360,5 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        richText.getLastFocusEdit().rest();
     }
 }
