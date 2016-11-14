@@ -15,6 +15,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -162,10 +163,10 @@ public class PublishArticleActivity extends BaseActivity {
             EventBus.getDefault().register(this);
         }
         initView();
-
+        articleContentBind();
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover, R.id.btnContent})
+    @OnClick({R.id.btnFlag, R.id.ivAddCover})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnFlag://选择标签
@@ -176,13 +177,13 @@ public class PublishArticleActivity extends BaseActivity {
                 menuWindow.showAtLocation(PublishArticleActivity.this.getWindow().getDecorView(),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
-            case R.id.btnContent:
-                Intent intentDynamicActivity = new Intent();
-                intentDynamicActivity.setClass(this, EditActivity.class);
-                startActivityForResult(intentDynamicActivity, WRITE_RICH_CONTENT);
-                break;
         }
     }
+
+    float x = 0;
+    float x2 = 0;
+    float y = 0;
+    float y2 = 0;
 
     private void initView() {
         lineIntercept.setIntercept(true);
@@ -236,7 +237,30 @@ public class PublishArticleActivity extends BaseActivity {
                 tagListView.removeTag(tag);
             }
         });
+        svScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x = event.getX();
+                        y = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        x2 = event.getX();
+                        y2 = event.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (Math.abs(y2 - y) < 10 && Math.abs(x2 - x) < 10) {
+                            Intent intentDynamicActivity = new Intent();
+                            intentDynamicActivity.setClass(PublishArticleActivity.this, EditActivity.class);
+                            startActivityForResult(intentDynamicActivity, WRITE_RICH_CONTENT);
+                        }
 
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -284,30 +308,44 @@ public class PublishArticleActivity extends BaseActivity {
                 break;
             case WRITE_RICH_CONTENT:
                 if (resultCode == RESULT_OK) {
-                    if (richContentDataList != null && richContentDataList.size() > 0) {
-                        lineIntercept.removeAllViews();
-                        richText = new RichTextEditor(PublishArticleActivity.this);
-                        lineIntercept.addView(richText);
-                        richText.setIntercept(true);
-
-                        for (int i = 0; i < richContentDataList.size(); i++) {
-                            if (richContentDataList.get(i).bitmap != null) {
-                                richText.insertImage(richContentDataList.get(i).bitmap, richContentDataList.get(i).imagePath);
-                            } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
-                                richText.insertText(richContentDataList.get(i).inputStr);
-                            }
-                        }
-                        svScrollView.setVisibility(View.VISIBLE);
-                    } else {
-                        svScrollView.setVisibility(View.GONE);
-                    }
-                } else {
-                    svScrollView.setVisibility(View.GONE);
+                    articleContentBind();
                 }
                 break;
         }
 
 
+    }
+
+    private void articleContentBind() {
+        if (richContentDataList != null && richContentDataList.size() > 0) {
+            lineIntercept.removeAllViews();
+            richText = new RichTextEditor(PublishArticleActivity.this);
+            lineIntercept.addView(richText);
+            richText.setIntercept(true);
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < richContentDataList.size(); i++) {
+                if (richContentDataList.get(i).bitmap != null) {
+                    stringBuffer.append(StringUtils.replaceNullToEmpty(richContentDataList.get(i).imagePath));
+                    richText.insertImage(richContentDataList.get(i).bitmap, richContentDataList.get(i).imagePath);
+                } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
+                    stringBuffer.append(StringUtils.replaceNullToEmpty(richContentDataList.get(i).inputStr));
+                    richText.insertText(richContentDataList.get(i).inputStr);
+                }
+            }
+            if(TextUtils.isEmpty(stringBuffer)){
+                lineIntercept.removeAllViews();
+                richText = new RichTextEditor(PublishArticleActivity.this);
+                lineIntercept.addView(richText);
+                richText.setIntercept(true);
+                richText.insertText("请输入内容");
+            }
+        } else {
+            lineIntercept.removeAllViews();
+            richText = new RichTextEditor(PublishArticleActivity.this);
+            lineIntercept.addView(richText);
+            richText.setIntercept(true);
+            richText.insertText("请输入内容");
+        }
     }
 
     @Override

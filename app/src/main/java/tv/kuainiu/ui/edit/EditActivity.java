@@ -135,7 +135,7 @@ public class EditActivity extends BaseActivity {
                         y2 = event.getY();
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (Math.abs(y2 - y) < 5 && Math.abs(x2 - x) < 5) {
+                        if (Math.abs(y2 - y) < 10 && Math.abs(x2 - x) < 10) {
                             richText.showKeyBoard();
                         }
 

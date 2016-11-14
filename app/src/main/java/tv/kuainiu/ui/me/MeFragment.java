@@ -54,6 +54,7 @@ import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.dialog.LoginPromptDialog;
 
 /**
@@ -219,7 +220,7 @@ public class MeFragment extends BaseFragment {
 
     @OnClick({R.id.ivSetting, R.id.rlLogOut, R.id.ci_avatar, R.id.rl_institution, R.id.rl_live, R.id.rl_appointment,
             R.id.rlFollow, R.id.rlSub, R.id.rlDown, R.id.rlCollect, R.id.rlRecorder, R.id.ivEdite, R.id.tv_me_name,
-            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish, R.id.ivMessage})
+            R.id.tv_me_phone, R.id.rlHomePage, R.id.btnPublish, R.id.ivMessage, R.id.rl_authentication})
     public void onClick(View view) {
 
         switch (view.getId()) {
@@ -306,6 +307,9 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.btnPublish:
                 ((MainActivity) getActivity()).intro(false);
+                break;
+            case R.id.rl_authentication:
+                ToastUtils.showToast(getActivity(), "该功能暂未开放");
                 break;
         }
     }

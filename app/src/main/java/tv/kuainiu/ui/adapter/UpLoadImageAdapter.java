@@ -66,6 +66,21 @@ public class UpLoadImageAdapter extends BaseAdapter {
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
+    public UpLoadImageAdapter(ArrayList<String> imageList, BaseActivity activity, int i,int showNumberInline) {
+        super();
+        this.imageList = imageList;
+        this.activity = activity;
+        this.imageList = imageList;
+        this.context = activity;
+        this.i = i;
+        width = (ScreenUtils.getScreenWidth(context) - 4
+                * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
+                .getResources().getDimensionPixelSize(
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
+        height = width;
+        paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
+    }
+
 
     public UpLoadImageAdapter(ArrayList<String> imageList,
                               BaseActivity activity, int i, boolean only_preview) {

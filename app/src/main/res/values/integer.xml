@@ -4,4 +4,5 @@
     <integer name="title_length">40</integer>
     <integer name="content_length">140</integer>
     <integer name="tag_length">7</integer>
+    <integer name="show_line_image_number">6</integer>
 </resources>

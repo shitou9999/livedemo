@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="0dp"
+        android:background="#F5F5F5"
         android:padding="0dp">
 
         <LinearLayout
             android:id="@+id/fl_tab_frag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F5F5F5"
             android:orientation="vertical">
 
 
@@ -594,8 +594,8 @@
 
                     <ImageView
                         android:id="@+id/iv_live"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:scaleType="fitCenter"
@@ -649,14 +649,15 @@
 
                     <ImageView
                         android:id="@+id/iv_appointment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/appointment_ic" />
 
                     <TextView
+                        android:id="@+id/tvMyAppointment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -686,6 +687,50 @@
                         android:textColor="@color/colorGrey333333"
                         android:textSize="15sp"
                         tools:text="12" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_alignLeft="@+id/tvMyAppointment"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorGrey450" />
+                </RelativeLayout>
+                <!--预约-->
+                <RelativeLayout
+                    android:id="@+id/rl_authentication"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorWhite">
+
+                    <ImageView
+                        android:id="@+id/iv_authentication"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/vip_pre" />
+A
+                    <TextView
+                        android:id="@+id/tvAuthentication"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/iv_authentication"
+                        android:text="申请认证"
+                        android:textColor="@color/colorGrey333333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_authentication_right"
+                        android:layout_width="10dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/selector_right" />
+
                 </RelativeLayout>
             </LinearLayout>
 

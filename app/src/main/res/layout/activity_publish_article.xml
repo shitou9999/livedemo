@@ -62,21 +62,21 @@
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/tag_checked_normal"
-                android:text="填写博文内容" />
+                android:text="填写博文内容"
+                android:visibility="gone" />
 
             <ScrollView
                 android:id="@+id/svScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/white_color"
-                android:visibility="gone">
-
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:background="@drawable/selector_edit_bg"
+                >
                 <tv.kuainiu.widget.editview.InterceptLinearLayout
                     android:id="@+id/line_intercept"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:orientation="vertical" />
             </ScrollView>
 
@@ -146,7 +146,6 @@
                             android:id="@+id/etDynamics_desc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:background="@color/translate"
                             android:gravity="start"
                             android:hint="请输入内容"

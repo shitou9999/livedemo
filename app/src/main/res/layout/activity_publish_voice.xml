@@ -43,10 +43,10 @@
                     android:id="@+id/etTitle"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:inputType="textMultiLine"
                     android:background="@drawable/bg_publish_edit"
                     android:hint="请输入标题(必填)"
-                    android:maxLength="@integer/content_length"
-                    android:text="" />
+                    android:maxLength="@integer/content_length" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -58,7 +58,7 @@
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="3"
+                android:numColumns="@integer/show_line_image_number"
                 android:verticalSpacing="5dp" />
 
             <tv.kuainiu.widget.ExpandListView

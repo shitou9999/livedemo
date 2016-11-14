@@ -89,6 +89,7 @@ public class PublishDynamicActivity extends BaseActivity {
     private String tag_new = "";//
     private boolean isSubmiting = false;
     private UpLoadImageAdapter mUpLoadImageAdapter;
+    private int showNumberInline = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,8 @@ public class PublishDynamicActivity extends BaseActivity {
         initView();
 
         getImageList(null);// 占位符
-        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1);
+        showNumberInline=getResources().getInteger(R.integer.show_line_image_number);
+        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1, showNumberInline);
         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
     }
 
@@ -328,7 +330,7 @@ public class PublishDynamicActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1, showNumberInline);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
@@ -337,7 +339,7 @@ public class PublishDynamicActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1, showNumberInline);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }

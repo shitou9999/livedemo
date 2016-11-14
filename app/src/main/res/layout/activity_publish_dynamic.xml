@@ -42,7 +42,7 @@
                 android:columnWidth="100dp"
                 android:horizontalSpacing="5dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="3"
+                android:numColumns="@integer/show_line_image_number"
                 android:verticalSpacing="5dp" />
 
             <RelativeLayout
@@ -84,12 +84,14 @@
                 app:horizontalSpacing="@dimen/tag_horizontal_spacing"
                 app:orientation="horizontal"
                 app:verticalSpacing="@dimen/tag_vertical_spacing" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/colorGrey300" />
             <RelativeLayout
                 android:id="@+id/rlRelatedArticles"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
                 android:background="@color/colorGreyPublish"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
@@ -98,8 +100,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/colorGrey333333"
-                    android:text="引用我的" />
+                    android:text="引用我的"
+                    android:textColor="@color/colorGrey333333" />
 
                 <ImageView
                     android:id="@+id/iv_publish_video"

@@ -166,6 +166,7 @@ public class PublishVoiceActivity extends BaseActivity {
     private UpLoadImageAdapter mUpLoadImageAdapter;
     int j = 0;
     int i = 0;
+    private int showNumberInline = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +180,8 @@ public class PublishVoiceActivity extends BaseActivity {
         mMediaPlayUtil = MediaPlayUtil.getInstance();
         initSoundData();
         getImageList(null);// 占位符
-        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1);
+        showNumberInline=getResources().getInteger(R.integer.show_line_image_number);
+        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1,showNumberInline);
         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
     }
 
@@ -398,7 +400,7 @@ public class PublishVoiceActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1,showNumberInline);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
@@ -407,7 +409,7 @@ public class PublishVoiceActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishVoiceActivity.this, 1,showNumberInline);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
@@ -489,7 +491,7 @@ public class PublishVoiceActivity extends BaseActivity {
         map.put("dynamics_desc", dynamics_desc);  // 同步动态时必传     动态描述文字
         map.put("voice_time", String.valueOf(mTime));  // 录音时间
         OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_vioce);
-        }
+    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
