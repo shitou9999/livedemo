@@ -28,7 +28,7 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.ToastUtils;
 

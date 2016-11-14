@@ -101,7 +101,7 @@ import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.down.DownloadService;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
 import tv.kuainiu.umeng.UMEventManager;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;

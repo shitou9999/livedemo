@@ -291,7 +291,7 @@ public class PublishArticleActivity extends BaseActivity {
                         richText.setIntercept(true);
 
                         for (int i = 0; i < richContentDataList.size(); i++) {
-                            if (richContentDataList.get(i).bitmap!=null) {
+                            if (richContentDataList.get(i).bitmap != null) {
                                 richText.insertImage(richContentDataList.get(i).bitmap, richContentDataList.get(i).imagePath);
                             } else if (!TextUtils.isEmpty(richContentDataList.get(i).inputStr)) {
                                 richText.insertText(richContentDataList.get(i).inputStr);

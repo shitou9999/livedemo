@@ -44,7 +44,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.ui.teachers.adapter.TeacherListAdapter;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.MeasureUtil;

@@ -16,9 +16,9 @@
     <tv.kuainiu.widget.tagview.ThroughScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="10dp"
+        android:layout_weight="1"
         android:background="@color/colorGreyPublish"
-        android:layout_weight="1">
+        android:paddingBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,23 +36,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/ivAddCover_height" />
 
-            <EditText
-                android:id="@+id/etTitle"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@null"
-                android:hint="请输入标题（必填）"
-                android:maxLength="@integer/title_length"
-                android:text="" />
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/title_length"
+                app:hintEnabled="false">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorGrey400" />
+                <EditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_publish_edit"
+                    android:hint="请输入标题（必填）"
+                    android:maxLength="@integer/title_length"
+                    android:text="" />
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/btnContent"
@@ -130,25 +132,30 @@
                     android:layout_below="@+id/tvLive"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/selector_edit_bg"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/etDynamics_desc"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@color/translate"
-                        android:gravity="start"
-                        android:hint="请输入内容"
-                        android:inputType="textMultiLine"
-                        android:maxLength="@integer/content_length"
-                        android:minLines="3"
-                        android:text=""
-                        android:textColorHint="@color/colorGrey400"
-                        android:textSize="14sp" />
+                        app:counterEnabled="true"
+                        app:counterMaxLength="@integer/content_length"
+                        app:hintEnabled="false">
+
+                        <EditText
+                            android:id="@+id/etDynamics_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:background="@color/translate"
+                            android:gravity="start"
+                            android:hint="请输入内容"
+                            android:inputType="textMultiLine"
+                            android:maxLength="@integer/content_length"
+                            android:minLines="3"
+                            android:text=""
+                            android:textSize="14sp" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

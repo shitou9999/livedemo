@@ -60,7 +60,7 @@ import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;

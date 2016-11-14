@@ -1,4 +1,4 @@
-package tv.kuainiu.utils;
+package tv.kuainiu.widget.LayoutManager;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

@@ -39,7 +39,7 @@ import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.me.adapter.MyLiveHistoryFragmentAdapter;
-import tv.kuainiu.utils.CustomLinearLayoutManager;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
