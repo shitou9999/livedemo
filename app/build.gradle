@@ -94,27 +94,9 @@ repositories {
     }
 }
 dependencies {
-
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
-
-//    compile 'com.android.support:support-v4:24.1.0'
-//    compile 'com.android.support:appcompat-v7:24.1.0'
-//    compile 'com.android.support:design:24.1.0'
-    //    compile 'com.android.support:cardview-v7:24.1.0'
-    // 此处以SDK 2.1.8版本为例
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
-    //    # Other ABIs: optional
-//    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.6.3'
-    //    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.6.3'
-
-//    # ExoPlayer as IMediaPlayer: optional, experimental
-//    compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.6.3'
-
-    //    compile files('libs/jikmediaplayer.jar')
-//    compile files('libs/jikmediawidget.jar')
-    compile files('libs/CCSDK.jar')
-    compile files('libs/dwsdk_1021.jar')
+    compile files('libs/CCSDK.jar')//点播
+    compile files('libs/dwsdk_1021.jar')//直播
     compile('io.socket:socket.io-client:0.7.0') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
@@ -124,6 +106,7 @@ dependencies {
     compile project(':loading-more-view')
     compile project(':swipe-refresh-layout')
     compile project(':ultra-pull-to-refresh')
+    compile project(':InitActivity')
     compile files('libs/MobCommons-2016.0830.1940.jar')
     compile files('libs/MobTools-2016.0830.1940.jar')
     compile files('libs/ShareSDK-Core-2.7.7.jar')

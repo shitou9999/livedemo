@@ -12,12 +12,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
+import android.graphics.PixelFormat;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -50,7 +47,7 @@ import com.bokecc.sdk.mobile.download.Downloader;
 import com.bokecc.sdk.mobile.download.OnProcessDefinitionListener;
 import com.bokecc.sdk.mobile.exception.DreamwinException;
 import com.bokecc.sdk.mobile.exception.ErrorCode;
-import com.bokecc.sdk.mobile.play.DWMediaPlayer;
+import com.bokecc.sdk.mobile.play.DWSpeedMediaPlayer;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
@@ -77,6 +74,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.Vitamio;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.ConfigUtil;
@@ -101,7 +100,6 @@ import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.down.DownloadService;
 import tv.kuainiu.ui.video.adapter.VideoCommentAdapter;
 import tv.kuainiu.umeng.UMEventManager;
-import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
@@ -114,10 +112,12 @@ import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.ShareUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.widget.cc.PopMenu;
 import tv.kuainiu.widget.cc.VerticalSeekBar;
 
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
+
 
 /**
  * Created by sirius on 2016/9/24.
@@ -125,12 +125,16 @@ import static tv.kuainiu.modle.cons.Constant.SUCCEED;
  */
 
 public class VideoActivity extends BaseActivity implements
-        DWMediaPlayer.OnBufferingUpdateListener,
-        DWMediaPlayer.OnInfoListener,
-        DWMediaPlayer.OnPreparedListener, DWMediaPlayer.OnErrorListener,
-        MediaPlayer.OnVideoSizeChangedListener, SurfaceHolder.Callback, SensorEventListener {
+        DWSpeedMediaPlayer.OnBufferingUpdateListener,
+        DWSpeedMediaPlayer.OnInfoListener,
+        DWSpeedMediaPlayer.OnPreparedListener,
+        DWSpeedMediaPlayer.OnErrorListener,
+        DWSpeedMediaPlayer.OnVideoSizeChangedListener,
+        DWSpeedMediaPlayer.OnCompletionListener,
+        SurfaceHolder.Callback {
     public static final String NEWS_ID = "news_id";
     public static final String VIDEO_ID = "video_id";
+    public static final String VIDEO_PATH = "videoPath";
     public static final String CAT_ID = "cat_id";
     public static final String VIDEO_NAME = "video_name";
     @BindView(R.id.tvTiltle)
@@ -186,7 +190,7 @@ public class VideoActivity extends BaseActivity implements
     private Context context;
     /*点播*/
     private boolean networkConnected = true;
-    private DWMediaPlayer player;
+    private DWSpeedMediaPlayer player;
     //    private Subtitle subtitle;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
@@ -194,8 +198,8 @@ public class VideoActivity extends BaseActivity implements
     private SeekBar skbProgress;
     private ImageView playOp, backPlayList;
     private TextView videoIdText, playDuration, videoDuration;
-    private Button screenSizeBtn, definitionBtn/*, subtitleBtn*/;
-    private PopMenu screenSizeMenu, definitionMenu/*, subtitleMenu*/;
+    private Button screenSizeBtn, definitionBtn, subtitleBtn, speedBtn;
+    private PopMenu screenSizeMenu, definitionMenu, subtitleMenu, speedMenu;
     private LinearLayout playerTopLayout, volumeLayout;
     private LinearLayout playerBottomLayout;
     private AudioManager audioManager;
@@ -210,7 +214,20 @@ public class VideoActivity extends BaseActivity implements
 
     private Handler playerHandler;
     private Timer timer = new Timer();
-    private TimerTask timerTask, networkInfoTimerTask;
+    private TimerTask timerTask;
+
+
+    //当player未准备好，并且当前activity经过onPause()生命周期时，此值为true
+    private final String subtitleExampleURL = "http://dev.bokecc.com/static/font/example.utf8.srt";
+    // 设定默认播放速度为正常速度
+    private int currentSpeed = 1;
+    private final String[] speedArray = new String[]{"0.5", "1.0", "1.5", "2.0"};
+    private int videoWidth, videoHeight;
+    private boolean videoSizeKnow, videoSizeSet;
+    //是否是切换清晰度的标识
+    boolean definitionChangeFlag = false;
+
+    private TimerTask networkInfoTimerTask;
 
     private int currentScreenSizeFlag = 1;
     private int currrentSubtitleSwitchFlag = 0;
@@ -231,12 +248,14 @@ public class VideoActivity extends BaseActivity implements
     private String[] definitionArray;
     private final String[] screenSizeArray = new String[]{"满屏", "100%", "75%", "50%"};
     private final String[] subtitleSwitchArray = new String[]{"开启", "关闭"};
+
 //    private final String subtitleExampleURL = "http://dev.bokecc.com/static/font/example.utf8.srt";
 
     private GestureDetector detector;
     private float scrollTotalDistance, scrollCurrentPosition;
     private int lastPlayPosition, currentPlayPosition;
     private String videoId;
+    private String videoPath;
     private RelativeLayout rlPlay, rlComment;
     private ScrollView rlBelow;
     private WindowManager wm;
@@ -275,6 +294,17 @@ public class VideoActivity extends BaseActivity implements
         intent.putExtra(VIDEO_ID, video_id);
         intent.putExtra(CAT_ID, cat_id);
         intent.putExtra(VIDEO_NAME, video_name);
+        context.startActivity(intent);
+    }
+
+    public static void intoNewIntent(Context context, String news_id, String video_id, String cat_id, String video_name, boolean isLocalPlay,String video_path) {
+        Intent intent = new Intent(context, VideoActivity.class);
+        intent.putExtra(NEWS_ID, news_id);
+        intent.putExtra(VIDEO_ID, video_id);
+        intent.putExtra(CAT_ID, cat_id);
+        intent.putExtra(VIDEO_NAME, video_name);
+        intent.putExtra(VIDEO_PATH, video_path);
+        intent.putExtra("isLocalPlay", isLocalPlay);
         context.startActivity(intent);
     }
 
@@ -382,6 +412,12 @@ public class VideoActivity extends BaseActivity implements
         }
     };
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //播放完毕
+    }
+
+
     private class DownloadedReceiver extends BroadcastReceiver {
 
         @Override
@@ -401,23 +437,30 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //加载vitamio解码库
+        if (!Vitamio.isInitialized(getApplicationContext())) {
+            LogUtils.e(TAG, "加载vitamio解码库失败");
+            return;
+        }
         setContentView(R.layout.activity_video);
-        ButterKnife.bind(this);
-
+        DataSet.init(this);
         activity = this;
+        ButterKnife.bind(this);
         context = getApplicationContext();
         receiver = new DownloadedReceiver();
         activity.registerReceiver(receiver, new IntentFilter(ConfigUtil.ACTION_DOWNLOADING));
         service = new Intent(context, DownloadService.class);
-        activity.bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
+        this.bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        // videoId="144640A8D6A51BCB9C33DC5901307461";
         videoId = getIntent().getStringExtra(VIDEO_ID);
+        videoPath = getIntent().getStringExtra(VIDEO_PATH);
+//        videoId = "144640A8D6A51BCB9C33DC5901307461";
         news_id = getIntent().getStringExtra(NEWS_ID);
         cat_id = getIntent().getStringExtra(CAT_ID);
         video_name = getIntent().getStringExtra(VIDEO_NAME);
+        isLocalPlay = getIntent().getBooleanExtra("isLocalPlay", false);
         if (TextUtils.isEmpty(news_id)) {
             ToastUtils.showToast(this, "未获取到视频信息");
             finish();
@@ -431,6 +474,8 @@ public class VideoActivity extends BaseActivity implements
         initPlayHander();
         initPlayInfo();
         initScreenSizeMenu();
+
+        initSpeedSwitchMenu();
         if (!isLocalPlay) {
             initNetworkTimerTask();
         }
@@ -531,7 +576,7 @@ public class VideoActivity extends BaseActivity implements
         playerTopLayout = (LinearLayout) findViewById(R.id.playerTopLayout);
         volumeLayout = (LinearLayout) findViewById(R.id.volumeLayout);
         playerBottomLayout = (LinearLayout) findViewById(R.id.playerBottomLayout);
-
+        speedBtn = (Button) findViewById(R.id.speedPlayBtn);
         ivFullscreen = (ImageView) findViewById(R.id.iv_fullscreen);
 
         ivFullscreen.setOnClickListener(onClickListener);
@@ -539,11 +584,13 @@ public class VideoActivity extends BaseActivity implements
         backPlayList.setOnClickListener(onClickListener);
         screenSizeBtn.setOnClickListener(onClickListener);
         definitionBtn.setOnClickListener(onClickListener);
+        speedBtn.setOnClickListener(onClickListener);
 //        subtitleBtn.setOnClickListener(onClickListener);
 
         surfaceHolder = surfaceView.getHolder();
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); //2.3及以下使用，不然出现只有声音没有图像的问题
+        // 设置视频的format为RGBA_8888
         surfaceHolder.addCallback(this);
+        surfaceHolder.setFormat(PixelFormat.RGBA_8888);
 
 //        subtitleText = (TextView) findViewById(R.id.subtitleText);
 
@@ -712,7 +759,6 @@ public class VideoActivity extends BaseActivity implements
                     try {
                         JSONObject object = new JSONObject(json);
                         String info = object.optString("info");
-                        LogUtils.e("VideoActivity2222", info);
                         mVideoDetail = new DataConverter<VideoDetail>().JsonToObject(info, VideoDetail.class);
                         dataBind();
                     } catch (Exception e) {
@@ -724,13 +770,11 @@ public class VideoActivity extends BaseActivity implements
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "获取视频详情数据失败"));
                     LogUtils.e("VideoActivity", "获取视频详情数据失败:" + event.getMsg());
-                    finish();
                 }
                 break;
             case comment_list_hot_video:
                 if (SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
-                    LogUtils.e("VideoActivity", "json=" + json);
                     try {
                         JSONObject object = new JSONObject(json);
 
@@ -826,13 +870,12 @@ public class VideoActivity extends BaseActivity implements
 //                        .getCurrentPosition()));
 
                 // 更新播放进度
-                currentPlayPosition = player.getCurrentPosition();
-                int duration = player.getDuration();
+                int position = (int) player.getCurrentPosition();
+                int duration = (int) player.getDuration();
 
                 if (duration > 0) {
-                    long pos = skbProgress.getMax() * currentPlayPosition / duration;
-                    playDuration.setText(ParamsUtil.millsecondsToStr(player
-                            .getCurrentPosition()));
+                    long pos = skbProgress.getMax() * position / duration;
+                    playDuration.setText(ParamsUtil.millsecondsToStr((int) player.getCurrentPosition()));
                     skbProgress.setProgress((int) pos);
                 }
             }
@@ -858,13 +901,11 @@ public class VideoActivity extends BaseActivity implements
     private void initPlayInfo() {
         timer.schedule(timerTask, 0, 1000);
         isPrepared = false;
-        player = new DWMediaPlayer();
+        player = new DWSpeedMediaPlayer(this);
         player.reset();
         player.setOnErrorListener(this);
         player.setOnVideoSizeChangedListener(this);
         player.setOnInfoListener(this);
-
-        isLocalPlay = getIntent().getBooleanExtra("isLocalPlay", false);
         try {
 
             if (!isLocalPlay) {// 播放线上视频
@@ -880,7 +921,7 @@ public class VideoActivity extends BaseActivity implements
                         .getExternalStorageState())) {
                     path = Environment.getExternalStorageDirectory()
                             + "/".concat(ConfigUtil.DOWNLOAD_DIR).concat("/")
-                            .concat(videoId).concat(".mp4");
+                            .concat(videoPath).concat(".mp4");
                     if (!new File(path).exists()) {
                         return;
                     }
@@ -927,6 +968,23 @@ public class VideoActivity extends BaseActivity implements
                 LayoutParams params = getScreenSizeParams(position);
                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
                 surfaceView.setLayoutParams(params);
+            }
+        });
+    }
+
+    private void initSpeedSwitchMenu() {
+//        speedBtn.setVisibility(View.VISIBLE);
+        speedMenu = new PopMenu(this, R.drawable.popup, currentSpeed);
+        speedMenu.addItems(speedArray);
+        speedMenu.setOnItemClickListener(new PopMenu.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(getApplicationContext(), speedArray[position] + "倍速度播放", Toast.LENGTH_SHORT).show();
+                if (isPrepared) {
+                    player.setPlaybackSpeed(Float.parseFloat(speedArray[position]));
+                    currentSpeed = position;
+                }
             }
         });
     }
@@ -985,16 +1043,18 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             player.setOnBufferingUpdateListener(this);
             player.setOnPreparedListener(this);
-            player.setDisplay(holder);
+            player.setDisplay(surfaceHolder);
             player.setScreenOnWhilePlaying(true);
             if (isSurfaceDestroy) {
                 if (isLocalPlay) {
                     player.setDataSource(path);
                 }
-                player.prepareAsync();
+                // 当切换清晰度的时候，这里就不用再次调用prepareAsync()方法，否则会报错
+                if (!definitionChangeFlag) {
+                    player.prepareAsync();
+                }
             }
         } catch (Exception e) {
             LogUtils.e("videoPlayer", "error", e);
@@ -1003,8 +1063,7 @@ public class VideoActivity extends BaseActivity implements
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         holder.setFixedSize(width, height);
 
     }
@@ -1015,7 +1074,7 @@ public class VideoActivity extends BaseActivity implements
             return;
         }
         if (isPrepared) {
-            currentPosition = player.getCurrentPosition();
+            currentPosition = (int) player.getCurrentPosition();
         }
 
         isPrepared = false;
@@ -1031,10 +1090,12 @@ public class VideoActivity extends BaseActivity implements
         isPrepared = true;
         if (!isFreeze) {
             if (isPlaying == null || isPlaying.booleanValue()) {
-//                player.pause();
-                playOp.setImageResource(R.drawable.btn_play);
-                currentPosition = 0;
+                player.start();
+                player.setPlaybackSpeed(Float.parseFloat(speedArray[currentSpeed]));
             }
+        }
+        if (isPlaying != null && !isPlaying.booleanValue()) {
+            player.pause();
         }
 
         if (currentPosition >= 0) {
@@ -1052,7 +1113,8 @@ public class VideoActivity extends BaseActivity implements
 
         bufferProgressBar.setVisibility(View.GONE);
         setSurfaceViewLayout();
-        videoDuration.setText(ParamsUtil.millsecondsToStr(player.getDuration()));
+        videoDuration.setText(ParamsUtil.millsecondsToStr((int) player.getDuration()));
+        speedBtn.setVisibility(View.VISIBLE);
     }
 
     // 设置surfaceview的布局
@@ -1065,7 +1127,13 @@ public class VideoActivity extends BaseActivity implements
     private void initDefinitionPopMenu() {
 
         if (definitionMap.size() > 1 && firstInitDefinition) {
-            currentDefinition = 1;
+            currentDefinition = PreferencesUtils.getInt(this, Constant.CONFIG_KEY_VIDEO_SHARPNESS, Constant.VIDEO_SHARPNESS_STANDARD);
+            if (currentDefinition == 10) {
+                currentDefinition = 1;
+            } else {
+                currentDefinition = 0;
+            }
+
             firstInitDefinition = false;
         }
 
@@ -1080,27 +1148,27 @@ public class VideoActivity extends BaseActivity implements
             @Override
             public void onItemClick(int position) {
                 try {
-
-                    currentDefinition = position;
-                    int definitionCode = definitionMap
-                            .get(definitionArray[position]);
-
                     if (isPrepared) {
-                        currentPosition = player.getCurrentPosition();
+                        currentPosition = (int) player.getCurrentPosition();
                         if (player.isPlaying()) {
                             isPlaying = true;
                         } else {
                             isPlaying = false;
                         }
                     }
+                    definitionChangeFlag = true;
 
                     setLayoutVisibility(View.GONE, false);
                     bufferProgressBar.setVisibility(View.VISIBLE);
 
-                    player.reset();
+                    // 想要切换播放的视频源，需要重新加载surface
+                    surfaceView.setVisibility(View.INVISIBLE);
+                    surfaceView.setVisibility(View.VISIBLE);
 
-                    player.setDefinition(getApplicationContext(),
-                            definitionCode);
+                    currentDefinition = position;
+                    int definitionCode = definitionMap.get(definitionArray[position]);
+
+                    player.setDefinition(getApplicationContext(), definitionCode);
 
                 } catch (IOException e) {
                     LogUtils.e("player error", e.getMessage());
@@ -1153,6 +1221,9 @@ public class VideoActivity extends BaseActivity implements
                 case R.id.definitionBtn:
                     definitionMenu.showAsDropDown(v);
                     break;
+                case R.id.speedPlayBtn:
+                    speedMenu.showAsDropDown(v);
+                    break;
             }
         }
     };
@@ -1176,7 +1247,7 @@ public class VideoActivity extends BaseActivity implements
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (networkConnected || isLocalPlay) {
-                this.progress = progress * player.getDuration() / seekBar.getMax();
+                this.progress = (int) (progress * player.getDuration() / seekBar.getMax());
             }
         }
     };
@@ -1275,7 +1346,9 @@ public class VideoActivity extends BaseActivity implements
         } else {
             volumeLayout.setVisibility(visibility);
             screenSizeBtn.setVisibility(visibility);
-            definitionBtn.setVisibility(visibility);
+            if (!isLocalPlay) {
+                definitionBtn.setVisibility(visibility);
+            }
 //            subtitleBtn.setVisibility(visibility);
         }
     }
@@ -1446,14 +1519,19 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
         switch (what) {
-            case DWMediaPlayer.MEDIA_INFO_BUFFERING_START:
+            case DWSpeedMediaPlayer.MEDIA_INFO_BUFFERING_START:
                 if (player.isPlaying()) {
                     bufferProgressBar.setVisibility(View.VISIBLE);
                 }
                 break;
-            case DWMediaPlayer.MEDIA_INFO_BUFFERING_END:
+            case DWSpeedMediaPlayer.MEDIA_INFO_BUFFERING_END:
                 bufferProgressBar.setVisibility(View.GONE);
                 break;
+            case DWSpeedMediaPlayer.MEDIA_INFO_FILE_OPEN_OK:
+                long buffersize = player.audioTrackInit();
+                player.audioInitedOk(buffersize);
+                break;
+
         }
         return false;
     }
@@ -1473,7 +1551,7 @@ public class VideoActivity extends BaseActivity implements
     private Calendar mCalendar;
     private SensorManager sensorManager;
 
-    @Override
+   /* @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == null) {
             return;
@@ -1503,6 +1581,7 @@ public class VideoActivity extends BaseActivity implements
             mZ = z;
         }
     }
+*/
 
     /**
      * 获取一个最大值
@@ -1525,9 +1604,9 @@ public class VideoActivity extends BaseActivity implements
         return max;
     }
 
-    @Override
+  /*  @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -1553,8 +1632,8 @@ public class VideoActivity extends BaseActivity implements
                 player.start();
             }
         }
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
+     /*   sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);*/
     }
 
     @Override
@@ -1577,7 +1656,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onStop() {
-        sensorManager.unregisterListener(this);
+//        sensorManager.unregisterListener(this);
         super.onStop();
     }
 
@@ -1618,7 +1697,7 @@ public class VideoActivity extends BaseActivity implements
             networkInfoTimerTask.cancel();
         }
         if (serviceConnection != null) {
-            activity.unbindService(serviceConnection);
+            this.unbindService(serviceConnection);
         }
         if (receiver != null) {
             unregisterReceiver(receiver);

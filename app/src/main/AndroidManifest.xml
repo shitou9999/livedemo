@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <!-- android:maxSdkVersion="18"/> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/> -->
     <!-- ShareSDK start -->
@@ -182,8 +183,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.video.VideoActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"
-            android:screenOrientation="sensor" />
+            android:configChanges="screenSize|keyboardHidden|orientation" />
 
         <!-- 发布 -->
         <!-- 发布动态 -->
@@ -284,6 +284,7 @@
         <service
             android:name=".ui.down.DownloadService"
             android:enabled="true" />
+
         <!--
                  <service
                  android:name="com.bokecc.sdk.mobile.demo.upload.UploadService"
