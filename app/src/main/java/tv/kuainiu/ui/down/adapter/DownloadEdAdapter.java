@@ -176,8 +176,10 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
             @Override
             public void onClick(View view) {
                 DataSet.removeDownloadInfo(info.getTitle());
-
-                File file = new File(Environment.getExternalStorageDirectory() + "/" + ConfigUtil.DOWNLOAD_DIR, info.getTitle() + ".mp4");
+                String path=Environment.getExternalStorageDirectory()
+                        + "/".concat(ConfigUtil.DOWNLOAD_DIR).concat("/")
+                        .concat(info.getTitle()).concat(".mp4");
+                File file = new File(path);
                 if (file.exists()) {
                     file.delete();
                 }
@@ -186,7 +188,6 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mDownloadInfos.size());
                 mItemManger.closeAllItems();
-                //TODO 删除下载
             }
         });
 
@@ -209,7 +210,7 @@ public class DownloadEdAdapter extends RecyclerSwipeAdapter<DownloadEdAdapter.Vi
         DebugUtils.dd("Current Item Status click : " + mItemStatus);
         switch (mItemStatus) {
             case NORMAL:
-                VideoActivity.intoNewIntent(mContext, info.getNewId(), info.getVideoId(), info.getCatId(), info.getName());
+                VideoActivity.intoNewIntent(mContext, info.getNewId(), info.getVideoId(), info.getCatId(), info.getName(),true, info.getTitle());
                 break;
 
             case LEFT_SLIDE:

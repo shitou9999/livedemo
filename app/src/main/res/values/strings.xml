@@ -101,6 +101,8 @@
     <string name="label_email_binding">邮箱绑定</string>
     <string name="label_alter_password">修改密码</string>
     <string name="label_login_account">登录账号</string>
+    <string name="label_bind_account">第三方账号绑定</string>
+    <string name="label_login_thrid_account">第三方账号登录</string>
     <string name="label_identity_authentication">身份认证</string>
     <string name="label_logout">注销登录</string>
 

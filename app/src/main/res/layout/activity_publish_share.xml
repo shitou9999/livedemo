@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_color"
+    android:orientation="vertical">
+
+    <tv.kuainiu.widget.TitleBarView
+        android:id="@+id/tbv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mytitle="同步到第三方平台"
+        app:right_visibility="invisible" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorGrey100">
+
+                <TextView
+                    android:id="@+id/fl_bottom_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="同步到："
+                    android:textColor="@color/colorGrey333333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="(绑定第三方平台后即可同步)"
+                    android:textColor="#F5C068"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/imageButton_wechat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fl_bottom_label"
+                    android:layout_centerHorizontal="true"
+                    android:padding="20dp"
+                    android:src="@drawable/selector_share_wechat" />
+
+                <ImageView
+                    android:id="@+id/imageButton_weibo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fl_bottom_label"
+                    android:layout_toLeftOf="@id/imageButton_wechat"
+                    android:layout_toStartOf="@id/imageButton_wechat"
+                    android:padding="20dp"
+                    android:src="@drawable/selector_share_sina" />
+
+
+                <ImageView
+                    android:id="@+id/imageButton_qq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fl_bottom_label"
+                    android:layout_toEndOf="@id/imageButton_wechat"
+                    android:layout_toRightOf="@id/imageButton_wechat"
+                    android:padding="20dp"
+                    android:src="@drawable/selector_share_qq" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorGrey400" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="同步内容："
+                    android:textColor="@color/colorGrey333333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="(若内容为空，将自动同步动态消息)"
+                    android:textColor="#F5C068"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/selector_edit_bg"
+                android:hint="请输入内容（必填）"
+                android:padding="5dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/content_length"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/et_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/translate"
+                    android:gravity="start"
+                    android:hint="自定义同步内容"
+                    android:inputType="textMultiLine"
+                    android:maxLength="@integer/content_length"
+                    android:minLines="3"
+                    android:text=""
+                    android:textColorHint="@color/publishTextColor"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <tv.kuainiu.widget.ExpandGridView
+                android:id="@+id/exgv_appraisal_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:columnWidth="100dp"
+                android:horizontalSpacing="5dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="@integer/show_line_image_number"
+                android:verticalSpacing="5dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

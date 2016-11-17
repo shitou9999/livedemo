@@ -190,9 +190,9 @@ public class Constant {
     // |                    |                                                                                 ||
     // ---------------------|                                                                                 ||
     // ========================================================================================================
-    public static final int VIDEO_SHARPNESS_STANDARD = 0x1; // 流畅(标清)
-    public static final int VIDEO_SHARPNESS_HIGH = 0x2;     // 高清
-    public static final int VIDEO_SHARPNESS_SUPER = 0x3;    // 超清
+    public static final int VIDEO_SHARPNESS_STANDARD = 10; // 流畅(标清)
+    public static final int VIDEO_SHARPNESS_HIGH = 20;     // 高清
+    public static final int VIDEO_SHARPNESS_SUPER = 3;    // 超清
 
     public static final String CONFIG_FILE_NAME = "config";
     /**

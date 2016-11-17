@@ -35,6 +35,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
@@ -116,7 +117,6 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
             EventBus.getDefault().register(this);
         }
         bindDataForView();
-        initListener();
     }
 
 
@@ -146,18 +146,9 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    protected void initListener() {
-        mRlPerfect.setOnClickListener(this);
-        mRlAccount.setOnClickListener(this);
-        mRlLogout.setOnClickListener(this);
-        mRlBindEmail.setOnClickListener(this);
-        mRlIdentity.setOnClickListener(this);
-        mRlPassword.setOnClickListener(this);
-        mPhoto.setOnClickListener(this);
-    }
 
-
-    @Override
+    @OnClick({R.id.rl_personalPerfect, R.id.rl_personalAccount, R.id.rl_personalEmail,
+            R.id.rl_personalPassword, R.id.rl_personalIdentity, R.id.rl_bindAccount, R.id.rl_personalLogout, R.id.cimg_photo})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_personalPerfect:
@@ -179,6 +170,10 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
             case R.id.rl_personalIdentity:
                 Intent identity = new Intent(PersonalActivity.this, IdentityActivity.class);
                 startActivity(identity);
+                break;
+            case R.id.rl_bindAccount:
+                Intent iBindAccountActivity = new Intent(PersonalActivity.this, BindAccountActivity.class);
+                startActivity(iBindAccountActivity);
                 break;
             case R.id.rl_personalLogout:
                 if (!NetUtils.isOnline(getApplicationContext())) {
@@ -330,7 +325,6 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         intent.putExtra("return-data", true);
         startActivityForResult(intent, REQUEST_CUTTING);
     }
-
 
 
     /**

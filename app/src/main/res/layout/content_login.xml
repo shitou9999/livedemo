@@ -131,76 +131,67 @@
     <TextView
         android:id="@+id/tv_message_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_below="@id/btn_login"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginTop="@dimen/activity_horizontal_margin3x"
         android:text="@string/message_login"
         android:textColor="@drawable/selector_link_text_color" />
+    <RelativeLayout
+        android:id="@+id/rl_thrid_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_message_login">
 
+        <TextView
+            android:id="@+id/fl_bottom_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/label_login_thrid_account" />
+
+        <ImageView
+            android:id="@+id/imageButton_wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@id/fl_bottom_label"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/wechat_big_green_btn" />
+
+        <ImageView
+            android:id="@+id/imageButton_weibo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@id/fl_bottom_label"
+            android:layout_toLeftOf="@id/imageButton_wechat"
+            android:layout_toStartOf="@id/imageButton_wechat"
+            android:src="@mipmap/weibo_big_red_btn" />
+
+
+        <ImageView
+            android:id="@+id/imageButton_qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@id/fl_bottom_label"
+            android:layout_toEndOf="@id/imageButton_wechat"
+            android:layout_toRightOf="@id/imageButton_wechat"
+            android:src="@mipmap/qq_big_blue_btn" />
+    </RelativeLayout>
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="立即注册"
         android:textColor="@color/colorRed500"
         android:textSize="@dimen/text_size_large" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/btn_login"
-        android:visibility="gone">
 
-        <FrameLayout
-            android:id="@+id/fl_bottom_label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/def_option_height"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorGrey230"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingStart="@dimen/activity_horizontal_margin">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/social_account_login" />
-        </FrameLayout>
-
-
-        <ImageButton
-            android:id="@+id/imageButton_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fl_bottom_label"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ssdk_oks_classic_wechat" />
-
-        <ImageButton
-            android:id="@+id/imageButton_weibo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fl_bottom_label"
-            android:layout_toLeftOf="@id/imageButton_wechat"
-            android:layout_toStartOf="@id/imageButton_wechat"
-            android:src="@drawable/ssdk_oks_classic_sinaweibo" />
-
-
-        <ImageButton
-            android:id="@+id/imageButton_qq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fl_bottom_label"
-            android:layout_toEndOf="@id/imageButton_wechat"
-            android:layout_toRightOf="@id/imageButton_wechat"
-            android:src="@drawable/ssdk_oks_classic_qq" />
-    </RelativeLayout>
 </RelativeLayout>

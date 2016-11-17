@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +46,13 @@ import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
-import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 
 /**
  * 定制观点
@@ -126,7 +125,6 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.e("CustomViewPointFragment", "onResume");
 
     }
 
@@ -336,7 +334,6 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
                     if (event.getData() != null && event.getData().has("data")) {
                         try {
                             JSONObject jsonObject = event.getData().getJSONObject("data");
-                            Log.e("jsonObject", jsonObject.toString());
                             List<TeacherZoneDynamics> tempTeacherZoneDynamicsList = new DataConverter<TeacherZoneDynamics>().JsonToListObject(jsonObject.getString("list"), new TypeToken<List<TeacherZoneDynamics>>() {
                             }.getType());
                             if (tempTeacherZoneDynamicsList != null && tempTeacherZoneDynamicsList.size() > 0) {

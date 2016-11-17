@@ -52,6 +52,7 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.edit.EditActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
+import tv.kuainiu.ui.publishing.share.PublishShareActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
@@ -166,9 +167,13 @@ public class PublishArticleActivity extends BaseActivity {
         articleContentBind();
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover})
+    @OnClick({R.id.ivShareSina, R.id.btnFlag, R.id.ivAddCover})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivShareSina:
+                Intent intentPublishShareActivity = new Intent(this, PublishShareActivity.class);
+                startActivity(intentPublishShareActivity);
+                break;
             case R.id.btnFlag://选择标签
                 PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
                 break;
@@ -332,7 +337,7 @@ public class PublishArticleActivity extends BaseActivity {
                     richText.insertText(richContentDataList.get(i).inputStr);
                 }
             }
-            if(TextUtils.isEmpty(stringBuffer)){
+            if (TextUtils.isEmpty(stringBuffer)) {
                 lineIntercept.removeAllViews();
                 richText = new RichTextEditor(PublishArticleActivity.this);
                 lineIntercept.addView(richText);

@@ -41,12 +41,11 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.live.adapter.ReadingTapeAdapter;
-import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DateUtil;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 
 import static tv.kuainiu.ui.live.adapter.ReadingTapeAdapter.MY_PLAN;
 
@@ -308,7 +307,6 @@ public class MyLivePlanFragment extends BaseFragment {
                 }
                 if (Constant.SUCCEED == event.getCode()) {
                     String json = event.getData().optString("data");
-                    LogUtils.e("json", "json:" + json);
                     try {
                         JSONObject object = new JSONObject(json);
                         List<LiveInfo> tempLiveItemList = new DataConverter<LiveInfo>().JsonToListObject(object.optString("live_list"), new TypeToken<List<LiveInfo>>() {

@@ -17,26 +17,30 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/ivShareSina"
         android:padding="10dp"
-        android:src="@drawable/selector_share_wechat_small" />
+        android:src="@drawable/selector_share_wechat_small"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/ivShareQQ"
-        android:text="分享：" />
+        android:text="同步到：" />
 
     <ImageView
         android:id="@+id/ivShareQQ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@drawable/selector_share_qq_small"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/ivShareWeChat"
-        android:layout_toStartOf="@+id/ivShareWeChat" />
-    <View android:layout_width="match_parent"
+        android:layout_toStartOf="@+id/ivShareWeChat"
+        android:padding="10dp"
+        android:src="@drawable/selector_share_qq_small"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorGrey400"/>
+        android:background="@color/colorGrey400" />
 </RelativeLayout>

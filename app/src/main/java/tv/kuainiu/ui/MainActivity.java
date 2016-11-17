@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private void initData() {
+        DataSet.init(this);
         mBaseFragments.clear();
         mBaseFragments.add(HomeFragment.newInstance(0));
         mBaseFragments.add(LiveMainFragment.newInstance());
@@ -145,7 +146,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mVpMain.setAdapter(new TabFragmentPagerAdapter(getSupportFragmentManager(), mBaseFragments));
         mVpMain.setOffscreenPageLimit(mBaseFragments.size() - 1);
         switchFragment(0);
-        DataSet.init(this);
+
     }
 
     private void switchFragment(int position) {

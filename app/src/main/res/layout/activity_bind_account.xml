@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <tv.kuainiu.widget.TitleBarView
+        android:id="@+id/tbv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:left_visibility="visible"
+        app:mytitle="@string/label_bind_account"
+        app:rightText=""
+        app:right_visibility="invisible" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_sina"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/selector_option_normal">
+
+                <ImageView
+                    android:id="@+id/ivSina"
+                    android:layout_margin="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/selector_share_sina"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_sina_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right" />
+
+                <TextView
+                    android:id="@+id/tvBindSina"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:layout_toLeftOf="@+id/iv_sina_right"
+                    android:text="@string/binding" />
+            </RelativeLayout>
+
+            <View style="@style/default_divider" />
+
+            <RelativeLayout
+                android:id="@+id/rl_wechat"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/selector_option_normal">
+
+                <ImageView
+                    android:id="@+id/ivWechat"
+                    android:layout_margin="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/selector_share_wechat"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_wechat_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right" />
+
+                <TextView
+                    android:id="@+id/tvBindWechat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:layout_toLeftOf="@+id/iv_wechat_right"
+                    android:text="@string/binding" />
+            </RelativeLayout>
+
+            <View style="@style/default_divider" />
+            <RelativeLayout
+                android:id="@+id/rl_qq"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/selector_option_normal">
+
+                <ImageView
+                    android:id="@+id/ivQq"
+                    android:layout_margin="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/selector_share_qq"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_qq_right"
+                    android:layout_width="10dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/selector_right" />
+
+                <TextView
+                    android:id="@+id/tvBindQq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:layout_toLeftOf="@+id/iv_qq_right"
+                    android:text="@string/binding" />
+            </RelativeLayout>
+
+            <View style="@style/default_divider" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

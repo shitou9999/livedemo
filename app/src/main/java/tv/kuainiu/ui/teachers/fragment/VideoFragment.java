@@ -44,12 +44,11 @@ import tv.kuainiu.ui.comments.CommentListActivity;
 import tv.kuainiu.ui.comments.fragmet.PostCommentListFragment;
 import tv.kuainiu.ui.fragment.BaseFragment;
 import tv.kuainiu.ui.friends.adapter.FriendsPostAdapter;
-import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DataConverter;
 import tv.kuainiu.utils.DebugUtils;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.utils.ToastUtils;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 
 import static tv.kuainiu.modle.cons.Constant.SUCCEED;
 
@@ -243,7 +242,6 @@ public class VideoFragment extends BaseFragment implements OnItemClickListener {
                 favour(event);
                 break;
             case teacher_zone_jiepan:
-                LogUtils.e("teacher_zone","_jiepan");
                 data(event);
                 break;
             case del_news:

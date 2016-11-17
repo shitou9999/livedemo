@@ -65,7 +65,6 @@ public class DownloadIngActivity extends BaseActivity implements View.OnClickLis
     TextView mTvSelectedDel;
 
     private LinearLayoutManager mLayoutManager;
-    private LinkedList<DownloadInfo> mDownloadList = new LinkedList<>();
     private LinkedList<DownloadInfo> mSelectedList = new LinkedList<>();
     private VideoDownloadDao mDownloadDao;
     private DownloadIngAdapter mAdapter;
@@ -302,7 +301,7 @@ public class DownloadIngActivity extends BaseActivity implements View.OnClickLis
             public void selected(LinkedList<DownloadInfo> selectedInfos) {
                 mSelectedList = selectedInfos;
                 mTvSelectedDel.setText(getString(R.string.value_delete_count, selectedInfos.size()));
-                if (mSelectedList.size() == mDownloadList.size()) {
+                if (mSelectedList.size() == downloadingInfos.size()) {
                     mTvSelectedAdd.setText("全不选");
                 } else {
                     mTvSelectedAdd.setText("全选");
@@ -343,16 +342,19 @@ public class DownloadIngActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_delete_selected:
-                if (mDownloadList == null || mDownloadList.size() < 1) return;
+                if (downloadingInfos == null || downloadingInfos.size() < 1) return;
                 if (mSelectedList == null || mSelectedList.size() < 1) return;
 
                 for (DownloadInfo entry : mSelectedList) {
+                    String path=Environment.getExternalStorageDirectory()
+                            + "/".concat(ConfigUtil.DOWNLOAD_DIR).concat("/")
+                            .concat(entry.getTitle()).concat(".mp4");
                     DataSet.removeDownloadInfo(entry.getTitle());
-                    File file = new File(Environment.getExternalStorageDirectory() + "/" + ConfigUtil.DOWNLOAD_DIR, entry.getTitle() + ".mp4");
+                    File file = new File(path);
                     if (file.exists()) {
                         file.delete();
                     }
-                    mDownloadList.remove(entry);
+                    downloadingInfos.remove(entry);
                 }
                 mAdapter.notifyDataSetChanged();
                 mSelectedList.clear();
@@ -360,16 +362,16 @@ public class DownloadIngActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.tv_selected_add:
-                if (mDownloadList == null || mDownloadList.size() < 1) return;
+                if (downloadingInfos == null || downloadingInfos.size() < 1) return;
                 if (mSelectedList == null) return;
 
-                if (mSelectedList.size() == mDownloadList.size()) {
+                if (mSelectedList.size() == downloadingInfos.size()) {
                     mTvSelectedAdd.setText("全选");
                     mSelectedList.clear();
                 } else {
                     mTvSelectedAdd.setText("全不选");
                     mSelectedList.clear();
-                    mSelectedList.addAll(mDownloadList);
+                    mSelectedList.addAll(downloadingInfos);
                     mAdapter.setSelectedInfos(mSelectedList);
                 }
 

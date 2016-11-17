@@ -79,7 +79,7 @@ public class MyLiveHistoryFragmentAdapter extends RecyclerView.Adapter<MyLiveHis
                 break;
         }
         holder.tvLiveDescription.setText(StringUtils.replaceNullToEmpty(itemData.getTitle()));
-        holder.tvNumber.setText(String.format(Locale.CHINA, "%s人", StringUtils.getDecimal(itemData.getAppointment_count(), Constant.TEN_THOUSAND, "万", "")));
+        holder.tvNumber.setText(String.format(Locale.CHINA, "%s人", StringUtils.getDecimal(itemData.getView_num(), Constant.TEN_THOUSAND, "万", "")));
         holder.tvState.setText("观看过");
         holder.rlItem.setTag(itemData);
         holder.rlItem.setOnClickListener(new View.OnClickListener() {

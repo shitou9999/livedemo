@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_edit_bg"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="请输入内容（必填）"
+        app:counterEnabled="true"
+        app:counterMaxLength="@integer/content_length"
+        app:hintEnabled="false">
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/translate"
+            android:gravity="start"
+            android:hint="请输入内容（必填）"
+            android:inputType="textMultiLine"
+            android:maxLength="@integer/content_length"
+            android:minLines="3"
+            android:text=""
+            android:textColorHint="@color/publishTextColor"
+            android:textSize="14sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="1px"
+        android:layout_marginLeft="1px"
+        android:layout_marginRight="1px"
+        android:background="@color/colorGreyPublish"
+        android:paddingLeft="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvInputWordLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="还可以输入10个字"
+            android:visibility="invisible" />
+    </RelativeLayout>
+</LinearLayout>

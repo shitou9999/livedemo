@@ -105,7 +105,7 @@
     <color name="colorWupan">@color/colorBlue500</color>
     <color name="colorWanpan">#c477ff</color>
 
-    <color name="publishTextColor">@color/colorGrey333333</color>
+    <color name="publishTextColor">@color/colorGrey500</color>
 
 
     <!-- start zxing -->

@@ -17,8 +17,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,10 +25,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.sina.weibo.SinaWeibo;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -42,14 +44,18 @@ import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
+import tv.kuainiu.ui.me.thridLogin.LoginApi;
+import tv.kuainiu.ui.me.thridLogin.OnLoginListener;
 import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.KeyBoardUtil;
+import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.SecurityUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
 
 
@@ -58,14 +64,14 @@ import tv.kuainiu.widget.TitleBarView;
  */
 //public class LoginActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, PlatformActionListener { 社交账号登录
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
-//    private static final int MSG_USERID_FOUND = 1;
+    //    private static final int MSG_USERID_FOUND = 1;
 //    private static final int MSG_LOGIN = 2;
 //    private static final int MSG_AUTH_CANCEL = 3;
 //    private static final int MSG_AUTH_ERROR = 4;
 //    private static final int MSG_AUTH_COMPLETE = 5;
-
-    @BindView(android.R.id.content)
-    FrameLayout mFlRoot;
+    private static final int MSG_AUTH_CANCEL = 2;
+    private static final int MSG_AUTH_ERROR = 3;
+    private static final int MSG_AUTH_COMPLETE = 4;
     @BindView(R.id.ll_region_selector)
     LinearLayout mRlRegionSelector;
     @BindView(R.id.tv_region_name)
@@ -83,11 +89,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.btn_login)
     Button mBtnLogin;
     @BindView(R.id.imageButton_weibo)
-    ImageButton mImageButtonWeibo;
+    ImageView mImageButtonWeibo;
     @BindView(R.id.imageButton_wechat)
-    ImageButton mImageButtonWechat;
+    ImageView mImageButtonWechat;
     @BindView(R.id.imageButton_qq)
-    ImageButton mImageButtonQQ;
+    ImageView mImageButtonQQ;
     @BindView(R.id.tbv_title)
     TitleBarView mTbvTitle;
     @BindView(R.id.tvRegister)
@@ -96,7 +102,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     ImageView ivClearText;
     private boolean isKeyboardShown;
     private Map<String, Region> mRegionMap;
-
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             EventBus.getDefault().register(this);
         }
         mTbvTitle.setText("登录");
+        handler = new Handler();
         String text = mTvForgetPassword.getText().toString();
         SpannableString span = new SpannableString(text);
         span.setSpan(new UnderlineSpan(), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -267,10 +274,50 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Intent registerIntent = new Intent(LoginActivity.this, Register1Activity.class);
                 startActivity(registerIntent);
                 break;
-
+            case R.id.imageButton_weibo:
+                //新浪微博
+                login(SinaWeibo.NAME);
+                break;
+            case R.id.imageButton_wechat:
+                ToastUtils.showToast(LoginActivity.this, "微信登录暂未开放");
+                //login(Wechat.NAME);
+                break;
+            case R.id.imageButton_qq:
+                ToastUtils.showToast(LoginActivity.this, "qq登录暂未开放");
+                //login(QQ.NAME);
+                break;
             default:
                 break;
         }
+    }
+
+    /*
+       * 执行第三方登录/注册的方法
+       * <p>
+       * @param platformName 执行登录/注册的平台名称，如：SinaWeibo.NAME
+       */
+    private void login(String platformName) {
+        LoginApi api = new LoginApi();
+        //设置登陆的平台后执行登陆的方法
+        api.setPlatform(platformName);
+        api.setOnLoginListener(new OnLoginListener() {
+            public boolean onLogin(String platform, HashMap<String, Object> res, Platform mPlatform) {
+                // TODO 去服务器绑定
+                // 此处全部给回需要注册
+                LogUtils.e(TAG, "platformID=" + mPlatform.getDb().getUserId());
+                Iterator iter = res.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry entry = (Map.Entry) iter.next();
+                    String key = (String) entry.getKey();
+                    Object val = entry.getValue();
+
+                    LogUtils.e(TAG, key + "=" + val.toString());
+                }
+                return true;
+            }
+
+        });
+        api.login(this);
     }
 
     private void login() {
@@ -341,5 +388,4 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         super.onDestroy();
     }
-
 }
