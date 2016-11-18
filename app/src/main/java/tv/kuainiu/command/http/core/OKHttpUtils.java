@@ -248,7 +248,7 @@ public class OKHttpUtils {
     }
 
     public static String testUserAgent(Context context) {
-        StringBuilder sb = new StringBuilder("iguxuan ");
+        StringBuilder sb = new StringBuilder("kuainiu");
         sb.append(Utils.getAppVersionName(context));
         sb.append("(");
         sb.append(Constant.PUSH_TYPE_ANDROID);

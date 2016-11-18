@@ -39,11 +39,10 @@ android {
 
     signingConfigs {
         debug {
-            // No debug config
-//            storeFile file('D:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
-//            keyAlias 'kuainiuKeyStore'
-//            keyPassword 'kuainiuKey'
-//            storePassword 'kuaiNIU20160927tv'
+            storeFile file('E:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')
+            keyAlias 'kuainiuKeyStore'
+            keyPassword 'kuainiuKey'
+            storePassword 'kuaiNIU20160927tv'
         }
         release {
             storeFile file('E:/StudioProjects/livedemo/app/release/kuainiuKeyStore.jks')

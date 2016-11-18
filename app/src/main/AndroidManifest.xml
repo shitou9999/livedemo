@@ -262,8 +262,13 @@
         <activity
             android:name=".ui.edit.EditActivity"
             android:screenOrientation="portrait" />
+        <!--绑定第三方账号-->
         <activity
             android:name=".ui.me.activity.BindAccountActivity"
+            android:screenOrientation="portrait" />
+        <!--第三方账号绑定-->
+        <activity
+            android:name=".ui.me.activity.ThridAccountVerifyActivity"
             android:screenOrientation="portrait" />
 
         <activity

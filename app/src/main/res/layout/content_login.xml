@@ -12,9 +12,13 @@
         android:id="@+id/ll_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:orientation="vertical">
 
+        <ViewStub
+            android:id="@+id/vsAccountBind"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout="@layout/include_account_bind" />
 
         <include layout="@layout/layout_region_top" />
 
@@ -134,10 +138,11 @@
         android:layout_height="30dp"
         android:layout_below="@id/btn_login"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:layout_marginTop="@dimen/activity_horizontal_margin3x"
+        android:gravity="center"
         android:text="@string/message_login"
         android:textColor="@drawable/selector_link_text_color" />
+
     <RelativeLayout
         android:id="@+id/rl_thrid_login"
         android:layout_width="match_parent"
@@ -148,27 +153,27 @@
             android:id="@+id/fl_bottom_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center"
             android:text="@string/label_login_thrid_account" />
 
         <ImageView
             android:id="@+id/imageButton_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_below="@id/fl_bottom_label"
             android:layout_centerHorizontal="true"
+            android:padding="10dp"
             android:src="@mipmap/wechat_big_green_btn" />
 
         <ImageView
             android:id="@+id/imageButton_weibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_below="@id/fl_bottom_label"
             android:layout_toLeftOf="@id/imageButton_wechat"
             android:layout_toStartOf="@id/imageButton_wechat"
+            android:padding="10dp"
             android:src="@mipmap/weibo_big_red_btn" />
 
 
@@ -176,12 +181,13 @@
             android:id="@+id/imageButton_qq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_below="@id/fl_bottom_label"
             android:layout_toEndOf="@id/imageButton_wechat"
             android:layout_toRightOf="@id/imageButton_wechat"
+            android:padding="10dp"
             android:src="@mipmap/qq_big_blue_btn" />
     </RelativeLayout>
+
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="match_parent"

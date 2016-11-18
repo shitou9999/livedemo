@@ -15,10 +15,12 @@ import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +35,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -55,8 +60,12 @@ import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.SecurityUtils;
-import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
+
+import static tv.kuainiu.R.id.et_password;
+import static tv.kuainiu.R.id.et_region;
+import static tv.kuainiu.R.id.rl_thrid_login;
+import static tv.kuainiu.R.id.tv_forget_password;
 
 
 /**
@@ -76,15 +85,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     LinearLayout mRlRegionSelector;
     @BindView(R.id.tv_region_name)
     TextView mTvRegion;
-    @BindView(R.id.tv_forget_password)
+    @BindView(tv_forget_password)
     TextView mTvForgetPassword;
     @BindView(R.id.tv_message_login)
     TextView mTvMessageLogin;
-    @BindView(R.id.et_region)
+    @BindView(et_region)
     EditText mEtRegion;
     @BindView(R.id.et_account)
     EditText mEtAccount;
-    @BindView(R.id.et_password)
+    @BindView(et_password)
     EditText mEtPassword;
     @BindView(R.id.btn_login)
     Button mBtnLogin;
@@ -100,9 +109,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     TextView tvRegister;
     @BindView(R.id.ivClearText)
     ImageView ivClearText;
+    @BindView(R.id.vsAccountBind)
+    ViewStub vsAccountBind;
+    @BindView(R.id.ll_password)
+    LinearLayout llPassword;
+    @BindView(R.id.ll_input)
+    LinearLayout llInput;
+    @BindView(R.id.fl_bottom_label)
+    TextView flBottomLabel;
+    @BindView(rl_thrid_login)
+    RelativeLayout rlThridLogin;
+    @BindView(R.id.rl_login_content_root)
+    RelativeLayout rlLoginContentRoot;
+    CircleImageView ivPlatFromImage;
     private boolean isKeyboardShown;
     private Map<String, Region> mRegionMap;
     private Handler handler;
+    /**
+     * 第三方平台id
+     */
+    private String platform_id = "";
+    /**
+     * 第三方平台名称
+     */
+    private String platform_name = "";
+    /**
+     * 第三方平台token
+     */
+    private String platform_token_secret = "";
+    private String area = "";
+    private String area_country = "";
+    private String account = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,16 +160,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SpannableString messageSpan = new SpannableString(messageText);
         messageSpan.setSpan(new UnderlineSpan(), 0, messageText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvMessageLogin.setText(messageSpan);
-        initAccount();
+        platform_name = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_NAME);
+        area = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_CODE);
+        account = getIntent().getStringExtra(ThridAccountVerifyActivity.ACCOUNT);
+        area_country = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_COUNTRY);
         mRegionMap = RegionDataHelper.getRegionDataMap(this);
+        initAccount();
         initListener();
     }
 
     // XXX Review this code logic(审查此段代码逻辑)
     private void initAccount() {
         User user = UserPreferencesManager.getUserExtraInfo();
-        if (user != null) {
-            String area = user.getArea();
+        if (!TextUtils.isEmpty(area_country)) {
+            mEtRegion.setText(area);
+            mTvRegion.setText(area_country);
+        } else if (user != null) {
+            area = user.getArea();
             if (!TextUtils.isEmpty(area) && (mRegionMap != null && mRegionMap.containsKey(area))) {
                 mEtRegion.setText(area);
                 mTvRegion.setText(mRegionMap.get(area).getRegionName());
@@ -154,9 +198,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
 
         mEtRegion.setSelection(mEtRegion.length());
-
-        mEtAccount.requestFocus();
-        mEtAccount.setSelection(mEtAccount.length());
+        if (!TextUtils.isEmpty(account)) {
+            mEtAccount.setText(account.trim());
+            mEtAccount.setEnabled(false);
+        } else {
+            mEtAccount.requestFocus();
+            mEtAccount.setSelection(mEtAccount.length());
+        }
+        if (!TextUtils.isEmpty(platform_name)) {
+            vsAccountBind.setVisibility(View.VISIBLE);
+            mTvForgetPassword.setVisibility(View.INVISIBLE);
+            mTvMessageLogin.setVisibility(View.INVISIBLE);
+            rlThridLogin.setVisibility(View.GONE);
+            tvRegister.setVisibility(View.GONE);
+            ivClearText.setVisibility(View.GONE);
+            mEtRegion.setEnabled(false);
+            ivPlatFromImage = (CircleImageView) findViewById(R.id.ivPlatFromImage);
+            ivPlatFromImage.setSelected(true);
+            mRlRegionSelector.setEnabled(false);
+            mEtPassword.requestFocus();
+            mEtPassword.setSelection(mEtPassword.length());
+            if (SinaWeibo.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
+            }
+            if (QQ.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
+            }
+            if (Wechat.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
+            }
+        }
     }
 
 
@@ -253,7 +324,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 login();
                 break;
 
-            case R.id.tv_forget_password:
+            case tv_forget_password:
                 Intent forget = new Intent(LoginActivity.this, ForgetPassword1Activity.class);
                 startActivity(forget);
                 mEtPassword.setText("");
@@ -279,12 +350,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 login(SinaWeibo.NAME);
                 break;
             case R.id.imageButton_wechat:
-                ToastUtils.showToast(LoginActivity.this, "微信登录暂未开放");
-                //login(Wechat.NAME);
+//                ToastUtils.showToast(LoginActivity.this, "微信登录暂未开放");
+                login(Wechat.NAME);
                 break;
             case R.id.imageButton_qq:
-                ToastUtils.showToast(LoginActivity.this, "qq登录暂未开放");
-                //login(QQ.NAME);
+//                ToastUtils.showToast(LoginActivity.this, "qq登录暂未开放");
+                login(QQ.NAME);
                 break;
             default:
                 break;
@@ -302,8 +373,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         api.setPlatform(platformName);
         api.setOnLoginListener(new OnLoginListener() {
             public boolean onLogin(String platform, HashMap<String, Object> res, Platform mPlatform) {
-                // TODO 去服务器绑定
-                // 此处全部给回需要注册
+                ThridAccountVerifyActivity.intoNewActivity(LoginActivity.this, mPlatform);
+                LogUtils.e(TAG, "platformNAME1=" + platform);
+                LogUtils.e(TAG, "platformNAME=" + mPlatform.getDb().getPlatformNname());
                 LogUtils.e(TAG, "platformID=" + mPlatform.getDb().getUserId());
                 Iterator iter = res.entrySet().iterator();
                 while (iter.hasNext()) {
@@ -322,7 +394,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void login() {
         String area = mEtRegion.getText().toString();
-        String account = mEtAccount.getText().toString();
+        account = mEtAccount.getText().toString();
         String password = mEtPassword.getText().toString();
 
         if (TextUtils.isEmpty(area)) {

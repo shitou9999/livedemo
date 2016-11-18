@@ -2,51 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/selector_edit_bg"
+    android:layout_height="80dp"
+    android:background="@color/colorGrey100"
     android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="请输入内容（必填）"
-        app:counterEnabled="true"
-        app:counterMaxLength="@integer/content_length"
-        app:hintEnabled="false">
-
-        <EditText
-            android:id="@+id/et_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:background="@color/translate"
-            android:gravity="start"
-            android:hint="请输入内容（必填）"
-            android:inputType="textMultiLine"
-            android:maxLength="@integer/content_length"
-            android:minLines="3"
-            android:text=""
-            android:textColorHint="@color/publishTextColor"
-            android:textSize="14sp" />
-    </android.support.design.widget.TextInputLayout>
-
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="1px"
-        android:layout_marginLeft="1px"
-        android:layout_marginRight="1px"
-        android:background="@color/colorGreyPublish"
-        android:paddingLeft="10dp"
-        android:visibility="gone">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivPlatFromImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="1dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/selector_share_sina"
+            app:civ_border_color="@color/colorCircleImageViewborder"
+            app:civ_border_width="@dimen/widthCircleImageViewborder" />
+
+        <View
+            android:id="@+id/vPlatFromLine"
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ivPlatFromImage"
+            android:background="@color/colorGrey400" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivAppImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="1dp"
+            android:layout_toRightOf="@+id/vPlatFromLine"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            app:civ_border_color="@color/colorCircleImageViewborder"
+            app:civ_border_width="@dimen/widthCircleImageViewborder" />
 
         <TextView
-            android:id="@+id/tvInputWordLimit"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="还可以输入10个字"
-            android:visibility="invisible" />
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/vPlatFromLine"
+            android:layout_centerHorizontal="true"
+            android:text="绑定"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:text="（绑定快牛直播账号，服务更便捷）"
+            android:textColor="#F3BF66"
+            android:textSize="10sp" />
     </RelativeLayout>
 </LinearLayout>

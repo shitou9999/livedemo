@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +26,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -49,6 +54,8 @@ import tv.kuainiu.utils.WeakHandler;
  * 注册
  */
 public class Register1Activity extends AbsSMSPermissionActivity implements View.OnClickListener {
+    @BindView(R.id.vsAccountBind)
+    ViewStub vsAccountBind;
     @BindView(R.id.ll_region_selector)
     LinearLayout mRlRegionSelector;
     @BindView(R.id.tv_region_name)
@@ -69,8 +76,23 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
     Button mBtnRegister;
     @BindView(R.id.ivClearText)
     ImageView ivClearText;
+    CircleImageView ivPlatFromImage;
     private MyCountDownTimer mDownTimer;
-
+    /**
+     * 第三方平台id
+     */
+    private String platform_id = "";
+    /**
+     * 第三方平台名称
+     */
+    private String platform_name = "";
+    /**
+     * 第三方平台token
+     */
+    private String platform_token_secret = "";
+    private String area = "";
+    private String area_country = "";
+    private String account = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +103,45 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
         }
         mRegionMap = RegionDataHelper.getRegionDataMap(this);
         mDownTimer = new MyCountDownTimer();
+        platform_name = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_NAME);
+        area = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_CODE);
+        account = getIntent().getStringExtra(ThridAccountVerifyActivity.ACCOUNT);
+        area_country = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_COUNTRY);
+        mRegionMap = RegionDataHelper.getRegionDataMap(this);
 
         mEtRegion.setSelection(mEtRegion.length());
 
         mEtAccount.requestFocus();
         initListener();
+
+        if (!TextUtils.isEmpty(platform_name)) {
+            if (!TextUtils.isEmpty(account)) {
+                mEtAccount.setText(account.trim());
+                mEtAccount.setEnabled(false);
+            }
+            if (!TextUtils.isEmpty(area_country)) {
+                mEtRegion.setText(area);
+                mTvRegion.setText(area_country);
+            }
+            vsAccountBind.setVisibility(View.VISIBLE);
+            ivClearText.setVisibility(View.GONE);
+            mEtRegion.setEnabled(false);
+            ivPlatFromImage = (CircleImageView) findViewById(R.id.ivPlatFromImage);
+            ivPlatFromImage.setSelected(true);
+            mRlRegionSelector.setEnabled(false);
+            mEtCheckCode.requestFocus();
+            mEtCheckCode.setSelection(mEtCheckCode.length());
+            if (SinaWeibo.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
+            }
+            if (QQ.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
+            }
+            if (Wechat.NAME.equals(platform_name)) {
+                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
+            }
+        }
+
 //        new SMSUtils(Register1Activity.this, new MyHandle(this));
     }
 
