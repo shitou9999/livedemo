@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -261,7 +262,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     private int mTouchAction;
     private int mSurfaceYDisplayRange;
     private float mTouchY, mTouchX, mVol;
-//    private PowerManager.WakeLock wakeLock;
+    //    private PowerManager.WakeLock wakeLock;
     private boolean mIsLocked = false;
     private boolean mShowing;
     //Volume
@@ -275,6 +276,7 @@ public class ReplayLiveActivity extends BaseActivity implements
     int height;
     int minHeight;
     RelativeLayout.LayoutParams layoutParamsFrameLayout = null;
+    private GestureDetector detector;
 
     public static void intoNewIntent(Context context, LiveParameter liveParameter) {
         Intent intent = new Intent(context, ReplayLiveActivity.class);
@@ -304,6 +306,7 @@ public class ReplayLiveActivity extends BaseActivity implements
 //        wakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
 //                .newWakeLock(PowerManager.FULL_WAKE_LOCK, "time");
         tipIsKeepWatchVideo();
+        detector = new GestureDetector(this, new MyGesture());
     }
 
     private void registerBroadcast() {
@@ -410,10 +413,17 @@ public class ReplayLiveActivity extends BaseActivity implements
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
         });
-        sv.setOnTouchListener(new View.OnTouchListener() {
+        rl_control.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return onTouchEvent2(event);
+                return false;
+            }
+        });
+        rlPlay.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                detector.onTouchEvent(event);
+                return true;
             }
         });
     }
@@ -542,6 +552,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             }
         };
     }
+
     private void loginLive() {
         viewerName = PreferencesUtils.getString(this, MyApplication.KEY_DEVICEID, "");
         Map<String, String> map = new HashMap<>();
@@ -801,6 +812,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             llFullscreen.setVisibility(View.GONE);
             mBarrageLayout.stop();
             mBarrageLayout.setVisibility(View.GONE);
+            llBottomLayout.setVisibility(View.VISIBLE);
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.full_screen_b));
 
@@ -810,6 +822,7 @@ public class ReplayLiveActivity extends BaseActivity implements
             llFullscreen.setVisibility(View.GONE);
             mBarrageLayout.start();
             mBarrageLayout.setVisibility(View.VISIBLE);
+            llBottomLayout.setVisibility(View.GONE);
 //           	etFullscreen.requestFocus();
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.exit_full_b));
@@ -987,7 +1000,9 @@ public class ReplayLiveActivity extends BaseActivity implements
         isPrepared = true;
 
         pb_loading.setVisibility(View.GONE);
-        llBottomLayout.setVisibility(View.VISIBLE);
+        if (isPortrait()) {
+            llBottomLayout.setVisibility(View.VISIBLE);
+        }
         handler.sendEmptyMessage(SHOW_CONTROL);
         hidePlayHander();
         player.start();
@@ -1299,13 +1314,13 @@ public class ReplayLiveActivity extends BaseActivity implements
 
 
     private void hideEditTextSoftInput(EditText editText) {
-        if(imm!=null && editText!=null) {
+        if (imm != null && editText != null) {
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         }
     }
 
     private void hideKeyBoardEditTextSoftInput() {
-        if(imm!=null) {
+        if (imm != null) {
             imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
@@ -1340,7 +1355,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                             }
                         }
                         playLiveActivity.setHolderBlack(errorMessage);
-                        playLiveActivity.tip(errorMessage,false);
+                        playLiveActivity.tip(errorMessage, false);
                         sendEmptyMessage(SHOW_CONTROL);
                     }
                     break;
@@ -1378,7 +1393,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                         errorMessage = exception.getMessage();
                     }
                     playLiveActivity.setHolderBlack(errorMessage);
-                    playLiveActivity.tip(errorMessage,false);
+                    playLiveActivity.tip(errorMessage, false);
                     sendEmptyMessage(SHOW_CONTROL);
                     break;
                 case FADE_OUT_INFO:
@@ -1411,7 +1426,7 @@ public class ReplayLiveActivity extends BaseActivity implements
                 break;
             case live_add_like:
                 if (Constant.SUCCEED == event.getCode()) {
-                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞",mLiveInfo.getSupport_num() + 1));
+                    tv_live_teacher_zan.setText(String.format(Locale.CHINA, "%d赞", mLiveInfo.getSupport_num() + 1));
                     tv_live_teacher_zan.setSelected(true);
                     ToastUtils.showToast(this, "点赞成功");
                 } else if (Constant.HAS_SUCCEED == event.getCode()) {
@@ -1604,7 +1619,6 @@ public class ReplayLiveActivity extends BaseActivity implements
     /**
      * show/hide the overlay
      */
-
     public boolean onTouchEvent2(MotionEvent event) {
 
         DisplayMetrics screen = new DisplayMetrics();
@@ -1647,9 +1661,9 @@ public class ReplayLiveActivity extends BaseActivity implements
             }
             return false;
         }
-        if (isPortrait()) {
-            return false;
-        }
+//        if (isPortrait()) {
+//            return false;
+//        }
 
         switch (event.getAction()) {
 
@@ -1712,8 +1726,8 @@ public class ReplayLiveActivity extends BaseActivity implements
         if (coef > 0.5 || Math.abs(gesturesize) < 1)
             return;
 
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK)
-            return;
+//        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_SEEK)
+//            return;
         mTouchAction = TOUCH_SEEK;
 
         // Always show seekbar when searching
@@ -1752,8 +1766,8 @@ public class ReplayLiveActivity extends BaseActivity implements
      * @param y_changed
      */
     private void doVolumeTouch(float y_changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
-            return;
+//        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_VOLUME)
+//            return;
         int delta = -(int) ((y_changed / mSurfaceYDisplayRange) * mAudioMax);
         int vol = (int) Math.min(Math.max(mVol + delta, 0), mAudioMax);
         if (delta != 0) {
@@ -1784,8 +1798,8 @@ public class ReplayLiveActivity extends BaseActivity implements
      * @param changed
      */
     private void doBrightnessTouch(float changed) {
-        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
-            return;
+//        if (mTouchAction != TOUCH_NONE && mTouchAction != TOUCH_BRIGHTNESS)
+//            return;
         if (mIsFirstBrightnessGesture) initBrightnessTouch();
         mTouchAction = TOUCH_BRIGHTNESS;
 
@@ -1843,6 +1857,116 @@ public class ReplayLiveActivity extends BaseActivity implements
             layoutParamsFrameLayout.setMargins(0, minHeight, 0, 0);
             ll_chat_bottom.setLayoutParams(layoutParamsFrameLayout);
             rlOpenMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // 手势监听器类
+    private class MyGesture extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+
+            if (!isPrepared || isPortrait()) {
+                return super.onScroll(e1, e2, distanceX, distanceY);
+            }
+            DisplayMetrics screen = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(screen);
+
+            if (mSurfaceYDisplayRange == 0)
+                mSurfaceYDisplayRange = Math.min(screen.widthPixels, screen.heightPixels);
+            LogUtils.e("jksgsjjjj", "screen=" + screen);
+            LogUtils.e("jksgsjjjj", "distanceX=" + distanceX);
+            LogUtils.e("jksgsjjjj", "distanceY=" + distanceY);
+            float y_changed = e2.getRawY() - mTouchY;
+            float x_changed = e2.getRawX() - mTouchX;
+
+            // coef is the gradient's move to determine a neutral zone
+            float coef = Math.abs(y_changed / x_changed);
+            LogUtils.e("jksgsjjjj", "coef=" + coef);
+            float xgesturesize = ((x_changed / screen.xdpi) * 2.54f);
+            LogUtils.e("jksgsjjjj", "xgesturesize=" + xgesturesize);
+            if (coef > 2) {
+                // Volume (Up or Down - Right side)
+                if (mTouchX > (screen.widthPixels / 2)) {
+                    doVolumeTouch(y_changed);
+                }
+                // Brightness (Up or Down - Left side)
+                if (mTouchX <= (screen.widthPixels / 2)) {
+                    doBrightnessTouch(y_changed);
+                }
+
+            }
+            // Mouse events for the core
+//                mVideoView.sendMouseEvent(MotionEvent.ACTION_MOVE, 0, xTouch, yTouch);
+
+            // No volume/brightness action if coef < 2 or a secondary display is connected
+            // Seek (Right or Left move)
+            doSeekTouch(coef, xgesturesize, true);
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            super.onShowPress(e);
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            mTouchX = e.getRawX();
+            mTouchY = e.getRawY();
+            LogUtils.e("jksgsjjjj", "mTouch0X=" + mTouchX);
+            mVol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            return super.onDown(e);
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            if (isPrepared) {
+                if (rl_control.getVisibility() == View.VISIBLE) {
+                    handler.removeCallbacks(playHideRunnable);
+                    handler.sendEmptyMessage(HIDE_CONTROL);
+                } else {
+                    handler.sendEmptyMessage(SHOW_CONTROL);
+                    hidePlayHander();
+                }
+            }
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return super.onDoubleTapEvent(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (isPrepared) {
+                if (rl_control.getVisibility() == View.VISIBLE) {
+                    handler.removeCallbacks(playHideRunnable);
+                    handler.sendEmptyMessage(HIDE_CONTROL);
+                } else {
+                    handler.sendEmptyMessage(SHOW_CONTROL);
+                    hidePlayHander();
+                }
+            }
+            return super.onSingleTapConfirmed(e);
         }
     }
 }

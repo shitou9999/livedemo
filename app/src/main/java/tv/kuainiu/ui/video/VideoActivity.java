@@ -179,7 +179,8 @@ public class VideoActivity extends BaseActivity implements
     TextView tvCommentNumber;
     @BindView(R.id.rl_comment_btn)
     RelativeLayout rlCommentBtn;
-
+    @BindView(R.id.ivStartPlay)
+    ImageView ivStartPlay;
     private String news_id = "";
     private String cat_id = "";
     private String video_name = "";
@@ -297,7 +298,7 @@ public class VideoActivity extends BaseActivity implements
         context.startActivity(intent);
     }
 
-    public static void intoNewIntent(Context context, String news_id, String video_id, String cat_id, String video_name, boolean isLocalPlay,String video_path) {
+    public static void intoNewIntent(Context context, String news_id, String video_id, String cat_id, String video_name, boolean isLocalPlay, String video_path) {
         Intent intent = new Intent(context, VideoActivity.class);
         intent.putExtra(NEWS_ID, news_id);
         intent.putExtra(VIDEO_ID, video_id);
@@ -611,7 +612,7 @@ public class VideoActivity extends BaseActivity implements
     AlertDialog definitionDialog;
 
 
-    @OnClick({R.id.tvDown, R.id.tvCollection, R.id.tvShare, R.id.tvSupport, R.id.rlComment, R.id.tv_follow_button})
+    @OnClick({R.id.ivStartPlay, R.id.tvDown, R.id.tvCollection, R.id.tvShare, R.id.tvSupport, R.id.rlComment, R.id.tv_follow_button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvDown:
@@ -665,6 +666,12 @@ public class VideoActivity extends BaseActivity implements
                     return;
                 }
                 addFollow(mVideoDetail.getTeacher_info().getIs_follow(), mVideoDetail.getTeacher_info().getId());
+                break;
+            case R.id.ivStartPlay:
+                if (!isPrepared) {
+                    return;
+                }
+                changePlayStatus();
                 break;
         }
     }
@@ -1090,7 +1097,9 @@ public class VideoActivity extends BaseActivity implements
         isPrepared = true;
         if (!isFreeze) {
             if (isPlaying == null || isPlaying.booleanValue()) {
-                player.start();
+//                player.start();
+                playerBottomLayout.setVisibility(View.VISIBLE);
+                ivStartPlay.setVisibility(View.VISIBLE);
                 player.setPlaybackSpeed(Float.parseFloat(speedArray[currentSpeed]));
             }
         }
@@ -1336,7 +1345,9 @@ public class VideoActivity extends BaseActivity implements
         }
 
         playerTopLayout.setVisibility(visibility);
-        playerBottomLayout.setVisibility(visibility);
+        if (isPrepared) {
+            playerBottomLayout.setVisibility(visibility);
+        }
 
         if (isPortrait()) {
             volumeLayout.setVisibility(View.GONE);
@@ -1509,9 +1520,10 @@ public class VideoActivity extends BaseActivity implements
         if (player.isPlaying()) {
             player.pause();
             playOp.setImageResource(R.drawable.btn_play);
-
+            ivStartPlay.setVisibility(View.VISIBLE);
         } else {
             player.start();
+            ivStartPlay.setVisibility(View.GONE);
             playOp.setImageResource(R.drawable.btn_pause);
         }
     }

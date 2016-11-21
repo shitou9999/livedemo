@@ -108,7 +108,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="100"
                             android:background="@android:color/transparent"
-                            android:focusable="true"
                             android:hint="请输入聊天内容"
                             android:imeOptions="actionSend"
                             android:inputType="text"

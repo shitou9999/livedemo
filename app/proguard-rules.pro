@@ -249,6 +249,11 @@
     **[] $VALUES;
     public *;
 }
+
+# banner 的混淆代码
+-keep class com.youth.banner.** {
+    *;
+ }
 -dontwarn android.support.**
 
 #保留源文件和行号的信息

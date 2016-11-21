@@ -5,13 +5,15 @@ import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,14 @@ import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
-import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DensityUtils;
+import tv.kuainiu.utils.GlideImageLoader;
 import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.ScreenUtils;
 import tv.kuainiu.utils.StringUtils;
 import tv.kuainiu.widget.DividerItemDecoration;
+import tv.kuainiu.widget.LayoutManager.CustomLinearLayoutManager;
 
 /**
  * @author nanck on 2016/7/29.
@@ -156,7 +159,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (getItemViewType(position)) {
             case BANNER:
                 //绑定banner
-                onBindBannerViewHolder((BannerViewHolder) holder);
+                onBindBannerViewHolder((BannerHolder) holder);
                 break;
             case STOCK_INDEX:
                 onBindStockIndexViewHolder((BannerViewHolder) holder);
@@ -201,61 +204,34 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     //绑定Banner
-    public void onBindBannerViewHolder(final BannerViewHolder holder) {
-//        holder.mIndicator.setVisibility(View.GONE);
-        List<View> mList = new ArrayList<>();
-        for (int i = 0; i < mBannerList.size(); i++) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager_item, null);
-            final ImageView mIvIamge = (ImageView) view.findViewById(R.id.ivIamge);//直播间图片
-            TextView mTvLiveing = (TextView) view.findViewById(R.id.tvLiveing);//直播状态
-            TextView tvBannarTitle = (TextView) view.findViewById(R.id.tvBannarTitle);//直播状态
-            TextView mTvLiveingNumber = (TextView) view.findViewById(R.id.tvLiveingNumber);//直播间人数
-            RelativeLayout rl_state_living = (RelativeLayout) view.findViewById(R.id.rl_state_living);//直播间状态
-            rl_state_living.setVisibility(View.GONE);
-            Banner banner = mBannerList.get(i);
-            view.setTag(banner);
-            if (TextUtils.isEmpty(banner.title)) {
-                tvBannarTitle.setVisibility(View.INVISIBLE);
-            } else {
-                tvBannarTitle.setVisibility(View.VISIBLE);
-            }
-            tvBannarTitle.setText(banner.title);
-            ImageDisplayUtil.displayImage(mContext, mIvIamge, banner.thumb);
-            //绑定banner click事件
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Banner banner = (Banner) view.getTag();
-                    WebActivity.intoNewIntent(mContext, banner.url);
-                }
-            });
-            mList.add(view);
+    public void onBindBannerViewHolder(final BannerHolder holder) {
+        List<String> mListUrl = new ArrayList<>();
+        List<String> mListTitle = new ArrayList<>();
+        for (int i=0;i<mBannerList.size();i++){
+            mListUrl.add(mBannerList.get(i).thumb);
+            mListTitle.add(mBannerList.get(i).title);
         }
-        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(mList);
-        holder.mVpReadingTap.setAdapter(mViewPagerAdapter);
-        holder.mIndicator.setViewPager(holder.mVpReadingTap);
-        holder.mVpReadingTap.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        //设置banner样式
+        holder.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
+        //设置图片加载器
+        holder.banner.setImageLoader(new GlideImageLoader());
+        //设置图片集合
+        holder.banner.setImages(mListUrl);
+        //设置标题集合（当banner样式有显示title时）
+        holder.banner.setBannerTitles(mListTitle);
+        //设置自动轮播，默认为true
+        holder. banner.isAutoPlay(true);
+        //设置轮播时间
+        holder.banner.setDelayTime(3000);
+        //设置指示器位置（当banner模式中有指示器时）
+        holder.banner.setIndicatorGravity(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        //banner设置方法全部调用完毕时最后调用
+        holder.banner.start();
+        holder.banner.setOnBannerClickListener(new OnBannerClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffsetPixels == 0.0) {
-                    if (position == mBannerList.size() - 1) {
-                        holder.mVpReadingTap.setCurrentItem(1, false);
-                    } else if (position == 0) {
-                        holder.mVpReadingTap.setCurrentItem(mBannerList.size() - 2, false);
-                    } else {
-                        holder.mVpReadingTap.setCurrentItem(position);
-                    }
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void OnBannerClick(int position) {
+                Banner banner =mBannerList.get(position-1);
+                WebActivity.intoNewIntent(mContext, banner.url);
             }
         });
     }
@@ -358,11 +334,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //        vh.mViewFriendsPostLine.setLayoutParams(lp);
         switch (viewType) {
             case BANNER:
-
-                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_reading_tap_viewpager, parent, false);
-                vh = new BannerViewHolder(view);
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_home_bannar, parent, false);
+                vh = new BannerHolder(view);
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(screenWidth, (int) (screenWidth / 1.67));
-                ((BannerViewHolder) vh).mVpReadingTap.setLayoutParams(lp);
+                ((BannerHolder) vh).banner.setLayoutParams(lp);
                 break;
             case STOCK_INDEX:
             case LIVE:
@@ -398,7 +373,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         return vh;
     }
-
+    //banner ViewPager
+    static class BannerHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.banner)
+        com.youth.banner.Banner banner;
+        public BannerHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
     //banner ViewPager
     static class BannerViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vpReadingTap)
