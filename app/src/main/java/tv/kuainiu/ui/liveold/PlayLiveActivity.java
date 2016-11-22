@@ -164,6 +164,7 @@ public class PlayLiveActivity extends BaseActivity implements
     RelativeLayout rl_mInfo;
     ImageView iv_mInfo;
     ImageView ivCloseMessage;
+    ImageView iv_live_play_button2;
     TextView tvCloseMessage;
     RelativeLayout ll_chat_bottom;
     RelativeLayout rlOpenMessage;
@@ -352,6 +353,7 @@ public class PlayLiveActivity extends BaseActivity implements
         iv_share = (ImageView) findViewById(R.id.iv_share2);
         iv_control = (ImageView) findViewById(R.id.iv_control2);
         full_screen = (ImageView) findViewById(R.id.full_screen2);
+        iv_live_play_button2 = (ImageView) findViewById(R.id.iv_live_play_button2);
         etFullscreen = (EditText) findViewById(R.id.et_fullscreen2);
         btnFullscreenSendMsg = (Button) findViewById(R.id.btn_fullscreen_send2);
         mBarrageLayout = (BarrageLayout) findViewById(R.id.bl_barrage2);
@@ -493,6 +495,7 @@ public class PlayLiveActivity extends BaseActivity implements
         ivCloseMessage.setOnClickListener(this);
         tvCloseMessage.setOnClickListener(this);
         rlOpenMessage.setOnClickListener(this);
+        iv_live_play_button2.setOnClickListener(this);
 
         etFullscreen.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -988,9 +991,9 @@ public class PlayLiveActivity extends BaseActivity implements
 
                 String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
 //                mInfo.setText(centerDvrStr);
-                if (liveDuration > 0) {
-                    showInfo(centerDvrStr, 2000, -1);
-                }
+//                if (liveDuration > 0) {
+//                    showInfo(centerDvrStr, 2000, -1);
+//                }
 
                 try {
                     currentPosition = getRelTime();
@@ -1009,20 +1012,21 @@ public class PlayLiveActivity extends BaseActivity implements
 //                rlDvrTime.setVisibility(View.VISIBLE);
                 String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
 //                mInfo.setText(centerDvrStr);
-                if (liveDuration > 0) {
-                    showInfo(centerDvrStr, 2000, -1);
-                }
+//                if (liveDuration > 0) {
+//                    showInfo(centerDvrStr, 2000, -1);
+//                }
             }
 
             @Override
             public void onProgressChanged(final SeekBar seekBar, int _progress, boolean fromUser) {
                 Log.e("demo", _progress + "");
                 progress = _progress;
+                iv_live_play_button2.setVisibility(View.GONE);
                 String centerDvrStr = String.format("%s/%s", TimeFormatUtil.getTime(getRelTime()), TimeFormatUtil.getTime(liveDuration));
 //                mInfo.setText(centerDvrStr);
-                if (liveDuration > 0) {
-                    showInfo(centerDvrStr, 2000, -1);
-                }
+//                if (liveDuration > 0) {
+//                    showInfo(centerDvrStr, 2000, -1);
+//                }
             }
         });
 
@@ -1219,7 +1223,7 @@ public class PlayLiveActivity extends BaseActivity implements
         isPrepared = true;
 
         pb_loading.setVisibility(View.GONE);
-        if(isPortrait()) {
+        if (isPortrait()) {
             llBottomLayout.setVisibility(View.VISIBLE);
         }
         handler.sendEmptyMessage(SHOW_CONTROL);
@@ -1516,6 +1520,7 @@ public class PlayLiveActivity extends BaseActivity implements
         switch (v.getId()) {
             //返回按钮
             case R.id.iv_back2:
+
                 if (isPortrait()) {//竖屏就返回
                     finish();
                 } else {//全屏就返回正常模式
@@ -1546,31 +1551,45 @@ public class PlayLiveActivity extends BaseActivity implements
             case R.id.rlOpenMessage:
                 intro();
                 break;
-            // 暂停播放按钮
-            case R.id.iv_control2:
-
-                if (iv_control.isSelected()) {
-                    iv_control.setSelected(false);
-                    player.pause();
-                    stopLiveTimerTask();
-                } else {
+            case R.id.iv_live_play_button2:
+                if (!iv_control.isSelected() && isPrepared) {
                     iv_control.setSelected(true);
                     player.start();
+                    iv_live_play_button2.setVisibility(View.GONE);
                     dwLive.getLivePlayedTime();
                     startLiveTimerTask();
                 }
                 break;
+            // 暂停播放按钮
+            case R.id.iv_control2:
+                if (isPrepared) {
+                    if (iv_control.isSelected()) {
+                        iv_control.setSelected(false);
+                        iv_live_play_button2.setVisibility(View.VISIBLE);
+                        player.pause();
+                        stopLiveTimerTask();
+                    } else {
+                        iv_control.setSelected(true);
+                        player.start();
+                        iv_live_play_button2.setVisibility(View.GONE);
+                        dwLive.getLivePlayedTime();
+                        startLiveTimerTask();
+                    }
+                }
+                break;
             //全屏按钮
             case R.id.full_screen2:
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏切换成竖屏
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    hideEditTextSoftInput(etFullscreen);
-                } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {//竖屏切换成横屏
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    hideEditTextSoftInput(etMsg);
-                    gvFace.setVisibility(View.GONE);
-                    ivSmile.setVisibility(View.VISIBLE);
-                    ivKeyBoard.setVisibility(View.GONE);
+                if (isPrepared) {
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏切换成竖屏
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        hideEditTextSoftInput(etFullscreen);
+                    } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {//竖屏切换成横屏
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        hideEditTextSoftInput(etMsg);
+                        gvFace.setVisibility(View.GONE);
+                        ivSmile.setVisibility(View.VISIBLE);
+                        ivKeyBoard.setVisibility(View.GONE);
+                    }
                 }
                 break;
             //发送聊天按钮
@@ -2171,7 +2190,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     TimeFormatUtil.getTime(time + jump),
                     TimeFormatUtil.getTime(length)), 1000, -1);
         } else {
-            showInfo("播放时不支持定位的流", 1000, -1);
+            showInfo("直播时不支持定位的流", 1000, -1);
         }
 
     }
@@ -2256,9 +2275,8 @@ public class PlayLiveActivity extends BaseActivity implements
      */
     private void fadeOutInfo() {
         if (rl_mInfo != null) {
-            if (rl_mInfo.getVisibility() == View.VISIBLE)
-                rl_mInfo.startAnimation(AnimationUtils.loadAnimation(
-                        PlayLiveActivity.this, android.R.anim.fade_out));
+            rl_mInfo.startAnimation(AnimationUtils.loadAnimation(
+                    PlayLiveActivity.this, android.R.anim.fade_out));
             rl_mInfo.setVisibility(View.INVISIBLE);
         }
     }

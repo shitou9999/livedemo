@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -26,7 +27,6 @@ import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.SelectPictureActivity;
 import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
-import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.utils.FileUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.ExpandGridView;
@@ -36,6 +36,8 @@ import tv.kuainiu.widget.tagview.Tag;
 public class PublishShareActivity extends BaseActivity {
 
     public static final String PLAT_FROM = "PLAT_FROM";
+    public static final String DYNAMICS_DESC = "dynamics_desc";
+    public static final String DYNAMICS_IMAGE_PATH = "dynamics_image_path";
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     @BindView(R.id.et_content)
@@ -47,19 +49,19 @@ public class PublishShareActivity extends BaseActivity {
     private List<Tag> mNewTagList = new ArrayList<Tag>();
     private ArrayList<String> stList;// 用户上传图片的URL集合
 
-    private String description = "";//必传     文字内容
     private String thumb = "";//
     private boolean isSubmiting = false;
     private UpLoadImageAdapter mUpLoadImageAdapter;
     private int showNumberInline = 0;
     private int platFromId = 0;
+    private String dynamics_desc = "";    //同步动态时必传     动态描述文字
+    private String dynamics_image_path = "";    //同步微博时必传 微博图片
 
-    public static void intoNewActivity(BaseActivity mContext, String cls, int id) {
-        Intent intent = new Intent(mContext, PickTagsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt(PLAT_FROM, id);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
+    public static void intoNewActivity(BaseActivity mContext, String dynamics_desc, String dynamics_image_path, int requestCode) {
+        Intent intentPublishShareActivity = new Intent(mContext, PublishShareActivity.class);
+        intentPublishShareActivity.putExtra(DYNAMICS_DESC, dynamics_desc);
+        intentPublishShareActivity.putExtra(DYNAMICS_IMAGE_PATH, dynamics_image_path);
+        mContext.startActivityForResult(intentPublishShareActivity, requestCode);
     }
 
     @Override
@@ -70,11 +72,16 @@ public class PublishShareActivity extends BaseActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        dynamics_desc = getIntent().getStringExtra(DYNAMICS_DESC);
+        dynamics_image_path = getIntent().getStringExtra(DYNAMICS_IMAGE_PATH);
         initView();
-
-        getImageList(null);// 占位符
+        List<String> list = new ArrayList<>();
+        if (!TextUtils.isEmpty(dynamics_image_path)) {
+            list.add(dynamics_image_path);
+        }
+        getImageList(list);// 占位符
         showNumberInline = getResources().getInteger(R.integer.show_line_image_number);
-        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1, showNumberInline);
+        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1, showNumberInline, 1);
         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
     }
 
@@ -82,7 +89,24 @@ public class PublishShareActivity extends BaseActivity {
     int i = 0;
 
     private void initView() {
+        etContent.setText(dynamics_desc);
+        etContent.setSelection(etContent.length(), etContent.length());
+        tbvTitle.setOnClickListening(new TitleBarView.OnClickListening() {
+            @Override
+            public void leftClick() {
+                finishActivty();
+            }
 
+            @Override
+            public void rightClick() {
+
+            }
+
+            @Override
+            public void titleClick() {
+
+            }
+        });
     }
 
     private void press() {
@@ -133,11 +157,11 @@ public class PublishShareActivity extends BaseActivity {
      */
     private boolean dataVerify() {
         boolean flag = true;
-        description = "";//必传     文字内容
-        description = etContent.getText().toString();
-        if (TextUtils.isEmpty(description)) {
+        dynamics_desc = "";//必传     文字内容
+        dynamics_desc = etContent.getText().toString();
+        if (TextUtils.isEmpty(dynamics_desc)) {
             flag = false;
-            etContent.setError("动态直播内容不能为空");
+            etContent.setError("同步内容不能为空");
         } else {
             etContent.setError(null);
         }
@@ -167,7 +191,7 @@ public class PublishShareActivity extends BaseActivity {
             stList.addAll(list);
         }
         // 占位符
-        if (Constant.UPLOAD_IMAGE_MAX_NUMBER > stList.size()) {
+        if (1 > stList.size()) {
             stList.add(Constant.UPLOADIMAGE);
         }
 
@@ -182,7 +206,7 @@ public class PublishShareActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(SelectPictureActivity.INTENT_SELECTED_PICTURE));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishShareActivity.this, 1, showNumberInline);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1, showNumberInline, 1);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
@@ -191,7 +215,7 @@ public class PublishShareActivity extends BaseActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     if (data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY) != null) {
                         stList = getImageList(data.getExtras().getStringArrayList(Constant.PICTURE_PREVIEW_INDEX_KEY));
-                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishShareActivity.this, 1, showNumberInline);
+                        mUpLoadImageAdapter = new UpLoadImageAdapter(stList, this, 1, showNumberInline, 1);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
                 }
@@ -216,4 +240,23 @@ public class PublishShareActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            finishActivty();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void finishActivty() {
+        if(dataVerify()) {
+            Intent intent = new Intent();
+            intent.putExtra(DYNAMICS_DESC, dynamics_desc);
+            intent.putExtra(DYNAMICS_IMAGE_PATH, dynamics_image_path);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
 }

@@ -82,6 +82,7 @@ public class PublishArticleActivity extends BaseActivity {
      */
     private static final int CAMERA_REQUEST_CODE = 110;
     public static final int REQUSET_TAG_CODE = 0;
+    public static final int REQUSET_SYNCHRONIZATION = 111;
     /**
      * 相册选图
      */
@@ -148,6 +149,7 @@ public class PublishArticleActivity extends BaseActivity {
     private String content = "";    // 必传     内容体
     private String synchro_dynamics = "1";    //  可选     是否同步动态     1是0否
     private String dynamics_desc = "";    //同步动态时必传     动态描述文字
+    private String dynamics_image_path = "";    //同步微博时必传 微博图片
 
     private boolean isSubmiting = false;
 
@@ -171,8 +173,7 @@ public class PublishArticleActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivShareSina:
-                Intent intentPublishShareActivity = new Intent(this, PublishShareActivity.class);
-                startActivity(intentPublishShareActivity);
+                PublishShareActivity.intoNewActivity(this,dynamics_desc,dynamics_image_path,REQUSET_SYNCHRONIZATION);
                 break;
             case R.id.btnFlag://选择标签
                 PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
@@ -314,6 +315,14 @@ public class PublishArticleActivity extends BaseActivity {
             case WRITE_RICH_CONTENT:
                 if (resultCode == RESULT_OK) {
                     articleContentBind();
+                }
+                break;
+            case REQUSET_SYNCHRONIZATION:
+                if (resultCode == RESULT_OK && data != null) {
+                    dynamics_desc = data.getStringExtra(PublishShareActivity.DYNAMICS_DESC);
+                    dynamics_image_path = data.getStringExtra(PublishShareActivity.DYNAMICS_IMAGE_PATH);
+                    etDynamics_desc.setText(dynamics_desc);
+                    etDynamics_desc.setSelection(etDynamics_desc.length(),etDynamics_desc.length());
                 }
                 break;
         }

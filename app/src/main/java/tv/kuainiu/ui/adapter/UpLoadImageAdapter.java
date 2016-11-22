@@ -3,6 +3,7 @@ package tv.kuainiu.ui.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
     private Fragment fragment;
     private int i = 0;
     private boolean only_preview = false;
+    private int MAX_NUM = Constant.UPLOAD_IMAGE_MAX_NUMBER;
 
     public UpLoadImageAdapter(ArrayList<String> imageList,
                               BaseActivity activity) {
@@ -66,7 +68,8 @@ public class UpLoadImageAdapter extends BaseAdapter {
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
-    public UpLoadImageAdapter(ArrayList<String> imageList, BaseActivity activity, int i,int showNumberInline) {
+
+    public UpLoadImageAdapter(ArrayList<String> imageList, BaseActivity activity, int i, int showNumberInline) {
         super();
         this.imageList = imageList;
         this.activity = activity;
@@ -81,6 +84,21 @@ public class UpLoadImageAdapter extends BaseAdapter {
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
 
+    public UpLoadImageAdapter(ArrayList<String> imageList, BaseActivity activity, int i, int showNumberInline, int maxNum) {
+        super();
+        this.imageList = imageList;
+        this.activity = activity;
+        this.imageList = imageList;
+        this.context = activity;
+        this.i = i;
+        width = (ScreenUtils.getScreenWidth(context) - 4
+                * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
+                .getResources().getDimensionPixelSize(
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
+        height = width;
+        paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
+        MAX_NUM = maxNum;
+    }
 
     public UpLoadImageAdapter(ArrayList<String> imageList,
                               BaseActivity activity, int i, boolean only_preview) {
@@ -109,7 +127,7 @@ public class UpLoadImageAdapter extends BaseAdapter {
         width = (ScreenUtils.getScreenWidth(context) - 4
                 * context.getResources().getDimensionPixelSize(R.dimen.ten_dp) - 5 * context
                 .getResources().getDimensionPixelSize(
-                        R.dimen.expgv_setting_service_image_horizontalSpacing)) /showNumberInline;
+                        R.dimen.expgv_setting_service_image_horizontalSpacing)) / showNumberInline;
         height = width;
         paramsFrameLayout = new RelativeLayout.LayoutParams(width, height);
     }
@@ -117,8 +135,8 @@ public class UpLoadImageAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return imageList == null ? 0
-                : (imageList.size() < Constant.UPLOAD_IMAGE_MAX_NUMBER ? imageList
-                .size() : Constant.UPLOAD_IMAGE_MAX_NUMBER);
+                : (imageList.size() < MAX_NUM ? imageList
+                .size() : MAX_NUM);
     }
 
     @Override
@@ -174,7 +192,11 @@ public class UpLoadImageAdapter extends BaseAdapter {
                     intent.putExtra(
                             SelectPictureActivity.INTENT_SELECTED_PICTURE_INDEX,
                             i);
-
+                    if (MAX_NUM == 1) {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(SelectPictureActivity.OnlyOnePic, true);
+                        intent.putExtras(bundle);
+                    }
                     if (fragment != null) {
                         fragment.startActivityForResult(intent,
                                 Constant.SELECT_PICTURE);
