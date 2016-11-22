@@ -23,12 +23,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -55,17 +56,23 @@ import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
 import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.KeyBoardUtil;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 import tv.kuainiu.utils.SecurityUtils;
+import tv.kuainiu.utils.StringUtils;
+import tv.kuainiu.utils.ToastUtils;
 import tv.kuainiu.widget.TitleBarView;
 
 import static tv.kuainiu.R.id.et_password;
 import static tv.kuainiu.R.id.et_region;
 import static tv.kuainiu.R.id.rl_thrid_login;
+import static tv.kuainiu.R.id.tbv_title;
 import static tv.kuainiu.R.id.tv_forget_password;
+import static tv.kuainiu.ui.me.activity.ThridAccountVerifyActivity.PLATFORM_AVATAR;
+import static tv.kuainiu.ui.me.activity.ThridAccountVerifyActivity.PLATFORM_ID;
+import static tv.kuainiu.ui.me.activity.ThridAccountVerifyActivity.PLATFORM_NAME;
 
 
 /**
@@ -103,7 +110,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     ImageView mImageButtonWechat;
     @BindView(R.id.imageButton_qq)
     ImageView mImageButtonQQ;
-    @BindView(R.id.tbv_title)
+    @BindView(tbv_title)
     TitleBarView mTbvTitle;
     @BindView(R.id.tvRegister)
     TextView tvRegister;
@@ -129,17 +136,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 第三方平台id
      */
     private String platform_id = "";
+    private String platform_avatar = "";
     /**
      * 第三方平台名称
      */
     private String platform_name = "";
-    /**
-     * 第三方平台token
-     */
-    private String platform_token_secret = "";
+
     private String area = "";
     private String area_country = "";
     private String account = "";
+    private Platform mPlatform;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,11 +167,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         SpannableString messageSpan = new SpannableString(messageText);
         messageSpan.setSpan(new UnderlineSpan(), 0, messageText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvMessageLogin.setText(messageSpan);
-        platform_name = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_NAME);
+        platform_name = getIntent().getStringExtra(PLATFORM_NAME);
+        platform_id = getIntent().getStringExtra(PLATFORM_ID);
+        platform_avatar = getIntent().getStringExtra(PLATFORM_AVATAR);
         area = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_CODE);
         account = getIntent().getStringExtra(ThridAccountVerifyActivity.ACCOUNT);
         area_country = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_COUNTRY);
         mRegionMap = RegionDataHelper.getRegionDataMap(this);
+        snackbar = Snackbar.make(mBtnLogin, "正在登录......", Snackbar.LENGTH_LONG);
         initAccount();
         initListener();
     }
@@ -218,15 +228,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             mRlRegionSelector.setEnabled(false);
             mEtPassword.requestFocus();
             mEtPassword.setSelection(mEtPassword.length());
-            if (SinaWeibo.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
-            }
-            if (QQ.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
-            }
-            if (Wechat.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
-            }
+//            if (SinaWeibo.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
+//            }
+//            if (QQ.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
+//            }
+//            if (Wechat.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
+//            }
+            ImageDisplayUtil.displayImage(this, ivPlatFromImage, platform_avatar);
         }
     }
 
@@ -368,24 +379,41 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
        * @param platformName 执行登录/注册的平台名称，如：SinaWeibo.NAME
        */
     private void login(String platformName) {
+        snackbar.show();
         LoginApi api = new LoginApi();
         //设置登陆的平台后执行登陆的方法
         api.setPlatform(platformName);
         api.setOnLoginListener(new OnLoginListener() {
-            public boolean onLogin(String platform, HashMap<String, Object> res, Platform mPlatform) {
-                ThridAccountVerifyActivity.intoNewActivity(LoginActivity.this, mPlatform);
-                LogUtils.e(TAG, "platformNAME1=" + platform);
-                LogUtils.e(TAG, "platformNAME=" + mPlatform.getDb().getPlatformNname());
-                LogUtils.e(TAG, "platformID=" + mPlatform.getDb().getUserId());
-                Iterator iter = res.entrySet().iterator();
-                while (iter.hasNext()) {
-                    Map.Entry entry = (Map.Entry) iter.next();
-                    String key = (String) entry.getKey();
-                    Object val = entry.getValue();
-
-                    LogUtils.e(TAG, key + "=" + val.toString());
+            public void onLogin(String platform_name, HashMap<String, Object> res, Platform mPlatform) {
+                LoginActivity.this.mPlatform = mPlatform;
+                String type = "";
+                if (SinaWeibo.NAME.equals(platform_name)) {
+                    type = "wb";
                 }
-                return true;
+                if (QQ.NAME.equals(platform_name)) {
+                    type = "qq";
+                }
+                if (Wechat.NAME.equals(platform_name)) {
+                    type = "wx";
+                }
+                String platform_id = mPlatform.getDb().getUserId();
+                String platform_token = mPlatform.getDb().getToken();
+                String platform_nickname = mPlatform.getDb().getUserName();
+                String platform_avatar = mPlatform.getDb().getUserIcon();
+                long platform_expires_in = mPlatform.getDb().getExpiresTime();
+                UserHttpRequest.thirdLoginCheck(LoginActivity.this, type, platform_token, platform_id, platform_nickname, platform_avatar, platform_expires_in, Action.third_login);
+            }
+
+            @Override
+            public void error(Throwable error) {
+                snackbar.dismiss();
+                ToastUtils.showToast(LoginActivity.this, error.getMessage());
+            }
+
+            @Override
+            public void cancel() {
+                snackbar.dismiss();
+                ToastUtils.showToast(LoginActivity.this, "取消登录");
             }
 
         });
@@ -414,31 +442,46 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         } else if (!NetUtils.isOnline(this)) {
             DebugUtils.showToast(this, R.string.toast_not_network);
         } else {
-            UserHttpRequest.login(this, area, account, password);
+            snackbar.show();
+            UserHttpRequest.login(this, area, account, password, platform_id, platform_name);
             mBtnLogin.setEnabled(false);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHttpEvent(HttpEvent event) {
+        switch (event.getAction()) {
+            case third_login:
+                snackbar.dismiss();
+                if (Constant.SUCCEED == event.getCode()) {
+                    User user = new Gson().fromJson(event.getData().optString("data"), User.class);
+                    MyApplication.setUser(user);
+                    ToastUtils.showToast(this, "登录成功");
+                    EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
+
+                    finish();
+                } else if (-201 == event.getCode()) {
+                    ThridAccountVerifyActivity.intoNewActivity(LoginActivity.this, mPlatform);
+                } else {
+                    ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "第三方登录失败"));
+                }
+                break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventLoginMain(UserEvent event) {
         mBtnLogin.setEnabled(true);
+        snackbar.dismiss();
         if (Constant.SUCCEED == event.getCode()) {
             KeyBoardUtil.hideSoftInput(LoginActivity.this, mEtPassword);
-            Snackbar snackbar = Snackbar.make(mBtnLogin, "正在登录......", Snackbar.LENGTH_LONG);
             User user = event.getUser();
             MyApplication.setUser(user);
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constant.INTENT_ACTION_GET_CUSTOM));
             EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
             PreferencesUtils.putString(this, "phone", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));
             PreferencesUtils.putString(this, "area", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getArea()));
-
-            snackbar.show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                }
-            }, 1000);
+            finish();
         } else {
             DebugUtils.showToastResponse(this, event.getMsg());
         }

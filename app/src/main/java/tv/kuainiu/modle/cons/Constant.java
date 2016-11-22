@@ -234,6 +234,8 @@ public class Constant {
     public static final int NETWORK_ERROR = -20016;
     public static final int NULL_FOR_DATA = -10086;
     public static final int NULL_FOR_LIST = -10010;
+    public static final int THRID_LOGIN = 301;
+    public static final int THRID_REGIST = 302;
 
     /**
      * 是否已检查过更新

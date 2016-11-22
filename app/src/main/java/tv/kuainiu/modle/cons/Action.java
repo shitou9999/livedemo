@@ -213,4 +213,7 @@ public enum Action {
     del_live,   //删除直播
     del_dynamics,   //删除动态
     del_news,   //删除文章/视频
+    third_login,   //删除文章/视频
+    third_bind, //删除文章/视频
+    third_check_phone,   //删除文章/视频
 }

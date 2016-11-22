@@ -52,8 +52,8 @@ public class UserHttpRequest {
         OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V21, Api.AUTH_LOGIN, ParamUtil.getParam(map), action);
     }
 
-    public static void login(Context context, String area, String account, String password) {
-        String param = prepareLoginParam(area, account, password);
+    public static void login(Context context, String area, String account, String password, String third_uid, String third_type) {
+        String param = prepareLoginParam(area, account, password, third_uid, third_type);
         OKHttpUtils.getInstance().syncPost(context, Api.TEST_DNS_API_HOST_V21, Api.LOGIN, param, new OKHttpCallBackListener() {
             @Override
             public void onSucceed(int code, String msg, JSONObject data) {
@@ -76,10 +76,30 @@ public class UserHttpRequest {
             }
         });
     }
+
+    public static void thirdLoginCheck(Context context, String type, String platform_token, String platform_id, String platform_nickname, String platform_avatar, long platform_expires_in, Action action) {
+       /* 固定参数  user_id, time ,sign
+        业务参数
+        type     必传     类型 微博：wb  微信：wx  QQ：qq
+        access_token     必传      微博token
+        uid  必传    微博用户ID
+        name     必传     微博昵称
+        avatar     必传     微博头像
+        expires_in     必传     微博授权有效期*/
+
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("access_token", platform_token);
+        map.put("uid", platform_id);
+        map.put("name", platform_nickname);
+        map.put("avatar", platform_avatar);
+        map.put("expires_in", String.valueOf(platform_expires_in));
+        OKHttpUtils.getInstance().post(context, Api.third_login, ParamUtil.getParam(map), action);
+    }
 /*    {"status"="0","data"="json"}
     -101 调用自动登录接口*/
 
-    public static void qrCodeLogin(Context context, String session_id, String client_id, String connect_time, Action action){
+    public static void qrCodeLogin(Context context, String session_id, String client_id, String connect_time, Action action) {
         Map<String, String> map = new HashMap<>();
         map.put("session_id", session_id);
         map.put("client_id", client_id);
@@ -87,8 +107,10 @@ public class UserHttpRequest {
         OKHttpUtils.getInstance().post(context, Api.TEST_DNS_API_HOST_V21, Api.QRCODE_LOGIN, ParamUtil.getParam(map), action);
     }
 
-    private static String prepareLoginParam(String area, String account, String password) {
+    private static String prepareLoginParam(String area, String account, String password, String third_uid, String third_type) {
         Map<String, String> map = new HashMap<>();
+        map.put("third_uid", StringUtils.replaceBlank(third_uid));
+        map.put("third_type", StringUtils.replaceBlank(third_type));
         map.put("area", StringUtils.replaceBlank(area));
         map.put("phone", StringUtils.replaceBlank(account));
         map.put("password", SecurityUtils.salt(StringUtils.replaceBlank(password))); // 密码加盐

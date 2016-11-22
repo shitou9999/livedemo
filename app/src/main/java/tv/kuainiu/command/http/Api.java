@@ -230,10 +230,18 @@ public class Api {
     //直播详情
     public static final String live_info = "live/live_info";
     public static final String self_check_permission = "cc/self_check_permission";
-//    删除动态
+    //    删除动态
     public static final String del_dynamics = "publish/del_dynamics";
-//    1.1.1 删除文章/视频   v1/publish/del_news
+    //    1.1.1 删除文章/视频   v1/publish/del_news
     public static final String del_news = "publish/del_news";
+    /**
+     * 4.1 第三方登录
+     */
+    public static final String third_login = "third/login";
+    /**
+     * 4.2 第三方登录 - 绑定快牛账号 - 检测手机号    third/check_phone
+     */
+    public static final String third_check_phone = "third/check_phone";
 
 
 }

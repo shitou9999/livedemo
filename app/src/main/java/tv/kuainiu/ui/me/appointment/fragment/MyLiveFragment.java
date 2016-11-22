@@ -287,7 +287,7 @@ public class MyLiveFragment extends BaseFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Map<String, String> map = new HashMap<>();
                         map.put("id", liveInfo.getId());
-                        OKHttpUtils.getInstance().post(getActivity(), Api.del_news, ParamUtil.getParam(map), Action.del_live);
+                        OKHttpUtils.getInstance().post(getActivity(), Api.del_live, ParamUtil.getParam(map), Action.del_live);
                         dialog.dismiss();
                     }
                 });

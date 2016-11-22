@@ -13,10 +13,11 @@ public interface OnLoginListener {
 
 	/**
 	 * 登录完成调用此接口，返回登录者在第三方社交平台上的用户数据。实现此方法时要根据
-	 * res参数中的用户资料，结合开发者应用的用户系统数据，判断此登录者是否需要先注册，
-	 * 如果需要注册，则返回true
+	 * res参数中的用户资料，结合开发者应用的用户系统数据，判断此登录者是否需要先注册
 	 */
-	public boolean onLogin(String platform, HashMap<String, Object> res, Platform Platform);
+	public void onLogin(String platform, HashMap<String, Object> res, Platform Platform);
+	public void error(Throwable error);
+	public void cancel();
 
 
 }

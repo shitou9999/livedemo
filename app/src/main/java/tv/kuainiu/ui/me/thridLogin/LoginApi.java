@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Looper;
 import android.os.Message;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -97,14 +96,17 @@ public class LoginApi implements Callback {
         switch (msg.what) {
             case MSG_AUTH_CANCEL: {
                 // 取消
-                Toast.makeText(context, "取消", Toast.LENGTH_SHORT).show();
+                if (loginListener != null) {
+                    loginListener.cancel();
+                }
             }
             break;
             case MSG_AUTH_ERROR: {
-                // 失败
                 Throwable t = (Throwable) msg.obj;
-                String text = "caught error: " + t.getMessage();
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                // 失败
+                if (loginListener != null) {
+                    loginListener.error(t);
+                }
                 t.printStackTrace();
             }
             break;

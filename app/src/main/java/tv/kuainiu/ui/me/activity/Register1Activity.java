@@ -26,9 +26,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
 import de.hdodenhof.circleimageview.CircleImageView;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
@@ -43,6 +40,7 @@ import tv.kuainiu.ui.region.Region;
 import tv.kuainiu.ui.region.RegionDataHelper;
 import tv.kuainiu.ui.region.RegionSelectionActivity;
 import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.ImageDisplayUtil;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.SMSUtils;
 import tv.kuainiu.utils.SecurityUtils;
@@ -82,17 +80,16 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
      * 第三方平台id
      */
     private String platform_id = "";
+    private String platform_avatar = "";
     /**
      * 第三方平台名称
      */
     private String platform_name = "";
-    /**
-     * 第三方平台token
-     */
-    private String platform_token_secret = "";
+
     private String area = "";
     private String area_country = "";
     private String account = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +101,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
         mRegionMap = RegionDataHelper.getRegionDataMap(this);
         mDownTimer = new MyCountDownTimer();
         platform_name = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_NAME);
+        platform_id = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_ID);
+        platform_avatar = getIntent().getStringExtra(ThridAccountVerifyActivity.PLATFORM_AVATAR);
         area = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_CODE);
         account = getIntent().getStringExtra(ThridAccountVerifyActivity.ACCOUNT);
         area_country = getIntent().getStringExtra(ThridAccountVerifyActivity.AREA_COUNTRY);
@@ -131,15 +130,16 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
             mRlRegionSelector.setEnabled(false);
             mEtCheckCode.requestFocus();
             mEtCheckCode.setSelection(mEtCheckCode.length());
-            if (SinaWeibo.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
-            }
-            if (QQ.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
-            }
-            if (Wechat.NAME.equals(platform_name)) {
-                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
-            }
+//            if (SinaWeibo.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_sina);
+//            }
+//            if (QQ.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_qq);
+//            }
+//            if (Wechat.NAME.equals(platform_name)) {
+//                ivPlatFromImage.setImageResource(R.drawable.selector_share_wechat);
+//            }
+            ImageDisplayUtil.displayImage(this, ivPlatFromImage, platform_avatar);
         }
 
 //        new SMSUtils(Register1Activity.this, new MyHandle(this));
@@ -355,6 +355,8 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
         map.put("password", SecurityUtils.salt(mEtPassword2.getText().toString().trim()));
         map.put("phone", mEtAccount.getText().toString().trim());
         map.put("area", mEtRegion.getText().toString().trim());
+        map.put("third_type", platform_name);
+        map.put("third_uid", platform_id);
 
         return ParamUtil.getParam(map);
     }
