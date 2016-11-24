@@ -22,7 +22,6 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.GuideActivity;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PreferencesUtils;
 
 /**
@@ -86,11 +85,9 @@ public class SplashActivity extends BaseActivity {
             case client_init:
                 if (Constant.SUCCEED == event.getCode()) {
 //                    BaseActivity.initClientNumbers = 0;//初始化成功后清空初始化计数
-                    LogUtils.i(TAG, "json data : " + event.getData().toString());
                     String tempString = event.getData().optString("data");
                     InitInfo initInfo = new Gson().fromJson(tempString, InitInfo.class);
                     String privateKey = initInfo.getPrivate_key();
-                    LogUtils.i(TAG, "privateKey : " + privateKey);
                     if (!TextUtils.isEmpty(privateKey)) {
                         MyApplication.setKey(privateKey);
                     }
@@ -100,6 +97,7 @@ public class SplashActivity extends BaseActivity {
                         user.setLive_count(initInfo.getLive_count());
                         user.setFans_count(initInfo.getFans_count());
                         user.setFollow_count(initInfo.getFollow_count());
+                        user.setThird_bind(initInfo.getThird_bind());
                         MyApplication.setUser(user);
                     }
                     PreferencesUtils.putInt(this, Constant.MSG_NUM, initInfo.getMsg_num());

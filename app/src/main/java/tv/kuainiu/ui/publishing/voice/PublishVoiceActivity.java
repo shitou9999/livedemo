@@ -272,45 +272,55 @@ public class PublishVoiceActivity extends BaseActivity {
 
     private void press() {
         String path = stList.get(i).replace("file://", "");
-        LogUtils.e(TAG, "path=" + path);
-        Luban.get(PublishVoiceActivity.this)
-                .load(new File(path))                     //传人要压缩的图片
-                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
-                .setCompressListener(new OnCompressListener() { //设置回调
+        File file = new File(path);
+        if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+            thumb += Base64.encodeToString(FileUtils.fileToBytes(file), Base64.DEFAULT) + "####";
+            i++;
+            if (i == j) {
+                submitData();
+            } else {
+                press();
+            }
+        }else {
+            Luban.get(PublishVoiceActivity.this)
+                    .load(new File(path))                     //传人要压缩的图片
+                    .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                    .setCompressListener(new OnCompressListener() { //设置回调
 
-                    @Override
-                    public void onStart() {
-                    }
+                        @Override
+                        public void onStart() {
+                        }
 
-                    @Override
-                    public void onSuccess(File file) {
-                        LogUtils.e(TAG, "file=" + file.getPath());
-                        byte[] mByte = FileUtils.fileToBytes(file);
-                        if (mByte != null) {
-                            thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
-                        } else {
-                            LogUtils.e(TAG, "图片压转码异常");
+                        @Override
+                        public void onSuccess(File file) {
+                            LogUtils.e(TAG, "file=" + file.getPath());
+                            byte[] mByte = FileUtils.fileToBytes(file);
+                            if (mByte != null) {
+                                thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
+                            } else {
+                                LogUtils.e(TAG, "图片压转码异常");
+                            }
+                            i++;
+                            if (i == j) {
+                                submitData();
+                            } else {
+                                press();
+                            }
                         }
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
-                        }
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // 当压缩过去出现问题时调用
-                        LogUtils.e(TAG, "图片压缩错误", e);
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
+                        @Override
+                        public void onError(Throwable e) {
+                            // 当压缩过去出现问题时调用
+                            LogUtils.e(TAG, "图片压缩错误", e);
+                            i++;
+                            if (i == j) {
+                                submitData();
+                            } else {
+                                press();
+                            }
                         }
-                    }
-                }).launch();    //启动压缩
+                    }).launch();    //启动压缩
+        }
     }
 
 

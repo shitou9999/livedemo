@@ -385,6 +385,9 @@ public class ThridAccountVerifyActivity extends BaseActivity implements View.OnC
                     startActivity(intent);
                 }
                 break;
+            case login_finish:
+                finish();
+                break;
         }
     }
 

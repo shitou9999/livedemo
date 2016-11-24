@@ -446,6 +446,7 @@ public class Register1Activity extends AbsSMSPermissionActivity implements View.
                     MyApplication.setUser(user);
                     ToastUtils.showToast(this, "注册成功");
                     EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
+                    EventBus.getDefault().post(new HttpEvent(Action.login_finish, Constant.SUCCEED));
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();

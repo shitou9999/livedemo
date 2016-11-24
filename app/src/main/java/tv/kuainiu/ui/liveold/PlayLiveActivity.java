@@ -147,6 +147,7 @@ public class PlayLiveActivity extends BaseActivity implements
     ImageView iv_back;
     ImageView iv_share;
     ImageView iv_control;
+    TextView tvBarrageControl,tvGoToLiving;
     ImageView full_screen;
     EditText etFullscreen;
     Button btnFullscreenSendMsg;
@@ -353,6 +354,8 @@ public class PlayLiveActivity extends BaseActivity implements
         iv_share = (ImageView) findViewById(R.id.iv_share2);
         iv_control = (ImageView) findViewById(R.id.iv_control2);
         full_screen = (ImageView) findViewById(R.id.full_screen2);
+        tvBarrageControl=(TextView)findViewById(R.id.tvBarrageControl);
+        tvGoToLiving=(TextView)findViewById(R.id.tvGoToLiving);
         iv_live_play_button2 = (ImageView) findViewById(R.id.iv_live_play_button2);
         etFullscreen = (EditText) findViewById(R.id.et_fullscreen2);
         btnFullscreenSendMsg = (Button) findViewById(R.id.btn_fullscreen_send2);
@@ -496,6 +499,7 @@ public class PlayLiveActivity extends BaseActivity implements
         tvCloseMessage.setOnClickListener(this);
         rlOpenMessage.setOnClickListener(this);
         iv_live_play_button2.setOnClickListener(this);
+        tvBarrageControl.setOnClickListener(this);
 
         etFullscreen.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -810,6 +814,7 @@ public class PlayLiveActivity extends BaseActivity implements
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.full_screen_b));
             llBottomLayout.setVisibility(View.VISIBLE);
+            tvBarrageControl.setVisibility(View.GONE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setRelativeLayoutPlay(false);
@@ -819,6 +824,7 @@ public class PlayLiveActivity extends BaseActivity implements
             llProgress.setVisibility(View.GONE);
             llBottomLayout.setVisibility(View.GONE);
 //           	etFullscreen.requestFocus();
+            tvBarrageControl.setVisibility(View.VISIBLE);
             full_screen.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             full_screen.setImageDrawable(getResources().getDrawable(R.mipmap.exit_full_b));
         }
@@ -1068,6 +1074,7 @@ public class PlayLiveActivity extends BaseActivity implements
                         if (isPlayBack) {
                             tvLiveDuration.setText(TimeFormatUtil.getTime(currentPosition));
                             total_time.setText(TimeFormatUtil.getTime(liveDuration));
+                            tvGoToLiving.setVisibility(View.VISIBLE);
                         }
 
                         // 如果当前正在拖动seekbar，则停止刷新滑块位置
@@ -1116,6 +1123,9 @@ public class PlayLiveActivity extends BaseActivity implements
 //                tvCurrentPlayTip.setText("直播中");
 //                backToLive.setVisibility(View.INVISIBLE);
                 currentPosition = 0;
+                if(!isPlayBack){
+                    tvGoToLiving.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -1638,9 +1648,19 @@ public class PlayLiveActivity extends BaseActivity implements
             case R.id.tv_follow_button:
                 if (mTeacherInfo != null && isLogin(this)) {
                     addFollow(teacherId, btn_teacher_follow.isSelected());
-                } else {
-
                 }
+                break;
+            case R.id.tvBarrageControl:
+                if("屏蔽弹幕".equals(tvBarrageControl.getText().toString())){
+                    mBarrageLayout.setVisibility(View.GONE);
+                    tvBarrageControl.setText("开启弹幕");
+                }else{
+                    mBarrageLayout.setVisibility(View.VISIBLE);
+                    tvBarrageControl.setText("屏蔽弹幕");
+                }
+                break;
+            case R.id.tvGoToLiving:
+                startLivePlay();
                 break;
 
         }
@@ -1773,7 +1793,7 @@ public class PlayLiveActivity extends BaseActivity implements
                     break;
                 case USER_COUNT:
                     if (playLiveActivity.tvCount != null && msg.obj != null) {
-                        playLiveActivity.tvCount.setText(String.format(Locale.CHINA, "%d人在线", (Integer) msg.obj));
+                        playLiveActivity.tvCount.setText(String.format(Locale.CHINA, "%d人在线", ((Integer) msg.obj)*3));
                     }
                     break;
                 case FINISH:

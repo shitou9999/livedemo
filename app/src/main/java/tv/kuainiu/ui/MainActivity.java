@@ -49,7 +49,6 @@ import tv.kuainiu.ui.teachers.TeachersFragment;
 import tv.kuainiu.utils.AppUtils;
 import tv.kuainiu.utils.DebugUtils;
 import tv.kuainiu.utils.JpushUtil;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.MediaPlayUtil;
 import tv.kuainiu.utils.NetUtils;
 import tv.kuainiu.utils.PreferencesUtils;
@@ -234,12 +233,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case client_init:
                 if (Constant.SUCCEED == event.getCode()) {
 //                    BaseActivity.initClientNumbers = 0;//初始化成功后清空初始化计数
-                    LogUtils.i(TAG, "json data : " + event.getData().toString());
                     String tempString = event.getData().optString("data");
                     InitInfo initInfo = new Gson().fromJson(tempString, InitInfo.class);
 //                    PreferencesUtils.putString(this, Constant.COURSE_URL, initInfo.getKe_url());
                     String privateKey = initInfo.getPrivate_key();
-                    LogUtils.i(TAG, "privateKey : " + privateKey);
                     if (!TextUtils.isEmpty(privateKey)) {
                         MyApplication.setKey(privateKey);
                     }
@@ -249,6 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         user.setLive_count(initInfo.getLive_count());
                         user.setFans_count(initInfo.getFans_count());
                         user.setFollow_count(initInfo.getFollow_count());
+                        user.setThird_bind(initInfo.getThird_bind());
                         MyApplication.setUser(user);
                     }
 //                    showCustomRedPoint(initInfo.getCustom_num() > 0);//显示红点

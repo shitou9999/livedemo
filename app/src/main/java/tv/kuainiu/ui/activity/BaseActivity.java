@@ -43,9 +43,7 @@ import tv.kuainiu.ui.MainActivity;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
-import tv.kuainiu.ui.me.activity.ChooseRegionActivity;
 import tv.kuainiu.ui.me.activity.LoginActivity;
-import tv.kuainiu.ui.me.activity.PerfectPersonalActivity;
 import tv.kuainiu.ui.message.activity.MessageSystemActivity;
 import tv.kuainiu.ui.teachers.activity.TeacherZoneActivity;
 import tv.kuainiu.ui.video.VideoActivity;
@@ -109,9 +107,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (!(this instanceof MainActivity) && !(this instanceof PerfectPersonalActivity) && !(this instanceof ChooseRegionActivity) && EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
+//        if (!(this instanceof MainActivity) && !(this instanceof PerfectPersonalActivity) && !(this instanceof ChooseRegionActivity) && EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().unregister(this);
+//        }
         MobclickAgent.onPause(this);
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.command.http.core.CacheConfig;
 import tv.kuainiu.command.http.core.OKHttpUtils;
 import tv.kuainiu.command.http.core.ParamUtil;
@@ -61,6 +62,7 @@ public class TeacherHttpUtil {
     public static void fetchTeacherDynamicsList(Context context, int page, String teacherId, Action action) {
         Map<String, Object> map = new HashMap<>();
         map.put("teacher_id", teacherId);
+        map.put("user_id",MyApplication.getUser()==null?"":MyApplication.getUser().getUser_id());
         map.put("page", String.valueOf(page));
 //        map.put("size", String.valueOf(size));
         OKHttpUtils.getInstance().syncGet(context, Api.FIND_DYNAMICS_LIST + ParamUtil.getParamForGet(map), action);

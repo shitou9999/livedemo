@@ -292,4 +292,8 @@ public class Constant {
     public static final String APPOINTMENT_REMINDER = "预约提醒";
     public static final String UN_APPOINTMENT_REMINDER = "取消提醒";
 
+    public static final String WB = "wb";
+    public static final String Q_Q = "qq";
+    public static final String WeChat = "wx";
+
 }

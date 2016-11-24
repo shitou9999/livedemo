@@ -332,10 +332,9 @@ public class MeFragment extends BaseFragment {
     private void uploadUserInfo() {
         if (MyApplication.isLogin()) {
             OKHttpUtils.getInstance().post(getActivity(), Api.TEST_DNS_API_HOST_V2, Api.FETCH_USERINFO, ParamUtil.getParam(null), Action.fetch_userinfo);
-        } else {
-            User user = MyApplication.getUser();
-            bindDataForView(user);
         }
+        User user = MyApplication.getUser();
+        bindDataForView(user);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN,

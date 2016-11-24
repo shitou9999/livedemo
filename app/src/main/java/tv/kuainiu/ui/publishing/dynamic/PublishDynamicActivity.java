@@ -40,6 +40,7 @@ import tv.kuainiu.ui.activity.SelectPictureActivity;
 import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
 import tv.kuainiu.ui.publishing.pick.PickArticleActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
+import tv.kuainiu.ui.publishing.share.PublishShareActivity;
 import tv.kuainiu.utils.FileUtils;
 import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
@@ -52,6 +53,7 @@ import tv.kuainiu.widget.tagview.Tag;
 import tv.kuainiu.widget.tagview.TagListView;
 import tv.kuainiu.widget.tagview.TagView;
 
+import static tv.kuainiu.R.id.et_content;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.NEW_LIST;
 import static tv.kuainiu.ui.publishing.pick.PickTagsActivity.SELECTED_LIST;
 
@@ -59,6 +61,7 @@ public class PublishDynamicActivity extends BaseActivity {
 
     public static final int REQUSET_ARTICLE_CODE = 1;
     public static final int REQUSET_TAG_CODE = 0;
+    public static final int REQUSET_SYNCHRONIZATION = 111;
     @BindView(R.id.tbv_title)
     TitleBarView tbvTitle;
     @BindView(R.id.tvInputWordLimit)
@@ -73,7 +76,7 @@ public class PublishDynamicActivity extends BaseActivity {
     ExpandGridView exgv_appraisal_pic;
     @BindView(R.id.rlRelatedArticles)
     RelativeLayout rlRelatedArticles;
-    @BindView(R.id.et_content)
+    @BindView(et_content)
     EditText etContent;
     private List<Tag> mTags = new ArrayList<Tag>();
     private List<Tag> mNewTagList = new ArrayList<Tag>();
@@ -90,7 +93,9 @@ public class PublishDynamicActivity extends BaseActivity {
     private boolean isSubmiting = false;
     private UpLoadImageAdapter mUpLoadImageAdapter;
     private int showNumberInline = 0;
-
+    private String dynamics_image_path = "";    //同步微博时必传 微博图片
+    private String synchro_content = "";    //必传，同步微博内容
+    private String synchro_thumb = "";    //同步微博图片,不必传
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +150,7 @@ public class PublishDynamicActivity extends BaseActivity {
                     i = 0;
                     press();
                 } else {
-                    submitData();
+                   pressWeiBoImage();
                 }
             }
 
@@ -158,47 +163,101 @@ public class PublishDynamicActivity extends BaseActivity {
 
     private void press() {
         String path = stList.get(i).replace("file://", "");
-        LogUtils.e(TAG, "path=" + path);
-        Luban.get(PublishDynamicActivity.this)
-                .load(new File(path))                     //传人要压缩的图片
-                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
-                .setCompressListener(new OnCompressListener() { //设置回调
+        File file = new File(path);
+        if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+            thumb += Base64.encodeToString(FileUtils.fileToBytes(file), Base64.DEFAULT) + "####";
+            i++;
+            if (i == j) {
+                pressWeiBoImage();
+            } else {
+                press();
+            }
+        }else {
+            LogUtils.e(TAG, "path=" + path);
+            Luban.get(PublishDynamicActivity.this)
+                    .load(new File(path))                     //传人要压缩的图片
+                    .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                    .setCompressListener(new OnCompressListener() { //设置回调
 
-                    @Override
-                    public void onStart() {
-                    }
+                        @Override
+                        public void onStart() {
+                        }
 
-                    @Override
-                    public void onSuccess(File file) {
-                        LogUtils.e(TAG, "file=" + file.getPath());
-                        byte[] mByte = FileUtils.fileToBytes(file);
-                        if (mByte != null) {
-                            thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
-                        } else {
-                            LogUtils.e(TAG, "图片压转码异常");
+                        @Override
+                        public void onSuccess(File file) {
+                            LogUtils.e(TAG, "file=" + file.getPath());
+                            byte[] mByte = FileUtils.fileToBytes(file);
+                            if (mByte != null) {
+                                thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
+                            } else {
+                                LogUtils.e(TAG, "图片压转码异常");
+                            }
+                            i++;
+                            if (i == j) {
+                                pressWeiBoImage();
+                            } else {
+                                press();
+                            }
                         }
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
-                        }
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // 当压缩过去出现问题时调用
-                        LogUtils.e(TAG, "图片压缩错误", e);
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
+                        @Override
+                        public void onError(Throwable e) {
+                            // 当压缩过去出现问题时调用
+                            LogUtils.e(TAG, "图片压缩错误", e);
+                            i++;
+                            if (i == j) {
+                                pressWeiBoImage();
+                            } else {
+                                press();
+                            }
                         }
-                    }
-                }).launch();    //启动压缩
+                    }).launch();    //启动压缩
+        }
     }
+private void pressWeiBoImage(){
+    if (!TextUtils.isEmpty(dynamics_image_path)) {
+        String path = dynamics_image_path.replace("file://", "");
+        File file = new File(path);
+        if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+            synchro_thumb = Base64.encodeToString(FileUtils.fileToBytes(file), Base64.DEFAULT);
+            submitData();
+        }else {
+            Luban.get(PublishDynamicActivity.this)
+                    .load(file)                     //传人要压缩的图片
+                    .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                    .setCompressListener(new OnCompressListener() { //设置回调
 
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onSuccess(File file) {
+                            LogUtils.e(TAG, "file=" + file.getPath());
+                            byte[] mByte = FileUtils.fileToBytes(file);
+                            if (mByte != null) {
+                                synchro_thumb = Base64.encodeToString(mByte, Base64.DEFAULT);
+                            } else {
+                                synchro_thumb = "";
+                                LogUtils.e(TAG, "图片压转码异常");
+                            }
+                            submitData();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            // 当压缩过去出现问题时调用
+                            LogUtils.e(TAG, "图片压缩错误", e);
+                            synchro_thumb = "";
+                            submitData();
+                        }
+                    }).launch();
+        }
+    } else {
+        synchro_thumb = "";
+        submitData();
+    }
+}
     /**
      * 数据验证
      */
@@ -254,6 +313,8 @@ public class PublishDynamicActivity extends BaseActivity {
         map.put("synchro_wb", synchro_wb);
         map.put("tag", tag);
         map.put("tag_new", tag_new);
+        map.put("synchro_content", synchro_content);//第三方同步动态时必传     第三方同步内容
+        map.put("synchro_thumb", synchro_thumb);//非必传    第三方同步缩略图
         if (!isSubmiting) {
             isSubmiting = true;
             OKHttpUtils.getInstance().post(this, Api.add_dynamics, ParamUtil.getParam(map), Action.add_dynamics);
@@ -266,9 +327,15 @@ public class PublishDynamicActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.btnFlag, R.id.iv_publish_video, R.id.iv_publish_article})
+    @OnClick({R.id.ivShareSina,R.id.btnFlag, R.id.iv_publish_video, R.id.iv_publish_article})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivShareSina:
+                if (TextUtils.isEmpty(synchro_content)) {
+                    synchro_content = etContent.getText().toString();
+                }
+                PublishShareActivity.intoNewActivity(this, synchro_content, dynamics_image_path, REQUSET_SYNCHRONIZATION);
+                break;
             case R.id.iv_publish_video:
                 PickArticleActivity.intoNewActivity(this, REQUSET_ARTICLE_CODE, 1);
                 break;
@@ -342,6 +409,16 @@ public class PublishDynamicActivity extends BaseActivity {
                         mUpLoadImageAdapter = new UpLoadImageAdapter(stList, PublishDynamicActivity.this, 1, showNumberInline);
                         exgv_appraisal_pic.setAdapter(mUpLoadImageAdapter);
                     }
+                }
+                break;
+            case REQUSET_SYNCHRONIZATION:
+                if (resultCode == RESULT_OK && data != null) {
+                    synchro_content = data.getStringExtra(PublishShareActivity.DYNAMICS_DESC);
+                    if (TextUtils.isEmpty(etContent.getText().toString())) {
+                        etContent.setText(synchro_content);
+                    }
+                    dynamics_image_path = data.getStringExtra(PublishShareActivity.DYNAMICS_IMAGE_PATH);
+                    etContent.setSelection(etContent.length(), etContent.length());
                 }
                 break;
         }

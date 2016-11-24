@@ -8,6 +8,7 @@ public class Permission {
     private int id;
     private int is_own;
     private String icon;
+    private String name;
 
     public int getId() {
         return id;
@@ -31,5 +32,13 @@ public class Permission {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

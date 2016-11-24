@@ -3,7 +3,6 @@ package tv.kuainiu.ui.publishing.share;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -12,23 +11,18 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.event.HttpEvent;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.activity.SelectPictureActivity;
 import tv.kuainiu.ui.adapter.UpLoadImageAdapter;
-import tv.kuainiu.utils.FileUtils;
-import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.widget.ExpandGridView;
 import tv.kuainiu.widget.TitleBarView;
 import tv.kuainiu.widget.tagview.Tag;
@@ -109,48 +103,7 @@ public class PublishShareActivity extends BaseActivity {
         });
     }
 
-    private void press() {
-        String path = stList.get(i).replace("file://", "");
-        LogUtils.e(TAG, "path=" + path);
-        Luban.get(PublishShareActivity.this)
-                .load(new File(path))                     //传人要压缩的图片
-                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
-                .setCompressListener(new OnCompressListener() { //设置回调
 
-                    @Override
-                    public void onStart() {
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        LogUtils.e(TAG, "file=" + file.getPath());
-                        byte[] mByte = FileUtils.fileToBytes(file);
-                        if (mByte != null) {
-                            thumb += Base64.encodeToString(mByte, Base64.DEFAULT) + "####";
-                        } else {
-                            LogUtils.e(TAG, "图片压转码异常");
-                        }
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        // 当压缩过去出现问题时调用
-                        LogUtils.e(TAG, "图片压缩错误", e);
-                        i++;
-                        if (i == j) {
-                            submitData();
-                        } else {
-                            press();
-                        }
-                    }
-                }).launch();    //启动压缩
-    }
 
     /**
      * 数据验证
@@ -159,12 +112,12 @@ public class PublishShareActivity extends BaseActivity {
         boolean flag = true;
         dynamics_desc = "";//必传     文字内容
         dynamics_desc = etContent.getText().toString();
-        if (TextUtils.isEmpty(dynamics_desc)) {
-            flag = false;
-            etContent.setError("同步内容不能为空");
-        } else {
-            etContent.setError(null);
-        }
+//        if (TextUtils.isEmpty(dynamics_desc)) {
+//            flag = false;
+//            etContent.setError("同步内容不能为空");
+//        } else {
+//            etContent.setError(null);
+//        }
         return flag;
     }
 
@@ -254,6 +207,9 @@ public class PublishShareActivity extends BaseActivity {
         if(dataVerify()) {
             Intent intent = new Intent();
             intent.putExtra(DYNAMICS_DESC, dynamics_desc);
+            if(stList.size()>0 && !stList.get(0).equals(Constant.UPLOADIMAGE)){
+                dynamics_image_path=stList.get(0);
+            }
             intent.putExtra(DYNAMICS_IMAGE_PATH, dynamics_image_path);
             setResult(RESULT_OK, intent);
             finish();

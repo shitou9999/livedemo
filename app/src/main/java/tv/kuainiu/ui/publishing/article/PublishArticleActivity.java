@@ -42,6 +42,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
 import tv.kuainiu.command.http.core.OKHttpUtils;
@@ -54,6 +56,7 @@ import tv.kuainiu.ui.edit.EditActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
 import tv.kuainiu.ui.publishing.share.PublishShareActivity;
 import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.FileUtils;
 import tv.kuainiu.utils.LoadingProgressDialog;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
@@ -150,6 +153,8 @@ public class PublishArticleActivity extends BaseActivity {
     private String synchro_dynamics = "1";    //  可选     是否同步动态     1是0否
     private String dynamics_desc = "";    //同步动态时必传     动态描述文字
     private String dynamics_image_path = "";    //同步微博时必传 微博图片
+    private String synchro_content = "";    //必传，同步微博内容
+    private String synchro_thumb = "";    //同步微博图片,不必传
 
     private boolean isSubmiting = false;
 
@@ -173,7 +178,10 @@ public class PublishArticleActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivShareSina:
-                PublishShareActivity.intoNewActivity(this,dynamics_desc,dynamics_image_path,REQUSET_SYNCHRONIZATION);
+                if (TextUtils.isEmpty(synchro_content)) {
+                    synchro_content = etDynamics_desc.getText().toString();
+                }
+                PublishShareActivity.intoNewActivity(this, synchro_content, dynamics_image_path, REQUSET_SYNCHRONIZATION);
                 break;
             case R.id.btnFlag://选择标签
                 PickTagsActivity.intoNewActivity(this, "", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
@@ -209,7 +217,47 @@ public class PublishArticleActivity extends BaseActivity {
                         LoadingProgressDialog.stopProgressDialog();
                         return;
                     }
-                    submitData();
+                    if (!TextUtils.isEmpty(dynamics_image_path)) {
+                        String path = dynamics_image_path.replace("file://", "");
+                        File file = new File(path);
+                        if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+                            synchro_thumb = Base64.encodeToString(FileUtils.fileToBytes(file), Base64.DEFAULT);
+                            submitData();
+                        }else {
+                            Luban.get(PublishArticleActivity.this)
+                                    .load(file)                     //传人要压缩的图片
+                                    .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                                    .setCompressListener(new OnCompressListener() { //设置回调
+
+                                        @Override
+                                        public void onStart() {
+                                        }
+
+                                        @Override
+                                        public void onSuccess(File file) {
+                                            LogUtils.e(TAG, "file=" + file.getPath());
+                                            byte[] mByte = FileUtils.fileToBytes(file);
+                                            if (mByte != null) {
+                                                synchro_thumb = Base64.encodeToString(mByte, Base64.DEFAULT);
+                                            } else {
+                                                synchro_thumb = "";
+                                                LogUtils.e(TAG, "图片压转码异常");
+                                            }
+                                            submitData();
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            // 当压缩过去出现问题时调用
+                                            LogUtils.e(TAG, "图片压缩错误", e);
+                                            synchro_thumb = "";
+                                            submitData();
+                                        }
+                                    }).launch();
+                        }
+                    } else {
+                        submitData();
+                    }
                 }
             }
 
@@ -319,10 +367,12 @@ public class PublishArticleActivity extends BaseActivity {
                 break;
             case REQUSET_SYNCHRONIZATION:
                 if (resultCode == RESULT_OK && data != null) {
-                    dynamics_desc = data.getStringExtra(PublishShareActivity.DYNAMICS_DESC);
+                    synchro_content = data.getStringExtra(PublishShareActivity.DYNAMICS_DESC);
+                    if (TextUtils.isEmpty(etDynamics_desc.getText().toString())) {
+                        etDynamics_desc.setText(synchro_content);
+                    }
                     dynamics_image_path = data.getStringExtra(PublishShareActivity.DYNAMICS_IMAGE_PATH);
-                    etDynamics_desc.setText(dynamics_desc);
-                    etDynamics_desc.setSelection(etDynamics_desc.length(),etDynamics_desc.length());
+                    etDynamics_desc.setSelection(etDynamics_desc.length(), etDynamics_desc.length());
                 }
                 break;
         }
@@ -472,7 +522,8 @@ public class PublishArticleActivity extends BaseActivity {
         map.put("description", "");// 可选      文章描述
         map.put("synchro_dynamics", synchro_dynamics);  //  可选     是否同步动态     1是0否
         map.put("dynamics_desc", dynamics_desc);//同步动态时必传     动态描述文字
-
+        map.put("synchro_content", synchro_content);//第三方同步动态时必传     第三方同步内容
+        map.put("synchro_thumb", synchro_thumb);//非必传    第三方同步缩略图
         OKHttpUtils.getInstance().post(this, Api.add_news, ParamUtil.getParam(map), Action.add_news_article);
 
     }

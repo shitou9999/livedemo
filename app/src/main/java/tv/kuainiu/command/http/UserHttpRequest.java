@@ -96,6 +96,20 @@ public class UserHttpRequest {
         map.put("expires_in", String.valueOf(platform_expires_in));
         OKHttpUtils.getInstance().post(context, Api.third_login, ParamUtil.getParam(map), action);
     }
+    public static void thirdUnBindAccount(Context context, String type,Action action) {
+       /* 固定参数  user_id, time ,sign
+        业务参数
+        type     必传     类型 微博：wb  微信：wx  QQ：qq
+        access_token     必传      微博token
+        uid  必传    微博用户ID
+        name     必传     微博昵称
+        avatar     必传     微博头像
+        expires_in     必传     微博授权有效期*/
+
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        OKHttpUtils.getInstance().post(context, Api.third_unbind, ParamUtil.getParam(map), action);
+    }
 /*    {"status"="0","data"="json"}
     -101 调用自动登录接口*/
 

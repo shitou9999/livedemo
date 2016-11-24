@@ -34,6 +34,15 @@ public class InitInfo implements Serializable {
     private int is_teacher;
     private int live_wait_count;
     private int appointment_count;
+    private ThirdBind third_bind;
+
+    public ThirdBind getThird_bind() {
+        return third_bind;
+    }
+
+    public void setThird_bind(ThirdBind third_bind) {
+        this.third_bind = third_bind;
+    }
 
     public int getLive_count() {
         return live_count;

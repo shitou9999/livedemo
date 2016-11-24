@@ -29,7 +29,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -384,9 +383,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         //设置登陆的平台后执行登陆的方法
         api.setPlatform(platformName);
         api.setOnLoginListener(new OnLoginListener() {
-            public void onLogin(String platform_name, HashMap<String, Object> res, Platform mPlatform) {
+            public void onLogin(Platform mPlatform) {
                 LoginActivity.this.mPlatform = mPlatform;
                 String type = "";
+                String platform_name = mPlatform.getName();
                 if (SinaWeibo.NAME.equals(platform_name)) {
                     type = "wb";
                 }
@@ -400,14 +400,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String platform_token = mPlatform.getDb().getToken();
                 String platform_nickname = mPlatform.getDb().getUserName();
                 String platform_avatar = mPlatform.getDb().getUserIcon();
-                long platform_expires_in = mPlatform.getDb().getExpiresTime();
+                long platform_expires_in = mPlatform.getDb().getExpiresTime() / 1000 + mPlatform.getDb().getExpiresIn();
                 UserHttpRequest.thirdLoginCheck(LoginActivity.this, type, platform_token, platform_id, platform_nickname, platform_avatar, platform_expires_in, Action.third_login);
             }
 
             @Override
-            public void error(Throwable error) {
+            public void error(String errorMsg, Throwable error) {
                 snackbar.dismiss();
-                ToastUtils.showToast(LoginActivity.this, error.getMessage());
+                ToastUtils.showToast(LoginActivity.this, error == null ? errorMsg : error.getMessage());
             }
 
             @Override
@@ -458,13 +458,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     MyApplication.setUser(user);
                     ToastUtils.showToast(this, "登录成功");
                     EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
-
                     finish();
                 } else if (-201 == event.getCode()) {
                     ThridAccountVerifyActivity.intoNewActivity(LoginActivity.this, mPlatform);
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "第三方登录失败"));
                 }
+                break;
+            case login_finish:
+                finish();
                 break;
         }
     }
@@ -481,6 +483,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             EventBus.getDefault().post(new HttpEvent(Action.login, Constant.SUCCEED));
             PreferencesUtils.putString(this, "phone", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getPhone()));
             PreferencesUtils.putString(this, "area", SecurityUtils.DESUtil.en(Api.PUBLIC_KEY, user.getArea()));
+            EventBus.getDefault().post(new HttpEvent(Action.login_finish, Constant.SUCCEED));
             finish();
         } else {
             DebugUtils.showToastResponse(this, event.getMsg());

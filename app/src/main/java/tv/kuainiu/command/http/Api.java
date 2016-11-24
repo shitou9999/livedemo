@@ -242,6 +242,10 @@ public class Api {
      * 4.2 第三方登录 - 绑定快牛账号 - 检测手机号    third/check_phone
      */
     public static final String third_check_phone = "third/check_phone";
+    /**
+     * 4.4 第三方 解绑   third/unbind
+     */
+    public static final String third_unbind = "third/unbind";
 
 
 }

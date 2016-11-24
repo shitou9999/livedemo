@@ -31,6 +31,7 @@ public class ThroughScrollView  extends ScrollView{
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
         return false;
     }
 }

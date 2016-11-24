@@ -3,6 +3,7 @@ package tv.kuainiu.modle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,91 +55,17 @@ public class User implements Parcelable {
     private String session_id;
     private int is_teacher;
     private List<Permission> permission_list;
+    private ThirdBind third_bind;
 
-    public User() {
+
+
+    public ThirdBind getThird_bind() {
+        return third_bind;
     }
 
-    /**
-     * @param area  Region code
-     * @param phone Phone number
-     * @param email Email address
-     */
-    public User(String area, String phone, String email) {
-        this.area = area;
-        this.phone = phone;
-        this.email = email;
+    public void setThird_bind(ThirdBind third_bind) {
+        this.third_bind = third_bind;
     }
-
-
-    protected User(Parcel in) {
-        user_id = in.readString();
-        phone = in.readString();
-        email = in.readString();
-        realname = in.readString();
-        idno = in.readString();
-        area = in.readString();
-        nickname = in.readString();
-        province = in.readString();
-        city = in.readString();
-        qq = in.readString();
-        gender = in.readString();
-        birthday = in.readString();
-        avatar = in.readString();
-        follow_count = in.readInt();
-        subscibe_count = in.readInt();
-        allow_push = in.readInt();
-        msg_num = in.readInt();
-        fans_count = in.readInt();
-        live_count = in.readInt();
-        session_id = in.readString();
-        is_teacher = in.readInt();
-        live_wait_count = in.readInt();
-        appointment_count = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(user_id);
-        dest.writeString(phone);
-        dest.writeString(email);
-        dest.writeString(realname);
-        dest.writeString(idno);
-        dest.writeString(area);
-        dest.writeString(nickname);
-        dest.writeString(province);
-        dest.writeString(city);
-        dest.writeString(qq);
-        dest.writeString(gender);
-        dest.writeString(birthday);
-        dest.writeString(avatar);
-        dest.writeInt(follow_count);
-        dest.writeInt(subscibe_count);
-        dest.writeInt(allow_push);
-        dest.writeInt(msg_num);
-        dest.writeInt(fans_count);
-        dest.writeInt(live_count);
-        dest.writeString(session_id);
-        dest.writeInt(is_teacher);
-        dest.writeInt(live_wait_count);
-        dest.writeInt(appointment_count);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     public int getLive_count() {
         return live_count;
@@ -331,4 +258,93 @@ public class User implements Parcelable {
     public void setPermission_list(List<Permission> permission_list) {
         this.permission_list = permission_list;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.user_id);
+        dest.writeString(this.phone);
+        dest.writeString(this.email);
+        dest.writeString(this.realname);
+        dest.writeString(this.idno);
+        dest.writeString(this.area);
+        dest.writeString(this.nickname);
+        dest.writeString(this.province);
+        dest.writeString(this.city);
+        dest.writeString(this.qq);
+        dest.writeString(this.gender);
+        dest.writeString(this.birthday);
+        dest.writeString(this.avatar);
+        dest.writeInt(this.follow_count);
+        dest.writeInt(this.subscibe_count);
+        dest.writeInt(this.allow_push);
+        dest.writeInt(this.msg_num);
+        dest.writeInt(this.fans_count);
+        dest.writeInt(this.live_count);
+        dest.writeInt(this.live_wait_count);
+        dest.writeInt(this.appointment_count);
+        dest.writeString(this.session_id);
+        dest.writeInt(this.is_teacher);
+        dest.writeList(this.permission_list);
+        dest.writeParcelable(this.third_bind, flags);
+    }
+
+    public User() {
+    }
+
+    public User(String email, String phone, String area) {
+        this.email = email;
+        this.phone = phone;
+        this.area = area;
+    }
+
+    public User(String area, String phone) {
+        this.area = area;
+        this.phone = phone;
+    }
+
+    protected User(Parcel in) {
+        this.user_id = in.readString();
+        this.phone = in.readString();
+        this.email = in.readString();
+        this.realname = in.readString();
+        this.idno = in.readString();
+        this.area = in.readString();
+        this.nickname = in.readString();
+        this.province = in.readString();
+        this.city = in.readString();
+        this.qq = in.readString();
+        this.gender = in.readString();
+        this.birthday = in.readString();
+        this.avatar = in.readString();
+        this.follow_count = in.readInt();
+        this.subscibe_count = in.readInt();
+        this.allow_push = in.readInt();
+        this.msg_num = in.readInt();
+        this.fans_count = in.readInt();
+        this.live_count = in.readInt();
+        this.live_wait_count = in.readInt();
+        this.appointment_count = in.readInt();
+        this.session_id = in.readString();
+        this.is_teacher = in.readInt();
+        this.permission_list = new ArrayList<Permission>();
+        in.readList(this.permission_list, Permission.class.getClassLoader());
+        this.third_bind = in.readParcelable(ThirdBind.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

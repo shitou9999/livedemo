@@ -45,6 +45,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.Api;
@@ -57,8 +59,10 @@ import tv.kuainiu.modle.cons.Action;
 import tv.kuainiu.modle.cons.Constant;
 import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.publishing.pick.PickTagsActivity;
+import tv.kuainiu.ui.publishing.share.PublishShareActivity;
 import tv.kuainiu.utils.DateUtil;
 import tv.kuainiu.utils.DebugUtils;
+import tv.kuainiu.utils.FileUtils;
 import tv.kuainiu.utils.LogUtils;
 import tv.kuainiu.utils.PermissionManager;
 import tv.kuainiu.utils.StringUtils;
@@ -85,6 +89,7 @@ public class PublishVideoActivity extends BaseActivity {
      */
     private static final int CAMERA_REQUEST_CODE = 110;
     public static final int REQUSET_TAG_CODE = 0;
+    public static final int REQUSET_SYNCHRONIZATION = 111;
     /**
      * 相册选图
      */
@@ -170,6 +175,10 @@ public class PublishVideoActivity extends BaseActivity {
     private String end_date = "";
     private String synchro_dynamics = "1";
     private String dynamics_desc;
+    private String synchro_content = "";    //必传，同步微博内容
+    private String synchro_thumb = "";    //同步微博图片,不必传
+    private String dynamics_image_path = "";    //同步微博时必传 微博图片
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,9 +193,15 @@ public class PublishVideoActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btnFlag, R.id.ivAddCover, R.id.rlPick, R.id.llStartTime, R.id.llEndTime})
+    @OnClick({R.id.ivShareSina,R.id.btnFlag, R.id.ivAddCover, R.id.rlPick, R.id.llStartTime, R.id.llEndTime})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivShareSina:
+                if (TextUtils.isEmpty(synchro_content)) {
+                    synchro_content = etDynamicsDesc.getText().toString();
+                }
+                PublishShareActivity.intoNewActivity(this, synchro_content, dynamics_image_path, REQUSET_SYNCHRONIZATION);
+                break;
             case R.id.btnFlag://选择标签
                 PickTagsActivity.intoNewActivity(this, "live", programTag, mTags, mNewTagList, REQUSET_TAG_CODE);
                 break;
@@ -231,7 +246,47 @@ public class PublishVideoActivity extends BaseActivity {
                 if (!dataVerify()) {
                     return;
                 }
-                submitData();
+                if (!TextUtils.isEmpty(dynamics_image_path)) {
+                    String path = dynamics_image_path.replace("file://", "");
+                    File file = new File(path);
+                    if (file != null && file.exists() && file.length() < 102400) {//100k以内的图片不做压缩处理
+                        synchro_thumb = Base64.encodeToString(FileUtils.fileToBytes(file), Base64.DEFAULT);
+                        submitData();
+                    }else {
+                        Luban.get(PublishVideoActivity.this)
+                                .load(new File(path))                    //传人要压缩的图片
+                                .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                                .setCompressListener(new OnCompressListener() { //设置回调
+
+                                    @Override
+                                    public void onStart() {
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        LogUtils.e(TAG, "file=" + file.getPath());
+                                        byte[] mByte = FileUtils.fileToBytes(file);
+                                        if (mByte != null) {
+                                            synchro_thumb = Base64.encodeToString(mByte, Base64.DEFAULT);
+                                        } else {
+                                            synchro_thumb = "";
+                                            LogUtils.e(TAG, "图片压转码异常");
+                                        }
+                                        submitData();
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // 当压缩过去出现问题时调用
+                                        LogUtils.e(TAG, "图片压缩错误", e);
+                                        synchro_thumb = "";
+                                        submitData();
+                                    }
+                                }).launch();
+                    }
+                } else {
+                    submitData();
+                }
             }
 
             @Override
@@ -366,6 +421,16 @@ public class PublishVideoActivity extends BaseActivity {
                         programTag = (Tag) data.getExtras().getSerializable(PROGRAM);
                         dataBind();
                     }
+                }
+                break;
+            case REQUSET_SYNCHRONIZATION:
+                if (resultCode == RESULT_OK && data != null) {
+                    synchro_content = data.getStringExtra(PublishShareActivity.DYNAMICS_DESC);
+                    if (TextUtils.isEmpty(etDynamicsDesc.getText().toString())) {
+                        etDynamicsDesc.setText(synchro_content);
+                    }
+                    dynamics_image_path = data.getStringExtra(PublishShareActivity.DYNAMICS_IMAGE_PATH);
+                    etDynamicsDesc.setSelection(etDynamicsDesc.length(), etDynamicsDesc.length());
                 }
                 break;
         }
@@ -506,6 +571,8 @@ public class PublishVideoActivity extends BaseActivity {
         map.put("end_date", end_date);  //必传     结束直播时间     YYYY-mm-dd H:i:s
         map.put("synchro_dynamics", String.valueOf(synchro_dynamics));  // 可选     是否同步动态     1是0否
         map.put("dynamics_desc", dynamics_desc);  // 同步动态时必传     动态描述文字
+        map.put("synchro_content", synchro_content);//第三方同步动态时必传     第三方同步内容
+        map.put("synchro_thumb", synchro_thumb);//非必传    第三方同步缩略图
         if (!isSubmiting) {
             isSubmiting = true;
             OKHttpUtils.getInstance().post(this, Api.add_live, ParamUtil.getParam(map), Action.add_news_live);

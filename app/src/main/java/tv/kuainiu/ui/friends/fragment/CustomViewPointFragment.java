@@ -27,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.app.OnItemClickListener;
 import tv.kuainiu.app.Theme;
@@ -228,6 +229,10 @@ public class CustomViewPointFragment extends BaseFragment implements OnItemClick
 
     private void appointment(LiveInfo liveInfo) {
         if (liveInfo == null) {
+            return;
+        }
+        if(!MyApplication.isLogin()){
+            ToastUtils.showToast(getActivity(),"请先登录");
             return;
         }
         if (liveInfo.getIs_appointment() == 0) {

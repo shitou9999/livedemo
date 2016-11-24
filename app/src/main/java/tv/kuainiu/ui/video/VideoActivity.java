@@ -1356,7 +1356,7 @@ public class VideoActivity extends BaseActivity implements
 //            subtitleBtn.setVisibility(View.GONE);
         } else {
             volumeLayout.setVisibility(visibility);
-            screenSizeBtn.setVisibility(visibility);
+//            screenSizeBtn.setVisibility(visibility);
             if (!isLocalPlay) {
                 definitionBtn.setVisibility(visibility);
             }

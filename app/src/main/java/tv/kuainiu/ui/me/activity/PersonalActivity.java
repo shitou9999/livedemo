@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -103,11 +104,19 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
     TextView mTvIdentityCard;
     @BindView(R.id.cimg_photo)
     CircleImageView mPhoto;
+    @BindView(R.id.iv_bindAccount_qq)
+    ImageView iv_bindAccount_qq;
+    @BindView(R.id.iv_bindAccount_wechat)
+    ImageView iv_bindAccount_wechat;
+    @BindView(R.id.iv_bindAccount_sina)
+    ImageView iv_bindAccount_sina;
     Bitmap bitmap;
     private static ProgressDialog pd;             // 等待进度圈
     private SelectPicPopupWindow menuWindow;      // 头像弹出框
     private AlertDialog logoutDialog;
-
+    private boolean sinaIsBind;
+    private boolean qqIsBind;
+    private boolean wechatIsBind;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +128,16 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
         bindDataForView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sinaIsBind =MyApplication.getUser()==null?false:MyApplication.getUser().getThird_bind().getWb().getBind() != 0;
+        qqIsBind = MyApplication.getUser()==null?false:MyApplication.getUser().getThird_bind().getQq().getBind() != 0;
+        wechatIsBind = MyApplication.getUser()==null?false:MyApplication.getUser().getThird_bind().getWx().getBind() != 0;
+        iv_bindAccount_sina.setSelected(sinaIsBind);
+        iv_bindAccount_qq.setSelected(qqIsBind);
+        iv_bindAccount_wechat.setSelected(wechatIsBind);
+    }
 
     private void bindDataForView() {
         if (!MyApplication.isLogin()) {
@@ -172,8 +191,7 @@ public class PersonalActivity extends BaseActivity implements View.OnClickListen
                 startActivity(identity);
                 break;
             case R.id.rl_bindAccount:
-                Intent iBindAccountActivity = new Intent(PersonalActivity.this, BindAccountActivity.class);
-                startActivity(iBindAccountActivity);
+                BindAccountActivity.intoNewActivity(PersonalActivity.this);
                 break;
             case R.id.rl_personalLogout:
                 if (!NetUtils.isOnline(getApplicationContext())) {

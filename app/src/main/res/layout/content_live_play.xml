@@ -13,7 +13,7 @@
         <RelativeLayout
             android:id="@+id/rl_play2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:background="@color/colorGrey900">
 
             <SurfaceView
@@ -26,7 +26,7 @@
                 android:id="@+id/bl_barrage2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_control2"
@@ -56,6 +56,30 @@
                         android:layout_alignParentRight="true"
                         android:scaleType="center"
                         android:src="@drawable/live_share_selector" />
+
+                    <TextView
+                        android:id="@+id/tvBarrageControl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/iv_share2"
+                        android:gravity="center"
+                        android:text="屏蔽弹幕"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:textColor="@color/white_color" />
+
+                    <TextView
+                        android:id="@+id/tvGoToLiving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/tvBarrageControl"
+                        android:gravity="center"
+                        android:text="回到最新直播"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:textColor="@color/white_color" />
 
                     <TextView
                         android:id="@+id/tvCount2"
@@ -266,14 +290,15 @@
                     android:padding="10dp"
                     android:text="直播介绍"
                     android:textSize="@dimen/text_size_large" />
+
                 <TextView
                     android:id="@+id/tvLiveDescripion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:padding="10dp"
                     android:layout_marginBottom="@dimen/live_tab_height"
-                    android:gravity="left|top" />
+                    android:background="@color/transparent"
+                    android:gravity="left|top"
+                    android:padding="10dp" />
                 <!--
                             <android.support.design.widget.TabLayout
                                 android:id="@+id/tab_live_top2"

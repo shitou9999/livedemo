@@ -9,6 +9,7 @@ package tv.kuainiu.modle.cons;
 public enum Action {
     normal,                // 默认。请慎用该值!!!以避免多个事件接收者对同一个post作出响应。
     login,                 // 登录
+    login_finish,                 // 登录成功后发送关闭事件
     off_line,              // 离线
     client_init,           // 初始化请求
     reg_phone,             // 手机号注册
@@ -214,6 +215,7 @@ public enum Action {
     del_dynamics,   //删除动态
     del_news,   //删除文章/视频
     third_login,   //删除文章/视频
-    third_bind, //删除文章/视频
-    third_check_phone,   //删除文章/视频
+    third_bind, //第三方账号绑定
+    third_check_phone,   //账号检查是否绑定
+    third_unbind,   //第三方账号解绑
 }

@@ -34,9 +34,13 @@ public class LoginApi implements Callback {
         this.loginListener = login;
     }
 
-    public void login(Context context) {
+    public void loginOut(Context context) {
         this.context = context.getApplicationContext();
         if (platform == null) {
+            Message msg = new Message();
+            msg.what = MSG_AUTH_ERROR;
+            msg.obj = "未指定平台";
+            handler.sendMessage(msg);
             return;
         }
 
@@ -44,12 +48,52 @@ public class LoginApi implements Callback {
         ShareSDK.initSDK(context);
         Platform plat = ShareSDK.getPlatform(platform);
         if (plat == null) {
+            Message msg = new Message();
+            msg.what = MSG_AUTH_ERROR;
+            msg.obj = "平台初始化失败";
+            handler.sendMessage(msg);
             return;
         }
 
         if (plat.isAuthValid()) {
             plat.removeAccount(true);
+        }
+    }
+
+    public void login(Context context) {
+        this.context = context.getApplicationContext();
+        if (platform == null) {
+            Message msg = new Message();
+            msg.what = MSG_AUTH_ERROR;
+            msg.obj = "未指定平台";
+            handler.sendMessage(msg);
             return;
+        }
+
+        //初始化SDK
+        ShareSDK.initSDK(context);
+        Platform plat = ShareSDK.getPlatform(platform);
+        if (plat == null) {
+            Message msg = new Message();
+            msg.what = MSG_AUTH_ERROR;
+            msg.obj = "平台初始化失败";
+            handler.sendMessage(msg);
+            return;
+        }
+
+        if (plat.isAuthValid()) {
+            // 过期重新登录
+            plat.removeAccount(true);
+//            long time=(plat.getDb().getExpiresTime()/1000+plat.getDb().getExpiresIn())*1000;
+//            if (time < System.currentTimeMillis()) {
+//                plat.removeAccount(true);
+//            } else {
+//                Message msg = new Message();
+//                msg.what = MSG_AUTH_COMPLETE;
+//                msg.obj = plat;
+//                handler.sendMessage(msg);
+//                return;
+//            }
         }
 
         //使用SSO授权，通过客户单授权
@@ -60,7 +104,7 @@ public class LoginApi implements Callback {
                     Message msg = new Message();
                     msg.what = MSG_AUTH_COMPLETE;
                     msg.arg2 = action;
-                    msg.obj = new Object[]{res,plat};
+                    msg.obj = plat;
                     handler.sendMessage(msg);
                 }
             }
@@ -73,7 +117,6 @@ public class LoginApi implements Callback {
                     msg.obj = t;
                     handler.sendMessage(msg);
                 }
-                t.printStackTrace();
             }
 
             public void onCancel(Platform plat, int action) {
@@ -102,22 +145,25 @@ public class LoginApi implements Callback {
             }
             break;
             case MSG_AUTH_ERROR: {
-                Throwable t = (Throwable) msg.obj;
-                // 失败
-                if (loginListener != null) {
-                    loginListener.error(t);
+                if (msg.obj instanceof String) {
+                    if (loginListener != null) {
+                        loginListener.error(msg.obj.toString(), null);
+                    }
+                } else {
+                    Throwable t = (Throwable) msg.obj;
+                    // 失败
+                    if (loginListener != null) {
+                        loginListener.error("", t);
+                    }
                 }
-                t.printStackTrace();
+
             }
             break;
             case MSG_AUTH_COMPLETE: {
                 // 成功
-                Object[] objs = (Object[]) msg.obj;
-                @SuppressWarnings("unchecked")
-                HashMap<String, Object> res = (HashMap<String, Object>) objs[0];
-                Platform pPlatform= (Platform) objs[1];
+                Platform pPlatform = (Platform) msg.obj;
                 if (loginListener != null) {
-                    loginListener.onLogin(pPlatform.getName(), res,pPlatform);
+                    loginListener.onLogin(pPlatform);
                 }
             }
             break;
