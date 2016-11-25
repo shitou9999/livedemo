@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,9 +27,10 @@ import tv.kuainiu.MyApplication;
 import tv.kuainiu.R;
 import tv.kuainiu.command.http.UserHttpRequest;
 import tv.kuainiu.event.HttpEvent;
+import tv.kuainiu.modle.ThirdBind;
+import tv.kuainiu.modle.ThirdBindContent;
 import tv.kuainiu.modle.User;
 import tv.kuainiu.modle.cons.Action;
-import tv.kuainiu.ui.activity.BaseActivity;
 import tv.kuainiu.ui.me.thridLogin.LoginApi;
 import tv.kuainiu.ui.me.thridLogin.OnLoginListener;
 import tv.kuainiu.utils.StringUtils;
@@ -42,7 +45,7 @@ import static tv.kuainiu.modle.cons.Constant.WeChat;
 /**
  * 账号绑定
  */
-public class BindAccountActivity extends BaseActivity {
+public class BindAccountActivity extends AppCompatActivity {
 
 
     @BindView(R.id.ivSina)
@@ -71,6 +74,12 @@ public class BindAccountActivity extends BaseActivity {
     private boolean isClik = false;
     private String type = "";
 
+    ThirdBind mThirdBind;
+    ThirdBindContent wbThirdBindContent;
+    ThirdBindContent wxThirdBindContent;
+    ThirdBindContent qqThirdBindContent;
+    User user;
+
     public static void intoNewActivity(Context context) {
         Intent intent = new Intent(context, BindAccountActivity.class);
         context.startActivity(intent);
@@ -87,20 +96,25 @@ public class BindAccountActivity extends BaseActivity {
         if (!MyApplication.isLogin()) {
             finish();
         }
+        user = MyApplication.getUser();
+        mThirdBind = user.getThird_bind();
+        wbThirdBindContent = mThirdBind.getWb();
+        wxThirdBindContent = mThirdBind.getWx();
+        qqThirdBindContent = mThirdBind.getQq();
         initView();
     }
 
     private void initView() {
-        sinaIsBind = MyApplication.getUser().getThird_bind().getWb().getBind() != 0;
-        qqIsBind = MyApplication.getUser().getThird_bind().getQq().getBind() != 0;
-        wechatIsBind = MyApplication.getUser().getThird_bind().getWx().getBind() != 0;
+        sinaIsBind = wbThirdBindContent.getBind() != 0;
+        qqIsBind = qqThirdBindContent.getBind() != 0;
+        wechatIsBind = wxThirdBindContent.getBind() != 0;
         snackbar = Snackbar.make(tvBindQq, "正在绑定......", Snackbar.LENGTH_LONG);
         ivSina.setSelected(sinaIsBind);
         ivQq.setSelected(qqIsBind);
         ivWechat.setSelected(wechatIsBind);
-        tvBindSina.setText(sinaIsBind ?MyApplication.getUser().getThird_bind().getWb().getName() : "去绑定");
-        tvBindQq.setText(qqIsBind ?MyApplication.getUser().getThird_bind().getQq().getName(): "去绑定");
-        tvBindWechat.setText(wechatIsBind ?MyApplication.getUser().getThird_bind().getWx().getName(): "去绑定");
+        tvBindSina.setText(sinaIsBind ? wbThirdBindContent.getName() : "去绑定");
+        tvBindQq.setText(qqIsBind ? qqThirdBindContent.getName() : "去绑定");
+        tvBindWechat.setText(wechatIsBind ? wxThirdBindContent.getName() : "去绑定");
     }
 
     @OnClick({R.id.rl_sina, R.id.rl_wechat, R.id.rl_qq})
@@ -202,10 +216,10 @@ public class BindAccountActivity extends BaseActivity {
             }
 
             @Override
-            public void error(String errorMsg,Throwable error) {
+            public void error(String errorMsg, Throwable error) {
                 snackbar.dismiss();
                 isClik = false;
-                ToastUtils.showToast(BindAccountActivity.this,error==null?errorMsg:error.getMessage());
+                ToastUtils.showToast(BindAccountActivity.this, error == null ? errorMsg : error.getMessage());
             }
 
             @Override
@@ -228,7 +242,7 @@ public class BindAccountActivity extends BaseActivity {
 //                    User user = new Gson().fromJson(event.getData().optString("data"), User.class);
 //                    MyApplication.setUser(user);
                     ToastUtils.showToast(this, "绑定成功");
-                    databind(type, true);
+                    databind(true);
                 } else if (-201 == event.getCode()) {
                     ThridAccountVerifyActivity.intoNewActivity(this, mPlatform);
                 } else {
@@ -239,7 +253,7 @@ public class BindAccountActivity extends BaseActivity {
                 isClik = false;
                 snackbar.dismiss();
                 if (SUCCEED == event.getCode()) {
-                    databind(type, false);
+                    databind(false);
                     ToastUtils.showToast(this, "解绑成功");
                 } else {
                     ToastUtils.showToast(this, StringUtils.replaceNullToEmpty(event.getMsg(), "第三方解绑失败"));
@@ -248,30 +262,46 @@ public class BindAccountActivity extends BaseActivity {
         }
     }
 
-    private void databind(String type, boolean isBind) {
-        User user = MyApplication.getUser();
+    private void databind(boolean isBind) {
+
         String platformName = "";
+
         if (WB.equals(type)) {
-            user.getThird_bind().getWb().setBind(isBind ? 1 : 0);
-            user.getThird_bind().getWb().setName(mPlatform==null?"":mPlatform.getDb().getUserName());
+            wbThirdBindContent.setBind(isBind ? 1 : 0);
+            wbThirdBindContent.setName(mPlatform == null ? "" : mPlatform.getDb().getUserName());
             platformName = SinaWeibo.NAME;
         } else if (Q_Q.equals(type)) {
-            user.getThird_bind().getQq().setBind(isBind ? 1 : 0);
-            user.getThird_bind().getQq().setName(mPlatform==null?"":mPlatform.getDb().getUserName());
+            qqThirdBindContent.setBind(isBind ? 1 : 0);
+            qqThirdBindContent.setName(mPlatform == null ? "" : mPlatform.getDb().getUserName());
             platformName = QQ.NAME;
         } else if (WeChat.equals(type)) {
-            user.getThird_bind().getWx().setBind(isBind ? 1 : 0);
-            user.getThird_bind().getWx().setName(mPlatform==null?"":mPlatform.getDb().getUserName());
+            wxThirdBindContent.setBind(isBind ? 1 : 0);
+            wxThirdBindContent.setName(mPlatform == null ? "" : mPlatform.getDb().getUserName());
             platformName = Wechat.NAME;
         }
+        if (!TextUtils.isEmpty(type)) {
+            mThirdBind.setQq(qqThirdBindContent);
+            mThirdBind.setWb(wbThirdBindContent);
+            mThirdBind.setWx(wxThirdBindContent);
+            user.setThird_bind(mThirdBind);
+
+            mPlatform = null;
+            initView();
+            if (!isBind) {
+                LoginApi api = new LoginApi();
+                //设置登陆的平台后执行登陆的方法
+                api.setPlatform(platformName);
+                api.loginOut(this);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         MyApplication.setUser(user);
-        mPlatform=null;
-        initView();
-        if (!isBind) {
-            LoginApi api = new LoginApi();
-            //设置登陆的平台后执行登陆的方法
-            api.setPlatform(platformName);
-            api.loginOut(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

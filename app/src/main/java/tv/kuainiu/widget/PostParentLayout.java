@@ -21,6 +21,7 @@ import tv.kuainiu.modle.TeacherZoneDynamicsInfo;
 import tv.kuainiu.ui.articles.activity.PostZoneActivity;
 import tv.kuainiu.ui.friends.model.BasePost;
 import tv.kuainiu.ui.liveold.PlayLiveActivity;
+import tv.kuainiu.ui.liveold.ReplayLiveActivity;
 import tv.kuainiu.ui.liveold.model.LiveParameter;
 import tv.kuainiu.ui.video.VideoActivity;
 import tv.kuainiu.utils.DateUtil;
@@ -98,12 +99,18 @@ public class PostParentLayout extends RelativeLayout {
 //        } else {
 //            ToastUtils.showToast(mContext, liveItem.getLive_msg());
 //        }
+
         LiveParameter liveParameter = new LiveParameter();
         liveParameter.setLiveId(liveItem.getId());
         liveParameter.setLiveTitle(liveItem.getTitle());
         liveParameter.setRoomId(liveItem.getTeacher_info() == null ? liveItem.getLive_roomid() : liveItem.getTeacher_info().getLive_roomid());
         liveParameter.setTeacherId(liveItem.getTeacher_id());
-        PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+        liveParameter.setCcid(liveItem.getPlayback_id());
+        if(!TextUtils.isEmpty(liveItem.getPlayback_id())){
+            ReplayLiveActivity.intoNewIntent(mContext, liveParameter);
+        }else {
+            PlayLiveActivity.intoNewIntent(mContext, liveParameter);
+        }
     }
 
     private void loadPostView() {
